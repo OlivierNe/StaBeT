@@ -1,0 +1,63 @@
+﻿@model Stageopdracht
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Stageopdracht</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Titel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Titel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Omschrijving)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Omschrijving)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Semester)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Semester)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AantalStudenten)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AantalStudenten)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Academiejaar)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Academiejaar)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Specialisatie)
+            </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Specialisatie.Naam)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Wijzigen", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

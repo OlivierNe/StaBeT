@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using System.Data;
 
 namespace StageBeheersTool.Models.DAL
 {
@@ -30,7 +31,8 @@ namespace StageBeheersTool.Models.DAL
 
         public Bedrijf FindByEmail(string email)
         {
-            return bedrijven.FirstOrDefault(bedrijf => bedrijf.Email == email);
+            return bedrijven.Include(bedrijf => bedrijf.Stageopdrachten)
+                .FirstOrDefault(bedrijf => bedrijf.Email == email);
         }
     }
 }

@@ -22,10 +22,13 @@ namespace StageBeheersTool
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutomapperConfig.Configure();
+
             DbConfiguration.SetConfiguration(new MySql.Data.Entity.MySqlEFConfiguration());
-  
-            Database.SetInitializer<StageBeheersTool.Models.DAL.StageToolDbContext>(new StageBeheersTool.Models.DAL.StageToolDbInitializer());
-            var bedrijven = new StageToolDbContext().Bedrijven.ToList();
+            
+            Database.SetInitializer<StageToolDbContext>(new StageToolDbInitializer());
+            var ctx = new StageToolDbContext();
+            ctx.Database.Initialize(true);
+            ctx.Bedrijven.ToList();
         }
     }
 }

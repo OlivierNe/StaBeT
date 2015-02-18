@@ -18,28 +18,36 @@ namespace StageBeheersTool.Models.DAL
         public StageToolDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-
+            //Database.SetInitializer<StageToolDbContext>(null);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations.Add(new BedrijfMapper());
+            modelBuilder.Configurations.Add(new StageopdrachtMapper());
+            modelBuilder.Configurations.Add(new SpecialisatieMapper());
+
             modelBuilder.Conventions.Remove<System.Data.Entity.ModelConfiguration.Conventions.PluralizingTableNameConvention>();
             
-            //anders error: Specified key was too long; max key length is 767 bytes
+
+
             modelBuilder.Entity<IdentityRole>()
                 .Property(c => c.Name).HasMaxLength(128).IsRequired();
-            modelBuilder.Entity<IdentityUser>().ToTable("AspNetUsers")
+            modelBuilder.Entity<ApplicationUser>().ToTable("aspNetUsers")
                 .Property(c => c.UserName).HasMaxLength(128).IsRequired();
         }
 
         public DbSet<Bedrijf> Bedrijven { get; set; }
+        public DbSet<Stageopdracht> Stageopdrachten { get; set; }
+        public DbSet<Specialisatie> Specialisaties { get; set; }
 
         public static StageToolDbContext Create()
         {
             return new StageToolDbContext();
         }
+
+
     }
 
 }

@@ -64,6 +64,8 @@ namespace StageBeheersTool.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IBedrijfRepository>().To<BedrijfRepository>().InRequestScope();
+            kernel.Bind<IStageopdrachtRepository>().To<StageopdrachtRepository>().InRequestScope();
+            kernel.Bind<ISpecialisatieRepository>().To<SpecialisatieRepository>().InRequestScope();
             kernel.Bind<StageToolDbContext>().ToSelf().InRequestScope();
         }        
     }

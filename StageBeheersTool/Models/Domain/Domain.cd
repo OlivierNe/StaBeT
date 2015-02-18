@@ -1,10 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="StageBeheersTool.Models.Domain.Bedrijf">
-    <Position X="1" Y="0.5" Width="2.75" />
+    <Position X="2.25" Y="0.5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AIACAEAAACAAAAAAAAAAhAAAAACAAAIAAAAAIAAACAA=</HashCode>
+      <HashCode>AIACQEAAACgAAAAABAAAhAAAAACAAAAAAAAAAAAAGAA=</HashCode>
       <FileName>Models\Domain\Bedrijf.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ContactPersonen" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="StageBeheersTool.Models.Domain.Persoon">
+    <Position X="8.25" Y="2.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAgAAgAAAAAAgAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Persoon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StageBeheersTool.Models.Domain.ContactPersoon">
+    <Position X="8.25" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\ContactPersoon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StageBeheersTool.Models.Domain.Stageopdracht">
+    <Position X="2.25" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>BAACAAAAAAEAAAAAIAAAAAAAAAAAAAAAAAAAIAAQAAA=</HashCode>
+      <FileName>Models\Domain\Stageopdracht.cs</FileName>
+      <NewMemberFileName>Models\Domain\StageOpdracht.cs</NewMemberFileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

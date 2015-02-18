@@ -1,0 +1,65 @@
+﻿@model Stageopdracht
+
+@{
+    ViewBag.Title = "Bevestig verwijderen";
+}
+
+<h2>Bevestig verwijderen.</h2>
+
+<h3>Weet je zeker dat je deze stageopdracht wil verwijderen ?</h3>
+
+<div>
+    <h4>Stageopdracht</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Titel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Titel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Omschrijving)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Omschrijving)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Semester)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Semester)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AantalStudenten)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AantalStudenten)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Academiejaar)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Academiejaar)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Verwijderen" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

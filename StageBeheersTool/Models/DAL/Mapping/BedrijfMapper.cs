@@ -17,6 +17,7 @@ namespace StageBeheersTool.Models.DAL.Mapping
             this.Property(bedrijf => bedrijf.Straat).IsRequired().HasMaxLength(100);
             this.Property(bedrijf => bedrijf.Postcode).IsRequired().IsFixedLength().HasMaxLength(4);
             this.Property(bedrijf => bedrijf.Straatnummer).IsRequired();
+            this.Property(bedrijf => bedrijf.Bereikbaarheid).IsRequired();
             this.ToTable("Bedrijven");
 
         }
