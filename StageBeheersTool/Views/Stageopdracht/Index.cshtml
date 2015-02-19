@@ -1,59 +1,80 @@
-﻿@model IEnumerable<Stageopdracht>
+﻿@model IPagedList<Stageopdracht>
 
-<h2>Stageopdrachten</h2>
+@{
+    ViewBag.Title = "Stageopdrachten";
+}
 
+<h2>@ViewBag.Title</h2>
+<p class="text-success">
+    @ViewBag.Message
+</p>
 <p>
     @Html.ActionLink("Nieuwe stageopdracht", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Titel)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Titel)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Omschrijving)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Specialisatie)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Specialisatie)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Semester)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Semester)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AantalStudenten)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Academiejaar)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().AantalStudenten)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Titel)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Omschrijving)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Specialisatie.Naam)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Semester)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AantalStudenten)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Academiejaar)
-        </td>
-        <td>
-            @Html.ActionLink("Wijzigen", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Verwijderen", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Specialisatie.Naam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AantalStudenten)
+            </td>
+            <td>
+                @Html.ActionLink("Wijzigen", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
 
+                @if (item.IsGoedgekeurd == false)
+                {
+                    @Html.Raw("|");
+                    @Html.ActionLink("Verwijderen", "Delete", new { id = item.Id })
+                }
+            </td>
+        </tr>
+    }
 </table>
+
+<div class="pager">
+    @if (Model.HasPreviousPage)
+    {
+        @Html.ActionLink("<<", "Index", new { page = Model.PageNumber - 1 })
+    }
+    else
+    {
+        @Html.Raw("<< ")
+    }
+
+    Pagina @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) van @(Model.PageCount)
+    @if (Model.HasNextPage)
+    {
+        @Html.ActionLink(">>", "Index", new { page = Model.PageNumber + 1 })
+    }
+    else
+    {
+        @:>>
+        @Html.Raw(" ")
+    }
+</div>

@@ -18,7 +18,6 @@ namespace StageBeheersTool.Models.DAL
         public StageToolDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-            //Database.SetInitializer<StageToolDbContext>(null);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -27,10 +26,10 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new BedrijfMapper());
             modelBuilder.Configurations.Add(new StageopdrachtMapper());
             modelBuilder.Configurations.Add(new SpecialisatieMapper());
+            modelBuilder.Configurations.Add(new ContactpersoonMapper());
 
             modelBuilder.Conventions.Remove<System.Data.Entity.ModelConfiguration.Conventions.PluralizingTableNameConvention>();
             
-
 
             modelBuilder.Entity<IdentityRole>()
                 .Property(c => c.Name).HasMaxLength(128).IsRequired();

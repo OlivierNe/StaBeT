@@ -17,6 +17,9 @@ namespace StageBeheersTool.App_Start
             Mapper.CreateMap<Stageopdracht, StageopdrachtCreateVM>();
             Mapper.CreateMap<StageopdrachtEditVM, Stageopdracht>();
             Mapper.CreateMap<Stageopdracht, StageopdrachtEditVM>();
+            Mapper.CreateMap<ContactpersoonCreateVM, Contactpersoon>();
+            Mapper.CreateMap<ContactpersoonEditVM, Contactpersoon>();
+            Mapper.CreateMap<Contactpersoon, ContactpersoonEditVM>();
         }
     }
 }

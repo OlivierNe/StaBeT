@@ -14,7 +14,7 @@ namespace StageBeheersTool.ViewModels
         [StringLength(200, ErrorMessage = "{0} mag niet langer zijn dan 200 characters.")]
         public string Titel { get; set; }
         [Required]
-        [StringLength(200, ErrorMessage = "{0} mag niet langer zijn dan 200 characters.")]
+        [DataType(DataType.MultilineText)]
         public string Omschrijving { get; set; }
         [Required]
         [RegularExpression("[0-9]{4}-[0-9]{4}", ErrorMessage = "Ongeldig academiejaar")]
@@ -22,27 +22,39 @@ namespace StageBeheersTool.ViewModels
         [Required]
         [Display(Name = "Specialisatie")]
         public int SpecialisatieId { get; set; }
-        public SelectList SpecialisatieSelectList { get; set; }
         [Required]
         public int Semester { get; set; }
         [Required]
         [Range(1, 3)]
+        [Display(Name = "Aantal Studenten")]
         public int AantalStudenten { get; set; }
+        [Required]
+        [Display(Name = "Contractondertekenaar")]
+        public int ContractOndertekenaarId { get; set; }
+        [Required]
+        [Display(Name = "Stagementor")]
+        public int StagementorId { get; set; }
+        public SelectList SpecialisatieSelectList { get; set; }
+        public SelectList ContractOndertekenaarsSelectList { get; set; }
+        public SelectList StagementorsSelectList { get; set; }
 
-        public StageopdrachtCreateVM(IEnumerable<Specialisatie> specialisaties)
+        public StageopdrachtCreateVM(IEnumerable<Specialisatie> specialisaties,
+            IEnumerable<Contactpersoon> contractOndertekenaars, IEnumerable<Contactpersoon> stagementors)
+            : this()
         {
-            SetSelectList(specialisaties);
+            SetSelectLists(specialisaties, contractOndertekenaars, stagementors);
         }
         public StageopdrachtCreateVM()
         {
-
+            Academiejaar = DateTime.Now.Year + "-" + (DateTime.Now.Year + 1);
+            Semester = 2;
         }
-        //TODO
-        //public StagecontractOndertekenaar ContractOndertekenaar { get; set; }
-        //public Stagementor Stagementor { get; set; }
-        public void SetSelectList(IEnumerable<Specialisatie> specialisaties)
+        public void SetSelectLists(IEnumerable<Specialisatie> specialisaties,
+            IEnumerable<Contactpersoon> contractOndertekenaars, IEnumerable<Contactpersoon> stagementors)
         {
             SpecialisatieSelectList = new SelectList(specialisaties, "Id", "Naam", SpecialisatieId != 0 ? SpecialisatieId.ToString() : "");
+            ContractOndertekenaarsSelectList = new SelectList(contractOndertekenaars, "Id", "Naam", ContractOndertekenaarId != 0 ? ContractOndertekenaarId.ToString() : "");
+            StagementorsSelectList = new SelectList(stagementors, "Id", "Naam", StagementorId != 0 ? StagementorId.ToString() : "");
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -64,16 +76,31 @@ namespace StageBeheersTool.ViewModels
 
     }
 
-    public class StageopdrachtEditVM : StageopdrachtCreateVM
+    public class StageopdrachtEditVM : StageopdrachtCreateVM, IValidatableObject
     {
         public StageopdrachtEditVM()
+            : base()
         {
         }
 
-        public StageopdrachtEditVM(IQueryable<Specialisatie> specialisaties) : base(specialisaties)
+        public StageopdrachtEditVM(IEnumerable<Specialisatie> specialisaties, IEnumerable<Contactpersoon> contractOndertekenaars, IEnumerable<Contactpersoon> stagementors)
+            : base(specialisaties, contractOndertekenaars, stagementors)
         {
         }
         public int Id { get; set; }
-    } 
+        [Display(Name = "Aantal toegewezen studenten")]
+        [Range(0, 3)]
+        public int AantalToegewezenStudenten { get; set; }
+
+        public new IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var errors = base.Validate(validationContext).ToList();
+            if (AantalToegewezenStudenten > AantalStudenten)
+            {
+                errors.Add(new ValidationResult("Aantal toegewezen studenten moet lager zijn dan aantal studenten."));
+            }
+            return errors;
+        }
+    }
 
 }

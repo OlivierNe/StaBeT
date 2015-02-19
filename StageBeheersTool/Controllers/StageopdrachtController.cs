@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+
 
 namespace StageBeheersTool.Controllers
 {
@@ -15,21 +17,26 @@ namespace StageBeheersTool.Controllers
         private IBedrijfRepository bedrijfRepository;
         private ISpecialisatieRepository specialisatieRepository;
 
-        public StageopdrachtController(IBedrijfRepository bedrijfRepository, ISpecialisatieRepository specialisatieRepository)
+        public StageopdrachtController(IBedrijfRepository bedrijfRepository,
+            ISpecialisatieRepository specialisatieRepository)
         {
             this.bedrijfRepository = bedrijfRepository;
             this.specialisatieRepository = specialisatieRepository;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string message, int page = 1)
         {
-            return View(bedrijfRepository.FindByEmail(User.Identity.Name).Stageopdrachten);
+            ViewBag.Message = message;
+            return View(FindBedrijf().Stageopdrachten.ToPagedList(page, 10));
         }
 
         [Authorize(Roles = "bedrijf")]
         public ActionResult Create()
         {
-            return View(new StageopdrachtCreateVM(specialisatieRepository.FindAll()));
+            var bedrijf = FindBedrijf();
+            return View(new StageopdrachtCreateVM(specialisatieRepository.FindAll(),
+                bedrijf.FindAllContractOndertekenaars(),
+                bedrijf.FindAllStagementors()));
         }
 
 
@@ -38,60 +45,75 @@ namespace StageBeheersTool.Controllers
         [Authorize(Roles = "bedrijf")]
         public ActionResult Create(StageopdrachtCreateVM model)
         {
+            var bedrijf = FindBedrijf();
             if (ModelState.IsValid)
             {
                 var stageopdracht = Mapper.Map<StageopdrachtCreateVM, Stageopdracht>(model);
                 stageopdracht.Specialisatie = specialisatieRepository.FindBy(model.SpecialisatieId);
-                bedrijfRepository.FindByEmail(User.Identity.Name).AddStageopdracht(stageopdracht);
+                stageopdracht.Stagementor = bedrijf.FindContactpersoonById(model.StagementorId);
+                stageopdracht.ContractOndertekenaar = bedrijf.FindContactpersoonById(model.ContractOndertekenaarId);
+                bedrijf.AddStageopdracht(stageopdracht);
                 bedrijfRepository.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { message = "Stageopdracht succesvol aangemaakt." });
             }
-            return View(new StageopdrachtCreateVM(specialisatieRepository.FindAll()));
+            return View(new StageopdrachtCreateVM(specialisatieRepository.FindAll(),
+                bedrijf.FindAllContractOndertekenaars(),
+                bedrijf.FindAllStagementors()));
         }
 
         [Authorize(Roles = "bedrijf")]
         public ActionResult Details(int id)
         {
-            var bedrijf = bedrijfRepository.FindByEmail(User.Identity.Name);
-            Stageopdracht stageopdracht = bedrijf.FindStageopdrachtById(id);
+            var bedrijf = FindBedrijf();
+            var stageopdracht = bedrijf.FindStageopdrachtById(id);
             return View(stageopdracht);
         }
-
 
 
         [Authorize(Roles = "bedrijf")]
         public ActionResult Edit(int id)
         {
-            var stageopdracht = bedrijfRepository.FindByEmail(User.Identity.Name).FindStageopdrachtById(id);
-            var vm = Mapper.Map<Stageopdracht, StageopdrachtEditVM>(stageopdracht);
-            vm.SpecialisatieId = stageopdracht.Specialisatie.Id;
-            vm.SetSelectList(specialisatieRepository.FindAll());
-            return View(vm);
+            var bedrijf = FindBedrijf();
+            var stageopdracht = bedrijf.FindStageopdrachtById(id);
+            if (stageopdracht != null)
+            {
+                var model = Mapper.Map<Stageopdracht, StageopdrachtEditVM>(stageopdracht);
+                model.SpecialisatieId = stageopdracht.Specialisatie.Id;
+                model.ContractOndertekenaarId = stageopdracht.ContractOndertekenaar.Id;
+                model.StagementorId = stageopdracht.Stagementor.Id;
+                model.SetSelectLists(specialisatieRepository.FindAll(),
+                    bedrijf.FindAllContractOndertekenaars(),
+                    bedrijf.FindAllStagementors());
+                return View(model);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "bedrijf")]
-        [ActionName("Edit")]
-        public ActionResult EditConfirmed(StageopdrachtEditVM model)
+        public ActionResult Edit(StageopdrachtEditVM model)
         {
+            var bedrijf = FindBedrijf();
             if (ModelState.IsValid)
             {
                 var stageopdracht = Mapper.Map<StageopdrachtEditVM, Stageopdracht>(model);
                 stageopdracht.Specialisatie = specialisatieRepository.FindBy(model.SpecialisatieId);
-                var bedrijf = bedrijfRepository.FindByEmail(User.Identity.Name);
                 bedrijf.UpdateStageopdracht(stageopdracht);
                 bedrijfRepository.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(new StageopdrachtEditVM(specialisatieRepository.FindAll()));
+            model.SetSelectLists(specialisatieRepository.FindAll(),
+                bedrijf.FindAllContractOndertekenaars(),
+                bedrijf.FindAllStagementors());
+            return View(model);
         }
 
         [Authorize(Roles = "bedrijf")]
         public ActionResult Delete(int id)
         {
-            var bedrijf = bedrijfRepository.FindByEmail(User.Identity.Name);
-            Stageopdracht stageopdracht = bedrijf.FindStageopdrachtById(id);
+            var bedrijf = FindBedrijf();
+            var stageopdracht = bedrijf.FindStageopdrachtById(id);
             return View(stageopdracht);
         }
 
@@ -101,12 +123,23 @@ namespace StageBeheersTool.Controllers
         [Authorize(Roles = "bedrijf")]
         public ActionResult DeleteConfirmed(int id)
         {
-            var bedrijf = bedrijfRepository.FindByEmail(User.Identity.Name);
+            var bedrijf = FindBedrijf();
+            var stageopdracht = bedrijf.FindStageopdrachtById(id);
+            if (stageopdracht.IsGoedgekeurd)
+            {
+                return RedirectToAction("Index", new { message = "Goegekeurde stages kunnen niet verwijderd worden." });
+            }
             bedrijf.DeleteStageopdracht(id);
             bedrijfRepository.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { message = "Stageopdracht '" + stageopdracht.Titel + "' succesvol verwijderd." });
         }
 
+        #region Helpers
+        private Bedrijf FindBedrijf()
+        {
+            return bedrijfRepository.FindByEmail(User.Identity.Name);
+        }
+        #endregion
 
     }
 }

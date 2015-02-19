@@ -13,9 +13,11 @@ namespace StageBeheersTool.Models.DAL.Mapping
         {
             this.ToTable("Stageopdrachten");
             this.Property(so => so.Titel).IsRequired().HasMaxLength(200);
-            this.Property(so => so.Omschrijving).IsRequired().HasMaxLength(200);
+            this.Property(so => so.Omschrijving).IsRequired();
             this.Property(so => so.Academiejaar).IsRequired();
-
+            this.HasRequired(so => so.Stagementor).WithMany();
+            this.HasRequired(so => so.ContractOndertekenaar).WithMany();
+            this.HasRequired(so => so.Specialisatie);
         }
     }
 }

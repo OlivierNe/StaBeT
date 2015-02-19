@@ -18,10 +18,11 @@ namespace StageBeheersTool.Models.Domain
         public virtual Specialisatie Specialisatie { get; set; }
         public int Semester { get; set; }
         public int AantalStudenten { get; set; }
+        public int AantalToegewezenStudenten { get; set; }
         public string Academiejaar { get; set; }
-        public StagecontractOndertekenaar ContractOndertekenaar { get; set; }
-        public Stagementor Stagementor { get; set; }
-
+        public Contactpersoon ContractOndertekenaar { get; set; }
+        public Contactpersoon Stagementor { get; set; }
+        public bool IsGoedgekeurd { get; set; }
 
     }
 }

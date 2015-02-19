@@ -62,6 +62,12 @@
     <Reference Include="Ninject.Web.Mvc">
       <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -186,6 +192,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ContactpersoonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StageopdrachtController.cs" />
@@ -195,23 +202,23 @@
     <Compile Include="Models\DAL\ApplicationUser.cs" />
     <Compile Include="Models\DAL\BedrijfRepository.cs" />
     <Compile Include="Models\DAL\Mapping\BedrijfMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\ContactpersoonMapper.cs" />
     <Compile Include="Models\DAL\Mapping\SpecialisatieMapper.cs" />
     <Compile Include="Models\DAL\Mapping\StageopdrachtMapper.cs" />
     <Compile Include="Models\DAL\SpecialisatieRepository.cs" />
     <Compile Include="Models\Domain\ISpecialisatieRepository.cs" />
     <Compile Include="Models\Domain\Specialisatie.cs" />
-    <Compile Include="Models\Domain\StagecontractOndertekenaar.cs" />
-    <Compile Include="Models\Domain\Stagementor.cs" />
     <Compile Include="Models\DAL\StageopdrachtRepository.cs" />
     <Compile Include="Models\DAL\StageToolDbContext.cs" />
     <Compile Include="Models\DAL\StageToolDbInitializer.cs" />
     <Compile Include="Models\Domain\Bedrijf.cs" />
-    <Compile Include="Models\Domain\ContactPersoon.cs" />
+    <Compile Include="Models\Domain\Contactpersoon.cs" />
     <Compile Include="Models\Domain\IBedrijfRepository.cs" />
     <Compile Include="Models\Domain\IStageopdrachtRepository.cs" />
     <Compile Include="Models\Domain\Persoon.cs" />
     <Compile Include="Models\Domain\Stageopdracht.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
+    <Compile Include="ViewModels\ContactpersoonViewModels.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -220,6 +227,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -269,6 +277,11 @@
     <Content Include="Views\Stageopdracht\Delete.cshtml" />
     <Content Include="Views\Stageopdracht\Details.cshtml" />
     <Content Include="Views\Stageopdracht\Edit.cshtml" />
+    <Content Include="Views\ContactPersoon\Index.cshtml" />
+    <Content Include="Views\ContactPersoon\Create.cshtml" />
+    <Content Include="Views\ContactPersoon\Details.cshtml" />
+    <Content Include="Views\ContactPersoon\Edit.cshtml" />
+    <Content Include="Views\ContactPersoon\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -279,6 +292,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

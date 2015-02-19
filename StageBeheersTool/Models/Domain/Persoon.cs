@@ -18,8 +18,8 @@ namespace StageBeheersTool.Models.Domain
         public string Familienaam { get; set; }
         public string Voornaam { get; set; }
         public string Telefoonnummer { get; set; }
+        public string Email { get; set; }
         public string Gsmnummer { get; set; }
-        //adres
 
         public string Naam
         {

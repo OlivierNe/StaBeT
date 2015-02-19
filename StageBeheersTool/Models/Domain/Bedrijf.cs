@@ -20,20 +20,24 @@ namespace StageBeheersTool.Models.Domain
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        public int Straatnummer { get; set; }
+        public string Straatnummer { get; set; }
         public string Telefoonnummer { get; set; }
         public string Bereikbaarheid { get; set; } //(wagen – openbaar vervoer – georganiseerd vervoer door bedrijf) 
         public string BedrijfsActiviteiten { get; set; } //(bank – software ontwikkelaar – openbare diensten ….)
         public virtual ICollection<Stageopdracht> Stageopdrachten { get; set; }
-        public virtual ICollection<ContactPersoon> ContactPersonen { get; set; }
+        public virtual ICollection<Contactpersoon> Contactpersonen { get; set; }
         #endregion
+
+        #region Constructors
 
         public Bedrijf()
         {
             Stageopdrachten = new List<Stageopdracht>();
-            ContactPersonen = new List<ContactPersoon>();
+            Contactpersonen = new List<Contactpersoon>();
         }
+        #endregion
 
+        #region public methods
         public void AddStageopdracht(Stageopdracht stageopdracht)
         {
             Stageopdrachten.Add(stageopdracht);
@@ -54,7 +58,7 @@ namespace StageBeheersTool.Models.Domain
             return DeleteStageopdracht(FindStageopdrachtById(id));
         }
 
-        public void UpdateStageopdracht(Stageopdracht stageopdracht)
+        public bool UpdateStageopdracht(Stageopdracht stageopdracht)
         {
             var teUpdatenOpdracht = FindStageopdrachtById(stageopdracht.Id);
             if (stageopdracht != null)
@@ -65,7 +69,59 @@ namespace StageBeheersTool.Models.Domain
                 teUpdatenOpdracht.Specialisatie = stageopdracht.Specialisatie;
                 teUpdatenOpdracht.Academiejaar = stageopdracht.Academiejaar;
                 teUpdatenOpdracht.AantalStudenten = stageopdracht.AantalStudenten;
+                teUpdatenOpdracht.AantalToegewezenStudenten = stageopdracht.AantalToegewezenStudenten;
+                return true;
             }
+            return false;
         }
+
+        public void AddContactpersoon(Contactpersoon contactpersoon)
+        {
+            Contactpersonen.Add(contactpersoon);
+        }
+
+        public Contactpersoon FindContactpersoonById(int id)
+        {
+            return Contactpersonen.FirstOrDefault(cp => cp.Id == id);
+        }
+
+        public bool UpdateContactpersoon(Contactpersoon contactpersoon)
+        {
+            var teUpdatenPersoon = FindContactpersoonById(contactpersoon.Id);
+            if (contactpersoon != null)
+            {
+                teUpdatenPersoon.Voornaam = contactpersoon.Voornaam;
+                teUpdatenPersoon.Familienaam = contactpersoon.Familienaam;
+                teUpdatenPersoon.Gsmnummer = contactpersoon.Gsmnummer;
+                teUpdatenPersoon.Telefoonnummer = contactpersoon.Telefoonnummer;
+                teUpdatenPersoon.IsStagementor = contactpersoon.IsStagementor;
+                teUpdatenPersoon.IsContractOndertekenaar = contactpersoon.IsContractOndertekenaar;
+                teUpdatenPersoon.Aanspreektitel = contactpersoon.Aanspreektitel;
+                teUpdatenPersoon.Bedrijfsfunctie = contactpersoon.Bedrijfsfunctie;
+                teUpdatenPersoon.Email = contactpersoon.Email;
+                return true;
+            }
+            return false;
+
+        }
+
+        public bool DeleteContactpersoon(Contactpersoon contactpersoon)
+        {
+            return Contactpersonen.Remove(contactpersoon);
+        }
+
+        public IEnumerable<Contactpersoon> FindAllStagementors()
+        {
+            return Contactpersonen.Where(cp => cp.IsStagementor);
+        }
+
+        public IEnumerable<Contactpersoon> FindAllContractOndertekenaars()
+        {
+            return Contactpersonen.Where(cp => cp.IsContractOndertekenaar);
+        }
+
+        #endregion
+
+
     }
 }
