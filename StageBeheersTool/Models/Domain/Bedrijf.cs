@@ -48,15 +48,6 @@ namespace StageBeheersTool.Models.Domain
             return Stageopdrachten.FirstOrDefault(so => so.Id == id);
         }
 
-        public bool DeleteStageopdracht(Stageopdracht stageopdracht)
-        {
-            return Stageopdrachten.Remove(stageopdracht);
-        }
-
-        public bool DeleteStageopdracht(int id)
-        {
-            return DeleteStageopdracht(FindStageopdrachtById(id));
-        }
 
         public bool UpdateStageopdracht(Stageopdracht stageopdracht)
         {
@@ -70,6 +61,8 @@ namespace StageBeheersTool.Models.Domain
                 teUpdatenOpdracht.Academiejaar = stageopdracht.Academiejaar;
                 teUpdatenOpdracht.AantalStudenten = stageopdracht.AantalStudenten;
                 teUpdatenOpdracht.AantalToegewezenStudenten = stageopdracht.AantalToegewezenStudenten;
+                teUpdatenOpdracht.Stagementor = stageopdracht.Stagementor;
+                teUpdatenOpdracht.ContractOndertekenaar = stageopdracht.ContractOndertekenaar;
                 return true;
             }
             return false;
@@ -104,12 +97,7 @@ namespace StageBeheersTool.Models.Domain
             return false;
 
         }
-
-        public bool DeleteContactpersoon(Contactpersoon contactpersoon)
-        {
-            return Contactpersonen.Remove(contactpersoon);
-        }
-
+        
         public IEnumerable<Contactpersoon> FindAllStagementors()
         {
             return Contactpersonen.Where(cp => cp.IsStagementor);

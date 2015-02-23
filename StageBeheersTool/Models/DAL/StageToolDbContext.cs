@@ -8,7 +8,8 @@ using System.Linq;
 using System.Web;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.DAL.Mapping;
-
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Web.Mvc;
 
 namespace StageBeheersTool.Models.DAL
 {
@@ -28,8 +29,8 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new SpecialisatieMapper());
             modelBuilder.Configurations.Add(new ContactpersoonMapper());
 
-            modelBuilder.Conventions.Remove<System.Data.Entity.ModelConfiguration.Conventions.PluralizingTableNameConvention>();
-            
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
 
             modelBuilder.Entity<IdentityRole>()
                 .Property(c => c.Name).HasMaxLength(128).IsRequired();
@@ -40,10 +41,11 @@ namespace StageBeheersTool.Models.DAL
         public DbSet<Bedrijf> Bedrijven { get; set; }
         public DbSet<Stageopdracht> Stageopdrachten { get; set; }
         public DbSet<Specialisatie> Specialisaties { get; set; }
+        public DbSet<Contactpersoon> Contactpersonen { get; set; }
 
         public static StageToolDbContext Create()
         {
-            return new StageToolDbContext();
+            return DependencyResolver.Current.GetService(typeof(StageToolDbContext)) as StageToolDbContext;
         }
 
 

@@ -16,17 +16,18 @@ namespace StageBeheersTool.Controllers
     {
         private IBedrijfRepository bedrijfRepository;
         private ISpecialisatieRepository specialisatieRepository;
+        private IStageopdrachtRepository stageopdrachtRepository;
 
         public StageopdrachtController(IBedrijfRepository bedrijfRepository,
-            ISpecialisatieRepository specialisatieRepository)
+            ISpecialisatieRepository specialisatieRepository, IStageopdrachtRepository stageopdrachtRepository)
         {
             this.bedrijfRepository = bedrijfRepository;
             this.specialisatieRepository = specialisatieRepository;
+            this.stageopdrachtRepository = stageopdrachtRepository;
         }
 
-        public ActionResult Index(string message, int page = 1)
+        public ActionResult Index(int page = 1)
         {
-            ViewBag.Message = message;
             return View(FindBedrijf().Stageopdrachten.ToPagedList(page, 10));
         }
 
@@ -34,6 +35,13 @@ namespace StageBeheersTool.Controllers
         public ActionResult Create()
         {
             var bedrijf = FindBedrijf();
+            var constractondertekenaars = bedrijf.FindAllContractOndertekenaars();
+            var stagementors = bedrijf.FindAllStagementors();
+            if (constractondertekenaars.Count() == 0 || stagementors.Count() == 0)
+            {
+                ModelState.AddModelError("", "Geen stagementor of constractondertekenaar gevonden. Klik <a href='/Contactpersoon/Create'>hier</a> om 1 aan te maken.");
+            }
+
             return View(new StageopdrachtCreateVM(specialisatieRepository.FindAll(),
                 bedrijf.FindAllContractOndertekenaars(),
                 bedrijf.FindAllStagementors()));
@@ -54,7 +62,8 @@ namespace StageBeheersTool.Controllers
                 stageopdracht.ContractOndertekenaar = bedrijf.FindContactpersoonById(model.ContractOndertekenaarId);
                 bedrijf.AddStageopdracht(stageopdracht);
                 bedrijfRepository.SaveChanges();
-                return RedirectToAction("Index", new { message = "Stageopdracht succesvol aangemaakt." });
+                TempData["message"] = "Stageopdracht succesvol aangemaakt.";
+                return RedirectToAction("Index");
             }
             return View(new StageopdrachtCreateVM(specialisatieRepository.FindAll(),
                 bedrijf.FindAllContractOndertekenaars(),
@@ -66,7 +75,11 @@ namespace StageBeheersTool.Controllers
         {
             var bedrijf = FindBedrijf();
             var stageopdracht = bedrijf.FindStageopdrachtById(id);
-            return View(stageopdracht);
+            if (stageopdracht != null)
+            {
+                return View(stageopdracht);
+            }
+            return RedirectToAction("Index");
         }
 
 
@@ -99,9 +112,11 @@ namespace StageBeheersTool.Controllers
             {
                 var stageopdracht = Mapper.Map<StageopdrachtEditVM, Stageopdracht>(model);
                 stageopdracht.Specialisatie = specialisatieRepository.FindBy(model.SpecialisatieId);
+                stageopdracht.Stagementor = bedrijf.FindContactpersoonById(model.StagementorId);
+                stageopdracht.ContractOndertekenaar = bedrijf.FindContactpersoonById(model.ContractOndertekenaarId);
                 bedrijf.UpdateStageopdracht(stageopdracht);
                 bedrijfRepository.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = model.Id });
             }
             model.SetSelectLists(specialisatieRepository.FindAll(),
                 bedrijf.FindAllContractOndertekenaars(),
@@ -114,7 +129,11 @@ namespace StageBeheersTool.Controllers
         {
             var bedrijf = FindBedrijf();
             var stageopdracht = bedrijf.FindStageopdrachtById(id);
-            return View(stageopdracht);
+            if (stageopdracht != null)
+            {
+                return View(stageopdracht);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -125,13 +144,19 @@ namespace StageBeheersTool.Controllers
         {
             var bedrijf = FindBedrijf();
             var stageopdracht = bedrijf.FindStageopdrachtById(id);
-            if (stageopdracht.IsGoedgekeurd)
+            if (stageopdracht != null)
             {
-                return RedirectToAction("Index", new { message = "Goegekeurde stages kunnen niet verwijderd worden." });
+                if (stageopdracht.IsGoedgekeurd())
+                {
+                    TempData["message"] = "Goegekeurde stages kunnen niet meer verwijderd worden.";
+                    return RedirectToAction("Index");
+                }
+                stageopdrachtRepository.Delete(stageopdracht);
+                bedrijfRepository.SaveChanges();
+                TempData["message"] = "Stageopdracht '" + stageopdracht.Titel + "' succesvol verwijderd.";
+                return RedirectToAction("Index");
             }
-            bedrijf.DeleteStageopdracht(id);
-            bedrijfRepository.SaveChanges();
-            return RedirectToAction("Index", new { message = "Stageopdracht '" + stageopdracht.Titel + "' succesvol verwijderd." });
+            return RedirectToAction("Index");
         }
 
         #region Helpers

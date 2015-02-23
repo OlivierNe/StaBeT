@@ -20,7 +20,7 @@ namespace StageBeheersTool.Models.DAL
 
         public void Delete(Stageopdracht stageopdracht)
         {
-            throw new NotImplementedException();
+            stageopdrachten.Remove(stageopdracht);
         }
 
         public IQueryable<Stageopdracht> FindAll()

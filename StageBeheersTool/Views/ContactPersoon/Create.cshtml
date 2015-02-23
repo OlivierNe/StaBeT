@@ -1,28 +1,24 @@
 ﻿@model StageBeheersTool.ViewModels.ContactpersoonCreateVM
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Nieuw contactpersoon";
 }
 
-<h2>Create</h2>
-
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>Contactpersoon</h4>
+        <h2>@ViewBag.Title</h2>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.Familienaam, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Familienaam, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Familienaam, new { htmlAttributes = new { @class = "form-control", autofocus = "" } })
                 @Html.ValidationMessageFor(model => model.Familienaam, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.Voornaam, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -62,7 +58,6 @@
                 @Html.ValidationMessageFor(model => model.Bedrijfsfunctie, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.IsStagementor, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -82,19 +77,19 @@
                 </div>
             </div>
         </div>
-
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="col-md-offset-4">
+                <input type="submit" value="Opslaan" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Terug naar overzicht", "Index")
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/stagetool-form.js"></script>
 }

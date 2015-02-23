@@ -79,7 +79,6 @@ namespace StageBeheersTool.ViewModels
     public class StageopdrachtEditVM : StageopdrachtCreateVM, IValidatableObject
     {
         public StageopdrachtEditVM()
-            : base()
         {
         }
 
@@ -97,7 +96,7 @@ namespace StageBeheersTool.ViewModels
             var errors = base.Validate(validationContext).ToList();
             if (AantalToegewezenStudenten > AantalStudenten)
             {
-                errors.Add(new ValidationResult("Aantal toegewezen studenten moet lager zijn dan aantal studenten."));
+                errors.Add(new ValidationResult("Aantal toegewezen studenten moet lager zijn dan het aantal studenten."));
             }
             return errors;
         }

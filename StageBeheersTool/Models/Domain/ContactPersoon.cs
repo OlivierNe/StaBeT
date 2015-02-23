@@ -16,8 +16,7 @@ namespace StageBeheersTool.Models.Domain
         public bool IsContractOndertekenaar { get; set; }
         public string Bedrijfsfunctie { get; set; }
 
-
     }
 
-    
+
 }

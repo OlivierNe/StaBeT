@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 
@@ -12,6 +13,7 @@ namespace StageBeheersTool.Models.Domain
     //en het bedrijf dient een e-mail te ontvangen met de gepaste tekst over de (wijzigingen) stage-opdracht.
     public class Stageopdracht
     {
+        #region Properties
         public int Id { get; set; }
         public string Titel { get; set; }
         public string Omschrijving { get; set; }
@@ -22,7 +24,23 @@ namespace StageBeheersTool.Models.Domain
         public string Academiejaar { get; set; }
         public Contactpersoon ContractOndertekenaar { get; set; }
         public Contactpersoon Stagementor { get; set; }
-        public bool IsGoedgekeurd { get; set; }
+        public Bedrijf Bedrijf { get; set; }
+        public StageopdrachtStatus Status { get; set; } 
+        #endregion
+
+        #region Constructors
+        public Stageopdracht()
+        {
+            Status = StageopdrachtStatus.NietBeoordeeld;
+        } 
+        #endregion
+
+        #region Public methods
+        public bool IsGoedgekeurd()
+        {
+            return Status == StageopdrachtStatus.Goedgekeurd;
+        } 
+        #endregion
 
     }
 }

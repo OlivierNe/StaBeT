@@ -16,7 +16,6 @@ namespace StageBeheersTool.ViewModels
         public string Familienaam { get; set; }
         [Required]
         public string Voornaam { get; set; }
-        [Required]
         public string Aanspreektitel { get; set; }
         [Required]
         [EmailAddress]

@@ -21,7 +21,7 @@ namespace StageBeheersTool.Models.DAL.Mapping
             this.Property(bedrijf => bedrijf.Bereikbaarheid).IsRequired();
             this.Property(bedrijf => bedrijf.BedrijfsActiviteiten).IsRequired();
             this.HasMany(bedrijf => bedrijf.Contactpersonen).WithRequired().WillCascadeOnDelete(true);
-            this.HasMany(bedrijf => bedrijf.Stageopdrachten).WithOptional();//
+            this.HasMany(bedrijf => bedrijf.Stageopdrachten).WithRequired(so => so.Bedrijf);
         }
     }
 }

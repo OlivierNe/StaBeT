@@ -12,11 +12,13 @@ namespace StageBeheersTool.Models.DAL
     {
         private StageToolDbContext ctx;
         private DbSet<Bedrijf> bedrijven;
+        private DbSet<Contactpersoon> contactpersonen;
 
         public BedrijfRepository(StageToolDbContext ctx)
         {
             this.ctx = ctx;
-            bedrijven = ctx.Bedrijven;
+            this.bedrijven = ctx.Bedrijven;
+            this.contactpersonen = ctx.Contactpersonen;
         }
 
         public void Add(Bedrijf bedrijf)
@@ -34,6 +36,11 @@ namespace StageBeheersTool.Models.DAL
             return bedrijven.Include(bedrijf => bedrijf.Stageopdrachten)
                 .Include(bedrijf => bedrijf.Contactpersonen)
                 .FirstOrDefault(bedrijf => bedrijf.Email == email);
+        }
+
+        public void DeleteContactpersoon(Contactpersoon contactpersoon)
+        {
+            contactpersonen.Remove(contactpersoon);
         }
 
     }

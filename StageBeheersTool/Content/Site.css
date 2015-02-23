@@ -17,8 +17,26 @@
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+form input[type=text], input[type=email],input[type=password] {
+    max-width: 400px;
 }
+form input[type=number] {
+    max-width: 100px;
+}
+select{
+    max-width: 250px;
+}
+textarea {
+   max-width: 900px;
+}
+.field-validation-error{
+    border-radius: 4px;
+    border: solid 1px #333;
+    padding: 0 10px 0 5px;
+}
+
+.input-validation-error{
+    border: 1px solid #b94a48;
+}
+
+

@@ -1,104 +1,84 @@
-﻿@model StageBeheersTool.Models.Domain.Contactpersoon
+﻿@model Contactpersoon
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Contactpersoon verwijderen";
+    var message = TempData["message"];
 }
 
-<h2>Delete</h2>
+<h4 class="text-danger">
+    @message
+</h4>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Deze contactpersoon verwijderen?</h3>
 <div>
-    <h4>Contactpersoon</h4>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Familienaam)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Familienaam)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Voornaam)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Voornaam)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Telefoonnummer)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Telefoonnummer)
-        </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Email)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Email)
         </dd>
-
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefoonnummer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Telefoonnummer)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Gsmnummer)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Gsmnummer)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Naam)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Naam)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Aanspreektitel)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Aanspreektitel)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.IsStagementor)
+            Stagementor
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.IsStagementor)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.IsContractOndertekenaar)
+            Contractondertekenaar
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.IsContractOndertekenaar)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Bedrijfsfunctie)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Bedrijfsfunctie)
         </dd>
-
     </dl>
-
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Verwijderen" class="btn btn-default" /> |
+            @Html.ActionLink("Terug naar overzicht", "Index")
         </div>
     }
 </div>

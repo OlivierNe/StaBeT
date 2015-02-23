@@ -11,5 +11,6 @@ namespace StageBeheersTool.Models.Domain
         void Add(Bedrijf bedrijf);
         Bedrijf FindByEmail(string email);
         void SaveChanges();
+        void DeleteContactpersoon(Contactpersoon contactpersoon);
     }
 }

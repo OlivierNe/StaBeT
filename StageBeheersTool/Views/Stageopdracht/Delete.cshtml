@@ -1,16 +1,14 @@
 ﻿@model Stageopdracht
 
 @{
-    ViewBag.Title = "Bevestig verwijderen";
+    ViewBag.Title = "Stageopdracht verwijderen";
+    var message = TempData["message"];
 }
-
-<h2>Bevestig verwijderen.</h2>
-
-<h3>Weet je zeker dat je deze stageopdracht wil verwijderen ?</h3>
-
+<h4 class="text-danger">
+    @message
+</h4>
+<h3>Deze stageopdracht verwijderen?</h3>
 <div>
-    <h4>Stageopdracht</h4>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Titel)
@@ -59,7 +57,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Verwijderen" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Terug naar overzicht", "Index")
         </div>
     }
 </div>

@@ -206,6 +206,7 @@
     <Compile Include="Models\DAL\Mapping\SpecialisatieMapper.cs" />
     <Compile Include="Models\DAL\Mapping\StageopdrachtMapper.cs" />
     <Compile Include="Models\DAL\SpecialisatieRepository.cs" />
+    <Compile Include="Models\Domain\Begeleider.cs" />
     <Compile Include="Models\Domain\ISpecialisatieRepository.cs" />
     <Compile Include="Models\Domain\Specialisatie.cs" />
     <Compile Include="Models\DAL\StageopdrachtRepository.cs" />
@@ -216,7 +217,11 @@
     <Compile Include="Models\Domain\IBedrijfRepository.cs" />
     <Compile Include="Models\Domain\IStageopdrachtRepository.cs" />
     <Compile Include="Models\Domain\Persoon.cs" />
+    <Compile Include="Models\Domain\Stagebegeleider.cs" />
+    <Compile Include="Models\Domain\Stagecoördinator.cs" />
     <Compile Include="Models\Domain\Stageopdracht.cs" />
+    <Compile Include="Models\Domain\StageopdrachtStatus.cs" />
+    <Compile Include="Models\Domain\Student.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="ViewModels\ContactpersoonViewModels.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
@@ -232,6 +237,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\lib\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\lib\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\lib\bootstrap.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Models\Domain\Domain.cd" />
@@ -246,6 +253,8 @@
     <Content Include="Scripts\lib\modernizr-2.6.2.js" />
     <Content Include="Scripts\lib\respond.js" />
     <Content Include="Scripts\lib\respond.min.js" />
+    <Content Include="Scripts\stagetool-form.js" />
+    <Content Include="Scripts\stagetool.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

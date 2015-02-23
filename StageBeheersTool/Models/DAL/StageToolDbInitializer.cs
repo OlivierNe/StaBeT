@@ -74,7 +74,7 @@ namespace StageBeheersTool.Models.DAL
                         Telefoonnummer = "1234567",
                         IsStagementor = true,
                         IsContractOndertekenaar = false,
-                        Bedrijfsfunctie = "ietsnuttig",
+                        Bedrijfsfunctie = "bedrijfsfunctie",
                         Aanspreektitel = "meneer"
                     };
                     bedrijf1.AddContactpersoon(stagementor1);
@@ -82,14 +82,14 @@ namespace StageBeheersTool.Models.DAL
                 }
                 Contactpersoon contractOndertekenaar1 = new Contactpersoon()
                 {
-                    Voornaam = "voornaam1",
-                    Familienaam = "Naam1",
+                    Voornaam = "voornaam0",
+                    Familienaam = "Naam0",
                     Email = "contractondertekenaar1@bedrijf.be",
                     Gsmnummer = "123456",
                     Telefoonnummer = "1234567",
                     IsStagementor = false,
                     IsContractOndertekenaar = true,
-                    Bedrijfsfunctie = "ietsnuttig",
+                    Bedrijfsfunctie = "bedrijfsfunctie",
                     Aanspreektitel = "meneer"
                 };
                 bedrijf1.AddContactpersoon(contractOndertekenaar1);
@@ -106,7 +106,8 @@ namespace StageBeheersTool.Models.DAL
                         Academiejaar = "2015-2016",
                         AantalStudenten = 2,
                         ContractOndertekenaar = contractOndertekenaar1,
-                        Stagementor = stagementors[random.Next(0, stagementors.Count)]
+                        Stagementor = stagementors[random.Next(0, stagementors.Count)],
+                        Bedrijf = bedrijf1
                     };
                     bedrijf1.AddStageopdracht(stageopdracht);
                 }

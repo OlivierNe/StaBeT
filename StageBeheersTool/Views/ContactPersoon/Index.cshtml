@@ -1,51 +1,65 @@
-﻿@model IEnumerable<StageBeheersTool.Models.Domain.Contactpersoon>
+﻿@model IPagedList<Contactpersoon>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Contactpersonen";
+    var message = TempData["message"];
 }
-
-<h2>Index</h2>
-
+<h2>Contactpersonen</h2>
+<p class="text-success">
+    @message
+</p>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <a href="/Contactpersoon/Create" class="">Nieuw contactpersoon aanmaken</a>
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Naam)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Naam)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Aanspreektitel)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Bedrijfsfunctie)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Gsmnummer)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Email)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Telefoonnummer)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Gsmnummer)
         </th>
-
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Telefoonnummer)
+        </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Naam)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Aanspreektitel)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Gsmnummer)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Telefoonnummer)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Naam, "Details", new { id = item.Id })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bedrijfsfunctie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gsmnummer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefoonnummer)
+            </td>
+        </tr>
+    }
 
 </table>
+
+@if (Model.PageCount > 1)
+{
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), new PagedListRenderOptions()
+{
+    LinkToPreviousPageFormat = "<span class='glyphicon glyphicon-arrow-left'></span>",
+    LinkToNextPageFormat = "<span class='glyphicon glyphicon-arrow-right'></span>",
+    DisplayPageCountAndCurrentLocation = true,
+    PageCountAndCurrentLocationFormat = "Pagina {0} van {1}"
+})
+}

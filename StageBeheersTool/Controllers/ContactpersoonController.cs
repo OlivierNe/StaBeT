@@ -6,14 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using System.Data.Entity.Infrastructure;
 
 namespace StageBeheersTool.Controllers
 {
-    /*
-     * Aanmaken, wijzigen en verwijderen van contactpersonen (mentor-contractondertekenaar). 
-     * De informatie over een contactpersoon bevat minimaal: naam - voornaam - e-mail - gsm 
-     * - functie binnen het bedrijf - aanspreektitel - functie stageopdracht (mentor-contractondertekenaar.
-     * */
     [Authorize(Roles = "bedrijf")]
     public class ContactpersoonController : Controller
     {
@@ -24,10 +21,10 @@ namespace StageBeheersTool.Controllers
             this.bedrijfRepository = bedrijfRepository;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
             var contactPersonen = FindBedrijf().Contactpersonen;
-            return View(contactPersonen);
+            return View(contactPersonen.ToPagedList(page, 10));
         }
 
         public ActionResult Create()
@@ -65,8 +62,8 @@ namespace StageBeheersTool.Controllers
             var contactpersoon = FindBedrijf().FindContactpersoonById(id);
             if (contactpersoon != null)
             {
-                var vm = Mapper.Map<Contactpersoon, ContactpersoonEditVM>(contactpersoon);
-                return View(vm);
+                var model = Mapper.Map<Contactpersoon, ContactpersoonEditVM>(contactpersoon);
+                return View(model);
             }
             return RedirectToAction("Index");
         }
@@ -89,7 +86,11 @@ namespace StageBeheersTool.Controllers
         public ActionResult Delete(int id)
         {
             var contactpersoon = FindBedrijf().FindContactpersoonById(id);
-            return View(contactpersoon);
+            if (contactpersoon != null)
+            {
+                return View(contactpersoon);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -99,8 +100,21 @@ namespace StageBeheersTool.Controllers
         {
             var bedrijf = FindBedrijf();
             var contactpersoon = bedrijf.FindContactpersoonById(id);
-            bedrijf.DeleteContactpersoon(contactpersoon);
-            bedrijfRepository.SaveChanges();
+            if (contactpersoon != null)
+            {
+                try
+                {
+                    bedrijfRepository.DeleteContactpersoon(contactpersoon);
+                    bedrijfRepository.SaveChanges();
+                    TempData["message"] = "Contactpersoon " + contactpersoon.Naam + " verwijderd.";
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateException)
+                {
+                    TempData["message"] = "Verwijderen mislukt: Contactpersoon is aan 1 of meerdere stageopdrachten gekoppeld.";
+                    return View(contactpersoon);
+                }
+            }
             return RedirectToAction("Index");
         }
 

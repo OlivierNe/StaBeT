@@ -69,6 +69,11 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Wijzigen", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Terug naar overzicht", "Index") |
+    @Html.ActionLink("Aanpassen", "Edit", new { id = Model.Id }) 
+    @if (User.IsInRole("bedrijf") && Model.IsGoedgekeurd() == false)
+    {
+        @Html.Raw("|");
+        @Html.ActionLink("Verwijderen", "Delete", new { id = Model.Id })
+    }
 </p>
