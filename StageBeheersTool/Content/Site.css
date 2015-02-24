@@ -24,7 +24,7 @@ form input[type=number] {
     max-width: 100px;
 }
 select{
-    max-width: 250px;
+    max-width: 350px;
 }
 textarea {
    max-width: 900px;

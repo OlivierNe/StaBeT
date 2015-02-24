@@ -7,6 +7,7 @@ using Microsoft.Owin.Security.Google;
 using Owin;
 using StageBeheersTool.Models;
 using StageBeheersTool.Models.DAL;
+using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool
 {

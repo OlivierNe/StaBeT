@@ -25,12 +25,12 @@ namespace StageBeheersTool.Models.DAL
 
         public IQueryable<Stageopdracht> FindAll()
         {
-            throw new NotImplementedException();
+            return stageopdrachten;
         }
 
-        public IQueryable<Stageopdracht> FindById(int id)
+        public Stageopdracht FindById(int id)
         {
-            throw new NotImplementedException();
+            return stageopdrachten.FirstOrDefault(so => so.Id == id);
         }
 
         public IQueryable<Stageopdracht> FindBy(string seachTerm)

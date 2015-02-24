@@ -97,7 +97,7 @@ namespace StageBeheersTool.Models.Domain
             return false;
 
         }
-        
+
         public IEnumerable<Contactpersoon> FindAllStagementors()
         {
             return Contactpersonen.Where(cp => cp.IsStagementor);
@@ -108,7 +108,21 @@ namespace StageBeheersTool.Models.Domain
             return Contactpersonen.Where(cp => cp.IsContractOndertekenaar);
         }
 
+
+        public bool ContactpersoonHasStageopdrachten(Contactpersoon contactpersoon)
+        {
+            foreach (var so in Stageopdrachten)
+            {
+                if (so.Stagementor.Equals(contactpersoon) || so.ContractOndertekenaar.Equals(contactpersoon))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         #endregion
+
 
 
     }

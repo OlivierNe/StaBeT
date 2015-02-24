@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Stageopdracht>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Index2";
+}
+
+<h2>Index2</h2>
+
+@Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(so => so.Titel).Titled("Titel");
+    columns.Add(so => so.Specialisatie.Naam).Titled("Specialisatie");
+    columns.Add(so => so.Semester).Titled("Semester");
+    columns.Add(so => so.Academiejaar);
+    columns.Add(so => so.AantalToegewezenStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
+    columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf");
+}).WithPaging(10).Sortable().Filterable().WithMultipleFilters().Sortable().WithMultipleFilters()
+
+@section scripts{
+    <script src="~/Scripts/lib/gridmvc.min.js"></script>
+    <link href="~/Content/Gridmvc.css" rel="stylesheet" />
+}

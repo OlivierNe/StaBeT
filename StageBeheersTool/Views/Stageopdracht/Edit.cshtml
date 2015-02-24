@@ -69,7 +69,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SpecialisatieId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.SpecialisatieId, Model.SpecialisatieSelectList, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.SpecialisatieId, Model.SpecialisatieSelectList,"-- Selecteer een specialisatie --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SpecialisatieId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -77,14 +77,14 @@
         <div class="form-group">
             @Html.LabelFor(model => model.StagementorId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.StagementorId, Model.StagementorsSelectList, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.StagementorId, Model.StagementorsSelectList,"-- Selecteer een stagementor --" ,  new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.StagementorId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.ContractOndertekenaarId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ContractOndertekenaarId, Model.ContractOndertekenaarsSelectList, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ContractOndertekenaarId, Model.ContractOndertekenaarsSelectList,"-- Selecteer een constractondertekenaar --" , new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ContractOndertekenaarId, "", new { @class = "text-danger" })
             </div>
         </div>

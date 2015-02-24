@@ -8,7 +8,7 @@
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
-        <hr/>
+        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.Titel, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -39,7 +39,6 @@
                 @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.AantalStudenten, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -53,21 +52,24 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SpecialisatieId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.SpecialisatieId, Model.SpecialisatieSelectList, "", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.SpecialisatieId, Model.SpecialisatieSelectList, "-- Selecteer een specialisatie --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SpecialisatieId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.StagementorId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.StagementorId, Model.StagementorsSelectList, "", new { @class = "form-control" })
+            <div class="col-md-4" id="stagementorDropdown">
+                @Html.DropDownListFor(model => model.StagementorId, Model.StagementorsSelectList, "-- Selecteer een stagementor --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.StagementorId, "", new { @class = "text-danger" })
             </div>
+            <div id="stagementorForm" class="col-md-10" style="display:none"></div>
+            <button id="newStagementorBtn" class="btn btn-default col-md-2">Nieuwe stagementor</button>
         </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.ContractOndertekenaarId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ContractOndertekenaarId, Model.ContractOndertekenaarsSelectList, "", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ContractOndertekenaarId, Model.ContractOndertekenaarsSelectList, "-- Selecteer een constractondertekenaar --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ContractOndertekenaarId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -91,5 +93,21 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/stagetool.js"></script>
+    <script src="~/Scripts/stagetool-form.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            $("#newStagementorBtn").on("click", function () {
+                $(this).css("display", "none");
+                $.ajax("/Contactpersoon/CreateForm?isStagementor=true").done(function (data) {
+                    $("#stagementorDropdown").css("display", "none");
+                    $("#stagementorForm").css("display", "block").html(data);
+                });
+
+
+                return false;
+            });
+        });
+
+    </script>
 }

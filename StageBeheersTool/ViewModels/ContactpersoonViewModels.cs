@@ -21,6 +21,7 @@ namespace StageBeheersTool.ViewModels
         [EmailAddress]
         public string Email { get; set; }
         [Required]
+        [Display(Name="gsm")]
         public string Gsmnummer { get; set; }
         [Display(Name = "Functie binnen het bedrijf")]
         [Required]
@@ -37,17 +38,5 @@ namespace StageBeheersTool.ViewModels
     {
         public int Id { get; set; }
         public string Telefoonnummer { get; set; }
-    }
-
-    public class AdresVM
-    {
-        [Required]
-        public string Gemeente { get; set; }
-        [Required]
-        public int Postcode { get; set; }
-        [Required]
-        public string Straat { get; set; }
-        [Required]
-        public int Straatnummer { get; set; }
     }
 }

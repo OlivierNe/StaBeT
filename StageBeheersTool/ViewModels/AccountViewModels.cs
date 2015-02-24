@@ -10,7 +10,7 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "E-mail")]
         public string Email { get; set; }
         [Required]
-        [Display(Name="Bedrijfsnaam")]
+        [Display(Name = "Bedrijfsnaam")]
         public string Naam { get; set; }
         [Required]
         public string Gemeente { get; set; }
@@ -19,12 +19,12 @@ namespace StageBeheersTool.ViewModels
         [Required]
         public string Straat { get; set; }
         [Required]
+        [Display(Name="Nummer")]
         public int Straatnummer { get; set; }
         [Required]
+        [Display(Name = "Telefoon/gsm")]
         public string Telefoonnummer { get; set; }
-        [Required]
         public string Bereikbaarheid { get; set; } //(wagen – openbaar vervoer – georganiseerd vervoer door bedrijf) 
-        [Required]
         public string BedrijfsActiviteiten { get; set; } //(bank – software ontwikkelaar – openbare diensten ….)
     }
 
@@ -39,20 +39,20 @@ namespace StageBeheersTool.ViewModels
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "E-mail")]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Wachtwoord")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Onthouden")]
         public bool RememberMe { get; set; }
     }
 
-  
+
 
     public class ResetPasswordViewModel
     {

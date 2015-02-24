@@ -9,7 +9,7 @@ namespace StageBeheersTool.Models.Domain
     {
         void Delete(Stageopdracht stageopdracht);
         IQueryable<Stageopdracht> FindAll();
-        IQueryable<Stageopdracht> FindById(int id);
+        Stageopdracht FindById(int id);
         IQueryable<Stageopdracht> FindBy(string seachTerm);
     }
 }

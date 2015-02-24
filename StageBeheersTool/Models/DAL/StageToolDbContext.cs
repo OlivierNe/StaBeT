@@ -42,6 +42,7 @@ namespace StageBeheersTool.Models.DAL
         public DbSet<Stageopdracht> Stageopdrachten { get; set; }
         public DbSet<Specialisatie> Specialisaties { get; set; }
         public DbSet<Contactpersoon> Contactpersonen { get; set; }
+        public DbSet<Student> Studenten { get; set; }
 
         public static StageToolDbContext Create()
         {

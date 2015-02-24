@@ -19,21 +19,17 @@ namespace StageBeheersTool.ViewModels
         [Required]
         [RegularExpression("[0-9]{4}-[0-9]{4}", ErrorMessage = "Ongeldig academiejaar")]
         public string Academiejaar { get; set; }
-        [Required]
         [Display(Name = "Specialisatie")]
-        public int SpecialisatieId { get; set; }
+        public int? SpecialisatieId { get; set; }
         [Required]
         public int Semester { get; set; }
-        [Required]
         [Range(1, 3)]
         [Display(Name = "Aantal Studenten")]
         public int AantalStudenten { get; set; }
-        [Required]
         [Display(Name = "Contractondertekenaar")]
-        public int ContractOndertekenaarId { get; set; }
-        [Required]
+        public int? ContractOndertekenaarId { get; set; }
         [Display(Name = "Stagementor")]
-        public int StagementorId { get; set; }
+        public int? StagementorId { get; set; }
         public SelectList SpecialisatieSelectList { get; set; }
         public SelectList ContractOndertekenaarsSelectList { get; set; }
         public SelectList StagementorsSelectList { get; set; }

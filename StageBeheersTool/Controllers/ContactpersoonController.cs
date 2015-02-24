@@ -102,22 +102,28 @@ namespace StageBeheersTool.Controllers
             var contactpersoon = bedrijf.FindContactpersoonById(id);
             if (contactpersoon != null)
             {
-                try
-                {
-                    bedrijfRepository.DeleteContactpersoon(contactpersoon);
-                    bedrijfRepository.SaveChanges();
-                    TempData["message"] = "Contactpersoon " + contactpersoon.Naam + " verwijderd.";
-                    return RedirectToAction("Index");
-                }
-                catch (DbUpdateException)
+                if (bedrijf.ContactpersoonHasStageopdrachten(contactpersoon))
                 {
                     TempData["message"] = "Verwijderen mislukt: Contactpersoon is aan 1 of meerdere stageopdrachten gekoppeld.";
                     return View(contactpersoon);
                 }
+                bedrijfRepository.DeleteContactpersoon(contactpersoon);
+                bedrijfRepository.SaveChanges();
+                TempData["message"] = "Contactpersoon " + contactpersoon.Naam + " verwijderd.";
+                return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
         }
 
+
+        //todo POST
+        public ActionResult CreateForm(bool isStagementor = false, bool isConstractond = false)
+        {
+            var model = new ContactpersoonCreateVM();
+            model.IsStagementor = isStagementor;
+            model.IsContractOndertekenaar = isConstractond;
+            return PartialView("_CreateForm");
+        }
         #region Helpers
         private Bedrijf FindBedrijf()
         {

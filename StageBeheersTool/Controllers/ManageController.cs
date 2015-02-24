@@ -17,6 +17,18 @@ namespace StageBeheersTool.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        public ApplicationSignInManager SignInManager
+        {
+            get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
+            private set { _signInManager = value; }
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
+        }
+
         public ManageController()
         {
         }
@@ -27,29 +39,7 @@ namespace StageBeheersTool.Controllers
             SignInManager = signInManager;
         }
 
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set
-            {
-                _signInManager = value;
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
+    
 
         //
         // GET: /Manage/Index
@@ -75,6 +65,10 @@ namespace StageBeheersTool.Controllers
         public ActionResult ChangePassword()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
+            if (user == null)//student
+            {
+                return View(new ChangePasswordViewModel() { FirstLogin = true });
+            }
             return View(new ChangePasswordViewModel() { FirstLogin = !user.EmailConfirmed });
         }
 
@@ -97,6 +91,11 @@ namespace StageBeheersTool.Controllers
                 if (result.Succeeded)
                 {
                     await UserManager.AddToRoleAsync(user.Id, "bedrijf");
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToAction("Index", "Stageopdracht");
+                    }
                 }
             }
             else

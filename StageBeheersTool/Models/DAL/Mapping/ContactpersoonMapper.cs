@@ -16,8 +16,6 @@ namespace StageBeheersTool.Models.DAL.Mapping
             this.Property(cp => cp.Email).IsRequired().HasMaxLength(50); 
             this.Property(cp => cp.Familienaam).IsRequired().HasMaxLength(50);
             this.Property(cp => cp.Bedrijfsfunctie).IsRequired().HasMaxLength(200);
-                
-            
 
         }
     }

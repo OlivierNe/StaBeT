@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
-
+using Microsoft.AspNet.Identity;
 
 namespace StageBeheersTool.Controllers
 {
@@ -37,11 +37,6 @@ namespace StageBeheersTool.Controllers
             var bedrijf = FindBedrijf();
             var constractondertekenaars = bedrijf.FindAllContractOndertekenaars();
             var stagementors = bedrijf.FindAllStagementors();
-            if (constractondertekenaars.Count() == 0 || stagementors.Count() == 0)
-            {
-                ModelState.AddModelError("", "Geen stagementor of constractondertekenaar gevonden. Klik <a href='/Contactpersoon/Create'>hier</a> om 1 aan te maken.");
-            }
-
             return View(new StageopdrachtCreateVM(specialisatieRepository.FindAll(),
                 bedrijf.FindAllContractOndertekenaars(),
                 bedrijf.FindAllStagementors()));
@@ -57,9 +52,9 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 var stageopdracht = Mapper.Map<StageopdrachtCreateVM, Stageopdracht>(model);
-                stageopdracht.Specialisatie = specialisatieRepository.FindBy(model.SpecialisatieId);
-                stageopdracht.Stagementor = bedrijf.FindContactpersoonById(model.StagementorId);
-                stageopdracht.ContractOndertekenaar = bedrijf.FindContactpersoonById(model.ContractOndertekenaarId);
+                stageopdracht.Specialisatie = model.SpecialisatieId != null ? specialisatieRepository.FindBy((int)model.SpecialisatieId) : null;
+                stageopdracht.Stagementor = model.StagementorId != null ? bedrijf.FindContactpersoonById((int)model.StagementorId) : null;
+                stageopdracht.ContractOndertekenaar = model.ContractOndertekenaarId != null ? bedrijf.FindContactpersoonById((int)model.ContractOndertekenaarId) : null;
                 bedrijf.AddStageopdracht(stageopdracht);
                 bedrijfRepository.SaveChanges();
                 TempData["message"] = "Stageopdracht succesvol aangemaakt.";
@@ -91,9 +86,9 @@ namespace StageBeheersTool.Controllers
             if (stageopdracht != null)
             {
                 var model = Mapper.Map<Stageopdracht, StageopdrachtEditVM>(stageopdracht);
-                model.SpecialisatieId = stageopdracht.Specialisatie.Id;
-                model.ContractOndertekenaarId = stageopdracht.ContractOndertekenaar.Id;
-                model.StagementorId = stageopdracht.Stagementor.Id;
+                model.SpecialisatieId = stageopdracht.Specialisatie == null ? null : (int?)stageopdracht.Specialisatie.Id;
+                model.ContractOndertekenaarId = stageopdracht.ContractOndertekenaar == null ? null : (int?)stageopdracht.ContractOndertekenaar.Id;
+                model.StagementorId = stageopdracht.Stagementor == null ? null : (int?)stageopdracht.Stagementor.Id;
                 model.SetSelectLists(specialisatieRepository.FindAll(),
                     bedrijf.FindAllContractOndertekenaars(),
                     bedrijf.FindAllStagementors());
@@ -111,9 +106,9 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 var stageopdracht = Mapper.Map<StageopdrachtEditVM, Stageopdracht>(model);
-                stageopdracht.Specialisatie = specialisatieRepository.FindBy(model.SpecialisatieId);
-                stageopdracht.Stagementor = bedrijf.FindContactpersoonById(model.StagementorId);
-                stageopdracht.ContractOndertekenaar = bedrijf.FindContactpersoonById(model.ContractOndertekenaarId);
+                stageopdracht.Specialisatie = model.SpecialisatieId != null ? specialisatieRepository.FindBy((int)model.SpecialisatieId) : null;
+                stageopdracht.Stagementor = model.StagementorId != null ? bedrijf.FindContactpersoonById((int)model.StagementorId) : null;
+                stageopdracht.ContractOndertekenaar = model.ContractOndertekenaarId != null ? bedrijf.FindContactpersoonById((int)model.ContractOndertekenaarId) : null;
                 bedrijf.UpdateStageopdracht(stageopdracht);
                 bedrijfRepository.SaveChanges();
                 return RedirectToAction("Details", new { id = model.Id });

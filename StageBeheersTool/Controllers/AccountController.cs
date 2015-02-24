@@ -16,6 +16,8 @@ using AutoMapper;
 using System.Web.Security;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
+using System.Diagnostics;
+using System.Data.Entity.Validation;
 
 namespace StageBeheersTool.Controllers
 {
@@ -25,48 +27,31 @@ namespace StageBeheersTool.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private IBedrijfRepository bedrijfRepository;
-
-        public AccountController(IBedrijfRepository bedrijfRepository)
-        {
-            this.bedrijfRepository = bedrijfRepository;
-        }
-
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
+        private IStudentRepository studentRepository;
 
         public ApplicationSignInManager SignInManager
         {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set
-            {
-                _signInManager = value;
-            }
+            get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
+            private set { _signInManager = value; }
         }
 
         public ApplicationUserManager UserManager
         {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
+        }
+
+        public AccountController(IBedrijfRepository bedrijfRepository, IStudentRepository studentRepository)
+        {
+            this.bedrijfRepository = bedrijfRepository;
+            this.studentRepository = studentRepository;
         }
 
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl, string message)
+        public ActionResult Login(string returnUrl)
         {
-            ViewBag.Message = message;
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -83,8 +68,22 @@ namespace StageBeheersTool.Controllers
                 return View(model);
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            //TODO: onderscheid maken tussen bedrijf, student, ...
+            if (model.Email.EndsWith("@student.hogent.be"))
+            {
+                //TODO: service aanspreken:
+                //https://webservice.hogent.be/ldap/ldap.wsdl
+
+                //TODO: if( geldig hogent account + wachtwoord)...
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user == null)
+                {
+                    user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    await SignInManager.SignInAsync(user, model.RememberMe, false);
+                    return RedirectToAction("ChangePassword", "Manage");
+                }
+            }
+
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
@@ -92,6 +91,11 @@ namespace StageBeheersTool.Controllers
                     var user = await UserManager.FindByEmailAsync(model.Email);
                     if (user.EmailConfirmed)
                     {
+                        var roles = user.Roles;
+                        if (UserManager.IsInRole(user.Id, "bedrijf"))
+                        {
+                            return RedirectToAction("Index", "Stageopdracht");
+                        }
                         return RedirectToLocal(returnUrl);
                     }
                     else
@@ -141,7 +145,6 @@ namespace StageBeheersTool.Controllers
 #if DEBUG
                 generatedPassword = "wachtwoord";
 #endif
-                //generatedPassword = Regex.Replace(generatedPassword, @"[^a-zA-Z0-9]", m => r.Next(0, 9).ToString());
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, generatedPassword);
                 if (result.Succeeded)
@@ -149,7 +152,6 @@ namespace StageBeheersTool.Controllers
                     Bedrijf bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
                     bedrijfRepository.Add(bedrijf);
                     bedrijfRepository.SaveChanges();
-
                     IdentityMessage message = new IdentityMessage()
                     {
                         Subject = "Registratie",
@@ -158,7 +160,8 @@ namespace StageBeheersTool.Controllers
                         bedrijf.Email, generatedPassword)
                     };
 
-                    await UserManager.EmailService.SendAsync(message);
+                    //temp
+                    //await UserManager.EmailService.SendAsync(message);
 
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
@@ -166,7 +169,8 @@ namespace StageBeheersTool.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                    return RedirectToAction("Login", "Account", new { message = "Registratie e-mail verzonden." });
+                    TempData["message"] = "Registratie e-mail verzonden.";
+                    return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
             }
