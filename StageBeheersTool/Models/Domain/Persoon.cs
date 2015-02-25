@@ -20,6 +20,10 @@ namespace StageBeheersTool.Models.Domain
         public string Telefoonnummer { get; set; }
         public string Email { get; set; }
         public string Gsmnummer { get; set; }
+        public string Gemeente { get; set; }
+        public string Postcode { get; set; }
+        public string Straat { get; set; }
+        public string Straatnummer { get; set; }
 
         public string Naam
         {

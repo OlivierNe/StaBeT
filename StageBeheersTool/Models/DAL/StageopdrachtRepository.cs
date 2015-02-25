@@ -25,7 +25,7 @@ namespace StageBeheersTool.Models.DAL
 
         public IQueryable<Stageopdracht> FindAll()
         {
-            return stageopdrachten;
+            return stageopdrachten.OrderByDescending(so => so.Id);
         }
 
         public Stageopdracht FindById(int id)

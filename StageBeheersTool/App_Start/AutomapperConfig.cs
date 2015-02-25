@@ -20,6 +20,9 @@ namespace StageBeheersTool.App_Start
             Mapper.CreateMap<ContactpersoonCreateVM, Contactpersoon>();
             Mapper.CreateMap<ContactpersoonEditVM, Contactpersoon>();
             Mapper.CreateMap<Contactpersoon, ContactpersoonEditVM>();
+            Mapper.CreateMap<Student, StudentEditVM>();
+            Mapper.CreateMap<StudentEditVM, Student>();
+
         }
     }
 }

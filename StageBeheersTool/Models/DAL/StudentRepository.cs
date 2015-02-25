@@ -23,9 +23,14 @@ namespace StageBeheersTool.Models.DAL
             studenten.Add(student);
         }
 
-        public Student FindByEmail(string email)
+        public Student FindByEmail(string hogentEmail)
         {
-            return studenten.FirstOrDefault(student => student.Email == email);
+            return studenten.FirstOrDefault(student => student.HogentEmail == hogentEmail);
+        }
+
+        public Student FindById(int id)
+        {
+            return studenten.FirstOrDefault(s => s.Id == id);
         }
 
         public IQueryable<Student> FindAll()
@@ -37,5 +42,21 @@ namespace StageBeheersTool.Models.DAL
         {
             ctx.SaveChanges();
         }
+
+
+        public void Update(Student student, Student newStudent)
+        {
+            student.Voornaam = newStudent.Voornaam;
+            student.Familienaam = newStudent.Familienaam;
+            student.Keuzevak = newStudent.Keuzevak;
+            student.Email = newStudent.Email;
+            student.Gsmnummer = newStudent.Gsmnummer;
+            student.Gemeente = newStudent.Gemeente;
+            student.Straat = newStudent.Straat;
+            student.Straatnummer = newStudent.Straatnummer;
+            student.FotoUrl = newStudent.FotoUrl;
+        }
+
+
     }
 }

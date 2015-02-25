@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using StageBeheersTool.Models;
 using StageBeheersTool.ViewModels;
+using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.Controllers
 {
@@ -16,6 +17,7 @@ namespace StageBeheersTool.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IStudentRepository studentRepository;
 
         public ApplicationSignInManager SignInManager
         {
@@ -29,8 +31,9 @@ namespace StageBeheersTool.Controllers
             private set { _userManager = value; }
         }
 
-        public ManageController()
+        public ManageController(IStudentRepository studentRepository)
         {
+            this.studentRepository = studentRepository;
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -39,7 +42,7 @@ namespace StageBeheersTool.Controllers
             SignInManager = signInManager;
         }
 
-    
+
 
         //
         // GET: /Manage/Index
@@ -65,10 +68,6 @@ namespace StageBeheersTool.Controllers
         public ActionResult ChangePassword()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
-            if (user == null)//student
-            {
-                return View(new ChangePasswordViewModel() { FirstLogin = true });
-            }
             return View(new ChangePasswordViewModel() { FirstLogin = !user.EmailConfirmed });
         }
 
@@ -86,11 +85,20 @@ namespace StageBeheersTool.Controllers
             IdentityResult result = null;
             if (!user.EmailConfirmed)
             {
-                model.FirstLogin = true;
                 result = await UserManager.ChangePasswordWithoutOldAsync(user, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    await UserManager.AddToRoleAsync(user.Id, "bedrijf");
+                    if (User.Identity.Name.EndsWith("@student.hogent.be")) //student
+                    {
+                        await UserManager.AddToRoleAsync(user.Id, "student");
+                        Student student = new Student() { HogentEmail = User.Identity.Name };
+                        studentRepository.Add(student);
+                        studentRepository.SaveChanges();
+                    }
+                    else //bedrijf
+                    {
+                        await UserManager.AddToRoleAsync(user.Id, "bedrijf");
+                    }
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -98,10 +106,9 @@ namespace StageBeheersTool.Controllers
                     }
                 }
             }
-            else
-            {
-                result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-            }
+
+            result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+
 
             if (result.Succeeded)
             {
@@ -109,6 +116,12 @@ namespace StageBeheersTool.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
+                if (User.IsInRole("student"))
+                {
+                    TempData["message"] = "Wachtwoord is succesvol veranderd.";
+                    return RedirectToAction("Details", "Student");
+                }
+
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);

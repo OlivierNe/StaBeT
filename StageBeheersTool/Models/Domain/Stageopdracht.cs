@@ -22,9 +22,9 @@ namespace StageBeheersTool.Models.Domain
         public int AantalStudenten { get; set; }
         public int AantalToegewezenStudenten { get; set; }
         public string Academiejaar { get; set; }
-        public Contactpersoon ContractOndertekenaar { get; set; }
-        public Contactpersoon Stagementor { get; set; }
-        public Bedrijf Bedrijf { get; set; }
+        public virtual Contactpersoon ContractOndertekenaar { get; set; }
+        public virtual Contactpersoon Stagementor { get; set; }
+        public virtual Bedrijf Bedrijf { get; set; }
         public StageopdrachtStatus Status { get; set; } 
         #endregion
 

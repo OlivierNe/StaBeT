@@ -10,6 +10,7 @@ using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.DAL.Mapping;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Web.Mvc;
+using System.Diagnostics;
 
 namespace StageBeheersTool.Models.DAL
 {
@@ -19,6 +20,8 @@ namespace StageBeheersTool.Models.DAL
         public StageToolDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            Database.Log = message => Trace.WriteLine(message);
+
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -28,6 +31,8 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new StageopdrachtMapper());
             modelBuilder.Configurations.Add(new SpecialisatieMapper());
             modelBuilder.Configurations.Add(new ContactpersoonMapper());
+            modelBuilder.Configurations.Add(new StudentMapper());
+            modelBuilder.Configurations.Add(new BegeleiderMapper());
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
@@ -42,7 +47,9 @@ namespace StageBeheersTool.Models.DAL
         public DbSet<Stageopdracht> Stageopdrachten { get; set; }
         public DbSet<Specialisatie> Specialisaties { get; set; }
         public DbSet<Contactpersoon> Contactpersonen { get; set; }
+        public DbSet<Begeleider> Begeleiders { get; set; }
         public DbSet<Student> Studenten { get; set; }
+
 
         public static StageToolDbContext Create()
         {

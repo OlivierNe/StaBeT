@@ -26,9 +26,21 @@ namespace StageBeheersTool.Controllers
             this.stageopdrachtRepository = stageopdrachtRepository;
         }
 
+        [Authorize(Roles = "bedrijf,student")]
         public ActionResult Index(int page = 1)
         {
-            return View(FindBedrijf().Stageopdrachten.ToPagedList(page, 10));
+            if (User.IsInRole("bedrijf"))
+            {
+                return View(FindBedrijf().Stageopdrachten.ToPagedList(page, 10));
+            }
+            else if (User.IsInRole("student"))
+            {
+                return View(stageopdrachtRepository.FindAll()
+                    .Where(so => so.Status == StageopdrachtStatus.Goedgekeurd && so.AantalToegewezenStudenten < so.AantalStudenten)
+                    .ToPagedList(page, 10));
+            }
+
+            return View(stageopdrachtRepository.FindAll().ToPagedList(page, 10));
         }
 
         [Authorize(Roles = "bedrijf")]
@@ -65,11 +77,21 @@ namespace StageBeheersTool.Controllers
                 bedrijf.FindAllStagementors()));
         }
 
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Roles = "bedrijf,student,admin,begeleider")]
         public ActionResult Details(int id)
         {
-            var bedrijf = FindBedrijf();
-            var stageopdracht = bedrijf.FindStageopdrachtById(id);
+            Stageopdracht stageopdracht = null;
+
+            if (User.IsInRole("bedrijf"))
+            {
+                var bedrijf = FindBedrijf();
+                stageopdracht = bedrijf.FindStageopdrachtById(id);
+            }
+            else
+            {
+                stageopdracht = stageopdrachtRepository.FindById(id);
+            }
+
             if (stageopdracht != null)
             {
                 return View(stageopdracht);

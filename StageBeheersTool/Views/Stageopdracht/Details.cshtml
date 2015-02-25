@@ -54,6 +54,8 @@
         <dd>
             @Html.DisplayFor(model => model.Specialisatie.Naam)
         </dd>
+        <dt>@Html.DisplayNameFor(model => model.Bedrijf) </dt>
+        <dd>@Html.DisplayFor(model => model.Bedrijf.Naam)</dd>
         <dt>
             @Html.DisplayNameFor(model => model.ContractOndertekenaar)
         </dt>
@@ -69,8 +71,12 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Terug naar overzicht", "Index") |
-    @Html.ActionLink("Aanpassen", "Edit", new { id = Model.Id }) 
+    @Html.ActionLink("Terug naar overzicht", "Index")
+    @if (User.IsInRole("bedrijf"))
+    {
+        @Html.Raw("|")
+        @Html.ActionLink("Aanpassen", "Edit", new { id = Model.Id })
+    }
     @if (User.IsInRole("bedrijf") && Model.IsGoedgekeurd() == false)
     {
         @Html.Raw("|");

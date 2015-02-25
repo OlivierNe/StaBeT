@@ -9,7 +9,10 @@ namespace StageBeheersTool.Models.Domain
     {
         void Add(Student student);
         Student FindByEmail(string email);
+        Student FindById(int id);
         IQueryable<Student> FindAll();
         void SaveChanges();
+        void Update(Student student, Student newStudent);
+
     }
 }

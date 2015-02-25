@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -14,10 +13,7 @@ using StageBeheersTool.Models.DAL;
 using StageBeheersTool.Models.Domain;
 using AutoMapper;
 using System.Web.Security;
-using System.Text.RegularExpressions;
-using System.Net.Mail;
-using System.Diagnostics;
-using System.Data.Entity.Validation;
+using Newtonsoft.Json;
 
 namespace StageBeheersTool.Controllers
 {
@@ -68,22 +64,42 @@ namespace StageBeheersTool.Controllers
                 return View(model);
             }
 
-            //TODO: onderscheid maken tussen bedrijf, student, ...
-            if (model.Email.EndsWith("@student.hogent.be"))
+            if (model.Email.EndsWith("@student.hogent.be")) //student
             {
                 //TODO: service aanspreken:
                 //https://webservice.hogent.be/ldap/ldap.wsdl
-
+                //TODO: if( geldig hogent account + wachtwoord)...
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user == null) //eerste login
+                {
+                    user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    await UserManager.CreateAsync(user);
+                    await UserManager.AddToRoleAsync(user.Id, "student");
+                    await SignInManager.SignInAsync(user, model.RememberMe, false);
+                    return RedirectToAction("ChangePassword", "Manage");
+                }
+                else
+                {
+                    await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                }
+                return RedirectToAction("Index", "Stageopdracht");
+            }
+            else if (model.Email.EndsWith("@hogent.be")) //begeleider of admin
+            {
+                //TODO: service aanspreken:
+                //https://webservice.hogent.be/ldap/ldap.wsdl
                 //TODO: if( geldig hogent account + wachtwoord)...
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null)
                 {
                     user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                    await SignInManager.SignInAsync(user, model.RememberMe, false);
-                    return RedirectToAction("ChangePassword", "Manage");
+                    await UserManager.CreateAsync(user);
+                    await UserManager.AddToRoleAsync(user.Id, "begeleider");//of admin
                 }
+                await SignInManager.SignInAsync(user, model.RememberMe, false);
+                return RedirectToAction("Index", "Stageopdracht");
             }
-
+            //bedrijven
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
@@ -102,10 +118,6 @@ namespace StageBeheersTool.Controllers
                     {
                         return RedirectToAction("ChangePassword", "Manage");
                     }
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -160,9 +172,7 @@ namespace StageBeheersTool.Controllers
                         bedrijf.Email, generatedPassword)
                     };
 
-                    //temp
-                    //await UserManager.EmailService.SendAsync(message);
-
+                    await UserManager.EmailService.SendAsync(message);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link

@@ -12,7 +12,7 @@ using StageBeheersTool;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-    //        DropCreateDatabaseAlways<StageToolDbContext>
+        //                DropCreateDatabaseAlways<StageToolDbContext>
      DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
         protected override void Seed(StageToolDbContext context)
@@ -20,6 +20,7 @@ namespace StageBeheersTool.Models.DAL
             base.Seed(context);
             try
             {
+                #region logins/roles
                 var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new StageToolDbContext()));
                 roleManager.Create(new IdentityRole("student"));
                 roleManager.Create(new IdentityRole("admin"));
@@ -32,6 +33,21 @@ namespace StageBeheersTool.Models.DAL
                 userManager.Create(user, "wachtwoord");
                 userManager.AddToRole(user.Id, "bedrijf");
 
+                ApplicationUser user2 = new ApplicationUser() { Email = "test@bedrijf2.be", UserName = "test@bedrijf2.be", EmailConfirmed = true };
+                userManager.Create(user2, "wachtwoord");
+                userManager.AddToRole(user2.Id, "bedrijf");
+
+                ApplicationUser user3 = new ApplicationUser()
+                {
+                    Email = "olivier.neirynck.1177q@student.hogent.be",
+                    UserName = "olivier.neirynck.1177q@student.hogent.be",
+                    EmailConfirmed = true
+                };
+                userManager.Create(user3, "wachtwoord");
+                userManager.AddToRole(user3.Id, "student");
+                #endregion
+
+                #region specialisaties
                 //netwerk – programmeren – mobile – onderzoek – mainframe 
                 Specialisatie specialisatie1 = new Specialisatie() { Naam = "Netwerken" };
                 Specialisatie specialisatie2 = new Specialisatie() { Naam = "Programmeren" };
@@ -45,10 +61,10 @@ namespace StageBeheersTool.Models.DAL
                 specialisaties.Add(specialisatie3);
                 specialisaties.Add(specialisatie4);
                 specialisaties.Add(specialisatie5);
-
                 context.Specialisaties.AddRange(specialisaties);
+                #endregion
 
-            
+                #region bedrijf1
 
                 Bedrijf bedrijf1 = new Bedrijf()
                   {
@@ -113,6 +129,82 @@ namespace StageBeheersTool.Models.DAL
                 }
 
                 context.Bedrijven.Add(bedrijf1);
+                #endregion
+
+                #region bedrijf2
+                var bedrijf2 = new Bedrijf()
+                          {
+                              Email = "test@bedrijf2.be",
+                              Naam = "bedrijf2",
+                              Telefoonnummer = "?",
+                              Postcode = "1243",
+                              Straatnummer = "2",
+                              Gemeente = "gemeente2",
+                              Straat = "straat2"
+                          };
+                var stagementors2 = new List<Contactpersoon>();
+                for (int i = 1; i <= 5; i++)
+                {
+                    Contactpersoon stagementor2 = new Contactpersoon()
+                    {
+                        Voornaam = "voornaam" + i,
+                        Familienaam = "Naam" + i,
+                        Email = "stagementor" + i + "@bedrijf2.be",
+                        Gsmnummer = "123456",
+                        Telefoonnummer = "1234567",
+                        IsStagementor = true,
+                        IsContractOndertekenaar = false,
+                        Bedrijfsfunctie = "bedrijfsfunctie",
+                        Aanspreektitel = "meneer"
+                    };
+                    bedrijf2.AddContactpersoon(stagementor2);
+                    stagementors.Add(stagementor2);
+                }
+                Contactpersoon contractOndertekenaar2 = new Contactpersoon()
+                {
+                    Voornaam = "voornaam0",
+                    Familienaam = "Naam0",
+                    Email = "contractondertekenaar1@bedrijf2.be",
+                    Gsmnummer = "123456",
+                    Telefoonnummer = "1234567",
+                    IsStagementor = false,
+                    IsContractOndertekenaar = true,
+                    Bedrijfsfunctie = "bedrijfsfunctie",
+                    Aanspreektitel = "meneer"
+                };
+                bedrijf2.AddContactpersoon(contractOndertekenaar2);
+                for (int i = 0; i < 5; i++)
+                {
+                    Stageopdracht stageopdracht = new Stageopdracht()
+                    {
+                        Titel = "opdracht " + i,
+                        Specialisatie = specialisaties[random.Next(0, 4)],
+                        Semester = random.Next(1, 2),
+                        Omschrijving = "omschrijving " + i,
+                        Academiejaar = "2015-2016",
+                        AantalStudenten = random.Next(1, 3),
+                        ContractOndertekenaar = contractOndertekenaar2,
+                        Stagementor = stagementors[random.Next(0, stagementors2.Count)],
+                        Bedrijf = bedrijf2
+                    };
+                    bedrijf2.AddStageopdracht(stageopdracht);
+                }
+
+                context.Bedrijven.Add(bedrijf2);
+                #endregion
+
+                #region student1
+                Student student1 = new Student()
+                {
+                    Voornaam = "Olivier",
+                    Familienaam = "Neirynck",
+                    HogentEmail = "olivier.neirynck.1177q@student.hogent.be"
+                };
+
+
+                context.Studenten.Add(student1);
+                #endregion
+
                 context.SaveChanges();
             }
             catch (DbEntityValidationException e)

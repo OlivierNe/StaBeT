@@ -1,0 +1,65 @@
+﻿@model Student
+@{
+    var message = TempData["message"];
+}
+
+<div>
+    <h4>Student</h4>
+    <div class="text-success">
+        @message
+    </div>
+    <hr />
+    <div class="row">
+        <img class="col-sm-push-1 col-xs-2 img-responsive" src="@Url.Content(Model.FotoUrl)" />
+    </div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Naam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Naam)
+        </dd>
+        <dt>
+            Hogent E-mail
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HogentEmail)
+        </dd>
+
+        <dt>
+            E-mail
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            Adres
+        </dt>
+        <dd>
+            @Model.Gemeente @Model.Postcode
+        </dd>
+        <dd>@Model.Straat @Model.Straatnummer</dd>
+        <dt>
+            @Html.NameFor(model => model.Keuzevak)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Keuzevak)
+        </dd>
+        <dt>
+            Gsm
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gsmnummer)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Gegevens wijzigen", "Edit")
+    @*, new { id = Model.Id }) |*@
+    @*@Html.ActionLink("Back to List", "Index")*@
+</p>
+<p>    @Html.ActionLink("Wachtwoord wijzigen", "ChangePassword", "Manage")</p>

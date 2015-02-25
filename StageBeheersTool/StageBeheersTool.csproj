@@ -199,15 +199,18 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StageopdrachtController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DAL\ApplicationUser.cs" />
     <Compile Include="Models\DAL\BedrijfRepository.cs" />
     <Compile Include="Models\DAL\Mapping\BedrijfMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\BegeleiderMapper.cs" />
     <Compile Include="Models\DAL\Mapping\ContactpersoonMapper.cs" />
     <Compile Include="Models\DAL\Mapping\SpecialisatieMapper.cs" />
     <Compile Include="Models\DAL\Mapping\StageopdrachtMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\StudentMapper.cs" />
     <Compile Include="Models\DAL\SpecialisatieRepository.cs" />
     <Compile Include="Models\DAL\StudentRepository.cs" />
     <Compile Include="Models\Domain\Begeleider.cs" />
@@ -233,6 +236,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\StageopdrachtViewModels.cs" />
+    <Compile Include="ViewModels\StudentViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -243,6 +247,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Student\profiel.jpg" />
     <Content Include="Scripts\lib\gridmvc.js" />
     <Content Include="Scripts\lib\gridmvc.lang.ru.js" />
     <Content Include="Scripts\lib\gridmvc.min.js" />
@@ -304,6 +309,8 @@
     <Content Include="Views\Shared\_Grid.cshtml" />
     <Content Include="Views\Stageopdracht\Index2.cshtml" />
     <Content Include="Views\Contactpersoon\_CreateForm.cshtml" />
+    <Content Include="Views\Student\Details.cshtml" />
+    <Content Include="Views\Student\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

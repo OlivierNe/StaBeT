@@ -7,5 +7,6 @@ namespace StageBeheersTool.Models.Domain
 {
     public class Begeleider : Persoon
     {
+        public string HogentEmail { get; set; }
     }
 }

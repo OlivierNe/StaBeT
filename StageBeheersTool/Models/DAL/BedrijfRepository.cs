@@ -33,8 +33,7 @@ namespace StageBeheersTool.Models.DAL
 
         public Bedrijf FindByEmail(string email)
         {
-            return bedrijven.Include(bedrijf => bedrijf.Stageopdrachten)
-                .Include(bedrijf => bedrijf.Contactpersonen)
+            return bedrijven
                 .FirstOrDefault(bedrijf => bedrijf.Email == email);
         }
 
