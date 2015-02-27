@@ -12,7 +12,7 @@ using StageBeheersTool;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        //                DropCreateDatabaseAlways<StageToolDbContext>
+        //  DropCreateDatabaseAlways<StageToolDbContext>
      DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
         protected override void Seed(StageToolDbContext context)
@@ -108,6 +108,7 @@ namespace StageBeheersTool.Models.DAL
                     Bedrijfsfunctie = "bedrijfsfunctie",
                     Aanspreektitel = "meneer"
                 };
+
                 bedrijf1.AddContactpersoon(contractOndertekenaar1);
 
                 var random = new Random();
@@ -119,12 +120,17 @@ namespace StageBeheersTool.Models.DAL
                         Specialisatie = specialisaties[random.Next(0, 4)],
                         Semester = 1,
                         Omschrijving = "omschrijving" + i,
-                        Academiejaar = "2015-2016",
+                        Academiejaar = "2014-2015",
                         AantalStudenten = 2,
                         ContractOndertekenaar = contractOndertekenaar1,
                         Stagementor = stagementors[random.Next(0, stagementors.Count)],
                         Bedrijf = bedrijf1
                     };
+                    stageopdracht.AantalToegewezenStudenten = random.Next(0, stageopdracht.AantalStudenten);
+                    if (i % 2 == 0)
+                    {
+                        stageopdracht.Status = StageopdrachtStatus.Goedgekeurd;
+                    }
                     bedrijf1.AddStageopdracht(stageopdracht);
                 }
 
@@ -181,12 +187,14 @@ namespace StageBeheersTool.Models.DAL
                         Specialisatie = specialisaties[random.Next(0, 4)],
                         Semester = random.Next(1, 2),
                         Omschrijving = "omschrijving " + i,
-                        Academiejaar = "2015-2016",
+                        Academiejaar = "2014-2015",
                         AantalStudenten = random.Next(1, 3),
                         ContractOndertekenaar = contractOndertekenaar2,
                         Stagementor = stagementors[random.Next(0, stagementors2.Count)],
-                        Bedrijf = bedrijf2
+                        Bedrijf = bedrijf2,
+                        Status = StageopdrachtStatus.Goedgekeurd
                     };
+                    stageopdracht.AantalToegewezenStudenten = random.Next(0, stageopdracht.AantalStudenten);
                     bedrijf2.AddStageopdracht(stageopdracht);
                 }
 

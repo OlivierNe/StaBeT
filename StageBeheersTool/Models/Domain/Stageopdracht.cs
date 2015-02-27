@@ -6,18 +6,24 @@ using System.Web;
 
 namespace StageBeheersTool.Models.Domain
 {
-    //Een stage-opdracht bevat minstens volgende gegevens: titel, omschrijving opdracht,
-    //specialisatie stageopdracht (programmeren, webontwikkeling, mainframe, e-business,
-    //mobile, systeembeheer..), sem 1 of sem2, aantal studenten opdracht, stagementor,
-    //contractondertekenaar. De stage coördinator, de administratie  studentensecretariaat
-    //en het bedrijf dient een e-mail te ontvangen met de gepaste tekst over de (wijzigingen) stage-opdracht.
     public class Stageopdracht
     {
+
         #region Properties
         public int Id { get; set; }
         public string Titel { get; set; }
         public string Omschrijving { get; set; }
         public virtual Specialisatie Specialisatie { get; set; }
+
+        public string ToonSpecialisatie
+        {
+            get
+            {
+                if (Specialisatie == null) { return ""; }
+                else { return Specialisatie.Naam; }
+            }
+        }
+
         public int Semester { get; set; }
         public int AantalStudenten { get; set; }
         public int AantalToegewezenStudenten { get; set; }
@@ -25,22 +31,41 @@ namespace StageBeheersTool.Models.Domain
         public virtual Contactpersoon ContractOndertekenaar { get; set; }
         public virtual Contactpersoon Stagementor { get; set; }
         public virtual Bedrijf Bedrijf { get; set; }
-        public StageopdrachtStatus Status { get; set; } 
+        public StageopdrachtStatus Status { get; set; }
         #endregion
 
         #region Constructors
         public Stageopdracht()
         {
             Status = StageopdrachtStatus.NietBeoordeeld;
-        } 
+        }
         #endregion
 
         #region Public methods
         public bool IsGoedgekeurd()
         {
             return Status == StageopdrachtStatus.Goedgekeurd;
-        } 
+        }
+
+        public bool IsInHuidigAcademiejaar()
+        {
+            var beginJaar = int.Parse(Academiejaar.Substring(0, 4));
+            var eindJaar = int.Parse(Academiejaar.Substring(5, 4));
+            if ((beginJaar == DateTime.Now.Year && DateTime.Now.Month >= 9)
+                || (eindJaar == (beginJaar + 1)
+                && DateTime.Now.Month < 9))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool isVolledigIngenomen()
+        {
+            return AantalToegewezenStudenten < AantalStudenten;
+        }
         #endregion
+
 
     }
 }

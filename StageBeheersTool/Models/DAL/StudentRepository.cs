@@ -51,6 +51,7 @@ namespace StageBeheersTool.Models.DAL
             student.Keuzevak = newStudent.Keuzevak;
             student.Email = newStudent.Email;
             student.Gsmnummer = newStudent.Gsmnummer;
+            student.Postcode = newStudent.Postcode;
             student.Gemeente = newStudent.Gemeente;
             student.Straat = newStudent.Straat;
             student.Straatnummer = newStudent.Straatnummer;

@@ -1,0 +1,59 @@
+﻿@model StageopdrachtCreateVM
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Stagementor.Familienaam, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Stagementor.Familienaam, new { htmlAttributes = new { @class = "form-control", autofocus = "" } })
+        @Html.ValidationMessageFor(model => model.Stagementor.Familienaam, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Stagementor.Voornaam, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Stagementor.Voornaam, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Stagementor.Voornaam, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Stagementor.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Stagementor.Email, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Stagementor.Email, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Stagementor.Gsmnummer, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Stagementor.Gsmnummer, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Stagementor.Gsmnummer, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Stagementor.Bedrijfsfunctie, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Stagementor.Bedrijfsfunctie, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Stagementor.Bedrijfsfunctie, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Stagementor.IsStagementor, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        <div class="checkbox">
+            @Html.EditorFor(model => model.Stagementor.IsStagementor)
+            @Html.ValidationMessageFor(model => model.Stagementor.IsStagementor, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Stagementor.IsContractOndertekenaar, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        <div class="checkbox">
+            @Html.EditorFor(model => model.Stagementor.IsContractOndertekenaar)
+            @Html.ValidationMessageFor(model => model.Stagementor.IsContractOndertekenaar, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+

@@ -8,6 +8,23 @@ using System.Web.Mvc;
 
 namespace StageBeheersTool.ViewModels
 {
+
+    public class StageopdrachtIndexVM
+    {
+        public IEnumerable<Stageopdracht> Stageopdrachten { get; set; }
+        public int? Semester { get; set; }
+        [Display(Name="Soort stage")]
+        public string Soort { get; set; }
+        public string Locatie { get; set; }
+        public string Bedrijf { get; set; }
+        public SelectList SemesterList { get; set; }
+
+        public StageopdrachtIndexVM()
+        {
+            SemesterList = new SelectList(new string[] { "1", "2" }, Semester == null ? "" : Semester.ToString());
+        }
+    }
+
     public class StageopdrachtCreateVM : IValidatableObject
     {
         [Required]
@@ -33,6 +50,9 @@ namespace StageBeheersTool.ViewModels
         public SelectList SpecialisatieSelectList { get; set; }
         public SelectList ContractOndertekenaarsSelectList { get; set; }
         public SelectList StagementorsSelectList { get; set; }
+
+        public ContactpersoonCreateVM Stagementor { get; set; }
+        public ContactpersoonCreateVM ContactOndertekenaar { get; set; }
 
         public StageopdrachtCreateVM(IEnumerable<Specialisatie> specialisaties,
             IEnumerable<Contactpersoon> contractOndertekenaars, IEnumerable<Contactpersoon> stagementors)

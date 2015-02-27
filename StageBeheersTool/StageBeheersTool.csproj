@@ -296,7 +296,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Stageopdracht\Create.cshtml" />
-    <Content Include="Views\Stageopdracht\Index.cshtml" />
+    <Content Include="Views\Stageopdracht\Index2.cshtml" />
     <Content Include="Views\Stageopdracht\Delete.cshtml" />
     <Content Include="Views\Stageopdracht\Details.cshtml" />
     <Content Include="Views\Stageopdracht\Edit.cshtml" />
@@ -307,10 +307,11 @@
     <Content Include="Views\Contactpersoon\Delete.cshtml" />
     <Content Include="Views\Shared\_GridPager.cshtml" />
     <Content Include="Views\Shared\_Grid.cshtml" />
-    <Content Include="Views\Stageopdracht\Index2.cshtml" />
-    <Content Include="Views\Contactpersoon\_CreateForm.cshtml" />
+    <Content Include="Views\Stageopdracht\Index.cshtml" />
+    <Content Include="Views\Stageopdracht\_CreateStagementorForm.cshtml" />
     <Content Include="Views\Student\Details.cshtml" />
     <Content Include="Views\Student\Edit.cshtml" />
+    <Content Include="Views\Stageopdracht\_CreateContractOndertekenaarForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

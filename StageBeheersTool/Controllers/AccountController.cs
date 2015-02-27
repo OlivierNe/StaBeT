@@ -78,11 +78,14 @@ namespace StageBeheersTool.Controllers
                     await SignInManager.SignInAsync(user, model.RememberMe, false);
                     return RedirectToAction("ChangePassword", "Manage");
                 }
-                else
-                {
-                    await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-                }
-                return RedirectToAction("Index", "Stageopdracht");
+                //else
+                //{
+                //    var result1 = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
+                //}
+
+
+                //return RedirectToAction("Index", "Stageopdracht");
             }
             else if (model.Email.EndsWith("@hogent.be")) //begeleider of admin
             {
@@ -99,7 +102,6 @@ namespace StageBeheersTool.Controllers
                 await SignInManager.SignInAsync(user, model.RememberMe, false);
                 return RedirectToAction("Index", "Stageopdracht");
             }
-            //bedrijven
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
@@ -107,12 +109,12 @@ namespace StageBeheersTool.Controllers
                     var user = await UserManager.FindByEmailAsync(model.Email);
                     if (user.EmailConfirmed)
                     {
-                        var roles = user.Roles;
-                        if (UserManager.IsInRole(user.Id, "bedrijf"))
-                        {
+                        //var roles = user.Roles;
+                        //if (UserManager.IsInRole(user.Id, "bedrijf"))
+                        //{
                             return RedirectToAction("Index", "Stageopdracht");
-                        }
-                        return RedirectToLocal(returnUrl);
+                        //}
+                        //return RedirectToLocal(returnUrl);
                     }
                     else
                     {

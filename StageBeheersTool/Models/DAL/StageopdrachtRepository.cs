@@ -25,7 +25,9 @@ namespace StageBeheersTool.Models.DAL
 
         public IQueryable<Stageopdracht> FindAll()
         {
-            return stageopdrachten.OrderByDescending(so => so.Id);
+            return stageopdrachten.OrderBy(so => so.Titel)
+                .Include(so => so.Bedrijf)
+                .Include(so => so.Specialisatie);
         }
 
         public Stageopdracht FindById(int id)
@@ -33,9 +35,22 @@ namespace StageBeheersTool.Models.DAL
             return stageopdrachten.FirstOrDefault(so => so.Id == id);
         }
 
-        public IQueryable<Stageopdracht> FindBy(string seachTerm)
+        public IQueryable<Stageopdracht> FindByFilter(int? semester, string soort, string bedrijf, string locatie)
         {
-            throw new NotImplementedException();
+            return FindAll()
+            .Where(so => (semester == null ? true : so.Semester == semester) &&
+               (string.IsNullOrEmpty(soort) ? true :
+                  so.Specialisatie.Naam.ToLower().Contains(soort.ToLower())) &&
+                  (string.IsNullOrEmpty(bedrijf) ? true : so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower())) &&
+                  (string.IsNullOrEmpty(locatie) ? true : so.Bedrijf.Gemeente.ToLower().Contains(locatie.ToLower())));
         }
+
+        public IQueryable<Stageopdracht> FindGeldigeStageopdrachten(int? semester, string soort, string bedrijf, string locatie)
+        {
+            return FindByFilter(semester, soort, bedrijf, locatie).AsEnumerable()
+                .Where(so => so.IsGoedgekeurd() && so.isVolledigIngenomen() && so.IsInHuidigAcademiejaar()).AsQueryable();
+        }
+
+
     }
 }

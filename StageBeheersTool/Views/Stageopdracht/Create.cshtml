@@ -1,6 +1,13 @@
 ﻿@model StageopdrachtCreateVM
 @{
     ViewBag.Title = "Nieuwe stageopdracht";
+    var ajaxOptions = new AjaxOptions()
+    {
+        HttpMethod = "GET",
+        UpdateTargetId = "stagementorForm",
+        InsertionMode = InsertionMode.Replace,
+        OnSuccess = "showForm();"
+    };
 }
 <h2 class="col-md-offset-2">Nieuwe stageopdracht</h2>
 
@@ -62,8 +69,8 @@
                 @Html.DropDownListFor(model => model.StagementorId, Model.StagementorsSelectList, "-- Selecteer een stagementor --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.StagementorId, "", new { @class = "text-danger" })
             </div>
-            <div id="stagementorForm" class="col-md-10" style="display:none"></div>
-            <button id="newStagementorBtn" class="btn btn-default col-md-2">Nieuwe stagementor</button>
+            <div id="stagementorForm" class="col-md-10" style="display:none;border:dashed;"></div>
+            @Ajax.ActionLink("Nieuwe stagementor", "Create", new { IsStagementor = true }, ajaxOptions, new { @class = "btn btn-default" })
         </div>
 
         <div class="form-group">
@@ -93,9 +100,19 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/lib/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/stagetool-form.js"></script>
     <script type="text/javascript">
+        function showForm() {
+            $("#stagementorForm").css("display", "block");
+            $("#stagementorForm input[type='text'],#stagementorForm input[type='email'],#stagementorForm textarea").each(showRequired);
+        }
 
+        function onError(ajaxContext) {
+            var response = ajaxContext.get_response();
+            var statusCode = response.get_statusCode();
+            alert("Error occured. Status code = " + statusCode);
+        }
         $(function () {
             $("#newStagementorBtn").on("click", function () {
                 $(this).css("display", "none");

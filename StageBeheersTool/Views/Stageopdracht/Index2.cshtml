@@ -1,22 +1,76 @@
-﻿@model IEnumerable<Stageopdracht>
-@using GridMvc.Html
+﻿@model IPagedList<Stageopdracht>
+
 @{
-    ViewBag.Title = "Index2";
+    ViewBag.Title = "Stageopdrachten";
+    var message = TempData["message"];
 }
 
-<h2>Index2</h2>
+<h2>@ViewBag.Title</h2>
+<p class="text-success">
 
-@Html.Grid(Model).Columns(columns =>
+    @message
+</p>
+@if (User.IsInRole("bedrijf"))
 {
-    columns.Add(so => so.Titel).Titled("Titel");
-    columns.Add(so => so.Specialisatie.Naam).Titled("Specialisatie");
-    columns.Add(so => so.Semester).Titled("Semester");
-    columns.Add(so => so.Academiejaar);
-    columns.Add(so => so.AantalToegewezenStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
-    columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf");
-}).WithPaging(10).Sortable().Filterable().WithMultipleFilters().Sortable().WithMultipleFilters()
+    <p>
+        @Html.ActionLink("Nieuwe stageopdracht aanmaken", "Create")
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Titel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Specialisatie)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Semester)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Academiejaar)
+        </th>
+        <th>
+            Aantal studenten
+        </th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Bedrijf)</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Titel, "Details", new { id = item.Id })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Specialisatie.Naam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Academiejaar)
+            </td>
+            <td>
+                @item.AantalToegewezenStudenten / @item.AantalStudenten
+            </td>
+            <td>
+                @item.Bedrijf.Naam
+            </td>
+        </tr>
+    }
+</table>
+
+@if (Model.PageCount > 1)
+{
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), new PagedListRenderOptions()
+{
+    LinkToPreviousPageFormat = "<span class='glyphicon glyphicon-arrow-left'></span>",
+    LinkToNextPageFormat = "<span class='glyphicon glyphicon-arrow-right'></span>",
+    DisplayPageCountAndCurrentLocation = true,
+    PageCountAndCurrentLocationFormat = "Pagina {0} van {1}"
+})
+}
 
 @section scripts{
-    <script src="~/Scripts/lib/gridmvc.min.js"></script>
-    <link href="~/Content/Gridmvc.css" rel="stylesheet" />
+    <script src="~/Scripts/stagetool.js"></script>
 }

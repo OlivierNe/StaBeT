@@ -115,15 +115,6 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("Index");
         }
 
-
-        //todo POST
-        public ActionResult CreateForm(bool isStagementor = false, bool isConstractond = false)
-        {
-            var model = new ContactpersoonCreateVM();
-            model.IsStagementor = isStagementor;
-            model.IsContractOndertekenaar = isConstractond;
-            return PartialView("_CreateForm");
-        }
         #region Helpers
         private Bedrijf FindBedrijf()
         {
