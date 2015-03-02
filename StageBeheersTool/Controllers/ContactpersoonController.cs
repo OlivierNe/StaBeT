@@ -21,12 +21,14 @@ namespace StageBeheersTool.Controllers
             this.bedrijfRepository = bedrijfRepository;
         }
 
+        [Authorize(Roles = "bedrijf")]
         public ActionResult Index(int page = 1)
         {
             var contactPersonen = FindBedrijf().Contactpersonen;
             return View(contactPersonen.ToPagedList(page, 10));
         }
 
+        [Authorize(Roles = "bedrijf")]
         public ActionResult Create()
         {
             return View();
@@ -34,6 +36,7 @@ namespace StageBeheersTool.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "bedrijf")]
         public ActionResult Create(ContactpersoonCreateVM model)
         {
             if (ModelState.IsValid)
@@ -47,29 +50,32 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "bedrijf")]
         public ActionResult Details(int id)
         {
             var contactpersoon = FindBedrijf().FindContactpersoonById(id);
-            if (contactpersoon != null)
+            if (contactpersoon == null)
             {
-                return View(contactpersoon);
+                return HttpNotFound();
             }
-            return RedirectToAction("Index");
+            return View(contactpersoon);
         }
 
+        [Authorize(Roles = "bedrijf")]
         public ActionResult Edit(int id)
         {
             var contactpersoon = FindBedrijf().FindContactpersoonById(id);
-            if (contactpersoon != null)
+            if (contactpersoon == null)
             {
-                var model = Mapper.Map<Contactpersoon, ContactpersoonEditVM>(contactpersoon);
-                return View(model);
+                return HttpNotFound();
             }
-            return RedirectToAction("Index");
+            var model = Mapper.Map<Contactpersoon, ContactpersoonEditVM>(contactpersoon);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "bedrijf")]
         public ActionResult Edit(ContactpersoonEditVM model)
         {
             if (ModelState.IsValid)
@@ -83,35 +89,37 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "bedrijf")]
         public ActionResult Delete(int id)
         {
             var contactpersoon = FindBedrijf().FindContactpersoonById(id);
-            if (contactpersoon != null)
+            if (contactpersoon == null)
             {
-                return View(contactpersoon);
+                return HttpNotFound();
             }
-            return RedirectToAction("Index");
+            return View(contactpersoon);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
+        [Authorize(Roles = "bedrijf")]
         public ActionResult DeleteConfirmed(int id)
         {
             var bedrijf = FindBedrijf();
             var contactpersoon = bedrijf.FindContactpersoonById(id);
-            if (contactpersoon != null)
+            if (contactpersoon == null)
             {
-                if (bedrijf.ContactpersoonHasStageopdrachten(contactpersoon))
-                {
-                    TempData["message"] = "Verwijderen mislukt: Contactpersoon is aan 1 of meerdere stageopdrachten gekoppeld.";
-                    return View(contactpersoon);
-                }
-                bedrijfRepository.DeleteContactpersoon(contactpersoon);
-                bedrijfRepository.SaveChanges();
-                TempData["message"] = "Contactpersoon " + contactpersoon.Naam + " verwijderd.";
-                return RedirectToAction("Index");
+                return HttpNotFound();
             }
+            if (bedrijf.ContactpersoonHasStageopdrachten(contactpersoon))
+            {
+                TempData["message"] = "Verwijderen mislukt: Contactpersoon is aan 1 of meerdere stageopdrachten gekoppeld.";
+                return View(contactpersoon);
+            }
+            bedrijfRepository.DeleteContactpersoon(contactpersoon);
+            bedrijfRepository.SaveChanges();
+            TempData["message"] = "Contactpersoon " + contactpersoon.Naam + " verwijderd.";
             return RedirectToAction("Index");
         }
 

@@ -3,14 +3,14 @@
     ViewBag.Title = "Stageopdrachten";
     var message = TempData["message"];
 }
-
-<h2>@ViewBag.Title</h2>
 <p class="text-success">
     @message
 </p>
-@if (!User.IsInRole("bedrijf"))
+<h2>@ViewBag.Title</h2>
+
+@if (Model.DisplaySearchForm)
 {
-    <a id="searchA" class="btn btn-default" hidden="hidden">Zoeken</a>
+    <a id="searchA" class="btn btn-default" style="display:compact">Zoeken</a>
     using (Html.BeginForm("Index", "Stageopdracht", new { }, FormMethod.Get, new { id = "searchForm" }))
     {
         <div class="form-group">
@@ -38,37 +38,8 @@
         @Html.ActionLink("Nieuwe stageopdracht aanmaken", "Create")
     </p>
 }
-@Html.Grid(Model.Stageopdrachten).Columns(columns =>
-{
-    columns.Add(so => so.Titel).Titled("Titel")
-        .Encoded(false).Sanitized(false)
-        .RenderValueAs(so => Html.ActionLink(so.Titel, "Details", new { id = so.Id }));
-    columns.Add(so => so.ToonSpecialisatie).Titled("Specialisatie");
-    columns.Add(so => so.Semester).Titled("Semester");
-    columns.Add(so => so.Academiejaar);
-    columns.Add(so => so.AantalToegewezenStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
-    columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf");
-    columns.Add(so => so.Bedrijf.Gemeente).Titled("Locatie");
-}).WithPaging(5).Sortable()
-
+@Html.Partial("_StageopdrachtList")
 
 @section scripts{
-    <script type="text/javascript">
-        $(function () {
-            $inputs = $("#searchForm input, #searchForm select");
-            var emptyInputs = $inputs.filter(function () {
-                return !$(this).val();
-            }).length;
-            if (emptyInputs == $inputs.length) {
-                $("#searchForm").attr("hidden", "hidden");
-            }
-            else {
-                $("#searchA").remove();
-            }
-            $("#searchA").on("click", function () {
-                $("#searchForm").removeAttr("hidden");
-                $("#searchA").remove();
-            });
-        });
-    </script>
+    <script src="~/Scripts/stagetool.js"></script>
 }

@@ -55,12 +55,12 @@ namespace StageBeheersTool.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
-            var model = new IndexViewModel
+            var user = await UserManager.FindByIdAsync(userId);
+            if (!user.EmailConfirmed)
             {
-                HasPassword = HasPassword(),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
-            };
-            return View(model);
+                return RedirectToAction("ChangePassword");
+            }
+            return RedirectToAction("ChangePassword"); //View();
         }
 
         //
@@ -118,7 +118,7 @@ namespace StageBeheersTool.Controllers
                 }
                 if (User.IsInRole("student"))
                 {
-                    TempData["message"] = "Wachtwoord is succesvol veranderd.";
+                    TempData["message"] = "Wachtwoord is succesvol gewijzigd.";
                     return RedirectToAction("Details", "Student");
                 }
 

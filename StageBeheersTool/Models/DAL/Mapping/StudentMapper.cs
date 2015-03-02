@@ -16,8 +16,6 @@ namespace StageBeheersTool.Models.DAL.Mapping
             this.ToTable("Studenten");
             this.Property(student => student.HogentEmail).IsRequired().HasMaxLength(200)
                 .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("HogentEmailIndex") { IsUnique = true }));
-
-
         }
     }
 }

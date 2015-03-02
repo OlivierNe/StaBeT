@@ -74,7 +74,7 @@ namespace StageBeheersTool.Controllers
                 {
                     user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                     await UserManager.CreateAsync(user);
-                    await UserManager.AddToRoleAsync(user.Id, "student");
+                    //await UserManager.AddToRoleAsync(user.Id, "student");
                     await SignInManager.SignInAsync(user, model.RememberMe, false);
                     return RedirectToAction("ChangePassword", "Manage");
                 }
@@ -112,7 +112,7 @@ namespace StageBeheersTool.Controllers
                         //var roles = user.Roles;
                         //if (UserManager.IsInRole(user.Id, "bedrijf"))
                         //{
-                            return RedirectToAction("Index", "Stageopdracht");
+                        return RedirectToAction("Index", "Stageopdracht");
                         //}
                         //return RedirectToLocal(returnUrl);
                     }

@@ -16,15 +16,13 @@ namespace StageBeheersTool.ViewModels
         public string Familienaam { get; set; }
         [Required]
         public string Voornaam { get; set; }
-        public string Aanspreektitel { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        [Required]
-        [Display(Name="gsm")]
+        public string Aanspreektitel { get; set; }
+        [Display(Name = "gsm")]
         public string Gsmnummer { get; set; }
         [Display(Name = "Functie binnen het bedrijf")]
-        [Required]
         public string Bedrijfsfunctie { get; set; }
         [Required]
         [Display(Name = "Stagementor")]

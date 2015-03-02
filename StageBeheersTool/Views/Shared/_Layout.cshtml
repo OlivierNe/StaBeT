@@ -22,7 +22,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>*@
+                        <li>@Html.ActionLink("About", "About", "Home")</li>*@
                     @if (User.IsInRole("bedrijf"))
                     {
                         <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
@@ -31,6 +31,7 @@
                     else if (User.IsInRole("student"))
                     {
                         <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
+                        <li>@Html.ActionLink("Mijn stageopdrachten", "MijnStageopdrachten", "Stageopdracht")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

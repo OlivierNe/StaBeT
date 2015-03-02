@@ -248,6 +248,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\Student\profiel.jpg" />
+    <Content Include="Scripts\createStageForm.js" />
     <Content Include="Scripts\lib\gridmvc.js" />
     <Content Include="Scripts\lib\gridmvc.lang.ru.js" />
     <Content Include="Scripts\lib\gridmvc.min.js" />
@@ -296,7 +297,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Stageopdracht\Create.cshtml" />
-    <Content Include="Views\Stageopdracht\Index2.cshtml" />
     <Content Include="Views\Stageopdracht\Delete.cshtml" />
     <Content Include="Views\Stageopdracht\Details.cshtml" />
     <Content Include="Views\Stageopdracht\Edit.cshtml" />
@@ -312,6 +312,7 @@
     <Content Include="Views\Student\Details.cshtml" />
     <Content Include="Views\Student\Edit.cshtml" />
     <Content Include="Views\Stageopdracht\_CreateContractOndertekenaarForm.cshtml" />
+    <Content Include="Views\Stageopdracht\_StageopdrachtList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

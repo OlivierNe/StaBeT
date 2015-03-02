@@ -1,72 +1,74 @@
-﻿@model Stageopdracht
+﻿@model StageopdrachtDetailsVM
 
 @{
     ViewBag.Title = "Details";
+    var message = TempData["message"];
 }
-
+<h4 class="text-success">
+    @message
+</h4>
 <h2>Details</h2>
-
 <div>
     <h4>Stageopdracht</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Titel)
+            @Html.DisplayNameFor(model => model.Stageopdracht.Titel)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Titel)
+            @Html.DisplayFor(model => model.Stageopdracht.Titel)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Omschrijving)
+            @Html.DisplayNameFor(model => model.Stageopdracht.Omschrijving)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Omschrijving)
+            @Html.DisplayFor(model => model.Stageopdracht.Omschrijving)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Semester)
+            @Html.DisplayNameFor(model => model.Stageopdracht.Semester)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Semester)
+            @Html.DisplayFor(model => model.Stageopdracht.Semester)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.AantalStudenten)
+            @Html.DisplayNameFor(model => model.Stageopdracht.AantalStudenten)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.AantalStudenten)
+            @Html.DisplayFor(model => model.Stageopdracht.AantalStudenten)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Academiejaar)
+            @Html.DisplayNameFor(model => model.Stageopdracht.Academiejaar)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Academiejaar)
+            @Html.DisplayFor(model => model.Stageopdracht.Academiejaar)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Specialisatie)
+            @Html.DisplayNameFor(model => model.Stageopdracht.Specialisatie)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Specialisatie.Naam)
+            @Html.DisplayFor(model => model.Stageopdracht.Specialisatie.Naam)
         </dd>
-        <dt>@Html.DisplayNameFor(model => model.Bedrijf) </dt>
-        <dd>@Html.DisplayFor(model => model.Bedrijf.Naam)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Bedrijf) </dt>
+        <dd>@Html.DisplayFor(model => model.Stageopdracht.Bedrijf.Naam)</dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ContractOndertekenaar)
+            @Html.DisplayNameFor(model => model.Stageopdracht.ContractOndertekenaar)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ContractOndertekenaar.Naam)
+            @Html.DisplayFor(model => model.Stageopdracht.ContractOndertekenaar.Naam)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Stagementor)
+            @Html.DisplayNameFor(model => model.Stageopdracht.Stagementor)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Stagementor.Naam)
+            @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Naam)
         </dd>
     </dl>
 </div>
@@ -75,15 +77,21 @@
     @if (User.IsInRole("bedrijf"))
     {
         @Html.Raw("|")
-        @Html.ActionLink("Aanpassen", "Edit", new { id = Model.Id })
+        @Html.ActionLink("Aanpassen", "Edit", new { id = Model.Stageopdracht.Id })
     }
-    @if (User.IsInRole("bedrijf") && Model.IsGoedgekeurd() == false)
+    @if (User.IsInRole("bedrijf") && Model.Stageopdracht.IsGoedgekeurd() == false)
     {
         @Html.Raw("|");
-        @Html.ActionLink("Verwijderen", "Delete", new { id = Model.Id })
+        @Html.ActionLink("Verwijderen", "Delete", new { id = Model.Stageopdracht.Id })
     }
-    @if (User.IsInRole("student"))
+    @if (Model.ToonToevoegen)
     {
-        @Html.ActionLink("Toevoegen", "", "", new { }, new {@class="btn btn-default", @title="Toevoegen aan stages waar ik ga solliciteren." })
+        @Html.ActionLink("Toevoegen aan mijn voorkeurstages", "ToevoegenAanVoorkeur", "Stageopdracht",
+            new { id = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Toevoegen aan mijn voorkeurstages." })
+    }
+    @if (Model.ToonVerwijderenBtn)
+    {
+        @Html.ActionLink("Verwijderen uit mijn voorkeurstages", "VerwijderenUitVoorkeur", "Stageopdracht",
+            new { id = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Verwijderen uit mijn voorkeurstages." })
     }
 </p>

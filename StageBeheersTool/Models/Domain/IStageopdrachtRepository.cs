@@ -10,6 +10,7 @@ namespace StageBeheersTool.Models.Domain
         void Delete(Stageopdracht stageopdracht);
         IQueryable<Stageopdracht> FindAll();
         Stageopdracht FindById(int id);
+        Stageopdracht FindGeldigeStageopdrachtById(int id);
         IQueryable<Stageopdracht> FindByFilter(int? semester, string soort, string bedrijf, string locatie);
         IQueryable<Stageopdracht> FindGeldigeStageopdrachten(int? semester, string soort, string bedrijf, string locatie);
     }

@@ -51,6 +51,10 @@ namespace StageBeheersTool.Models.DAL
                 .Where(so => so.IsGoedgekeurd() && so.isVolledigIngenomen() && so.IsInHuidigAcademiejaar()).AsQueryable();
         }
 
+        public Stageopdracht FindGeldigeStageopdrachtById(int id)
+        {
+            return stageopdrachten.AsEnumerable().FirstOrDefault(so => so.IsGoedgekeurd() && so.isVolledigIngenomen() && so.IsInHuidigAcademiejaar() && so.Id == id);
+        }
 
     }
 }

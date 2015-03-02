@@ -13,20 +13,35 @@ namespace StageBeheersTool.ViewModels
     {
         public IEnumerable<Stageopdracht> Stageopdrachten { get; set; }
         public int? Semester { get; set; }
-        [Display(Name="Soort stage")]
+        [Display(Name = "Soort stage")]
         public string Soort { get; set; }
         public string Locatie { get; set; }
         public string Bedrijf { get; set; }
         public SelectList SemesterList { get; set; }
-
+        public bool DisplaySearchForm { get; set; }
         public StageopdrachtIndexVM()
         {
+            DisplaySearchForm = true;
             SemesterList = new SelectList(new string[] { "1", "2" }, Semester == null ? "" : Semester.ToString());
         }
     }
 
+    public class StageopdrachtDetailsVM
+    {
+        public Stageopdracht Stageopdracht { get; set; }
+        public bool ToonToevoegen { get; set; }
+        public bool ToonVerwijderenBtn { get; set; }
+        public StageopdrachtDetailsVM()
+        {
+            ToonVerwijderenBtn = false;
+            ToonToevoegen = false;
+        }
+
+    }
+
     public class StageopdrachtCreateVM : IValidatableObject
     {
+        #region Properties
         [Required]
         [StringLength(200, ErrorMessage = "{0} mag niet langer zijn dan 200 characters.")]
         public string Titel { get; set; }
@@ -52,10 +67,12 @@ namespace StageBeheersTool.ViewModels
         public SelectList StagementorsSelectList { get; set; }
 
         public ContactpersoonCreateVM Stagementor { get; set; }
-        public ContactpersoonCreateVM ContactOndertekenaar { get; set; }
+        public ContactpersoonCreateVM ContractOndertekenaar { get; set; }
+        #endregion
 
+        #region Constructors
         public StageopdrachtCreateVM(IEnumerable<Specialisatie> specialisaties,
-            IEnumerable<Contactpersoon> contractOndertekenaars, IEnumerable<Contactpersoon> stagementors)
+          IEnumerable<Contactpersoon> contractOndertekenaars, IEnumerable<Contactpersoon> stagementors)
             : this()
         {
             SetSelectLists(specialisaties, contractOndertekenaars, stagementors);
@@ -65,6 +82,9 @@ namespace StageBeheersTool.ViewModels
             Academiejaar = DateTime.Now.Year + "-" + (DateTime.Now.Year + 1);
             Semester = 2;
         }
+        #endregion
+
+        #region Public methods
         public void SetSelectLists(IEnumerable<Specialisatie> specialisaties,
             IEnumerable<Contactpersoon> contractOndertekenaars, IEnumerable<Contactpersoon> stagementors)
         {
@@ -89,6 +109,7 @@ namespace StageBeheersTool.ViewModels
 
             return errors;
         }
+        #endregion
 
     }
 
@@ -102,6 +123,7 @@ namespace StageBeheersTool.ViewModels
             : base(specialisaties, contractOndertekenaars, stagementors)
         {
         }
+        [HiddenInput]
         public int Id { get; set; }
         [Display(Name = "Aantal toegewezen studenten")]
         [Range(0, 3)]

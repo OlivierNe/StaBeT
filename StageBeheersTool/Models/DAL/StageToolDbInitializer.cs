@@ -206,7 +206,7 @@ namespace StageBeheersTool.Models.DAL
                 {
                     Voornaam = "Olivier",
                     Familienaam = "Neirynck",
-                    HogentEmail = "olivier.neirynck.1177q@student.hogent.be"
+                    HogentEmail = "olivier.neirynck.q1177@student.hogent.be"
                 };
 
 

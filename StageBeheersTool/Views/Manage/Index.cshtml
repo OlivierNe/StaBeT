@@ -1,5 +1,4 @@
-﻿@model IndexViewModel
-@{
+﻿@{
     ViewBag.Title = "Manage";
 }
 
@@ -10,18 +9,8 @@
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>Password:</dt>
+        <dt></dt>
         <dd>
-            [
-            @if (Model.HasPassword)
-            {
-                @Html.ActionLink("Change your password", "ChangePassword")
-            }
-            else
-            {
-                @Html.ActionLink("Create", "SetPassword")
-            }
-            ]
         </dd>
     </dl>
 </div>

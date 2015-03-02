@@ -1,59 +1,51 @@
 ﻿@model StageopdrachtCreateVM
-
+<hr />
+<strong>Contractondertekenaar</strong> <a id="cancelBtnCO" class="btn" title="Nieuwe contractondertekenaar annuleren.">(X)</a>
+<hr />
 <div class="form-group">
-    @Html.LabelFor(model => model.ContactOndertekenaar.Familienaam, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.ContractOndertekenaar.Familienaam, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.EditorFor(model => model.ContactOndertekenaar.Familienaam, new { htmlAttributes = new { @class = "form-control", autofocus = "" } })
-        @Html.ValidationMessageFor(model => model.ContactOndertekenaar.Familienaam, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.ContractOndertekenaar.Familienaam, new { htmlAttributes = new { @class = "form-control", autofocus = "" } })
+        @Html.ValidationMessageFor(model => model.ContractOndertekenaar.Familienaam, "", new { @class = "text-danger" })
     </div>
 </div>
 <div class="form-group">
-    @Html.LabelFor(model => model.ContactOndertekenaar.Voornaam, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.ContractOndertekenaar.Voornaam, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.EditorFor(model => model.ContactOndertekenaar.Voornaam, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ContactOndertekenaar.Voornaam, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.ContractOndertekenaar.Voornaam, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ContractOndertekenaar.Voornaam, "", new { @class = "text-danger" })
     </div>
 </div>
 <div class="form-group">
-    @Html.LabelFor(model => model.ContactOndertekenaar.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.ContractOndertekenaar.Email, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.EditorFor(model => model.ContactOndertekenaar.Email, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ContactOndertekenaar.Email, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.ContractOndertekenaar.Email, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ContractOndertekenaar.Email, "", new { @class = "text-danger" })
     </div>
 </div>
 <div class="form-group">
-    @Html.LabelFor(model => model.ContactOndertekenaar.Gsmnummer, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.ContractOndertekenaar.Gsmnummer, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.EditorFor(model => model.ContactOndertekenaar.Gsmnummer, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ContactOndertekenaar.Gsmnummer, "", new { @class = "text-danger" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(model => model.ContactOndertekenaar.Bedrijfsfunctie, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.ContactOndertekenaar.Bedrijfsfunctie, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ContactOndertekenaar.Bedrijfsfunctie, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.ContractOndertekenaar.Gsmnummer, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ContractOndertekenaar.Gsmnummer, "", new { @class = "text-danger" })
     </div>
 </div>
 <div class="form-group">
-    @Html.LabelFor(model => model.ContactOndertekenaar.IsStagementor, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.ContractOndertekenaar.Bedrijfsfunctie, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.ContractOndertekenaar.Bedrijfsfunctie, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ContractOndertekenaar.Bedrijfsfunctie, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.ContractOndertekenaar.IsStagementor, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
         <div class="checkbox">
-            @Html.EditorFor(model => model.ContactOndertekenaar.IsStagementor)
-            @Html.ValidationMessageFor(model => model.ContactOndertekenaar.IsStagementor, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.ContractOndertekenaar.IsStagementor)
+            @Html.ValidationMessageFor(model => model.ContractOndertekenaar.IsStagementor, "", new { @class = "text-danger" })
         </div>
     </div>
 </div>
-
-<div class="form-group">
-    @Html.LabelFor(model => model.ContactOndertekenaar.IsContractOndertekenaar, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        <div class="checkbox">
-            @Html.EditorFor(model => model.ContactOndertekenaar.IsContractOndertekenaar)
-            @Html.ValidationMessageFor(model => model.ContactOndertekenaar.IsContractOndertekenaar, "", new { @class = "text-danger" })
-        </div>
-    </div>
-</div>
-
+@Html.Hidden("ContractOndertekenaar.IsContractOndertekenaar", true)
+<hr />
 

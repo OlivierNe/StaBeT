@@ -5,15 +5,19 @@
     {
         HttpMethod = "GET",
         UpdateTargetId = "stagementorForm",
-        InsertionMode = InsertionMode.Replace,
-        OnSuccess = "showForm();"
+        InsertionMode = InsertionMode.Replace
+    };
+    var ajaxOptions2 = new AjaxOptions()
+    {
+        HttpMethod = "GET",
+        UpdateTargetId = "contractOndertekenaarForm",
+        InsertionMode = InsertionMode.Replace
     };
 }
-<h2 class="col-md-offset-2">Nieuwe stageopdracht</h2>
+<h2 class="col-md-offset-2">@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+@using (Html.BeginForm("Create", "Stageopdracht", FormMethod.Post, new { @id="stageopdrachtForm"}))
+{ @Html.AntiForgeryToken()
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -64,20 +68,38 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.StagementorId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4" id="stagementorDropdown">
-                @Html.DropDownListFor(model => model.StagementorId, Model.StagementorsSelectList, "-- Selecteer een stagementor --", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.StagementorId, "", new { @class = "text-danger" })
+            <div id="stagementorDropdown">
+                @Html.LabelFor(model => model.StagementorId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.StagementorId, Model.StagementorsSelectList, "-- Selecteer een stagementor --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.StagementorId, "", new { @class = "text-danger" })
+                </div>
+                @Html.HiddenFor(model => model.StagementorId, new { @id = "StagementorIdHidden" })
+                @Ajax.ActionLink("Nieuwe stagementor", "Create", new { IsStagementor = true }, ajaxOptions, new { @class = "btn btn-default", @id = "stagementorBtn" })
             </div>
-            <div id="stagementorForm" class="col-md-10" style="display:none;border:dashed;"></div>
-            @Ajax.ActionLink("Nieuwe stagementor", "Create", new { IsStagementor = true }, ajaxOptions, new { @class = "btn btn-default" })
+            <div id="stagementorForm" class="col-md-12">
+                @if (Model.Stagementor != null)
+                {
+                    @Html.Partial("_CreateStagementorForm")
+                }
+            </div>
         </div>
-
         <div class="form-group">
-            @Html.LabelFor(model => model.ContractOndertekenaarId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ContractOndertekenaarId, Model.ContractOndertekenaarsSelectList, "-- Selecteer een constractondertekenaar --", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ContractOndertekenaarId, "", new { @class = "text-danger" })
+            <div id="ContrOndDropdown">
+                @Html.LabelFor(model => model.ContractOndertekenaarId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.ContractOndertekenaarId, Model.ContractOndertekenaarsSelectList, "-- Selecteer een contractondertekenaar --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ContractOndertekenaarId, "", new { @class = "text-danger" })
+                </div>
+                @Html.HiddenFor(model => model.ContractOndertekenaarId, new { @id = "ContractOndertekenaarIdHidden" })
+                @Ajax.ActionLink("Nieuwe Contractondertekenaar", "Create", new { isContractOndertekenaar = true }, ajaxOptions2,
+         new { @class = "btn btn-default", @id = "contrOndBtn" })
+            </div>
+            <div id="contractOndertekenaarForm" class="col-md-12">
+                @if (Model.ContractOndertekenaar != null)
+                {
+                    @Html.Partial("_CreateContractOndertekenaarForm")
+                }
             </div>
         </div>
         <div class="form-group">
@@ -100,31 +122,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/lib/jquery.unobtrusive-ajax.min.js"></script>
+    @*<script src="~/Scripts/lib/jquery.unobtrusive-ajax.min.js"></script>*@
     <script src="~/Scripts/stagetool-form.js"></script>
-    <script type="text/javascript">
-        function showForm() {
-            $("#stagementorForm").css("display", "block");
-            $("#stagementorForm input[type='text'],#stagementorForm input[type='email'],#stagementorForm textarea").each(showRequired);
-        }
-
-        function onError(ajaxContext) {
-            var response = ajaxContext.get_response();
-            var statusCode = response.get_statusCode();
-            alert("Error occured. Status code = " + statusCode);
-        }
-        $(function () {
-            $("#newStagementorBtn").on("click", function () {
-                $(this).css("display", "none");
-                $.ajax("/Contactpersoon/CreateForm?isStagementor=true").done(function (data) {
-                    $("#stagementorDropdown").css("display", "none");
-                    $("#stagementorForm").css("display", "block").html(data);
-                });
-
-
-                return false;
-            });
-        });
-
-    </script>
+    <script src="~/Scripts/createStageForm.js"></script>
 }
