@@ -1,34 +1,43 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
+using Microsoft.AspNet.Identity.Owin;
+using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.ViewModels
-{/*
-    public class RegisterBedrijfViewModel
+{
+
+    public class ChangePasswordViewModel : IValidatableObject
     {
-        [Required]
-        [EmailAddress]
-        [Display(Name = "E-mail")]
-        public string Email { get; set; }
-        [Required]
-        [Display(Name = "Bedrijfsnaam")]
-        public string Naam { get; set; }
-        [Required]
-        public string Gemeente { get; set; }
-        [Required]
-        public int Postcode { get; set; }
-        [Required]
-        public string Straat { get; set; }
-        [Required]
-        [Display(Name="Nummer")]
-        public int Straatnummer { get; set; }
-        [Required]
-        [Display(Name = "Telefoon/gsm")]
-        public string Telefoonnummer { get; set; }
-        public string Bereikbaarheid { get; set; } //(wagen – openbaar vervoer – georganiseerd vervoer door bedrijf) 
-        public string BedrijfsActiviteiten { get; set; } //(bank – software ontwikkelaar – openbare diensten ….)
-    }*/
+        //[Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Huidig wachtwoord")]
+        public string OldPassword { get; set; }
 
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Nieuw wachtwoord")]
+        public string NewPassword { get; set; }
 
+        [DataType(DataType.Password)]
+        [Display(Name = "Nieuw wachtwoord bevestigen")]
+        [Compare("NewPassword", ErrorMessage = "Het nieuwe wachtwoord en het bevestigde antwoord komen niet overeen.")]
+        public string ConfirmPassword { get; set; }
+
+        public bool FirstLogin { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var results = new List<ValidationResult>();
+            var manager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            if (!FirstLogin && string.IsNullOrEmpty(OldPassword))
+            {
+                results.Add(new ValidationResult("Verplicht oud wachtwoord in te vullen."));
+            }
+            return results;
+        }
+    }
     public class ForgotViewModel
     {
         [Required]
