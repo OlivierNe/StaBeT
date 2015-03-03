@@ -190,11 +190,12 @@
     <Compile Include="App_Start\AutomapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BedrijfController.cs" />
+    <Compile Include="Controllers\BegeleiderController.cs" />
     <Compile Include="Controllers\ContactpersoonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -203,19 +204,28 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DAL\ApplicationUser.cs" />
+    <Compile Include="Models\Authentication\ApplicationSignInManager.cs" />
+    <Compile Include="Models\Authentication\ApplicationUser.cs" />
+    <Compile Include="Models\Authentication\ApplicationUserManager.cs" />
+    <Compile Include="Models\Authentication\EmailService.cs" />
     <Compile Include="Models\DAL\BedrijfRepository.cs" />
+    <Compile Include="Models\DAL\BegeleiderRepository.cs" />
+    <Compile Include="Models\DAL\KeuzepakketRepository.cs" />
     <Compile Include="Models\DAL\Mapping\BedrijfMapper.cs" />
     <Compile Include="Models\DAL\Mapping\BegeleiderMapper.cs" />
     <Compile Include="Models\DAL\Mapping\ContactpersoonMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\KeuzepakketMapper.cs" />
     <Compile Include="Models\DAL\Mapping\SpecialisatieMapper.cs" />
     <Compile Include="Models\DAL\Mapping\StageopdrachtMapper.cs" />
     <Compile Include="Models\DAL\Mapping\StudentMapper.cs" />
     <Compile Include="Models\DAL\SpecialisatieRepository.cs" />
     <Compile Include="Models\DAL\StudentRepository.cs" />
     <Compile Include="Models\Domain\Begeleider.cs" />
+    <Compile Include="Models\Domain\IBegeleiderRepository.cs" />
+    <Compile Include="Models\Domain\IKeuzepakketRepository.cs" />
     <Compile Include="Models\Domain\ISpecialisatieRepository.cs" />
     <Compile Include="Models\Domain\IStudentRepository.cs" />
+    <Compile Include="Models\Domain\Keuzepakket.cs" />
     <Compile Include="Models\Domain\Specialisatie.cs" />
     <Compile Include="Models\DAL\StageopdrachtRepository.cs" />
     <Compile Include="Models\DAL\StageToolDbContext.cs" />
@@ -225,12 +235,13 @@
     <Compile Include="Models\Domain\IBedrijfRepository.cs" />
     <Compile Include="Models\Domain\IStageopdrachtRepository.cs" />
     <Compile Include="Models\Domain\Persoon.cs" />
-    <Compile Include="Models\Domain\Stagebegeleider.cs" />
     <Compile Include="Models\Domain\Stagecoördinator.cs" />
     <Compile Include="Models\Domain\Stageopdracht.cs" />
     <Compile Include="Models\Domain\StageopdrachtStatus.cs" />
     <Compile Include="Models\Domain\Student.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
+    <Compile Include="ViewModels\BedrijfViewModels.cs" />
+    <Compile Include="ViewModels\BegeleiderViewModels.cs" />
     <Compile Include="ViewModels\ContactpersoonViewModels.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -247,6 +258,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Begeleider\profiel.jpg" />
     <Content Include="Images\Student\profiel.jpg" />
     <Content Include="Scripts\createStageForm.js" />
     <Content Include="Scripts\lib\gridmvc.js" />
@@ -313,6 +325,10 @@
     <Content Include="Views\Student\Edit.cshtml" />
     <Content Include="Views\Stageopdracht\_CreateContractOndertekenaarForm.cshtml" />
     <Content Include="Views\Stageopdracht\_StageopdrachtList.cshtml" />
+    <Content Include="Views\Bedrijf\Details.cshtml" />
+    <Content Include="Views\Bedrijf\Edit.cshtml" />
+    <Content Include="Views\Begeleider\Details.cshtml" />
+    <Content Include="Views\Begeleider\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

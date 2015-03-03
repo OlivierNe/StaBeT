@@ -30,14 +30,21 @@ namespace StageBeheersTool.Models.Domain
         public string Academiejaar { get; set; }
         public virtual Contactpersoon ContractOndertekenaar { get; set; }
         public virtual Contactpersoon Stagementor { get; set; }
+        public virtual Begeleider Stagebegeleider { get; set; }
         public virtual Bedrijf Bedrijf { get; set; }
+        public virtual ICollection<Student> Studenten { get; set; }
         public StageopdrachtStatus Status { get; set; }
+        public string Gemeente { get; set; }
+        public string Postcode { get; set; }
+        public string Straat { get; set; }
+        public string Straatnummer { get; set; }
         #endregion
 
         #region Constructors
         public Stageopdracht()
         {
             Status = StageopdrachtStatus.NietBeoordeeld;
+            Studenten = new List<Student>();
         }
         #endregion
 

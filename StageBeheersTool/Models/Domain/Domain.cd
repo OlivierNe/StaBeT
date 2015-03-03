@@ -3,7 +3,7 @@
   <Class Name="StageBeheersTool.Models.Domain.Bedrijf">
     <Position X="0.5" Y="0.5" Width="4.5" />
     <TypeIdentifier>
-      <HashCode>gIACQEAAACEAAACgBAAAlABAACCAAAgAAAAACAAAGAA=</HashCode>
+      <HashCode>gIACQEAAACEAEACgBAAAlABAACCAAAgAAAAACAAAGAA=</HashCode>
       <FileName>Models\Domain\Bedrijf.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -14,7 +14,7 @@
   <Class Name="StageBeheersTool.Models.Domain.Persoon">
     <Position X="9.75" Y="5.75" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAACQAAgACgAAAAAAgAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACQAAgACgAAAAAAgAAhAAAAACAAAAAAAAAAAAAGAA=</HashCode>
       <FileName>Models\Domain\Persoon.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -43,7 +43,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>BAgSAAEMAAEAAAAAKAAAAAAAAAACAAAAAAAAIAAQAAA=</HashCode>
+      <HashCode>BAgSAAEMAEEAAAAAKAAAgCAAIACCAAAAAAAAIAAQGAA=</HashCode>
       <FileName>Models\Domain\Stageopdracht.cs</FileName>
       <NewMemberFileName>Models\Domain\StageOpdracht.cs</NewMemberFileName>
     </TypeIdentifier>
@@ -62,22 +62,16 @@
     </TypeIdentifier>
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Student">
-    <Position X="10.25" Y="9.75" Width="1.5" />
-    <InheritanceLine Type="StageBeheersTool.Models.Domain.Persoon" FixedToPoint="true">
-      <Path>
-        <Point X="11.125" Y="8.007" />
-        <Point X="11.125" Y="9.75" />
-      </Path>
-    </InheritanceLine>
+    <Position X="10.25" Y="9.75" Width="3" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAgAAAEIIAAAAAAEAAAAABAAAAAQIAIAAAAAAAA=</HashCode>
       <FileName>Models\Domain\Student.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Begeleider">
-    <Position X="6.25" Y="8.75" Width="1.5" />
+    <Position X="6.25" Y="11.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAgAAAEIIAAAAAAAAAAAABAAAAAQIAIAAAAAAAA=</HashCode>
       <FileName>Models\Domain\Begeleider.cs</FileName>
     </TypeIdentifier>
   </Class>

@@ -7,10 +7,13 @@ namespace StageBeheersTool.Models.Domain
 {
     public class Student : Persoon
     {
+        #region Private Fields
         private string _fotoUrl;
+        #endregion
 
+        #region Properties
         public string HogentEmail { get; set; }
-        public string Keuzevak { get; set; }
+        public virtual Keuzepakket Keuzepakket { get; set; }
         public string FotoUrl
         {
             get
@@ -23,12 +26,16 @@ namespace StageBeheersTool.Models.Domain
             }
         }
         public virtual ICollection<Stageopdracht> MijnStageopdrachten { get; set; }
+        #endregion
 
+        #region Constructors
         public Student()
         {
             MijnStageopdrachten = new List<Stageopdracht>();
         }
+        #endregion
 
+        #region Public Methods
         public void AddStageopdracht(Stageopdracht stageopdracht)
         {
             MijnStageopdrachten.Add(stageopdracht);
@@ -48,5 +55,6 @@ namespace StageBeheersTool.Models.Domain
         {
             return MijnStageopdrachten.Remove(stageopdracht);
         }
+        #endregion
     }
 }

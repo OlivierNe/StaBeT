@@ -1,18 +1,20 @@
-﻿@model Student
+﻿@model Begeleider
+
 @{
+    ViewBag.Title = "Details";
     var message = TempData["message"];
 }
 
+<h2>Details</h2>
+<div class="text-success">
+    @message
+</div>
 <div>
-    <h4>Student</h4>
-    <div class="text-success">
-        @message
-    </div>
+    <h4>Begeleider</h4>
     <hr />
     <div class="row">
         <img class="col-sm-push-1 col-xs-2 img-responsive" src="@Url.Content(Model.FotoUrl)" />
     </div>
-
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Naam)
@@ -27,13 +29,20 @@
         <dd>
             @Html.DisplayFor(model => model.HogentEmail)
         </dd>
-
         <dt>
-            E-mail
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gsmnummer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gsmnummer)
         </dd>
         <dt>
             Adres
@@ -42,23 +51,9 @@
             @Model.Gemeente @Model.Postcode
         </dd>
         <dd>@Model.Straat @Model.Straatnummer</dd>
-        <dt>
-            @Html.NameFor(model => model.Keuzepakket)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Keuzepakket.Naam)
-        </dd>
-        <dt>
-            Gsm
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Gsmnummer)
-        </dd>
     </dl>
 </div>
 <p>
     @Html.ActionLink("Gegevens wijzigen", "Edit")
-    @*, new { id = Model.Id }) |*@
-    @*@Html.ActionLink("Back to List", "Index")*@
 </p>

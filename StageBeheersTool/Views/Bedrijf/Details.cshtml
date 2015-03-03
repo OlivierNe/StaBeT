@@ -1,0 +1,70 @@
+﻿@model Bedrijf
+
+@{
+    var message = TempData["message"];
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Bedrijf</h4>
+    <div class="text-success">
+        @message
+    </div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Naam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Naam)
+        </dd>
+
+        <dt>
+            Adres
+        </dt>
+        <dd>
+            @Model.Gemeente @Model.Postcode
+        </dd>
+        <dd>@Model.Straat @Model.Straatnummer</dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefoonnummer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefoonnummer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Bereikbaarheid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bereikbaarheid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BedrijfsActiviteiten)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BedrijfsActiviteiten)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Gegevens wijzigen", "Edit")
+</p>
+<p>
+    @Html.ActionLink("Wachtwoord wijzigen", "ChangePassword", "Account")
+</p>

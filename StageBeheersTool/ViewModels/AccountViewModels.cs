@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace StageBeheersTool.ViewModels
-{
+{/*
     public class RegisterBedrijfViewModel
     {
         [Required]
@@ -26,7 +26,7 @@ namespace StageBeheersTool.ViewModels
         public string Telefoonnummer { get; set; }
         public string Bereikbaarheid { get; set; } //(wagen – openbaar vervoer – georganiseerd vervoer door bedrijf) 
         public string BedrijfsActiviteiten { get; set; } //(bank – software ontwikkelaar – openbare diensten ….)
-    }
+    }*/
 
 
     public class ForgotViewModel

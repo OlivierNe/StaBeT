@@ -7,6 +7,7 @@
     @Styles.Render("~/Content/css")
     @RenderSection("styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
+    <meta name="description" content="" />
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,17 +22,15 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>*@
                     @if (User.IsInRole("bedrijf"))
                     {
                         <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
                         <li>@Html.ActionLink("Contactpersonen", "Index", "Contactpersoon")</li>
                     }
-                    else if (User.IsInRole("student"))
+                    else if (User.IsInRole("student") || User.IsInRole("begeleider"))
                     {
                         <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
-                        <li>@Html.ActionLink("Mijn stageopdrachten", "MijnStageopdrachten", "Stageopdracht")</li>
+                        <li>@Html.ActionLink("Mijn voorkeurstages", "MijnVoorkeurStages", "Stageopdracht")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

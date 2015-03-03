@@ -11,7 +11,7 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<Stageopdracht> FindAll();
         Stageopdracht FindById(int id);
         Stageopdracht FindGeldigeStageopdrachtById(int id);
-        IQueryable<Stageopdracht> FindByFilter(int? semester, string soort, string bedrijf, string locatie);
-        IQueryable<Stageopdracht> FindGeldigeStageopdrachten(int? semester, string soort, string bedrijf, string locatie);
+        IQueryable<Stageopdracht> FindByFilter(int? semester, int? aantalStudenten, string soort, string bedrijf, string locatie);
+        IQueryable<Stageopdracht> FindGeldigeStageopdrachten(int? semester, int? aantalStudenten, string soort, string bedrijf, string locatie);
     }
 }

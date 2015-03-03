@@ -36,7 +36,6 @@ namespace StageBeheersTool.ViewModels
             ToonVerwijderenBtn = false;
             ToonToevoegen = false;
         }
-
     }
 
     public class StageopdrachtCreateVM : IValidatableObject
@@ -45,6 +44,11 @@ namespace StageBeheersTool.ViewModels
         [Required]
         [StringLength(200, ErrorMessage = "{0} mag niet langer zijn dan 200 characters.")]
         public string Titel { get; set; }
+        public string Gemeente { get; set; }
+        public string Postcode { get; set; }
+        public string Straat { get; set; }
+        [Display(Name = "nummer")]
+        public string Straatnummer { get; set; }
         [Required]
         [DataType(DataType.MultilineText)]
         public string Omschrijving { get; set; }

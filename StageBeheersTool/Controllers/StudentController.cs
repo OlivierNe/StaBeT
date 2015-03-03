@@ -17,10 +17,12 @@ namespace StageBeheersTool.Controllers
     {
 
         private IStudentRepository studentRepository;
+        private IKeuzepakketRepository keuzepakketRepository;
 
-        public StudentController(IStudentRepository studentRepository)
+        public StudentController(IStudentRepository studentRepository, IKeuzepakketRepository keuzepakketRepository)
         {
             this.studentRepository = studentRepository;
+            this.keuzepakketRepository = keuzepakketRepository;
         }
 
         [Authorize(Roles = "student")]
@@ -43,6 +45,8 @@ namespace StageBeheersTool.Controllers
                 student = studentRepository.FindById((int)id);
             }
             var model = Mapper.Map<Student, StudentEditVM>(student);
+            model.InitSelectList(keuzepakketRepository.FindAll());
+            model.KeuzepakketId = student.Keuzepakket == null ? null : (int?)student.Keuzepakket.Id;
             return View(model);
         }
 
@@ -68,7 +72,7 @@ namespace StageBeheersTool.Controllers
             {
                 if (fotoFile.ContentLength > 512000)
                 {
-                    ModelState.AddModelError(string.Empty, "Ongeldige afbeelding grootte, max. 500kb zijn.");
+                    ModelState.AddModelError(string.Empty, "Ongeldige afbeelding grootte, max. 500kb.");
                     return View(model);
                 }
                 else
@@ -85,8 +89,8 @@ namespace StageBeheersTool.Controllers
                     fotoFile.SaveAs(absolutePath);
                 }
             }
-
             var newStudent = Mapper.Map<StudentEditVM, Student>(model);
+            newStudent.Keuzepakket = model.KeuzepakketId == null ? null : keuzepakketRepository.FindBy((int)model.KeuzepakketId);
             studentRepository.Update(student, newStudent);
             studentRepository.SaveChanges();
 

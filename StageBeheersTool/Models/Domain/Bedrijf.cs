@@ -63,6 +63,11 @@ namespace StageBeheersTool.Models.Domain
                 teUpdatenOpdracht.AantalToegewezenStudenten = stageopdracht.AantalToegewezenStudenten;
                 teUpdatenOpdracht.Stagementor = stageopdracht.Stagementor;
                 teUpdatenOpdracht.ContractOndertekenaar = stageopdracht.ContractOndertekenaar;
+                teUpdatenOpdracht.Gemeente = stageopdracht.Gemeente;
+                teUpdatenOpdracht.Postcode = stageopdracht.Postcode;
+                teUpdatenOpdracht.Straat = stageopdracht.Straat;
+                teUpdatenOpdracht.Straatnummer = stageopdracht.Straatnummer;
+
                 return true;
             }
             return false;

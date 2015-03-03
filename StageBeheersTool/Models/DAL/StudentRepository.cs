@@ -43,12 +43,11 @@ namespace StageBeheersTool.Models.DAL
             ctx.SaveChanges();
         }
 
-
         public void Update(Student student, Student newStudent)
         {
             student.Voornaam = newStudent.Voornaam;
             student.Familienaam = newStudent.Familienaam;
-            student.Keuzevak = newStudent.Keuzevak;
+            student.Keuzepakket = newStudent.Keuzepakket;
             student.Email = newStudent.Email;
             student.Gsmnummer = newStudent.Gsmnummer;
             student.Postcode = newStudent.Postcode;

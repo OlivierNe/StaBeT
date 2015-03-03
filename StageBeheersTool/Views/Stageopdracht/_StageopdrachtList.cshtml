@@ -11,6 +11,6 @@
     columns.Add(so => so.Academiejaar);
     columns.Add(so => so.AantalToegewezenStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
     columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf");
-    columns.Add(so => so.Bedrijf.Gemeente).Titled("Locatie");
-}).WithPaging(10).Sortable()
+    columns.Add(so => so.Gemeente).Titled("Locatie");
+}).WithPaging(10).Sortable().EmptyText("")
 </div>

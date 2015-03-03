@@ -26,9 +26,13 @@
                 {
                     @Html.ActionLink(User.Identity.GetUserName(), "Details", "Student")
                 }
-                else
+                else if (User.IsInRole("bedrijf"))
                 {
-                    @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    @Html.ActionLink(User.Identity.GetUserName(), "Details", "Bedrijf")
+                }
+                else if (User.IsInRole("begeleider"))
+                {
+                    @Html.ActionLink(User.Identity.GetUserName(), "Details", "Begeleider")
                 }
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>

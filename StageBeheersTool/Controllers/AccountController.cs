@@ -14,6 +14,7 @@ using StageBeheersTool.Models.Domain;
 using AutoMapper;
 using System.Web.Security;
 using Newtonsoft.Json;
+using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.Controllers
 {
@@ -24,6 +25,7 @@ namespace StageBeheersTool.Controllers
         private ApplicationUserManager _userManager;
         private IBedrijfRepository bedrijfRepository;
         private IStudentRepository studentRepository;
+        private IBegeleiderRepository begeleiderRepository;
 
         public ApplicationSignInManager SignInManager
         {
@@ -37,10 +39,12 @@ namespace StageBeheersTool.Controllers
             private set { _userManager = value; }
         }
 
-        public AccountController(IBedrijfRepository bedrijfRepository, IStudentRepository studentRepository)
+        public AccountController(IBedrijfRepository bedrijfRepository,
+            IStudentRepository studentRepository, IBegeleiderRepository begeleiderRepository)
         {
             this.bedrijfRepository = bedrijfRepository;
             this.studentRepository = studentRepository;
+            this.begeleiderRepository = begeleiderRepository;
         }
 
         //
@@ -63,7 +67,6 @@ namespace StageBeheersTool.Controllers
             {
                 return View(model);
             }
-
             if (model.Email.EndsWith("@student.hogent.be")) //student
             {
                 //TODO: service aanspreken:
@@ -72,20 +75,15 @@ namespace StageBeheersTool.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null) //eerste login
                 {
-                    user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
                     await UserManager.CreateAsync(user);
-                    //await UserManager.AddToRoleAsync(user.Id, "student");
-                    await SignInManager.SignInAsync(user, model.RememberMe, false);
-                    return RedirectToAction("ChangePassword", "Manage");
+                    await UserManager.AddToRoleAsync(user.Id, "student");
+                    Student student = new Student() { HogentEmail = model.Email };
+                    studentRepository.Add(student);
+                    studentRepository.SaveChanges();
                 }
-                //else
-                //{
-                //    var result1 = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-
-                //}
-
-
-                //return RedirectToAction("Index", "Stageopdracht");
+                await SignInManager.SignInAsync(user, model.RememberMe, false);
+                return RedirectToAction("Index", "Stageopdracht");
             }
             else if (model.Email.EndsWith("@hogent.be")) //begeleider of admin
             {
@@ -95,9 +93,12 @@ namespace StageBeheersTool.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null)
                 {
-                    user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
                     await UserManager.CreateAsync(user);
                     await UserManager.AddToRoleAsync(user.Id, "begeleider");//of admin
+                    Begeleider begeleider = new Begeleider() { HogentEmail = model.Email };
+                    begeleiderRepository.Add(begeleider);
+                    begeleiderRepository.SaveChanges();
                 }
                 await SignInManager.SignInAsync(user, model.RememberMe, false);
                 return RedirectToAction("Index", "Stageopdracht");
@@ -109,12 +110,7 @@ namespace StageBeheersTool.Controllers
                     var user = await UserManager.FindByEmailAsync(model.Email);
                     if (user.EmailConfirmed)
                     {
-                        //var roles = user.Roles;
-                        //if (UserManager.IsInRole(user.Id, "bedrijf"))
-                        //{
                         return RedirectToAction("Index", "Stageopdracht");
-                        //}
-                        //return RedirectToLocal(returnUrl);
                     }
                     else
                     {
@@ -190,106 +186,154 @@ namespace StageBeheersTool.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-
-        //
-        // GET: /Account/ConfirmEmail
-        [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        // GET: /Manage/ChangePassword
+        public ActionResult ChangePassword()
         {
-            if (userId == null || code == null)
-            {
-                return View("Error");
-            }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            return View(new ChangePasswordViewModel() { FirstLogin = !user.EmailConfirmed });
         }
 
         //
-        // GET: /Account/ForgotPassword
-        [AllowAnonymous]
-        public ActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Account/ForgotPassword
+        // POST: /Manage/ChangePassword
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
-                }
-
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        //
-        // GET: /Account/ForgotPasswordConfirmation
-        [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
-
-        //
-        // GET: /Account/ResetPassword
-        [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
-        {
-            return code == null ? View("Error") : View();
-        }
-
-        //
-        // POST: /Account/ResetPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
-            if (user == null)
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            IdentityResult result = null;
+            if (!user.EmailConfirmed)
             {
-                // Don't reveal that the user does not exist
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                result = await UserManager.ChangePasswordWithoutOldAsync(user, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(user.Id, "bedrijf");
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToAction("Index", "Stageopdracht");
+                    }
+                }
             }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                if (user != null)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                TempData["message"] = "Wachtwoord gewijzigd.";
+                return RedirectToAction("Details", "Bedrijf");
             }
             AddErrors(result);
-            return View();
+            return View(model);
         }
 
-        //
-        // GET: /Account/ResetPasswordConfirmation
-        [AllowAnonymous]
-        public ActionResult ResetPasswordConfirmation()
-        {
-            return View();
-        }
+
+
+
+
+        ////
+        //// GET: /Account/ConfirmEmail
+        //[AllowAnonymous]
+        //public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        //{
+        //    if (userId == null || code == null)
+        //    {
+        //        return View("Error");
+        //    }
+        //    var result = await UserManager.ConfirmEmailAsync(userId, code);
+        //    return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        //}
+
+        ////
+        //// GET: /Account/ForgotPassword
+        //[AllowAnonymous]
+        //public ActionResult ForgotPassword()
+        //{
+        //    return View();
+        //}
+
+        ////
+        //// POST: /Account/ForgotPassword
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await UserManager.FindByNameAsync(model.Email);
+        //        if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+        //        {
+        //            // Don't reveal that the user does not exist or is not confirmed
+        //            return View("ForgotPasswordConfirmation");
+        //        }
+
+        //        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+        //        // Send an email with this link
+        //        // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+        //        // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
+        //        // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+        //        // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+        //    }
+
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
+
+        ////
+        //// GET: /Account/ForgotPasswordConfirmation
+        //[AllowAnonymous]
+        //public ActionResult ForgotPasswordConfirmation()
+        //{
+        //    return View();
+        //}
+
+        ////
+        //// GET: /Account/ResetPassword
+        //[AllowAnonymous]
+        //public ActionResult ResetPassword(string code)
+        //{
+        //    return code == null ? View("Error") : View();
+        //}
+
+        ////
+        //// POST: /Account/ResetPassword
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+        //    var user = await UserManager.FindByNameAsync(model.Email);
+        //    if (user == null)
+        //    {
+        //        // Don't reveal that the user does not exist
+        //        return RedirectToAction("ResetPasswordConfirmation", "Account");
+        //    }
+        //    var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+        //    if (result.Succeeded)
+        //    {
+        //        return RedirectToAction("ResetPasswordConfirmation", "Account");
+        //    }
+        //    AddErrors(result);
+        //    return View();
+        //}
+
+        ////
+        //// GET: /Account/ResetPasswordConfirmation
+        //[AllowAnonymous]
+        //public ActionResult ResetPasswordConfirmation()
+        //{
+        //    return View();
+        //}
 
         protected override void Dispose(bool disposing)
         {

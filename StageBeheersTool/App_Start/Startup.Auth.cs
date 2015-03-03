@@ -8,6 +8,7 @@ using Owin;
 using StageBeheersTool.Models;
 using StageBeheersTool.Models.DAL;
 using StageBeheersTool.Models.Domain;
+using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool
 {

@@ -5,7 +5,9 @@ using System.Web;
 
 namespace StageBeheersTool.Models.Domain
 {
-    public class Stagebegeleider
+    public interface IKeuzepakketRepository
     {
+        IQueryable<Keuzepakket> FindAll();
+        Keuzepakket FindBy(int id);
     }
 }

@@ -1,14 +1,12 @@
-﻿using StageBeheersTool.Models.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 
 namespace StageBeheersTool.ViewModels
 {
-    public class StudentEditVM
+    public class BegeleiderEditVM
     {
         public int Id { get; set; }
         [Display(Name = "Naam")]
@@ -16,8 +14,6 @@ namespace StageBeheersTool.ViewModels
         public string Voornaam { get; set; }
         [Display(Name = "Hogent E-mail")]
         public string HogentEmail { get; set; }
-        [Display(Name = "Keuzepakket")]
-        public int? KeuzepakketId { get; set; }
         [Display(Name = "E-mail")]
         [EmailAddress]
         public string Email { get; set; }
@@ -29,11 +25,7 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "Nummer")]
         public string Straatnummer { get; set; }
         public string FotoUrl { get; set; }
-        public SelectList KeuzevakSelectList { get; set; }
 
-        public void InitSelectList(IEnumerable<Keuzepakket> keuzepakketten)
-        {
-            KeuzevakSelectList = new SelectList(keuzepakketten, "Id", "Naam", KeuzepakketId != 0 ? KeuzepakketId.ToString() : "");
-        }
+
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System.Web;
 using Microsoft.AspNet.Identity.Owin;
+using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.ViewModels
 {

@@ -13,20 +13,20 @@ namespace StageBeheersTool.App_Start
     using StageBeheersTool.Models.Domain;
     using StageBeheersTool.Models.DAL;
 
-    public static class NinjectWebCommon 
+    public static class NinjectWebCommon
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
 
         /// <summary>
         /// Starts the application
         /// </summary>
-        public static void Start() 
+        public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
             bootstrapper.Initialize(CreateKernel);
         }
-        
+
         /// <summary>
         /// Stops the application.
         /// </summary>
@@ -34,7 +34,7 @@ namespace StageBeheersTool.App_Start
         {
             bootstrapper.ShutDown();
         }
-        
+
         /// <summary>
         /// Creates the kernel that will manage your application.
         /// </summary>
@@ -66,8 +66,10 @@ namespace StageBeheersTool.App_Start
             kernel.Bind<IBedrijfRepository>().To<BedrijfRepository>().InRequestScope();
             kernel.Bind<IStageopdrachtRepository>().To<StageopdrachtRepository>().InRequestScope();
             kernel.Bind<ISpecialisatieRepository>().To<SpecialisatieRepository>().InRequestScope();
+            kernel.Bind<IKeuzepakketRepository>().To<KeuzepakketRepository>().InRequestScope();
             kernel.Bind<IStudentRepository>().To<StudentRepository>().InRequestScope();
+            kernel.Bind<IBegeleiderRepository>().To<BegeleiderRepository>().InRequestScope();
             kernel.Bind<StageToolDbContext>().ToSelf().InRequestScope();
-        }        
+        }
     }
 }

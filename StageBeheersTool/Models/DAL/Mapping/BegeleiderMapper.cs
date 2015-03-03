@@ -9,7 +9,7 @@ using System.Web;
 
 namespace StageBeheersTool.Models.DAL.Mapping
 {
-    public class BegeleiderMapper: EntityTypeConfiguration<Begeleider>
+    public class BegeleiderMapper : EntityTypeConfiguration<Begeleider>
     {
         public BegeleiderMapper()
         {

@@ -9,6 +9,7 @@ using Microsoft.Owin.Security;
 using StageBeheersTool.Models;
 using StageBeheersTool.ViewModels;
 using StageBeheersTool.Models.Domain;
+using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.Controllers
 {
@@ -42,8 +43,6 @@ namespace StageBeheersTool.Controllers
             SignInManager = signInManager;
         }
 
-
-
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
@@ -64,70 +63,7 @@ namespace StageBeheersTool.Controllers
         }
 
         //
-        // GET: /Manage/ChangePassword
-        public ActionResult ChangePassword()
-        {
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            return View(new ChangePasswordViewModel() { FirstLogin = !user.EmailConfirmed });
-        }
-
-        //
-        // POST: /Manage/ChangePassword
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            IdentityResult result = null;
-            if (!user.EmailConfirmed)
-            {
-                result = await UserManager.ChangePasswordWithoutOldAsync(user, model.NewPassword);
-                if (result.Succeeded)
-                {
-                    if (User.Identity.Name.EndsWith("@student.hogent.be")) //student
-                    {
-                        await UserManager.AddToRoleAsync(user.Id, "student");
-                        Student student = new Student() { HogentEmail = User.Identity.Name };
-                        studentRepository.Add(student);
-                        studentRepository.SaveChanges();
-                    }
-                    else //bedrijf
-                    {
-                        await UserManager.AddToRoleAsync(user.Id, "bedrijf");
-                    }
-                    if (result.Succeeded)
-                    {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("Index", "Stageopdracht");
-                    }
-                }
-            }
-
-            result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-
-
-            if (result.Succeeded)
-            {
-                if (user != null)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                }
-                if (User.IsInRole("student"))
-                {
-                    TempData["message"] = "Wachtwoord is succesvol gewijzigd.";
-                    return RedirectToAction("Details", "Student");
-                }
-
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
-            }
-            AddErrors(result);
-            return View(model);
-        }
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)

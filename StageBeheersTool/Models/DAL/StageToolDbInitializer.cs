@@ -8,6 +8,7 @@ using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using StageBeheersTool;
+using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.Models.DAL
 {
@@ -39,8 +40,8 @@ namespace StageBeheersTool.Models.DAL
 
                 ApplicationUser user3 = new ApplicationUser()
                 {
-                    Email = "olivier.neirynck.1177q@student.hogent.be",
-                    UserName = "olivier.neirynck.1177q@student.hogent.be",
+                    Email = "olivier.neirynck.q1177@student.hogent.be",
+                    UserName = "olivier.neirynck.q1177@student.hogent.be",
                     EmailConfirmed = true
                 };
                 userManager.Create(user3, "wachtwoord");
@@ -48,12 +49,13 @@ namespace StageBeheersTool.Models.DAL
                 #endregion
 
                 #region specialisaties
-                //netwerk – programmeren – mobile – onderzoek – mainframe 
                 Specialisatie specialisatie1 = new Specialisatie() { Naam = "Netwerken" };
                 Specialisatie specialisatie2 = new Specialisatie() { Naam = "Programmeren" };
                 Specialisatie specialisatie3 = new Specialisatie() { Naam = "Mobile" };
                 Specialisatie specialisatie4 = new Specialisatie() { Naam = "Onderzoek" };
                 Specialisatie specialisatie5 = new Specialisatie() { Naam = "Mainframe" };
+                Specialisatie specialisatie6 = new Specialisatie() { Naam = "E-business" };
+                Specialisatie specialisatie7 = new Specialisatie() { Naam = "Systeembeheer" };
 
                 IList<Specialisatie> specialisaties = new List<Specialisatie>();
                 specialisaties.Add(specialisatie1);
@@ -61,7 +63,24 @@ namespace StageBeheersTool.Models.DAL
                 specialisaties.Add(specialisatie3);
                 specialisaties.Add(specialisatie4);
                 specialisaties.Add(specialisatie5);
+                specialisaties.Add(specialisatie6);
+                specialisaties.Add(specialisatie7);
                 context.Specialisaties.AddRange(specialisaties);
+                #endregion
+
+                #region Keuzepakketten
+                //e-commerce-mobile-netwerken-mainframe
+                Keuzepakket keuzepakket1 = new Keuzepakket() { Naam = "Netwerken" };
+                Keuzepakket keuzepakket2 = new Keuzepakket() { Naam = "e-commerce" };
+                Keuzepakket keuzepakket3 = new Keuzepakket() { Naam = "Mobile" };
+                Keuzepakket keuzepakket4 = new Keuzepakket() { Naam = "Mainframe" };
+
+                IList<Keuzepakket> keuzepakketten = new List<Keuzepakket>();
+                keuzepakketten.Add(keuzepakket1);
+                keuzepakketten.Add(keuzepakket2);
+                keuzepakketten.Add(keuzepakket3);
+                keuzepakketten.Add(keuzepakket4);
+                context.Keuzepakketten.AddRange(keuzepakketten);
                 #endregion
 
                 #region bedrijf1
@@ -124,7 +143,8 @@ namespace StageBeheersTool.Models.DAL
                         AantalStudenten = 2,
                         ContractOndertekenaar = contractOndertekenaar1,
                         Stagementor = stagementors[random.Next(0, stagementors.Count)],
-                        Bedrijf = bedrijf1
+                        Bedrijf = bedrijf1,
+                        Gemeente = "Gemeente1"
                     };
                     stageopdracht.AantalToegewezenStudenten = random.Next(0, stageopdracht.AantalStudenten);
                     if (i % 2 == 0)
@@ -175,8 +195,7 @@ namespace StageBeheersTool.Models.DAL
                     Telefoonnummer = "1234567",
                     IsStagementor = false,
                     IsContractOndertekenaar = true,
-                    Bedrijfsfunctie = "bedrijfsfunctie",
-                    Aanspreektitel = "meneer"
+                    Bedrijfsfunctie = "bedrijfsfunctie"
                 };
                 bedrijf2.AddContactpersoon(contractOndertekenaar2);
                 for (int i = 0; i < 5; i++)
@@ -192,6 +211,7 @@ namespace StageBeheersTool.Models.DAL
                         ContractOndertekenaar = contractOndertekenaar2,
                         Stagementor = stagementors[random.Next(0, stagementors2.Count)],
                         Bedrijf = bedrijf2,
+                        Gemeente = "Gemeente2",
                         Status = StageopdrachtStatus.Goedgekeurd
                     };
                     stageopdracht.AantalToegewezenStudenten = random.Next(0, stageopdracht.AantalStudenten);

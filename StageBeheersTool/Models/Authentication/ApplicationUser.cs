@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using StageBeheersTool.Models.Domain;
 
-namespace StageBeheersTool.Models.DAL
+namespace StageBeheersTool.Models.Authentication
 {
     public class ApplicationUser : IdentityUser
     {
@@ -17,9 +17,7 @@ namespace StageBeheersTool.Models.DAL
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
-            //userIdentity.AddClaim(new Claim(ClaimTypes.Role, "bedrijf"));
             return userIdentity;
         }
-
     }
 }
