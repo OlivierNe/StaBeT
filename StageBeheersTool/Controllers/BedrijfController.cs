@@ -13,23 +13,26 @@ namespace StageBeheersTool.Controllers
     public class BedrijfController : Controller
     {
         private IBedrijfRepository bedrijfRepository;
+        private IUserService userService;
 
-        public BedrijfController(IBedrijfRepository bedrijfRepository)
+        public BedrijfController(IBedrijfRepository bedrijfRepository,
+            IUserService userService)
         {
             this.bedrijfRepository = bedrijfRepository;
+            this.userService = userService;
         }
 
         [Authorize(Roles = "bedrijf")]
         public ActionResult Details()
         {
-            var bedrijf = FindBedrijf();
+            var bedrijf = userService.FindBedrijf();
             return View(bedrijf);
         }
 
         [Authorize(Roles = "bedrijf")]
         public ActionResult Edit()
         {
-            var bedrijf = FindBedrijf();
+            var bedrijf = userService.FindBedrijf();
             return View(Mapper.Map<EditBedrijfVM>(bedrijf));
         }
 
@@ -38,19 +41,12 @@ namespace StageBeheersTool.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(EditBedrijfVM model)
         {
-            var bedrijf = FindBedrijf();
+            var bedrijf = userService.FindBedrijf();
             var newBedrijf = Mapper.Map<Bedrijf>(model);
             bedrijfRepository.Update(bedrijf, newBedrijf);
             bedrijfRepository.SaveChanges();
             TempData["message"] = "Gegevens gewijzigd.";
             return RedirectToAction("Details");
         }
-
-        #region Helpers
-        private Bedrijf FindBedrijf()
-        {
-            return bedrijfRepository.FindByEmail(User.Identity.Name);
-        }
-        #endregion
     }
 }

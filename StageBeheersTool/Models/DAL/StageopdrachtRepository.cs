@@ -48,13 +48,47 @@ namespace StageBeheersTool.Models.DAL
         public IQueryable<Stageopdracht> FindGeldigeStageopdrachten(int? semester, int? aantalStudenten, string soort, string bedrijf, string locatie)
         {
             return FindByFilter(semester, aantalStudenten, soort, bedrijf, locatie).AsEnumerable()
-                .Where(so => so.IsGoedgekeurd() && so.isVolledigIngenomen() && so.IsInHuidigAcademiejaar()).AsQueryable();
+                .Where(so => so.IsGoedgekeurd() && so.IsVolledigIngenomen() && so.IsInHuidigAcademiejaar()).AsQueryable();
         }
 
         public Stageopdracht FindGeldigeStageopdrachtById(int id)
         {
-            return stageopdrachten.AsEnumerable().FirstOrDefault(so => so.IsGoedgekeurd() && so.isVolledigIngenomen() && so.IsInHuidigAcademiejaar() && so.Id == id);
+            return stageopdrachten.AsEnumerable().FirstOrDefault(so => so.IsGoedgekeurd() && so.IsVolledigIngenomen() && so.IsInHuidigAcademiejaar() && so.Id == id);
         }
 
+        public IQueryable<Stageopdracht> FindStageopdrachtenFrom(Begeleider begeleider)
+        {
+            return FindAll().Where(so => so.Stagebegeleider.Id == begeleider.Id);
+        }
+
+
+        public void Update(Stageopdracht stageopdracht, Stageopdracht teUpdatenOpdracht)
+        {
+            //db.Users.Attach(updatedUser);
+            //var entry = db.Entry(updatedUser);
+            //entry.Property(e => e.Email).IsModified = true;
+            //// other changed properties
+            //db.SaveChanges();
+
+            //ctx.Stageopdrachten.Attach(stageopdracht);
+            //var entry = ctx.Entry(stageopdrachten);
+            //ctx.Stageopdrachten.Attach(stageopdracht);
+            //ctx.Entry(stageopdracht).State = EntityState.Modified;
+            //ctx.SaveChanges();
+            teUpdatenOpdracht.Omschrijving = stageopdracht.Omschrijving;
+            teUpdatenOpdracht.Titel = stageopdracht.Titel;
+            teUpdatenOpdracht.Semester = stageopdracht.Semester;
+            teUpdatenOpdracht.Specialisatie = stageopdracht.Specialisatie;
+            teUpdatenOpdracht.Academiejaar = stageopdracht.Academiejaar;
+            teUpdatenOpdracht.AantalStudenten = stageopdracht.AantalStudenten;
+            teUpdatenOpdracht.AantalToegewezenStudenten = stageopdracht.AantalToegewezenStudenten;
+            teUpdatenOpdracht.Stagementor = stageopdracht.Stagementor;
+            teUpdatenOpdracht.ContractOndertekenaar = stageopdracht.ContractOndertekenaar;
+            teUpdatenOpdracht.Gemeente = stageopdracht.Gemeente;
+            teUpdatenOpdracht.Postcode = stageopdracht.Postcode;
+            teUpdatenOpdracht.Straat = stageopdracht.Straat;
+            teUpdatenOpdracht.Straatnummer = stageopdracht.Straatnummer;
+
+        }
     }
 }

@@ -206,7 +206,12 @@
     <Compile Include="Models\Authentication\ApplicationSignInManager.cs" />
     <Compile Include="Models\Authentication\ApplicationUser.cs" />
     <Compile Include="Models\Authentication\ApplicationUserManager.cs" />
-    <Compile Include="Models\Authentication\EmailService.cs" />
+    <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
+    <Compile Include="Models\Domain\IContactpersoonRepository.cs" />
+    <Compile Include="Models\Services\UserService.cs" />
+    <Compile Include="Models\Domain\Admin.cs" />
+    <Compile Include="Models\Domain\IUserService.cs" />
+    <Compile Include="Models\Services\EmailService.cs" />
     <Compile Include="Models\DAL\BedrijfRepository.cs" />
     <Compile Include="Models\DAL\BegeleiderRepository.cs" />
     <Compile Include="Models\DAL\KeuzepakketRepository.cs" />
@@ -234,7 +239,6 @@
     <Compile Include="Models\Domain\IBedrijfRepository.cs" />
     <Compile Include="Models\Domain\IStageopdrachtRepository.cs" />
     <Compile Include="Models\Domain\Persoon.cs" />
-    <Compile Include="Models\Domain\Stagecoördinator.cs" />
     <Compile Include="Models\Domain\Stageopdracht.cs" />
     <Compile Include="Models\Domain\StageopdrachtStatus.cs" />
     <Compile Include="Models\Domain\Student.cs" />

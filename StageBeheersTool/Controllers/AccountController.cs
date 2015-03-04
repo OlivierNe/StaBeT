@@ -23,9 +23,7 @@ namespace StageBeheersTool.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private IBedrijfRepository bedrijfRepository;
-        private IStudentRepository studentRepository;
-        private IBegeleiderRepository begeleiderRepository;
+        private IUserService userService;
 
         public ApplicationSignInManager SignInManager
         {
@@ -39,12 +37,9 @@ namespace StageBeheersTool.Controllers
             private set { _userManager = value; }
         }
 
-        public AccountController(IBedrijfRepository bedrijfRepository,
-            IStudentRepository studentRepository, IBegeleiderRepository begeleiderRepository)
+        public AccountController(IUserService userService)
         {
-            this.bedrijfRepository = bedrijfRepository;
-            this.studentRepository = studentRepository;
-            this.begeleiderRepository = begeleiderRepository;
+            this.userService = userService;
         }
 
         //
@@ -79,8 +74,8 @@ namespace StageBeheersTool.Controllers
                     await UserManager.CreateAsync(user);
                     await UserManager.AddToRoleAsync(user.Id, "student");
                     Student student = new Student() { HogentEmail = model.Email };
-                    studentRepository.Add(student);
-                    studentRepository.SaveChanges();
+                    userService.CreateUser<Student>(student);
+                    userService.SaveChanges();
                 }
                 await SignInManager.SignInAsync(user, model.RememberMe, false);
                 return RedirectToAction("Index", "Stageopdracht");
@@ -97,11 +92,18 @@ namespace StageBeheersTool.Controllers
                     await UserManager.CreateAsync(user);
                     await UserManager.AddToRoleAsync(user.Id, "begeleider");//of admin
                     Begeleider begeleider = new Begeleider() { HogentEmail = model.Email };
-                    begeleiderRepository.Add(begeleider);
-                    begeleiderRepository.SaveChanges();
+                    userService.CreateUser<Begeleider>(begeleider);
+                    userService.SaveChanges();
                 }
                 await SignInManager.SignInAsync(user, model.RememberMe, false);
                 return RedirectToAction("Index", "Stageopdracht");
+            }
+            else if (model.Email.EndsWith("@admin.be"))
+            {//tijdelijk
+
+
+
+
             }
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
@@ -114,7 +116,7 @@ namespace StageBeheersTool.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("ChangePassword", "Manage");
+                        return RedirectToAction("ChangePassword");
                     }
                 case SignInStatus.Failure:
                 default:
@@ -160,8 +162,8 @@ namespace StageBeheersTool.Controllers
                 if (result.Succeeded)
                 {
                     Bedrijf bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
-                    bedrijfRepository.Add(bedrijf);
-                    bedrijfRepository.SaveChanges();
+                    userService.CreateUser<Bedrijf>(bedrijf);
+                    userService.SaveChanges();
                     IdentityMessage message = new IdentityMessage()
                     {
                         Subject = "Registratie",

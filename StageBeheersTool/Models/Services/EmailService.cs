@@ -8,7 +8,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace StageBeheersTool.Models.Authentication
+namespace StageBeheersTool.Models.Services
 {
     public class EmailService : IIdentityMessageService
     {
