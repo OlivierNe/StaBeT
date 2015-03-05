@@ -5,55 +5,29 @@ using System.Web;
 
 namespace StageBeheersTool.Models.Domain
 {
-    public class Begeleider : Persoon
+    public class Begeleider : HoGentPersoon
     {
-        #region private fields
-        private string _fotoUrl;
-        #endregion
 
         #region Properties
-        public string HogentEmail { get; set; }
-        public string FotoUrl
-        {
-            get
-            {
-                return _fotoUrl ?? "~/Images/Begeleider/profiel.jpg";
-            }
-            set
-            {
-                _fotoUrl = value;
-            }
-        }
-        public virtual ICollection<Stageopdracht> MijnStageopdrachten { get; set; }
+        /// <summary>
+        /// stages begeleid door deze begeleider
+        /// </summary>
+        public virtual ICollection<Stageopdracht> Stages { get; set; }
         #endregion
 
         #region Public Constructors
         public Begeleider()
+            : base()
         {
-            MijnStageopdrachten = new List<Stageopdracht>();
+            Stages = new List<Stageopdracht>();
         }
 
         #endregion
 
         #region Public methods
-        public void AddStageopdracht(Stageopdracht stageopdracht)
+        public Stageopdracht FindStage(int id)
         {
-            MijnStageopdrachten.Add(stageopdracht);
-        }
-
-        public void RemoveStageopdracht(Stageopdracht stageopdracht)
-        {
-            MijnStageopdrachten.Remove(stageopdracht);
-        }
-
-        public Stageopdracht FindStageopdracht(int id)
-        {
-            return MijnStageopdrachten.FirstOrDefault(so => so.Id == id);
-        }
-
-        public bool HeeftStageopdracht(int id)
-        {
-            return FindStageopdracht(id) != null;
+            return Stages.SingleOrDefault(so => so.Id == id);
         }
         #endregion
 

@@ -14,10 +14,12 @@ namespace StageBeheersTool.Controllers
     public class BegeleiderController : Controller
     {
         private IBegeleiderRepository begeleiderRepository;
+        private IImageService imageService;
 
-        public BegeleiderController(IBegeleiderRepository begeleiderRepository)
+        public BegeleiderController(IBegeleiderRepository begeleiderRepository, IImageService imageService)
         {
             this.begeleiderRepository = begeleiderRepository;
+            this.imageService = imageService;
         }
 
         public ActionResult Details()
@@ -40,25 +42,16 @@ namespace StageBeheersTool.Controllers
         public ActionResult Edit(BegeleiderEditVM model, HttpPostedFileBase fotoFile)
         {
             var begeleider = CurrentBegeleider();
-            if (fotoFile != null && fotoFile.ContentLength > 0 && fotoFile.ContentType.StartsWith("image/"))
+            if (imageService.IsValidImage(fotoFile))
             {
-                if (fotoFile.ContentLength > 512000)
+                if (imageService.HasValidSize(fotoFile))
                 {
-                    ModelState.AddModelError(string.Empty, "Ongeldige afbeelding grootte, max. 500kb.");
-                    return View(model);
+                    model.FotoUrl = imageService.SaveImage(fotoFile, begeleider.FotoUrl, "~/Images/Begeleider");
                 }
                 else
                 {
-                    string oldFotoUrl = begeleider.FotoUrl;
-                    if (System.IO.File.Exists(oldFotoUrl))
-                    {
-                        System.IO.File.Delete(oldFotoUrl);
-                    }
-                    string filename = User.Identity.GetUserId() + Path.GetExtension(fotoFile.FileName);
-                    string relativePath = "~/Images/Begeleider/" + filename;
-                    model.FotoUrl = relativePath;
-                    string absolutePath = Path.Combine(Server.MapPath("~/Images/Begeleider"), Path.GetFileName(filename));
-                    fotoFile.SaveAs(absolutePath);
+                    ModelState.AddModelError(string.Empty, "Ongeldige afbeelding grootte, max. " + (imageService.MaxSize() / 1024) + " Kb.");
+                    return View(model);
                 }
             }
             var newBegeleider = Mapper.Map<Begeleider>(model);

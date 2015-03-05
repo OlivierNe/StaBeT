@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 
@@ -18,14 +19,9 @@ namespace StageBeheersTool.Models.DAL
             contactpersonen = ctx.Contactpersonen;
         }
 
-        public void Delete(Contactpersoon contactpersoon)
-        {
-            contactpersonen.Remove(contactpersoon);
-        }
-
         public Contactpersoon FindById(int id)
         {
-            return contactpersonen.FirstOrDefault(cp => cp.Id == id);
+            return contactpersonen.SingleOrDefault(cp => cp.Id == id);
         }
 
         public IQueryable<Contactpersoon> Contactpersonen()
@@ -33,9 +29,36 @@ namespace StageBeheersTool.Models.DAL
             return contactpersonen;
         }
 
+        public void Delete(Contactpersoon contactpersoon)
+        {
+            contactpersonen.Remove(contactpersoon);
+            SaveChanges();
+        }
+
         public void SaveChanges()
         {
-            ctx.SaveChanges();
+            try
+            {
+                ctx.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                string message = String.Empty;
+                foreach (var eve in e.EntityValidationErrors)
+                {
+
+                    message +=
+                        String.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.GetValidationResult());
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        message +=
+                            String.Format("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw new ApplicationException("" + message);
+            }
         }
     }
 }

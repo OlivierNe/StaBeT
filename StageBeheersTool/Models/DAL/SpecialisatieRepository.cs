@@ -23,7 +23,7 @@ namespace StageBeheersTool.Models.DAL
 
         public Specialisatie FindBy(int id)
         {
-            return specialisaties.FirstOrDefault(s => s.Id == id);
+            return specialisaties.SingleOrDefault(s => s.Id == id);
         }
     }
 }

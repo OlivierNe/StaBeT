@@ -16,6 +16,8 @@ namespace StageBeheersTool.Models.DAL.Mapping
             this.ToTable("Begeleiders");
             this.Property(b => b.HogentEmail).IsRequired().HasMaxLength(200)
                 .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("HogentEmailIndex") { IsUnique = true }));
+            this.HasMany(b => b.Stages).WithOptional(so => so.Stagebegeleider);
+            this.HasMany(b => b.VoorkeurStages).WithOptional().Map(m => m.MapKey("voorkeurBegeleider_id"));
         }
     }
 }

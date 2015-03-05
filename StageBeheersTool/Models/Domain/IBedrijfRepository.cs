@@ -10,8 +10,8 @@ namespace StageBeheersTool.Models.Domain
     {
         void Add(Bedrijf bedrijf);
         Bedrijf FindByEmail(string email);
+        Bedrijf FindById(int id);
         void SaveChanges();
-        void DeleteContactpersoon(Contactpersoon contactpersoon);
-        void Update(Bedrijf bedrijf, Bedrijf newBedrijf);
+        void Update(Bedrijf bedrijf, Bedrijf model);
     }
 }

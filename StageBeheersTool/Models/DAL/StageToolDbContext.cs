@@ -57,8 +57,6 @@ namespace StageBeheersTool.Models.DAL
         {
             return DependencyResolver.Current.GetService(typeof(StageToolDbContext)) as StageToolDbContext;
         }
-
-
     }
 
 }

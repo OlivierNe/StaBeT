@@ -28,10 +28,7 @@ namespace StageBeheersTool
             Database.SetInitializer<StageToolDbContext>(new StageToolDbInitializer());
             var ctx = new StageToolDbContext();
             ctx.Database.Initialize(true);
-            ctx.Bedrijven.ToList();
-            /*
-            var init = new StageToolDbInitializer();
-            init.RunSeed(ctx);*/
+            var bedrijven = ctx.Bedrijven.ToList();
         }
     }
 }

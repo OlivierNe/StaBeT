@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using AutoMapper;
 using System.Net;
 using System.IO;
+using StageBeheersTool.Models.Services;
 
 namespace StageBeheersTool.Controllers
 {
@@ -18,11 +19,16 @@ namespace StageBeheersTool.Controllers
 
         private IStudentRepository studentRepository;
         private IKeuzepakketRepository keuzepakketRepository;
+        private IUserService userService;
+        private IImageService imageService;
 
-        public StudentController(IStudentRepository studentRepository, IKeuzepakketRepository keuzepakketRepository)
+        public StudentController(IStudentRepository studentRepository, IKeuzepakketRepository keuzepakketRepository,
+            IUserService userService, IImageService imageService)
         {
             this.studentRepository = studentRepository;
             this.keuzepakketRepository = keuzepakketRepository;
+            this.imageService = imageService;
+            this.userService = userService;
         }
 
         [Authorize(Roles = "student")]
@@ -33,21 +39,14 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Roles = "student")]
-        public ActionResult Edit(int? id)
+        [ActionName("Edit")]
+        public ActionResult Edit()
         {
-            Student student = null;
-            if (User.IsInRole("student") || id == null)
-            {
-                student = studentRepository.FindByEmail(User.Identity.Name);
-            }
-            else
-            {
-                student = studentRepository.FindById((int)id);
-            }
+            var student = userService.FindStudent();
             var model = Mapper.Map<Student, StudentEditVM>(student);
             model.InitSelectList(keuzepakketRepository.FindAll());
             model.KeuzepakketId = student.Keuzepakket == null ? null : (int?)student.Keuzepakket.Id;
-            return View(model);
+            return View("Edit", model);
         }
 
         [Authorize(Roles = "student")]
@@ -55,44 +54,23 @@ namespace StageBeheersTool.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(StudentEditVM model, HttpPostedFileBase fotoFile)
         {
-            Student student = null;
-            if (User.IsInRole("student"))
+            var student = userService.FindStudent();
+            if (imageService.IsValidImage(fotoFile))
             {
-                student = studentRepository.FindByEmail(User.Identity.Name);
-                if (student.Id != model.Id)
+                if (imageService.HasValidSize(fotoFile))
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-                }
-            }
-            else
-            {
-                student = studentRepository.FindById(model.Id);
-            }
-            if (fotoFile != null && fotoFile.ContentLength > 0 && fotoFile.ContentType.StartsWith("image/"))
-            {
-                if (fotoFile.ContentLength > 512000)
-                {
-                    ModelState.AddModelError(string.Empty, "Ongeldige afbeelding grootte, max. 500kb.");
-                    return View(model);
+                    model.FotoUrl = imageService.SaveImage(fotoFile, student.FotoUrl, "~/Images/Student");
                 }
                 else
                 {
-                    string oldFotoUrl = student.FotoUrl;
-                    if (System.IO.File.Exists(oldFotoUrl))
-                    {
-                        System.IO.File.Delete(oldFotoUrl);
-                    }
-                    string filename = User.Identity.GetUserId() + Path.GetExtension(fotoFile.FileName);
-                    string relativePath = "~/Images/Student/" + filename;
-                    model.FotoUrl = relativePath;
-                    string absolutePath = Path.Combine(Server.MapPath("~/Images/Student"), Path.GetFileName(filename));
-                    fotoFile.SaveAs(absolutePath);
+                    ModelState.AddModelError(string.Empty, "Ongeldige afbeelding grootte, max. " + (imageService.MaxSize() / 1024) + " Kb.");
+                    return View(model);
                 }
             }
-            var newStudent = Mapper.Map<StudentEditVM, Student>(model);
-            newStudent.Keuzepakket = model.KeuzepakketId == null ? null : keuzepakketRepository.FindBy((int)model.KeuzepakketId);
-            studentRepository.Update(student, newStudent);
-            studentRepository.SaveChanges();
+            var studentModel = Mapper.Map<StudentEditVM, Student>(model);
+            studentModel.HogentEmail = "olivier.neirynck.q1177@student.hogent.be";
+            studentModel.Keuzepakket = model.KeuzepakketId == null ? null : keuzepakketRepository.FindBy((int)model.KeuzepakketId);
+            studentRepository.Update(student, studentModel);
 
             TempData["message"] = "Gegevens gewijzigd.";
             return RedirectToAction("Details");

@@ -203,11 +203,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AuthorizeAttribute.cs" />
     <Compile Include="Models\Authentication\ApplicationSignInManager.cs" />
     <Compile Include="Models\Authentication\ApplicationUser.cs" />
     <Compile Include="Models\Authentication\ApplicationUserManager.cs" />
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
+    <Compile Include="Models\Domain\HoGentPersoon.cs" />
     <Compile Include="Models\Domain\IContactpersoonRepository.cs" />
+    <Compile Include="Models\Domain\IImageService.cs" />
+    <Compile Include="Models\Services\ImageService.cs" />
     <Compile Include="Models\Services\UserService.cs" />
     <Compile Include="Models\Domain\Admin.cs" />
     <Compile Include="Models\Domain\IUserService.cs" />
@@ -260,8 +264,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Images\Begeleider\profiel.jpg" />
-    <Content Include="Images\Student\profiel.jpg" />
+    <Content Include="Images\profiel.jpg" />
     <Content Include="Scripts\createStageForm.js" />
     <Content Include="Scripts\lib\gridmvc.js" />
     <Content Include="Scripts\lib\gridmvc.lang.ru.js" />
@@ -333,6 +336,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\Begeleider\" />
+    <Folder Include="Images\Student\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

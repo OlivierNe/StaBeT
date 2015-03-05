@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 
@@ -18,34 +19,61 @@ namespace StageBeheersTool.Models.DAL
             this.begeleiders = ctx.Begeleiders;
         }
 
-        public Begeleider FindByEmail(string hoGentEmail)
-        {
-            return begeleiders.FirstOrDefault(b => b.HogentEmail == hoGentEmail);
-        }
-
-
-        public void SaveChanges()
-        {
-            ctx.SaveChanges();
-        }
-
-        public void Update(Begeleider begeleider, Begeleider newBegeleider)
-        {
-            begeleider.Voornaam = newBegeleider.Voornaam;
-            begeleider.Familienaam = newBegeleider.Familienaam;
-            begeleider.Email = newBegeleider.Email;
-            begeleider.Gsmnummer = newBegeleider.Gsmnummer;
-            begeleider.Telefoonnummer = newBegeleider.Telefoonnummer;
-            begeleider.Postcode = newBegeleider.Postcode;
-            begeleider.Gemeente = newBegeleider.Gemeente;
-            begeleider.Straat = newBegeleider.Straat;
-            begeleider.Straatnummer = newBegeleider.Straatnummer;
-            begeleider.FotoUrl = newBegeleider.FotoUrl;
-        }
-
         public void Add(Begeleider begeleider)
         {
             begeleiders.Add(begeleider);
+            SaveChanges();
+        }
+
+        public Begeleider FindByEmail(string hoGentEmail)
+        {
+            return begeleiders.SingleOrDefault(b => b.HogentEmail == hoGentEmail);
+        }
+
+        public Begeleider FindById(int id)
+        {
+            return begeleiders.SingleOrDefault(b => b.Id == id);
+        }
+
+        public void Update(Begeleider begeleider, Begeleider model)
+        {
+            begeleider.Voornaam = model.Voornaam;
+            begeleider.Familienaam = model.Familienaam;
+            begeleider.Email = model.Email;
+            begeleider.Gsmnummer = model.Gsmnummer;
+            begeleider.Telefoonnummer = model.Telefoonnummer;
+            begeleider.Postcode = model.Postcode;
+            begeleider.Gemeente = model.Gemeente;
+            begeleider.Straat = model.Straat;
+            begeleider.Straatnummer = model.Straatnummer;
+            begeleider.FotoUrl = model.FotoUrl;
+            SaveChanges();
+        }
+
+        public void SaveChanges()
+        {
+            try
+            {
+                ctx.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                string message = String.Empty;
+                foreach (var eve in e.EntityValidationErrors)
+                {
+
+                    message +=
+                        String.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.GetValidationResult());
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        message +=
+                            String.Format("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw new ApplicationException("" + message);
+            }
         }
     }
 }

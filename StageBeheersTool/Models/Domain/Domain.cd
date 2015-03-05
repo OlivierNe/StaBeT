@@ -3,7 +3,7 @@
   <Class Name="StageBeheersTool.Models.Domain.Bedrijf">
     <Position X="0.5" Y="0.5" Width="4.5" />
     <TypeIdentifier>
-      <HashCode>gIACQEAAACEAEACgBAAAlABAACCAAAgAAAAACAAAGAA=</HashCode>
+      <HashCode>gIACQEAAACEAAACgBAAAlABAQCCAAAgAAAAACAAAGAA=</HashCode>
       <FileName>Models\Domain\Bedrijf.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -12,7 +12,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Persoon">
-    <Position X="9.75" Y="5.75" Width="2.75" />
+    <Position X="13.5" Y="3.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAACQAAgACgAAAAAAgAAhAAAAACAAAAAAAAAAAAAGAA=</HashCode>
       <FileName>Models\Domain\Persoon.cs</FileName>
@@ -20,12 +20,10 @@
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Contactpersoon">
     <Position X="9.5" Y="2" Width="3" />
-    <InheritanceLine Type="StageBeheersTool.Models.Domain.Persoon" ManuallyRouted="true" FixedFromPoint="true">
+    <InheritanceLine Type="StageBeheersTool.Models.Domain.Persoon" ManuallyRouted="true">
       <Path>
-        <Point X="11" Y="5.75" />
-        <Point X="11" Y="5.233" />
-        <Point X="11" Y="5.233" />
-        <Point X="11" Y="3.81" />
+        <Point X="13.5" Y="3.53" />
+        <Point X="12.5" Y="3.53" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -34,16 +32,16 @@
     </TypeIdentifier>
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Stageopdracht">
-    <Position X="6" Y="5.25" Width="3.25" />
+    <Position X="6" Y="6.25" Width="3.25" />
     <AssociationLine Name="ContractOndertekenaar" Type="StageBeheersTool.Models.Domain.Contactpersoon" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.6" Y="5.25" />
+        <Point X="8.6" Y="6.25" />
         <Point X="8.6" Y="3.375" />
         <Point X="9.5" Y="3.375" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>BAgSAAEMAEEAAAAAKAAAgCAAIACCAAAAAAAAIAAQGAA=</HashCode>
+      <HashCode>JAgSQAEMAAEAAAAAKAAAgCAAIACCAAAAAAAAIAAQGAA=</HashCode>
       <FileName>Models\Domain\Stageopdracht.cs</FileName>
       <NewMemberFileName>Models\Domain\StageOpdracht.cs</NewMemberFileName>
     </TypeIdentifier>
@@ -52,7 +50,11 @@
       <Property Name="ContractOndertekenaar" />
       <Property Name="Stagementor" />
       <Property Name="Status" />
+      <Property Name="Stagebegeleider" />
     </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Studenten" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Specialisatie">
     <Position X="0.5" Y="7" Width="2" />
@@ -62,25 +64,31 @@
     </TypeIdentifier>
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Student">
-    <Position X="10.25" Y="9.75" Width="3" />
+    <Position X="15.5" Y="11.75" Width="3" />
     <TypeIdentifier>
-      <HashCode>AAAAAAgAAAEIIAAAAAAEAAAAABAAAAAQIAIAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Domain\Student.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Begeleider">
-    <Position X="6.25" Y="11.25" Width="2.5" />
+    <Position X="10.75" Y="11.5" Width="4" />
     <TypeIdentifier>
-      <HashCode>AAAAAAgAAAEIIAAAAAAAAAAAABAAAAAQIAIAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Models\Domain\Begeleider.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Stages" />
+    </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="StageBeheersTool.Models.Domain.Stagecoördinator">
-    <Position X="2.5" Y="9" Width="1.5" />
+  <Class Name="StageBeheersTool.Models.Domain.HoGentPersoon">
+    <Position X="13" Y="7.25" Width="4.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\Domain\Stagecoördinator.cs</FileName>
+      <HashCode>AEAAAAgAAAAAAAIAAAAAAAAABDAAIAAAIAAAAAAAQAA=</HashCode>
+      <FileName>Models\Domain\HoGentPersoon.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="VoorkeurStages" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Enum Name="StageBeheersTool.Models.Domain.StageopdrachtStatus">
     <Position X="3.25" Y="6" Width="1.75" />

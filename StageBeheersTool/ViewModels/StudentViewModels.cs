@@ -14,8 +14,6 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "Naam")]
         public string Familienaam { get; set; }
         public string Voornaam { get; set; }
-        [Display(Name = "Hogent E-mail")]
-        public string HogentEmail { get; set; }
         [Display(Name = "Keuzepakket")]
         public int? KeuzepakketId { get; set; }
         [Display(Name = "E-mail")]

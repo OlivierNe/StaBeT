@@ -8,9 +8,9 @@ namespace StageBeheersTool.Models.Domain
 {
     public interface IBegeleiderRepository
     {
-        Begeleider FindByEmail(string email);
+        Begeleider FindByEmail(string hoGentEmail);
         void SaveChanges();
-        void Update(Begeleider begeleider, Begeleider newBegeleider);
+        void Update(Begeleider begeleider, Begeleider model);
         void Add(Begeleider begeleider);
     }
 }
