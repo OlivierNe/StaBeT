@@ -1,18 +1,39 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+@section scripts
+{
+    @Scripts.Render("~/bundles/jquery-validation")
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="http://malsup.github.io/jquery.cycle2.js"></script>
+    
+
+}
 
 <div class="jumbotron">
+    
+    <div class="cycle-slideshow"
+         data-cycle-fx=scrollHorz
+         data-cycle-timeout=5000>
+        <!-- Carousel items -->
+        <img src="~/Images/foto-1.jpg" alt="foto1" style="width: 100%;" />
+        <img src="~/Images/foto-2.jpg" alt="foto2" style="width: 100%;" />
+        <img src="~/Images/foto-3.jpg" alt="foto3" style="width: 100%;" />
+        <img src="~/Images/foto-4.jpg" alt="foto4" style="width: 100%;" />
+        <img src="~/Images/foto-5.jpg" alt="foto5" style="width: 100%;" />
+        <img src="~/Images/foto-6.jpg" alt="foto6" style="width: 100%;" />
+    </div>
+    @*<div class="row" style="text-align: center">
+        <div class="col-md-4">
+            <a type="button" class="btn btn-primary" href="/Stageopdracht/Index">Bedrijven</a>
+        </div>
+        <div class="col-md-4">
+            <a type="button" class="btn btn-primary" href="/Stageopdracht/Index">Studenten</a>
+        </div>
+        <div class="col-md-4">
+            <a type="button" class="btn btn-primary" href="/Stageopdracht/Index">Lectoren</a>
+        </div>
+    </div>*@
+
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-       
-    </div>
-    <div class="col-md-4">
-       
-    </div>
-    <div class="col-md-4">
-       
-    </div>
-</div>

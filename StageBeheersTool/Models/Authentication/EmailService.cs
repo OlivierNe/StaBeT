@@ -26,15 +26,15 @@ namespace StageBeheersTool.Models.Authentication
                 mailMessage.IsBodyHtml = true;
                 mailMessage.To.Add(new MailAddress(message.Destination));
 
-                NetworkCredential NetworkCredential = new NetworkCredential();
-                NetworkCredential.UserName = mailMessage.From.Address;
-                NetworkCredential.Password = ConfigurationManager.AppSettings["smtpFromPw"];
+                //NetworkCredential NetworkCredential = new NetworkCredential();
+                //NetworkCredential.UserName = mailMessage.From.Address;
+                //NetworkCredential.Password = ConfigurationManager.AppSettings["smtpFromPw"];
 
                 SmtpClient smtp = new SmtpClient();
                 smtp.Host = ConfigurationManager.AppSettings["smtpServer"];
-                smtp.EnableSsl = true;
-                smtp.UseDefaultCredentials = true;
-                smtp.Credentials = NetworkCredential;
+                smtp.EnableSsl = false;
+                //smtp.UseDefaultCredentials = true;
+                //smtp.Credentials = NetworkCredential;
                 smtp.Port = int.Parse(ConfigurationManager.AppSettings["smtpPort"]);
                 try
                 {

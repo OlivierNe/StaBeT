@@ -257,6 +257,12 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\Begeleider\profiel.jpg" />
+    <Content Include="Images\foto-1.jpg" />
+    <Content Include="Images\foto-2.jpg" />
+    <Content Include="Images\foto-3.jpg" />
+    <Content Include="Images\foto-4.jpg" />
+    <Content Include="Images\foto-5.jpg" />
+    <Content Include="Images\foto-6.jpg" />
     <Content Include="Images\Student\profiel.jpg" />
     <Content Include="Scripts\createStageForm.js" />
     <Content Include="Scripts\lib\gridmvc.js" />
@@ -267,6 +273,7 @@
     <Content Include="Scripts\lib\bootstrap.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Models\Domain\Domain.cd" />
+    <None Include="Properties\PublishProfiles\StageTool.pubxml" />
     <None Include="Scripts\lib\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\lib\jquery-1.10.2.js" />
     <Content Include="Scripts\lib\jquery-1.10.2.min.js" />
@@ -281,7 +288,9 @@
     <Content Include="Scripts\stagetool-form.js" />
     <Content Include="Scripts\stagetool.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
