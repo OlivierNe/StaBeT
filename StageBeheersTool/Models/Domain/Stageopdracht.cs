@@ -24,11 +24,24 @@ namespace StageBeheersTool.Models.Domain
             }
         }
 
-        public int Semester { get; set; }
+        public string Semester
+        {
+            get
+            {
+                if (Semester1 && Semester2)
+                    return "1 & 2";
+                else if (Semester1)
+                    return "1";
+                return "2";
+            }
+        }
+
+        public bool Semester1 { get; set; }
+        public bool Semester2 { get; set; }
         public int AantalStudenten { get; set; }
         public int AantalToegewezenStudenten { get; set; }
         public string Academiejaar { get; set; }
-        public virtual Contactpersoon ContractOndertekenaar { get; set; }
+        public virtual Contactpersoon Contractondertekenaar { get; set; }
         public virtual Contactpersoon Stagementor { get; set; }
         public virtual Begeleider Stagebegeleider { get; set; }
         public virtual Bedrijf Bedrijf { get; set; }

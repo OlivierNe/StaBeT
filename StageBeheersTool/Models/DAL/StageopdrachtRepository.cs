@@ -37,19 +37,19 @@ namespace StageBeheersTool.Models.DAL
             return stageopdrachten.FirstOrDefault(so => so.Id == id);
         }
 
-        public IQueryable<Stageopdracht> FindByFilter(int? semester, int? aantalStudenten, string soort, string bedrijf, string locatie)
+        public IQueryable<Stageopdracht> FindByFilter(int? semester, int? aantalStudenten, int? specialisatieId, string bedrijf, string locatie)
         {
             return FindAll()
-            .Where(so => (semester == null ? true : so.Semester == semester) &&
+                .Where(so => (semester == null ? true : ((so.Semester1 ? semester == 1:false)||(so.Semester2 ? semester == 2 : false))) &&
                 (aantalStudenten == null ? true : so.AantalStudenten == aantalStudenten) &&
-               (string.IsNullOrEmpty(soort) ? true : so.Specialisatie.Naam.ToLower().Contains(soort.ToLower())) &&
-                  (string.IsNullOrEmpty(bedrijf) ? true : so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower())) &&
+                ((specialisatieId == null || so.Specialisatie == null) ? true : (specialisatieId == so.Specialisatie.Id)) &&
+                (string.IsNullOrEmpty(bedrijf) ? true : so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower())) &&
                   (string.IsNullOrEmpty(locatie) ? true : so.Gemeente.ToLower().Contains(locatie.ToLower())));
         }
 
-        public IQueryable<Stageopdracht> FindGeldigeStageopdrachten(int? semester, int? aantalStudenten, string soort, string bedrijf, string locatie)
+        public IQueryable<Stageopdracht> FindGeldigeStageopdrachten(int? semester, int? aantalStudenten, int? specialisatieId, string bedrijf, string locatie)
         {
-            return FindByFilter(semester, aantalStudenten, soort, bedrijf, locatie).AsEnumerable()
+            return FindByFilter(semester, aantalStudenten, specialisatieId, bedrijf, locatie).AsEnumerable()
                 .Where(so => so.IsGoedgekeurd() && !so.IsVolledigIngenomen() && so.IsInHuidigAcademiejaar()).AsQueryable();
         }
 
@@ -80,26 +80,28 @@ namespace StageBeheersTool.Models.DAL
         }
 
         public IQueryable<Stageopdracht> FindGoedgekeurdeStageopdrachtenByFilter(int? semester, int? aantalStudenten,
-            string soort, string bedrijf, string locatie, string student)
+            int? specialisatieId, string bedrijf, string locatie, string student)
         {
-            return FindByFilter(semester, aantalStudenten, soort, bedrijf, locatie)
+            return FindByFilter(semester, aantalStudenten, specialisatieId, bedrijf, locatie)
                 .Where(so => (so.Status == StageopdrachtStatus.Goedgekeurd)
                     && (student == null ? true : student == "" ? true :
                     so.Studenten.Any(st => student.ToLower().Contains(st.Voornaam.ToLower())
-                        || student.ToLower().Contains(st.Familienaam.ToLower()))));
+                        || student.ToLower().Contains(st.Familienaam.ToLower())))).AsEnumerable()
+                        .Where(so => so.IsInHuidigAcademiejaar()).AsQueryable();
         }
 
         public void Update(Stageopdracht stageopdracht, Stageopdracht model)
         {
             stageopdracht.Omschrijving = model.Omschrijving;
             stageopdracht.Titel = model.Titel;
-            stageopdracht.Semester = model.Semester;
+            stageopdracht.Semester1 = model.Semester1;
+            stageopdracht.Semester2 = model.Semester2;
             stageopdracht.Specialisatie = model.Specialisatie;
             stageopdracht.Academiejaar = model.Academiejaar;
             stageopdracht.AantalStudenten = model.AantalStudenten;
             stageopdracht.AantalToegewezenStudenten = model.AantalToegewezenStudenten;
             stageopdracht.Stagementor = model.Stagementor;
-            stageopdracht.ContractOndertekenaar = model.ContractOndertekenaar;
+            stageopdracht.Contractondertekenaar = model.Contractondertekenaar;
             stageopdracht.Gemeente = model.Gemeente;
             stageopdracht.Postcode = model.Postcode;
             stageopdracht.Straat = model.Straat;

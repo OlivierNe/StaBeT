@@ -36,30 +36,29 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.Semester, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">Semester</label>
             <div class="col-md-10">
-                <label>
-                    @Html.RadioButton("semester", 1, new { htmlAttributes = new { @class = "form-control radio" } })
+                <label class="checkbox">
+                    @Html.EditorFor(model => model.Semester1, new { htmlAttributes = new { @class = "" } })
                     Semester 1
                 </label>
                 <br />
-                <label>
-                    @Html.RadioButton("semester", 2, new { htmlAttributes = new { @class = "form-control radio" } })
+                <label class="checkbox">
+                    @Html.EditorFor(model => model.Semester2, new { htmlAttributes = new { @class = "" } })
                     Semester 2
                 </label>
-                @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.AantalStudenten, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.AantalStudenten,
-                 new SelectListItem[] { new SelectListItem() { Value = "1", Text = "1" }, new SelectListItem() { Value = "2", Text = "2" }, new SelectListItem() { Value = "3", Text = "3" } },
-                new { @class = "form-control", @style = "max-width:80px" })
+                @Html.DropDownListFor(model => model.AantalStudenten, Model.AantalStudentenSelectList,
+                        new { @class = "form-control", @style = "max-width:80px" })
                 @Html.ValidationMessageFor(model => model.AantalStudenten, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        <hr />
+        <label>Stageplaats</label>
         <div class="form-group">
             @Html.LabelFor(model => model.Gemeente, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -88,7 +87,7 @@
                 @Html.ValidationMessageFor(model => model.Straatnummer, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        <hr />
         <div class="form-group">
             @Html.LabelFor(model => model.SpecialisatieId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -117,7 +116,7 @@
             <div id="ContrOndDropdown">
                 @Html.LabelFor(model => model.ContractOndertekenaarId, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-4">
-                    @Html.DropDownListFor(model => model.ContractOndertekenaarId, Model.ContractOndertekenaarsSelectList, "-- Selecteer een contractondertekenaar --", new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.ContractOndertekenaarId, Model.ContractondertekenaarsSelectList, "-- Selecteer een contractondertekenaar --", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ContractOndertekenaarId, "", new { @class = "text-danger" })
                 </div>
                 @Html.HiddenFor(model => model.ContractOndertekenaarId, new { @id = "ContractOndertekenaarIdHidden" })
@@ -125,7 +124,7 @@
          new { @class = "btn btn-default", @id = "contrOndBtn" })
             </div>
             <div id="contractOndertekenaarForm" class="col-md-12">
-                @if (Model.ContractOndertekenaar != null)
+                @if (Model.Contractondertekenaar != null)
                 {
                     @Html.Partial("_CreateContractOndertekenaarForm")
                 }

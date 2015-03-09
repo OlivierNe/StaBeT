@@ -10,6 +10,7 @@ namespace StageBeheersTool.Models.Domain
        
         #region Properties
         public virtual Keuzepakket Keuzepakket { get; set; }
+        //public virtual Begeleider Begeleider { get; set; }
         #endregion
 
         #region Constructors

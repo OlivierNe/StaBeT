@@ -15,20 +15,29 @@ namespace StageBeheersTool.ViewModels
         public int? Semester { get; set; }
         [Display(Name = "Studenten")]
         public int? AantalStudenten { get; set; }
-        //[Display(Name = "Soort stage")]
-        public string Soort { get; set; }
         public string Locatie { get; set; }
         public string Bedrijf { get; set; }
         public string Student { get; set; }
+        [Display(Name = "Specialisatie")]
+        public int? SpecialisatieId { get; set; }
         public SelectList AantalStudentenList { get; set; }
         public SelectList SemesterList { get; set; }
+        public SelectList SpecialisatieList { get; set; }
         public bool ToonSearchForm { get; set; }
+        public bool ToonZoekenOpStudent { get; set; }
 
         public StageopdrachtIndexVM()
         {
-            ToonSearchForm = true;
+        }
+
+        public void setItems(IEnumerable<Stageopdracht> stageopdrachten, IEnumerable<Specialisatie> specialisaties)
+        {
+            Stageopdrachten = stageopdrachten;
+            SpecialisatieList = new SelectList(specialisaties, "Id", "Naam", SpecialisatieId == null ? "" : SpecialisatieId.ToString());
             AantalStudentenList = new SelectList(new string[] { "1", "2", "3" }, AantalStudenten == null ? "" : AantalStudenten.ToString());
             SemesterList = new SelectList(new string[] { "1", "2" }, Semester == null ? "" : Semester.ToString());
+            ToonSearchForm = true;
+            ToonZoekenOpStudent = false;
         }
     }
 
@@ -65,44 +74,50 @@ namespace StageBeheersTool.ViewModels
         public string Academiejaar { get; set; }
         [Display(Name = "Specialisatie")]
         public int? SpecialisatieId { get; set; }
-        [Required]
-        public int Semester { get; set; }
+        public bool Semester1 { get; set; }
+        public bool Semester2 { get; set; }
         [Range(1, 3)]
         [Display(Name = "Aantal Studenten")]
         public int AantalStudenten { get; set; }
         [Display(Name = "Contractondertekenaar")]
-        public int? ContractOndertekenaarId { get; set; }
+        public int? ContractondertekenaarId { get; set; }
         [Display(Name = "Stagementor")]
         public int? StagementorId { get; set; }
         public SelectList SpecialisatieSelectList { get; set; }
-        public SelectList ContractOndertekenaarsSelectList { get; set; }
+        public SelectList ContractondertekenaarsSelectList { get; set; }
         public SelectList StagementorsSelectList { get; set; }
+        public SelectList AantalStudentenSelectList { get; set; }
 
         public ContactpersoonCreateVM Stagementor { get; set; }
-        public ContactpersoonCreateVM ContractOndertekenaar { get; set; }
+        public ContactpersoonCreateVM Contractondertekenaar { get; set; }
         #endregion
 
         #region Constructors
         public StageopdrachtCreateVM(IEnumerable<Specialisatie> specialisaties,
-          IEnumerable<Contactpersoon> contractOndertekenaars, IEnumerable<Contactpersoon> stagementors)
+          IEnumerable<Contactpersoon> contractondertekenaars, IEnumerable<Contactpersoon> stagementors)
             : this()
         {
-            SetSelectLists(specialisaties, contractOndertekenaars, stagementors);
+            SetSelectLists(specialisaties, contractondertekenaars, stagementors);
         }
         public StageopdrachtCreateVM()
         {
             Academiejaar = DateTime.Now.Year + "-" + (DateTime.Now.Year + 1);
-            Semester = 2;
+            Semester2 = true;
         }
         #endregion
 
         #region Public methods
         public void SetSelectLists(IEnumerable<Specialisatie> specialisaties,
-            IEnumerable<Contactpersoon> contractOndertekenaars, IEnumerable<Contactpersoon> stagementors)
+            IEnumerable<Contactpersoon> contractondertekenaars, IEnumerable<Contactpersoon> stagementors)
         {
             SpecialisatieSelectList = new SelectList(specialisaties, "Id", "Naam", SpecialisatieId != 0 ? SpecialisatieId.ToString() : "");
-            ContractOndertekenaarsSelectList = new SelectList(contractOndertekenaars, "Id", "Naam", ContractOndertekenaarId != 0 ? ContractOndertekenaarId.ToString() : "");
+            ContractondertekenaarsSelectList = new SelectList(contractondertekenaars, "Id", "Naam",
+                ContractondertekenaarId != 0 ? ContractondertekenaarId.ToString() : "");
             StagementorsSelectList = new SelectList(stagementors, "Id", "Naam", StagementorId != 0 ? StagementorId.ToString() : "");
+            var aantalStudentenOpties = new SelectListItem[] { new SelectListItem() { Value = "1", Text = "1"},
+                     new SelectListItem() { Value = "2", Text = "2"}, new SelectListItem() { Value = "3", Text = "3" } };
+            AantalStudentenSelectList = new SelectList(aantalStudentenOpties, "Value", "Text");
+            this.AantalStudenten = 2;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -119,7 +134,20 @@ namespace StageBeheersTool.ViewModels
                 errors.Add(new ValidationResult("Academiejaar mag niet tot het verleden behoren."));
             }
 
+            if (Semester1 == false && Semester2 == false)
+            {
+                errors.Add(new ValidationResult("Geen semester geselecteerd."));
+            }
+
             return errors;
+        }
+
+        public void setAdres(string gemeente, string postcode, string straat, string nummer)
+        {
+            this.Gemeente = gemeente;
+            this.Postcode = postcode;
+            this.Straat = straat;
+            this.Straatnummer = nummer;
         }
         #endregion
 
@@ -131,8 +159,8 @@ namespace StageBeheersTool.ViewModels
         {
         }
 
-        public StageopdrachtEditVM(IEnumerable<Specialisatie> specialisaties, IEnumerable<Contactpersoon> contractOndertekenaars, IEnumerable<Contactpersoon> stagementors)
-            : base(specialisaties, contractOndertekenaars, stagementors)
+        public StageopdrachtEditVM(IEnumerable<Specialisatie> specialisaties, IEnumerable<Contactpersoon> contractondertekenaars, IEnumerable<Contactpersoon> stagementors)
+            : base(specialisaties, contractondertekenaars, stagementors)
         {
         }
         [HiddenInput]
