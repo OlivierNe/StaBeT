@@ -68,7 +68,6 @@ namespace StageBeheersTool.Controllers
                 }
             }
             var studentModel = Mapper.Map<StudentEditVM, Student>(model);
-            studentModel.HogentEmail = "olivier.neirynck.q1177@student.hogent.be";
             studentModel.Keuzepakket = model.KeuzepakketId == null ? null : keuzepakketRepository.FindBy((int)model.KeuzepakketId);
             studentRepository.Update(student, studentModel);
 

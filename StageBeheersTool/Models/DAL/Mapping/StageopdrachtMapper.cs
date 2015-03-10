@@ -16,7 +16,7 @@ namespace StageBeheersTool.Models.DAL.Mapping
             this.Property(so => so.Omschrijving).IsRequired();
             this.Property(so => so.Academiejaar).IsRequired();
             this.HasOptional(so => so.Stagementor).WithMany().WillCascadeOnDelete(false);
-            this.HasOptional(so => so.ContractOndertekenaar).WithMany().WillCascadeOnDelete(false);
+            this.HasOptional(so => so.Contractondertekenaar).WithMany().WillCascadeOnDelete(false);
             this.HasOptional(so => so.Specialisatie);
             //this.HasOptional(so => so.Stagebegeleider).WithMany().WillCascadeOnDelete(false);
         }

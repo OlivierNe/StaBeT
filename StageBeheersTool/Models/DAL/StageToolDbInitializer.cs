@@ -48,7 +48,7 @@ namespace StageBeheersTool.Models.DAL
                     UserName = "olivier.neirynck.q1177@student.hogent.be",
                     EmailConfirmed = true
                 };
-                userManager.Create(user3, "wachtwoord");
+                userManager.Create(user3);
                 userManager.AddToRole(user3.Id, "student");
                 #endregion
                 
@@ -143,12 +143,13 @@ namespace StageBeheersTool.Models.DAL
                     Stageopdracht stageopdracht = new Stageopdracht()
                     {
                         Titel = "titel" + i,
-                        Specialisatie = specialisaties[random.Next(0, 4)],
-                        Semester = 1,
+                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count-1))],
+                        Semester1 = random.Next(0,1)==0,
+                        Semester2 = random.Next(0,1)==0,
                         Omschrijving = "omschrijving" + i,
                         Academiejaar = "2014-2015",
                         AantalStudenten = 2,
-                        ContractOndertekenaar = contractOndertekenaar1,
+                        Contractondertekenaar = contractOndertekenaar1,
                         Stagementor = stagementors[random.Next(0, stagementors.Count)],
                         Bedrijf = bedrijf1,
                         Gemeente = "Gemeente1"
@@ -211,12 +212,13 @@ namespace StageBeheersTool.Models.DAL
                     Stageopdracht stageopdracht = new Stageopdracht()
                     {
                         Titel = "opdracht " + i,
-                        Specialisatie = specialisaties[random.Next(0, 4)],
-                        Semester = random.Next(1, 2),
+                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count-1))],
+                        Semester1 = random.Next(0, 1) == 0,
+                        Semester2 = random.Next(0, 1) == 0,
                         Omschrijving = "omschrijving " + i,
                         Academiejaar = "2014-2015",
                         AantalStudenten = random.Next(1, 3),
-                        ContractOndertekenaar = contractOndertekenaar2,
+                        Contractondertekenaar = contractOndertekenaar2,
                         Stagementor = stagementors2[random.Next(0, stagementors2.Count)],
                         Bedrijf = bedrijf2,
                         Gemeente = "Gemeente2",

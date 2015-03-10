@@ -56,13 +56,14 @@ namespace StageBeheersTool.Models.Domain
             {
                 teUpdatenOpdracht.Omschrijving = stageopdracht.Omschrijving;
                 teUpdatenOpdracht.Titel = stageopdracht.Titel;
-                teUpdatenOpdracht.Semester = stageopdracht.Semester;
+                teUpdatenOpdracht.Semester1 = stageopdracht.Semester1;
+                teUpdatenOpdracht.Semester2 = stageopdracht.Semester2;
                 teUpdatenOpdracht.Specialisatie = stageopdracht.Specialisatie;
                 teUpdatenOpdracht.Academiejaar = stageopdracht.Academiejaar;
                 teUpdatenOpdracht.AantalStudenten = stageopdracht.AantalStudenten;
                 teUpdatenOpdracht.AantalToegewezenStudenten = stageopdracht.AantalToegewezenStudenten;
                 teUpdatenOpdracht.Stagementor = stageopdracht.Stagementor;
-                teUpdatenOpdracht.ContractOndertekenaar = stageopdracht.ContractOndertekenaar;
+                teUpdatenOpdracht.Contractondertekenaar = stageopdracht.Contractondertekenaar;
                 teUpdatenOpdracht.Gemeente = stageopdracht.Gemeente;
                 teUpdatenOpdracht.Postcode = stageopdracht.Postcode;
                 teUpdatenOpdracht.Straat = stageopdracht.Straat;
@@ -118,7 +119,7 @@ namespace StageBeheersTool.Models.Domain
         {
             foreach (var so in Stageopdrachten)
             {
-                if (so.Stagementor.Equals(contactpersoon) || so.ContractOndertekenaar.Equals(contactpersoon))
+                if (so.Stagementor.Equals(contactpersoon) || so.Contractondertekenaar.Equals(contactpersoon))
                 {
                     return true;
                 }

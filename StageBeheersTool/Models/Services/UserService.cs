@@ -39,7 +39,13 @@ namespace StageBeheersTool.Models.Services
 
         public void CreateUser<T>(T userObject) where T : class
         {
-            ctx.Set<T>().Add(userObject);
+            if(!UserExists<T>(userObject))
+                ctx.Set<T>().Add(userObject);
+        }
+
+        private bool UserExists<T>(T userObject) where T : class
+        {
+            return ctx.Set<T>().Local.Any(obj => obj == userObject);
         }
 
         public bool IsAdmin()

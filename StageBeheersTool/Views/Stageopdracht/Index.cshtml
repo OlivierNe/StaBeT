@@ -12,27 +12,29 @@
 {
     <a id="searchA" class="btn btn-default" style="display:compact">Zoeken</a>
     using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-horizontal" }))
-    {
-        <div class="form-group form-group-sm ">
-            @Html.LabelFor(model => model.Semester, new { @class = "col-md-1" })
-            @Html.DropDownListFor(model => model.Semester, Model.SemesterList, "--Semester--", new { @class = "col-md-2" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.AantalStudenten, new { @class = "col-md-1" })
-            @Html.DropDownListFor(model => model.AantalStudenten, Model.AantalStudentenList, "--aantal studenten--", new { @class = "col-md-2" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Soort, new { @class = "col-md-1" })
-            @Html.EditorFor(model => model.Soort, new { @class = "col-md-10 form-control" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Bedrijf, new { @class = "col-md-1" })
-            @Html.EditorFor(model => model.Bedrijf, new { @class = "col-md-10 form-control" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Locatie, new { @class = "col-md-1" })
-            @Html.EditorFor(model => model.Locatie, new { @class = "col-md-10 form-control" })
-        </div>
+    { <div class="form-group form-group-sm ">
+        @Html.LabelFor(model => model.Semester, new { @class = "col-md-1" })
+        @Html.DropDownListFor(model => model.Semester, Model.SemesterList, "--Semester--", new { @class = "col-md-2" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.AantalStudenten, new { @class = "col-md-1" })
+        @Html.DropDownListFor(model => model.AantalStudenten, Model.AantalStudentenList, "--aantal studenten--", new { @class = "col-md-2" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.SpecialisatieId, htmlAttributes: new { @class = "col-md-1" })
+        @Html.DropDownListFor(model => model.SpecialisatieId, Model.SpecialisatieList, "--specialisatie--", new { @class = "col-md-2" })
+    </div>
+        if (User.IsInRole("bedrijf") == false)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Bedrijf, new { @class = "col-md-1" })
+                @Html.EditorFor(model => model.Bedrijf, new { @class = "input-small" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Locatie, new { @class = "col-md-1" })
+                @Html.EditorFor(model => model.Locatie, new { @class = "input-small" })
+            </div>
+        }
         if (User.IsInRole("begeleider"))
         {
             <div class="form-group">
