@@ -67,9 +67,9 @@ namespace StageBeheersTool.Models.Domain
             return false;
         }
 
-        public bool isVolledigIngenomen()
+        public bool IsVolledigIngenomen()
         {
-            return AantalToegewezenStudenten < AantalStudenten;
+            return AantalToegewezenStudenten == AantalStudenten;
         }
         #endregion
 

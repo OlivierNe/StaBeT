@@ -74,7 +74,7 @@
 </div>
 <p>
     @Html.ActionLink("Terug naar overzicht", "Index")
-    @if (User.IsInRole("bedrijf"))
+    @if (Model.ToonEdit)
     {
         @Html.Raw("|")
         @Html.ActionLink("Aanpassen", "Edit", new { id = Model.Stageopdracht.Id })
@@ -92,6 +92,6 @@
     @if (Model.ToonVerwijderenBtn)
     {
         @Html.ActionLink("Verwijderen uit mijn voorkeurstages", "VerwijderenUitVoorkeur", "Stageopdracht",
-            new { id = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Verwijderen uit mijn voorkeurstages." })
+            new { ids = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Verwijderen uit mijn voorkeurstages." })
     }
 </p>

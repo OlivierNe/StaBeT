@@ -27,10 +27,29 @@
                         <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
                         <li>@Html.ActionLink("Contactpersonen", "Index", "Contactpersoon")</li>
                     }
-                    else if (User.IsInRole("student") || User.IsInRole("begeleider"))
+                    else if (User.IsInRole("student"))
                     {
                         <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
                         <li>@Html.ActionLink("Mijn voorkeurstages", "MijnVoorkeurStages", "Stageopdracht")</li>
+                    }
+                    else if (User.IsInRole("admin"))
+                    {
+
+                    }
+                    else if (User.IsInRole("begeleider"))
+                    {
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                                Stageopdrachten
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                                <li>@Html.ActionLink("Goedgekeurde stages", "GoedgekeurdeStages", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
+                                <li>@Html.ActionLink("Mijn voorkeurstages", "MijnVoorkeurStages", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                            </ul>
+                        </li>
+                        @*<li><a href="#">other item</a></li>*@
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

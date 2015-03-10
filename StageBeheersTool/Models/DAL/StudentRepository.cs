@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 
@@ -21,16 +22,17 @@ namespace StageBeheersTool.Models.DAL
         public void Add(Student student)
         {
             studenten.Add(student);
+            SaveChanges();
         }
 
         public Student FindByEmail(string hogentEmail)
         {
-            return studenten.FirstOrDefault(student => student.HogentEmail == hogentEmail);
+            return studenten.SingleOrDefault(student => student.HogentEmail == hogentEmail);
         }
 
         public Student FindById(int id)
         {
-            return studenten.FirstOrDefault(s => s.Id == id);
+            return studenten.SingleOrDefault(s => s.Id == id);
         }
 
         public IQueryable<Student> FindAll()
@@ -38,25 +40,44 @@ namespace StageBeheersTool.Models.DAL
             return studenten;
         }
 
+        public void Update(Student student, Student model)
+        {
+            student.Voornaam = model.Voornaam;
+            student.Familienaam = model.Familienaam;
+            student.Keuzepakket = model.Keuzepakket;
+            student.Email = model.Email;
+            student.Gsmnummer = model.Gsmnummer;
+            student.Postcode = model.Postcode;
+            student.Gemeente = model.Gemeente;
+            student.Straat = model.Straat;
+            student.Straatnummer = model.Straatnummer;
+            student.FotoUrl = model.FotoUrl;
+            SaveChanges();
+        }
         public void SaveChanges()
         {
-            ctx.SaveChanges();
+            try
+            {
+                ctx.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                string message = String.Empty;
+                foreach (var eve in e.EntityValidationErrors)
+                {
+
+                    message +=
+                        String.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.GetValidationResult());
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        message +=
+                            String.Format("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw new ApplicationException("" + message);
+            }
         }
-
-        public void Update(Student student, Student newStudent)
-        {
-            student.Voornaam = newStudent.Voornaam;
-            student.Familienaam = newStudent.Familienaam;
-            student.Keuzepakket = newStudent.Keuzepakket;
-            student.Email = newStudent.Email;
-            student.Gsmnummer = newStudent.Gsmnummer;
-            student.Postcode = newStudent.Postcode;
-            student.Gemeente = newStudent.Gemeente;
-            student.Straat = newStudent.Straat;
-            student.Straatnummer = newStudent.Straatnummer;
-            student.FotoUrl = newStudent.FotoUrl;
-        }
-
-
     }
 }

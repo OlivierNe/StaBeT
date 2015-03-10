@@ -203,10 +203,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AuthorizeAttribute.cs" />
     <Compile Include="Models\Authentication\ApplicationSignInManager.cs" />
     <Compile Include="Models\Authentication\ApplicationUser.cs" />
     <Compile Include="Models\Authentication\ApplicationUserManager.cs" />
-    <Compile Include="Models\Authentication\EmailService.cs" />
+    <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
+    <Compile Include="Models\Domain\HoGentPersoon.cs" />
+    <Compile Include="Models\Domain\IContactpersoonRepository.cs" />
+    <Compile Include="Models\Domain\IImageService.cs" />
+    <Compile Include="Models\Services\ImageService.cs" />
+    <Compile Include="Models\Services\UserService.cs" />
+    <Compile Include="Models\Domain\Admin.cs" />
+    <Compile Include="Models\Domain\IUserService.cs" />
+    <Compile Include="Models\Services\EmailService.cs" />
     <Compile Include="Models\DAL\BedrijfRepository.cs" />
     <Compile Include="Models\DAL\BegeleiderRepository.cs" />
     <Compile Include="Models\DAL\KeuzepakketRepository.cs" />
@@ -234,7 +243,6 @@
     <Compile Include="Models\Domain\IBedrijfRepository.cs" />
     <Compile Include="Models\Domain\IStageopdrachtRepository.cs" />
     <Compile Include="Models\Domain\Persoon.cs" />
-    <Compile Include="Models\Domain\Stagecoördinator.cs" />
     <Compile Include="Models\Domain\Stageopdracht.cs" />
     <Compile Include="Models\Domain\StageopdrachtStatus.cs" />
     <Compile Include="Models\Domain\Student.cs" />
@@ -256,14 +264,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Images\Begeleider\profiel.jpg" />
     <Content Include="Images\foto-1.jpg" />
     <Content Include="Images\foto-2.jpg" />
     <Content Include="Images\foto-3.jpg" />
     <Content Include="Images\foto-4.jpg" />
     <Content Include="Images\foto-5.jpg" />
     <Content Include="Images\foto-6.jpg" />
-    <Content Include="Images\Student\profiel.jpg" />
+    <Content Include="Images\profiel.jpg" />
     <Content Include="Scripts\createStageForm.js" />
     <Content Include="Scripts\lib\gridmvc.js" />
     <Content Include="Scripts\lib\gridmvc.lang.ru.js" />
@@ -273,7 +280,6 @@
     <Content Include="Scripts\lib\bootstrap.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Models\Domain\Domain.cd" />
-    <None Include="Properties\PublishProfiles\StageTool.pubxml" />
     <None Include="Scripts\lib\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\lib\jquery-1.10.2.js" />
     <Content Include="Scripts\lib\jquery-1.10.2.min.js" />
@@ -288,9 +294,7 @@
     <Content Include="Scripts\stagetool-form.js" />
     <Content Include="Scripts\stagetool.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -338,6 +342,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\Begeleider\" />
+    <Folder Include="Images\Student\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

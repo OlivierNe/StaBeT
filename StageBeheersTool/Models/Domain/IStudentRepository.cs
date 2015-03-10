@@ -8,11 +8,11 @@ namespace StageBeheersTool.Models.Domain
     public interface IStudentRepository
     {
         void Add(Student student);
-        Student FindByEmail(string email);
+        Student FindByEmail(string hoGentEmail);
         Student FindById(int id);
         IQueryable<Student> FindAll();
         void SaveChanges();
-        void Update(Student student, Student newStudent);
+        void Update(Student student, Student model);
 
     }
 }

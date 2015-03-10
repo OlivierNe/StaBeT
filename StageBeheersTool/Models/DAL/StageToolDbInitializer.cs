@@ -16,6 +16,10 @@ namespace StageBeheersTool.Models.DAL
           //DropCreateDatabaseAlways<StageToolDbContext>
      DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
+        public void RunSeed(StageToolDbContext ctx)
+        {
+            this.Seed(ctx);
+        }
         protected override void Seed(StageToolDbContext context)
         {
             base.Seed(context);
@@ -47,7 +51,7 @@ namespace StageBeheersTool.Models.DAL
                 userManager.Create(user3, "wachtwoord");
                 userManager.AddToRole(user3.Id, "student");
                 #endregion
-
+                
                 #region specialisaties
                 Specialisatie specialisatie1 = new Specialisatie() { Naam = "Netwerken" };
                 Specialisatie specialisatie2 = new Specialisatie() { Naam = "Programmeren" };
@@ -82,7 +86,7 @@ namespace StageBeheersTool.Models.DAL
                 keuzepakketten.Add(keuzepakket4);
                 context.Keuzepakketten.AddRange(keuzepakketten);
                 #endregion
-
+                
                 #region bedrijf1
 
                 Bedrijf bedrijf1 = new Bedrijf()
@@ -97,6 +101,8 @@ namespace StageBeheersTool.Models.DAL
                       Gemeente = "gemeente1",
                       Straat = "straat1"
                   };
+
+                context.SaveChanges();
                 var stagementors = new List<Contactpersoon>();
                 for (int i = 1; i <= 5; i++)
                 {
@@ -115,6 +121,7 @@ namespace StageBeheersTool.Models.DAL
                     bedrijf1.AddContactpersoon(stagementor1);
                     stagementors.Add(stagementor1);
                 }
+
                 Contactpersoon contractOndertekenaar1 = new Contactpersoon()
                 {
                     Voornaam = "voornaam0",
@@ -155,8 +162,9 @@ namespace StageBeheersTool.Models.DAL
                 }
 
                 context.Bedrijven.Add(bedrijf1);
+                context.SaveChanges();
                 #endregion
-
+                
                 #region bedrijf2
                 var bedrijf2 = new Bedrijf()
                           {
@@ -184,7 +192,7 @@ namespace StageBeheersTool.Models.DAL
                         Aanspreektitel = "meneer"
                     };
                     bedrijf2.AddContactpersoon(stagementor2);
-                    stagementors.Add(stagementor2);
+                    stagementors2.Add(stagementor2);
                 }
                 Contactpersoon contractOndertekenaar2 = new Contactpersoon()
                 {
@@ -209,7 +217,7 @@ namespace StageBeheersTool.Models.DAL
                         Academiejaar = "2014-2015",
                         AantalStudenten = random.Next(1, 3),
                         ContractOndertekenaar = contractOndertekenaar2,
-                        Stagementor = stagementors[random.Next(0, stagementors2.Count)],
+                        Stagementor = stagementors2[random.Next(0, stagementors2.Count)],
                         Bedrijf = bedrijf2,
                         Gemeente = "Gemeente2",
                         Status = StageopdrachtStatus.Goedgekeurd
@@ -219,6 +227,7 @@ namespace StageBeheersTool.Models.DAL
                 }
 
                 context.Bedrijven.Add(bedrijf2);
+                context.SaveChanges();
                 #endregion
 
                 #region student1

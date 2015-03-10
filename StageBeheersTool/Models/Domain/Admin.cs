@@ -5,8 +5,12 @@ using System.Web;
 
 namespace StageBeheersTool.Models.Domain
 {
-    public class Stagecoördinator
+    public class Admin
     {
+        public int Id { get; set; }
+        public string HoGentEmail { get; set; }
+
+
 
 
     }

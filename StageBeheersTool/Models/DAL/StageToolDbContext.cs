@@ -51,14 +51,12 @@ namespace StageBeheersTool.Models.DAL
         public DbSet<Contactpersoon> Contactpersonen { get; set; }
         public DbSet<Begeleider> Begeleiders { get; set; }
         public DbSet<Student> Studenten { get; set; }
-
+        public DbSet<Admin> Admins { get; set; }
 
         public static StageToolDbContext Create()
         {
             return DependencyResolver.Current.GetService(typeof(StageToolDbContext)) as StageToolDbContext;
         }
-
-
     }
 
 }

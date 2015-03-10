@@ -12,6 +12,7 @@ namespace StageBeheersTool.App_Start
     using Ninject.Web.Common;
     using StageBeheersTool.Models.Domain;
     using StageBeheersTool.Models.DAL;
+    using StageBeheersTool.Models.Services;
 
     public static class NinjectWebCommon
     {
@@ -69,6 +70,9 @@ namespace StageBeheersTool.App_Start
             kernel.Bind<IKeuzepakketRepository>().To<KeuzepakketRepository>().InRequestScope();
             kernel.Bind<IStudentRepository>().To<StudentRepository>().InRequestScope();
             kernel.Bind<IBegeleiderRepository>().To<BegeleiderRepository>().InRequestScope();
+            kernel.Bind<IUserService>().To<UserService>().InRequestScope();
+            kernel.Bind<IContactpersoonRepository>().To<ContactpersoonRepository>().InRequestScope();
+            kernel.Bind<IImageService>().To<ImageService>().InRequestScope();
             kernel.Bind<StageToolDbContext>().ToSelf().InRequestScope();
         }
     }

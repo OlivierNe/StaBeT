@@ -8,45 +8,30 @@ using System.Web;
 
 namespace StageBeheersTool.Models.DAL
 {
-    public class BegeleiderRepository : IBegeleiderRepository
+    public class ContactpersoonRepository : IContactpersoonRepository
     {
-        private DbSet<Begeleider> begeleiders;
+        private DbSet<Contactpersoon> contactpersonen;
         private StageToolDbContext ctx;
 
-        public BegeleiderRepository(StageToolDbContext ctx)
+        public ContactpersoonRepository(StageToolDbContext ctx)
         {
             this.ctx = ctx;
-            this.begeleiders = ctx.Begeleiders;
+            contactpersonen = ctx.Contactpersonen;
         }
 
-        public void Add(Begeleider begeleider)
+        public Contactpersoon FindById(int id)
         {
-            begeleiders.Add(begeleider);
-            SaveChanges();
+            return contactpersonen.SingleOrDefault(cp => cp.Id == id);
         }
 
-        public Begeleider FindByEmail(string hoGentEmail)
+        public IQueryable<Contactpersoon> Contactpersonen()
         {
-            return begeleiders.SingleOrDefault(b => b.HogentEmail == hoGentEmail);
+            return contactpersonen;
         }
 
-        public Begeleider FindById(int id)
+        public void Delete(Contactpersoon contactpersoon)
         {
-            return begeleiders.SingleOrDefault(b => b.Id == id);
-        }
-
-        public void Update(Begeleider begeleider, Begeleider model)
-        {
-            begeleider.Voornaam = model.Voornaam;
-            begeleider.Familienaam = model.Familienaam;
-            begeleider.Email = model.Email;
-            begeleider.Gsmnummer = model.Gsmnummer;
-            begeleider.Telefoonnummer = model.Telefoonnummer;
-            begeleider.Postcode = model.Postcode;
-            begeleider.Gemeente = model.Gemeente;
-            begeleider.Straat = model.Straat;
-            begeleider.Straatnummer = model.Straatnummer;
-            begeleider.FotoUrl = model.FotoUrl;
+            contactpersonen.Remove(contactpersoon);
             SaveChanges();
         }
 

@@ -114,7 +114,7 @@ namespace StageBeheersTool.Models.Domain
         }
 
 
-        public bool ContactpersoonHasStageopdrachten(Contactpersoon contactpersoon)
+        public bool ContactpersoonHeeftStageopdrachten(Contactpersoon contactpersoon)
         {
             foreach (var so in Stageopdrachten)
             {

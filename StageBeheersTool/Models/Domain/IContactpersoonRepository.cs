@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace StageBeheersTool.Models.Domain
 {
-    public interface IBegeleiderRepository
+    public interface IContactpersoonRepository
     {
-        Begeleider FindByEmail(string hoGentEmail);
+        void Delete(Contactpersoon contactpersoon);
+        Contactpersoon FindById(int id);
+        IQueryable<Contactpersoon> Contactpersonen();
         void SaveChanges();
-        void Update(Begeleider begeleider, Begeleider model);
-        void Add(Begeleider begeleider);
     }
 }

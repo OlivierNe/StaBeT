@@ -13,15 +13,21 @@ namespace StageBeheersTool.ViewModels
     {
         public IEnumerable<Stageopdracht> Stageopdrachten { get; set; }
         public int? Semester { get; set; }
-        [Display(Name = "Soort stage")]
+        [Display(Name = "Studenten")]
+        public int? AantalStudenten { get; set; }
+        //[Display(Name = "Soort stage")]
         public string Soort { get; set; }
         public string Locatie { get; set; }
         public string Bedrijf { get; set; }
+        public string Student { get; set; }
+        public SelectList AantalStudentenList { get; set; }
         public SelectList SemesterList { get; set; }
-        public bool DisplaySearchForm { get; set; }
+        public bool ToonSearchForm { get; set; }
+
         public StageopdrachtIndexVM()
         {
-            DisplaySearchForm = true;
+            ToonSearchForm = true;
+            AantalStudentenList = new SelectList(new string[] { "1", "2", "3" }, AantalStudenten == null ? "" : AantalStudenten.ToString());
             SemesterList = new SelectList(new string[] { "1", "2" }, Semester == null ? "" : Semester.ToString());
         }
     }
@@ -31,8 +37,10 @@ namespace StageBeheersTool.ViewModels
         public Stageopdracht Stageopdracht { get; set; }
         public bool ToonToevoegen { get; set; }
         public bool ToonVerwijderenBtn { get; set; }
+        public bool ToonEdit { get; set; }
         public StageopdrachtDetailsVM()
         {
+            ToonEdit = false;
             ToonVerwijderenBtn = false;
             ToonToevoegen = false;
         }

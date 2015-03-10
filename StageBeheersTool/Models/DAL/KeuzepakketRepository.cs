@@ -24,7 +24,7 @@ namespace StageBeheersTool.Models.DAL
 
         public Keuzepakket FindBy(int id)
         {
-            return keuzepakketten.FirstOrDefault(k => k.Id == id);
+            return keuzepakketten.SingleOrDefault(k => k.Id == id);
         }
     }
 }

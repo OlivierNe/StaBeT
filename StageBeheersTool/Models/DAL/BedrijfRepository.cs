@@ -14,18 +14,41 @@ namespace StageBeheersTool.Models.DAL
     {
         private StageToolDbContext ctx;
         private DbSet<Bedrijf> bedrijven;
-        private DbSet<Contactpersoon> contactpersonen;
 
         public BedrijfRepository(StageToolDbContext ctx)
         {
             this.ctx = ctx;
             this.bedrijven = ctx.Bedrijven;
-            this.contactpersonen = ctx.Contactpersonen;
         }
 
         public void Add(Bedrijf bedrijf)
         {
             bedrijven.Add(bedrijf);
+            SaveChanges();
+        }
+
+        public Bedrijf FindByEmail(string email)
+        {
+            return bedrijven
+                .SingleOrDefault(bedrijf => bedrijf.Email == email);
+        }
+
+        public Bedrijf FindById(int id)
+        {
+            return bedrijven.SingleOrDefault(bedrijf => bedrijf.Id == id);
+        }
+
+        public void Update(Bedrijf bedrijf, Bedrijf model)
+        {
+            bedrijf.Naam = model.Naam;
+            bedrijf.Gemeente = model.Gemeente;
+            bedrijf.Postcode = model.Postcode;
+            bedrijf.Straat = model.Straat;
+            bedrijf.Straatnummer = model.Straatnummer;
+            bedrijf.Bereikbaarheid = model.Bereikbaarheid;
+            bedrijf.BedrijfsActiviteiten = model.BedrijfsActiviteiten;
+            bedrijf.Telefoonnummer = model.Telefoonnummer;
+            SaveChanges();
         }
 
         public void SaveChanges()
@@ -54,27 +77,5 @@ namespace StageBeheersTool.Models.DAL
             }
         }
 
-        public Bedrijf FindByEmail(string email)
-        {
-            return bedrijven
-                .FirstOrDefault(bedrijf => bedrijf.Email == email);
-        }
-
-        public void DeleteContactpersoon(Contactpersoon contactpersoon)
-        {
-            contactpersonen.Remove(contactpersoon);
-        }
-
-        public void Update(Bedrijf bedrijf, Bedrijf newBedrijf)
-        {
-            bedrijf.Naam = newBedrijf.Naam;
-            bedrijf.Gemeente = newBedrijf.Gemeente;
-            bedrijf.Postcode = newBedrijf.Postcode;
-            bedrijf.Straat = newBedrijf.Straat;
-            bedrijf.Straatnummer = newBedrijf.Straatnummer;
-            bedrijf.Bereikbaarheid = newBedrijf.Bereikbaarheid;
-            bedrijf.BedrijfsActiviteiten = newBedrijf.BedrijfsActiviteiten;
-            bedrijf.Telefoonnummer = newBedrijf.Telefoonnummer;
-        }
     }
 }
