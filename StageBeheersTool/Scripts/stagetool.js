@@ -20,7 +20,7 @@ $(function () {
 
     var ajaxDone = function (data) {
         $("#grid-tableDiv").html(data);
-        history.pushState({}, "", this.url);
+        history.pushState({ url: this.url }, "", this.url);
         registerListener();
     };
 
@@ -48,9 +48,13 @@ $(function () {
     }
     registerListener();
     $(window).on("popstate", function (e) {
-        if (e.originalEvent.state !== null) {
-            location.reload();
-        }
+        $.ajax({
+            method: "get", url: history.state.url,
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        }).done(function (data) {
+            $("#grid-tableDiv").html(data);
+            registerListener();
+        });
     });
 
 });

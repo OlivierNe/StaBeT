@@ -10,7 +10,6 @@ namespace StageBeheersTool.Models.Domain
         Bedrijf FindBedrijf();
         Student FindStudent();
         Begeleider FindBegeleider();
-        Admin FindAdmin();
         bool IsAdmin();
         bool IsBedrijf();
         bool IsStudent();

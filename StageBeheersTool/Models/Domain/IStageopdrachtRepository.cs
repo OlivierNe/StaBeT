@@ -16,6 +16,7 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<Stageopdracht> FindGeldigeStageopdrachten(int? semester, int? aantalStudenten, int? specialisatieId, string bedrijf, string locatie);
         IQueryable<Stageopdracht> FindStageopdrachtenFrom(Begeleider begeleider);
         IQueryable<Stageopdracht> FindGoedgekeurdeStageopdrachten();
+        IQueryable<Stageopdracht> FindStageopdrachtVoorstellen();
         IQueryable<Stageopdracht> FindGoedgekeurdeStageopdrachtenByFilter(int? semester, int? aantalStudenten, int? specialisatieId, string bedrijf, string locatie, string student);
         void Update(Stageopdracht stageopdracht, Stageopdracht model);
         void SaveChanges();

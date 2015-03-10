@@ -24,6 +24,17 @@ namespace StageBeheersTool.Models.Domain
             }
         }
 
+        public string ToonStatus
+        {
+            get
+            {
+                if (Status == StageopdrachtStatus.NietBeoordeeld)
+                {
+                    return "Niet beoordeeld";
+                }
+                return Status.ToString();
+            }
+        }
         public string Semester
         {
             get
@@ -67,6 +78,10 @@ namespace StageBeheersTool.Models.Domain
             return Status == StageopdrachtStatus.Goedgekeurd;
         }
 
+        public bool IsAfgekeurd()
+        {
+            return Status == StageopdrachtStatus.Afgekeurd;
+        }
         public bool IsInHuidigAcademiejaar()
         {
             var beginJaar = int.Parse(Academiejaar.Substring(0, 4));
@@ -85,7 +100,6 @@ namespace StageBeheersTool.Models.Domain
             return AantalToegewezenStudenten == AantalStudenten;
         }
         #endregion
-
 
     }
 }

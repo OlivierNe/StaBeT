@@ -8,6 +8,11 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
+using Microsoft.Owin.Security;
+using StageBeheersTool.Models.Authentication;
+
 
 namespace StageBeheersTool.Controllers
 {
@@ -60,6 +65,19 @@ namespace StageBeheersTool.Controllers
                 model.SpecialisatieId, model.Bedrijf, model.Locatie, model.Student).ToList();
             model.setItems(stageopdrachten, specialisatieRepository.FindAll());
             model.ToonZoekenOpStudent = true;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_StageopdrachtList", model);
+            }
+            return View("Index", model);
+        }
+
+        [Authorize(Roles = "admin")]
+        public ActionResult Voorstellen(StageopdrachtIndexVM model)
+        {
+            var stageopdrachten = stageopdrachtRepository.FindStageopdrachtVoorstellen().ToList();
+            model.ToonOordelen = true;
+            model.Stageopdrachten = stageopdrachten;
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageopdrachtList", model);
@@ -353,6 +371,54 @@ namespace StageBeheersTool.Controllers
             return View("Index", model);
         }
 
+        [Authorize(Roles = "admin")]
+        public ActionResult Goedkeuren(int id)
+        {
+            var stageopdracht = stageopdrachtRepository.FindById(id);
+            stageopdracht.Status = StageopdrachtStatus.Goedgekeurd;
+            var emailService = Request.GetOwinContext().GetUserManager<ApplicationUserManager>().EmailService;
+            emailService.Send(new IdentityMessage()
+            {
+                Destination = stageopdracht.Bedrijf.Email,
+                Subject = "Stageopdracht goedgekeurd.",
+                Body = "Stageopdracht " + stageopdracht.Titel + " goedgekeurd."
+            });
+            stageopdrachtRepository.SaveChanges();
+            return RedirectToAction("Voorstellen");
+        }
+
+        [Authorize(Roles = "admin")]
+        public ActionResult Afkeuren(int id)
+        {
+            var stageopdracht = stageopdrachtRepository.FindById(id);
+            var model = Mapper.Map<StageopdrachtAfkeurenVM>(stageopdracht);
+            model.Aan = stageopdracht.Bedrijf.Email;
+            model.Onderwerp = "Stageopdracht afgekeurd";
+            return View(model);
+        }
+
+        [HttpPost]
+        [ActionName("Afkeuren")]
+        [ValidateAntiForgeryToken]
+        public ActionResult AfkeurenConfirmed(StageopdrachtAfkeurenVM model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var stageopdracht = stageopdrachtRepository.FindById(model.Id);
+                stageopdracht.Status = StageopdrachtStatus.Afgekeurd;
+                var emailService = Request.GetOwinContext().GetUserManager<ApplicationUserManager>().EmailService;
+                emailService.Send(new IdentityMessage()
+                {
+                    Destination = stageopdracht.Bedrijf.Email,
+                    Subject = model.Onderwerp,
+                    Body = model.Reden
+                });
+                stageopdrachtRepository.SaveChanges();
+                return RedirectToAction("Voorstellen");
+            }
+            return View("Afkeuren", model);
+        }
     }
 
 }

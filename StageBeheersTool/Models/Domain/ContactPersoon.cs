@@ -14,7 +14,7 @@ namespace StageBeheersTool.Models.Domain
         #region Properties
         public string Aanspreektitel { get; set; }
         public bool IsStagementor { get; set; }
-        public bool IsContractOndertekenaar { get; set; }
+        public bool IsContractondertekenaar { get; set; }
         public string Bedrijfsfunctie { get; set; }
         #endregion
 

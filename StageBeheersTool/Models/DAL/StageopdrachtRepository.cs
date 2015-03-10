@@ -40,7 +40,7 @@ namespace StageBeheersTool.Models.DAL
         public IQueryable<Stageopdracht> FindByFilter(int? semester, int? aantalStudenten, int? specialisatieId, string bedrijf, string locatie)
         {
             return FindAll()
-                .Where(so => (semester == null ? true : ((so.Semester1 ? semester == 1:false)||(so.Semester2 ? semester == 2 : false))) &&
+                .Where(so => (semester == null ? true : ((so.Semester1 ? semester == 1 : false) || (so.Semester2 ? semester == 2 : false))) &&
                 (aantalStudenten == null ? true : so.AantalStudenten == aantalStudenten) &&
                 ((specialisatieId == null || so.Specialisatie == null) ? true : (specialisatieId == so.Specialisatie.Id)) &&
                 (string.IsNullOrEmpty(bedrijf) ? true : so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower())) &&
@@ -88,6 +88,10 @@ namespace StageBeheersTool.Models.DAL
                     so.Studenten.Any(st => student.ToLower().Contains(st.Voornaam.ToLower())
                         || student.ToLower().Contains(st.Familienaam.ToLower())))).AsEnumerable()
                         .Where(so => so.IsInHuidigAcademiejaar()).AsQueryable();
+        }
+        public IQueryable<Stageopdracht> FindStageopdrachtVoorstellen()
+        {
+            return FindAll().Where(so => so.Status == StageopdrachtStatus.NietBeoordeeld);
         }
 
         public void Update(Stageopdracht stageopdracht, Stageopdracht model)

@@ -114,12 +114,12 @@
         </div>
         <div class="form-group">
             <div id="ContrOndDropdown">
-                @Html.LabelFor(model => model.ContractOndertekenaarId, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.ContractondertekenaarId, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-4">
-                    @Html.DropDownListFor(model => model.ContractOndertekenaarId, Model.ContractondertekenaarsSelectList, "-- Selecteer een contractondertekenaar --", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.ContractOndertekenaarId, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(model => model.ContractondertekenaarId, Model.ContractondertekenaarsSelectList, "-- Selecteer een contractondertekenaar --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ContractondertekenaarId, "", new { @class = "text-danger" })
                 </div>
-                @Html.HiddenFor(model => model.ContractOndertekenaarId, new { @id = "ContractOndertekenaarIdHidden" })
+                @Html.HiddenFor(model => model.ContractondertekenaarId, new { @id = "ContractOndertekenaarIdHidden" })
                 @Ajax.ActionLink("Nieuwe Contractondertekenaar", "Create", new { isContractOndertekenaar = true }, ajaxOptions2,
          new { @class = "btn btn-default", @id = "contrOndBtn" })
             </div>

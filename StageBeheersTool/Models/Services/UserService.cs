@@ -32,11 +32,6 @@ namespace StageBeheersTool.Models.Services
             return ctx.Begeleiders.FirstOrDefault(begeleider => begeleider.HogentEmail == HttpContext.Current.User.Identity.Name);
         }
 
-        public Admin FindAdmin()
-        {
-            return ctx.Admins.FirstOrDefault(admin => admin.HoGentEmail == HttpContext.Current.User.Identity.Name);
-        }
-
         public void CreateUser<T>(T userObject) where T : class
         {
             if(!UserExists<T>(userObject))

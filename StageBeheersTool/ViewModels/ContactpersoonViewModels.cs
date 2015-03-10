@@ -29,7 +29,7 @@ namespace StageBeheersTool.ViewModels
         public bool IsStagementor { get; set; }
         [Required]
         [Display(Name = "Contractondertekenaar")]
-        public bool IsContractOndertekenaar { get; set; }
+        public bool IsContractondertekenaar { get; set; }
     }
 
     public class ContactpersoonEditVM : ContactpersoonCreateVM

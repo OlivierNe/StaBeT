@@ -114,7 +114,7 @@ namespace StageBeheersTool.Models.DAL
                         Gsmnummer = "123456",
                         Telefoonnummer = "1234567",
                         IsStagementor = true,
-                        IsContractOndertekenaar = false,
+                        IsContractondertekenaar = false,
                         Bedrijfsfunctie = "bedrijfsfunctie",
                         Aanspreektitel = "meneer"
                     };
@@ -130,7 +130,7 @@ namespace StageBeheersTool.Models.DAL
                     Gsmnummer = "123456",
                     Telefoonnummer = "1234567",
                     IsStagementor = false,
-                    IsContractOndertekenaar = true,
+                    IsContractondertekenaar = true,
                     Bedrijfsfunctie = "bedrijfsfunctie",
                     Aanspreektitel = "meneer"
                 };
@@ -144,8 +144,8 @@ namespace StageBeheersTool.Models.DAL
                     {
                         Titel = "titel" + i,
                         Specialisatie = specialisaties[random.Next(0, (specialisaties.Count-1))],
-                        Semester1 = random.Next(0,1)==0,
-                        Semester2 = random.Next(0,1)==0,
+                        Semester1 = new Random().Next(0,1)==0,
+                        Semester2 = new Random().Next(0,1)==0,
                         Omschrijving = "omschrijving" + i,
                         Academiejaar = "2014-2015",
                         AantalStudenten = 2,
@@ -188,7 +188,7 @@ namespace StageBeheersTool.Models.DAL
                         Gsmnummer = "123456",
                         Telefoonnummer = "1234567",
                         IsStagementor = true,
-                        IsContractOndertekenaar = false,
+                        IsContractondertekenaar = false,
                         Bedrijfsfunctie = "bedrijfsfunctie",
                         Aanspreektitel = "meneer"
                     };
@@ -203,7 +203,7 @@ namespace StageBeheersTool.Models.DAL
                     Gsmnummer = "123456",
                     Telefoonnummer = "1234567",
                     IsStagementor = false,
-                    IsContractOndertekenaar = true,
+                    IsContractondertekenaar = true,
                     Bedrijfsfunctie = "bedrijfsfunctie"
                 };
                 bedrijf2.AddContactpersoon(contractOndertekenaar2);

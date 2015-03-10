@@ -15,5 +15,14 @@
         columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf");
         columns.Add(so => so.Gemeente).Titled("Locatie");
     }
+    if (User.IsInRole("admin"))
+    {
+        columns.Add(so => so.ToonStatus).Titled("Status");
+        if (Model.ToonOordelen)
+        {
+            columns.Add().Sanitized(false).Encoded(false).RenderValueAs(so => !so.IsGoedgekeurd() ? Html.ActionLink("Goedkeuren", "Goedkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
+            columns.Add().Sanitized(false).Encoded(false).RenderValueAs(so => !so.IsAfgekeurd() ? Html.ActionLink("Afkeuren", "Afkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
+        }
+    }
 }).WithPaging(10).Sortable().EmptyText("")
 </div>

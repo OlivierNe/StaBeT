@@ -62,15 +62,27 @@
             @Html.DisplayNameFor(model => model.Stageopdracht.Contractondertekenaar)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Naam)
+            @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Naam)  / @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Email)
+            / @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Gsmnummer)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Stageopdracht.Stagementor)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Naam)
+            @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Naam) / @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Email)
+            / @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Gsmnummer)
         </dd>
+        @if (User.IsInRole("admin"))
+        {
+            <dt>
+                Status
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Stageopdracht.ToonStatus)
+            </dd>
+        }
     </dl>
+
 </div>
 <p>
     @Html.ActionLink("Terug naar overzicht", "Index")
@@ -81,7 +93,7 @@
     }
     @if (User.IsInRole("bedrijf") && Model.Stageopdracht.IsGoedgekeurd() == false)
     {
-        @Html.Raw("|");
+        @Html.Raw("|")
         @Html.ActionLink("Verwijderen", "Delete", new { id = Model.Stageopdracht.Id })
     }
     @if (Model.ToonToevoegen)
@@ -93,5 +105,12 @@
     {
         @Html.ActionLink("Verwijderen uit mijn voorkeurstages", "VerwijderenUitVoorkeur", "Stageopdracht",
             new { ids = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Verwijderen uit mijn voorkeurstages." })
+    }
+    @if (User.IsInRole("admin"))
+    {
+        @Html.Raw("|")
+        @Html.ActionLink("Goedkeuren", "Goedkeuren", new { id = Model.Stageopdracht.Id })
+        @Html.Raw("|")
+        @Html.ActionLink("Afkeuren", "Afkeuren", new { id = Model.Stageopdracht.Id })
     }
 </p>

@@ -28,6 +28,12 @@
         <th>
             @Html.DisplayNameFor(model => model.FirstOrDefault().Telefoonnummer)
         </th>
+        <th>
+            Stagementor
+        </th>
+        <th>
+            Contractondertekenaar
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -48,9 +54,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Telefoonnummer)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsStagementor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsContractondertekenaar)
+            </td>
         </tr>
     }
-
 </table>
 
 @if (Model.PageCount > 1)

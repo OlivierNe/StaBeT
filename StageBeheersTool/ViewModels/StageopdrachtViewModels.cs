@@ -25,6 +25,7 @@ namespace StageBeheersTool.ViewModels
         public SelectList SpecialisatieList { get; set; }
         public bool ToonSearchForm { get; set; }
         public bool ToonZoekenOpStudent { get; set; }
+        public bool ToonOordelen { get; set; }
 
         public StageopdrachtIndexVM()
         {
@@ -180,4 +181,16 @@ namespace StageBeheersTool.ViewModels
         }
     }
 
+    public class StageopdrachtAfkeurenVM
+    {
+        public int Id { get; set; }
+        public string Titel { get; set; }
+        public string Aan { get; set; }
+        [Required]
+        public string Onderwerp { get; set; }
+        [DataType(DataType.MultilineText)]
+        [Required]
+        public string Reden { get; set; }
+
+    }
 }

@@ -98,11 +98,17 @@ namespace StageBeheersTool.Controllers
                 await SignInManager.SignInAsync(user, model.RememberMe, false);
                 return RedirectToAction("Index", "Stageopdracht");
             }
-            else if (model.Email.EndsWith("@admin.be"))
-            {//tijdelijk
-
-
-
+            else if (model.Email.EndsWith("@admin.be"))//tijdelijk
+            {
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user == null)
+                {
+                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
+                    await UserManager.CreateAsync(user);
+                    await UserManager.AddToRoleAsync(user.Id, "admin");
+                }
+                await SignInManager.SignInAsync(user, model.RememberMe, false);
+                return RedirectToAction("Index", "Stageopdracht");
 
             }
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);

@@ -13,6 +13,7 @@ namespace StageBeheersTool.App_Start
     using StageBeheersTool.Models.Domain;
     using StageBeheersTool.Models.DAL;
     using StageBeheersTool.Models.Services;
+    using Microsoft.AspNet.Identity;
 
     public static class NinjectWebCommon
     {

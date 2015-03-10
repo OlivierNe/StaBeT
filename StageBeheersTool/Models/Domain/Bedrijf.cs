@@ -94,7 +94,7 @@ namespace StageBeheersTool.Models.Domain
                 teUpdatenPersoon.Gsmnummer = contactpersoon.Gsmnummer;
                 teUpdatenPersoon.Telefoonnummer = contactpersoon.Telefoonnummer;
                 teUpdatenPersoon.IsStagementor = contactpersoon.IsStagementor;
-                teUpdatenPersoon.IsContractOndertekenaar = contactpersoon.IsContractOndertekenaar;
+                teUpdatenPersoon.IsContractondertekenaar = contactpersoon.IsContractondertekenaar;
                 teUpdatenPersoon.Aanspreektitel = contactpersoon.Aanspreektitel;
                 teUpdatenPersoon.Bedrijfsfunctie = contactpersoon.Bedrijfsfunctie;
                 teUpdatenPersoon.Email = contactpersoon.Email;
@@ -111,7 +111,7 @@ namespace StageBeheersTool.Models.Domain
 
         public IEnumerable<Contactpersoon> FindAllContractOndertekenaars()
         {
-            return Contactpersonen.Where(cp => cp.IsContractOndertekenaar);
+            return Contactpersonen.Where(cp => cp.IsContractondertekenaar);
         }
 
 
