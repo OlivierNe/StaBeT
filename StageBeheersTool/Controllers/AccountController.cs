@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -85,6 +86,7 @@ namespace StageBeheersTool.Controllers
                 //TODO: service aanspreken:
                 //https://webservice.hogent.be/ldap/ldap.wsdl
                 //TODO: if( geldig hogent account + wachtwoord)...
+                
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null)
                 {

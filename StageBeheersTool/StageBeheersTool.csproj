@@ -263,6 +263,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\foto-1.jpg" />
+    <Content Include="Images\foto-2.jpg" />
+    <Content Include="Images\foto-3.jpg" />
+    <Content Include="Images\foto-4.jpg" />
+    <Content Include="Images\foto-5.jpg" />
+    <Content Include="Images\foto-6.jpg" />
     <Content Include="Images\profiel.jpg" />
     <Content Include="Scripts\createStageForm.js" />
     <Content Include="Scripts\lib\gridmvc.js" />

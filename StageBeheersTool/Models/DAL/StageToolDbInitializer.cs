@@ -13,7 +13,7 @@ using StageBeheersTool.Models.Authentication;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        //  DropCreateDatabaseAlways<StageToolDbContext>
+          //DropCreateDatabaseAlways<StageToolDbContext>
      DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
         public void RunSeed(StageToolDbContext ctx)
