@@ -75,6 +75,12 @@ namespace StageBeheersTool.Models.Authentication
                 roleManager.Create(new IdentityRole(role));
             return await base.AddToRoleAsync(userId, role);
         }
+
+        public bool IsInBedrijfRoleOfGeenRole(string userId)
+        {
+            IList<string> roles = this.GetRoles(userId);
+            return !(roles.Contains("bedrijf") || roles.Count == 0);
+        }
     }
 
 }

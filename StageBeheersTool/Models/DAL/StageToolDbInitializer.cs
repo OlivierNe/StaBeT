@@ -13,7 +13,7 @@ using StageBeheersTool.Models.Authentication;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-          //DropCreateDatabaseAlways<StageToolDbContext>
+        //DropCreateDatabaseAlways<StageToolDbContext>
      DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
         public void RunSeed(StageToolDbContext ctx)
@@ -51,7 +51,7 @@ namespace StageBeheersTool.Models.DAL
                 userManager.Create(user3);
                 userManager.AddToRole(user3.Id, "student");
                 #endregion
-                
+
                 #region specialisaties
                 Specialisatie specialisatie1 = new Specialisatie() { Naam = "Netwerken" };
                 Specialisatie specialisatie2 = new Specialisatie() { Naam = "Programmeren" };
@@ -86,7 +86,7 @@ namespace StageBeheersTool.Models.DAL
                 keuzepakketten.Add(keuzepakket4);
                 context.Keuzepakketten.AddRange(keuzepakketten);
                 #endregion
-                
+
                 #region bedrijf1
 
                 Bedrijf bedrijf1 = new Bedrijf()
@@ -143,9 +143,9 @@ namespace StageBeheersTool.Models.DAL
                     Stageopdracht stageopdracht = new Stageopdracht()
                     {
                         Titel = "titel" + i,
-                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count-1))],
-                        Semester1 = new Random().Next(0,1)==0,
-                        Semester2 = new Random().Next(0,1)==0,
+                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count))],
+                        Semester1 = random.Next(0, 2) == 0,
+                        Semester2 = random.Next(0, 2) == 0,
                         Omschrijving = "omschrijving" + i,
                         Academiejaar = "2014-2015",
                         AantalStudenten = 2,
@@ -165,7 +165,7 @@ namespace StageBeheersTool.Models.DAL
                 context.Bedrijven.Add(bedrijf1);
                 context.SaveChanges();
                 #endregion
-                
+
                 #region bedrijf2
                 var bedrijf2 = new Bedrijf()
                           {
@@ -212,12 +212,12 @@ namespace StageBeheersTool.Models.DAL
                     Stageopdracht stageopdracht = new Stageopdracht()
                     {
                         Titel = "opdracht " + i,
-                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count-1))],
-                        Semester1 = random.Next(0, 1) == 0,
-                        Semester2 = random.Next(0, 1) == 0,
+                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count - 1))],
+                        Semester1 = random.Next(0, 2) == 0,
+                        Semester2 = random.Next(0, 2) == 0,
                         Omschrijving = "omschrijving " + i,
                         Academiejaar = "2014-2015",
-                        AantalStudenten = random.Next(1, 3),
+                        AantalStudenten = random.Next(1, 4),
                         Contractondertekenaar = contractOndertekenaar2,
                         Stagementor = stagementors2[random.Next(0, stagementors2.Count)],
                         Bedrijf = bedrijf2,

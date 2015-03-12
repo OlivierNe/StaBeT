@@ -11,12 +11,14 @@ namespace StageBeheersTool.Models.DAL
     public class BegeleiderRepository : IBegeleiderRepository
     {
         private DbSet<Begeleider> begeleiders;
+        private DbSet<StageBegeleidAanvraag> aanvragen;
         private StageToolDbContext ctx;
 
         public BegeleiderRepository(StageToolDbContext ctx)
         {
             this.ctx = ctx;
             this.begeleiders = ctx.Begeleiders;
+            this.aanvragen = ctx.StageBegeleidAanvragen;
         }
 
         public void Add(Begeleider begeleider)
@@ -30,11 +32,11 @@ namespace StageBeheersTool.Models.DAL
             return begeleiders.SingleOrDefault(b => b.HogentEmail == hoGentEmail);
         }
 
-        public Begeleider FindById(int id)
+         public Begeleider FindById(int id)
         {
             return begeleiders.SingleOrDefault(b => b.Id == id);
         }
-
+        
         public void Update(Begeleider begeleider, Begeleider model)
         {
             begeleider.Voornaam = model.Voornaam;
@@ -75,5 +77,7 @@ namespace StageBeheersTool.Models.DAL
                 throw new ApplicationException("" + message);
             }
         }
+
+       
     }
 }

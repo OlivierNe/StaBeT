@@ -6,7 +6,7 @@ $(function () {
         return false;
     });
 
-    $("#contrOndBtn").click(function (e) {
+    $("#controndBtn").click(function (e) {
         getContrOndForm(e.target);
         return false;
     });
@@ -40,39 +40,39 @@ function initStagementorForm() {
     /*
      * Stagementor
      */
-    if ($("#ContractOndertekenaarId option[value='-1']").length == 0) {
+    if ($("#ContractondertekenaarId option[value='-1']").length == 0) {
         var voornaam = $("#Stagementor_Voornaam").val();
         var naam = $("#Stagementor_Familienaam").val();
-        if ($("#Stagementor_IsContractOndertekenaar").is(":checked") && naam && voornaam) {
+        if ($("#Stagementor_IsContractondertekenaar").is(":checked") && naam && voornaam) {
             var o = new Option(naam + " " + voornaam, "-1");
-            if ($("#ContractOndertekenaarIdHidden").val() == "-1") {
+            if ($("#ContractondertekenaarIdHidden").val() == "-1") {
                 o.selected = true;
             }
-            $("#ContractOndertekenaarId").append(o);
+            $("#ContractondertekenaarId").append(o);
         }
     }
     if ($("#stagementorForm").children().length > 0) {
         $("#stagementorDropdown").hide();
     }
 
-    $("#Stagementor_IsContractOndertekenaar").change(function () {
+    $("#Stagementor_IsContractondertekenaar").change(function () {
         if ($(this).is(":checked")) {
             var o = new Option($("#Stagementor_Familienaam").val() + " " + $("#Stagementor_Voornaam").val(), "-1");
-            $("#ContractOndertekenaarId").append(o);
+            $("#ContractondertekenaarId").append(o);
         }
         else {
-            $("#ContractOndertekenaarId option[value='-1']").remove();
+            $("#ContractondertekenaarId option[value='-1']").remove();
         }
     });
     $("#Stagementor_Voornaam, #Stagementor_Familienaam").keyup(function () {
-        if ($("#Stagementor_IsContractOndertekenaar").is(":checked")) {
-            $("#ContractOndertekenaarId option[value='-1']").text($("#Stagementor_Familienaam").val() + " " + $("#Stagementor_Voornaam").val());
+        if ($("#Stagementor_IsContractondertekenaar").is(":checked")) {
+            $("#ContractondertekenaarId option[value='-1']").text($("#Stagementor_Familienaam").val() + " " + $("#Stagementor_Voornaam").val());
         }
     });
     $("#cancelBtnStM").click(function () {
         $("#stagementorForm").fadeOut("slow", function () {
             $("#stagementorForm").empty();
-            $("#ContractOndertekenaarId option[value='-1']").remove();
+            $("#ContractondertekenaarId option[value='-1']").remove();
             $("#stagementorDropdown").show();
         })
     });
@@ -89,17 +89,17 @@ function getContrOndForm(a) {
         headers: { "X-Requested-With": "XMLHttpRequest" }
     }).success(function (data) {
         $($a.attr("data-ajax-update")).html(data).hide().fadeIn(1000);
-        $("#contractOndertekenaarForm input[type='text'],#contractOndertekenaarForm input[type='email'],#contractOndertekenaarForm textarea").each(showRequired);
-        $("#ContrOndDropdown").hide();
+        $("#contractondertekenaarForm input[type='text'],#contractondertekenaarForm input[type='email'],#contractondertekenaarForm textarea").each(showRequired);
+        $("#ControndDropdown").hide();
         initContrOndForm();
         initClientsideValidation();
     });
 }
 function initContrOndForm() {
     if ($("#StagementorId option[value='-1']").length == 0) {
-        var naam = $("#ContractOndertekenaar_Familienaam").val();
-        var voornaam = $("#ContractOndertekenaar_Voornaam").val();
-        if ($("#ContractOndertekenaar_IsStagementor").is(":checked") && naam && voornaam) {
+        var naam = $("#Contractondertekenaar_Familienaam").val();
+        var voornaam = $("#Contractondertekenaar_Voornaam").val();
+        if ($("#Contractondertekenaar_IsStagementor").is(":checked") && naam && voornaam) {
             var o = new Option(naam + " " + voornaam, "-1");
             if ($("#StagementorIdHidden").val() == "-1") {
                 o.selected = true;
@@ -107,28 +107,28 @@ function initContrOndForm() {
             $("#StagementorId").append(o);
         }
     }
-    if ($("#contractOndertekenaarForm").children().length > 0) {
-        $("#ContrOndDropdown").hide();
+    if ($("#contractondertekenaarForm").children().length > 0) {
+        $("#ControndDropdown").hide();
     }
-    $("#ContractOndertekenaar_IsStagementor").change(function () {
+    $("#Contractondertekenaar_IsStagementor").change(function () {
         if ($(this).is(":checked")) {
-            var o = new Option($("#ContractOndertekenaar_Familienaam").val() + " " + $("#ContractOndertekenaar_Voornaam").val(), "-1");
+            var o = new Option($("#Contractondertekenaar_Familienaam").val() + " " + $("#Contractondertekenaar_Voornaam").val(), "-1");
             $("#StagementorId").append(o);
         }
         else {
             $("#StagementorId option[value='-1']").remove();
         }
     });
-    $("#ContractOndertekenaar_Voornaam, #ContractOndertekenaar_Familienaam").keyup(function () {
-        if ($("#ContractOndertekenaar_IsStagementor").is(":checked")) {
-            $("#StagementorId option[value='-1']").text($("#ContractOndertekenaar_Familienaam").val() + " " + $("#ContractOndertekenaar_Voornaam").val());
+    $("#Contractondertekenaar_Voornaam, #Contractondertekenaar_Familienaam").keyup(function () {
+        if ($("#Contractondertekenaar_IsStagementor").is(":checked")) {
+            $("#StagementorId option[value='-1']").text($("#Contractondertekenaar_Familienaam").val() + " " + $("#Contractondertekenaar_Voornaam").val());
         }
     });
     $("#cancelBtnCO").click(function () {
-        $("#contractOndertekenaarForm").fadeOut("slow", function () {
-            $("#contractOndertekenaarForm").empty();
+        $("#contractondertekenaarForm").fadeOut("slow", function () {
+            $("#contractondertekenaarForm").empty();
             $("#StagementorId option[value='-1']").remove();
-            $("#ContrOndDropdown").show();
+            $("#ControndDropdown").show();
         });
     });
 }

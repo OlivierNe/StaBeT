@@ -12,10 +12,12 @@ namespace StageBeheersTool.Models.DAL
     {
         private StageToolDbContext ctx;
         private DbSet<Stageopdracht> stageopdrachten;
+        private DbSet<StageBegeleidAanvraag> aanvragen;
 
         public StageopdrachtRepository(StageToolDbContext ctx)
         {
             this.ctx = ctx;
+            this.aanvragen = ctx.StageBegeleidAanvragen;
             this.stageopdrachten = ctx.Stageopdrachten;
         }
 
@@ -34,11 +36,22 @@ namespace StageBeheersTool.Models.DAL
 
         public Stageopdracht FindById(int id)
         {
-            return stageopdrachten.FirstOrDefault(so => so.Id == id);
+            return stageopdrachten
+                .Include(so => so.Specialisatie)
+                .Include(so => so.Bedrijf)
+                .Include(so => so.Stagementor)
+                .Include(so => so.Contractondertekenaar)
+                .Include(so => so.Stagebegeleider)
+                .Include(so => so.Studenten)
+                .SingleOrDefault(so => so.Id == id);
         }
 
         public IQueryable<Stageopdracht> FindByFilter(int? semester, int? aantalStudenten, int? specialisatieId, string bedrijf, string locatie)
         {
+            if (semester == null && aantalStudenten == null && specialisatieId == null && bedrijf == null && locatie == null)
+            {
+                return FindAll();
+            }
             return FindAll()
                 .Where(so => (semester == null ? true : ((so.Semester1 ? semester == 1 : false) || (so.Semester2 ? semester == 2 : false))) &&
                 (aantalStudenten == null ? true : so.AantalStudenten == aantalStudenten) &&
@@ -113,6 +126,33 @@ namespace StageBeheersTool.Models.DAL
             SaveChanges();
         }
 
+        public StageBegeleidAanvraag FindAanvraagById(int id)
+        {
+            return aanvragen.Include(sba => sba.Begeleider).Include(sba => sba.Stageopdracht).SingleOrDefault(a => a.Id == id);
+        }
+
+        public void AddAanvraag(StageBegeleidAanvraag aanvraag)
+        {
+            aanvragen.Add(aanvraag);
+            SaveChanges();
+        }
+
+        public void DeleteAanvraag(StageBegeleidAanvraag aanvraag)
+        {
+            aanvragen.Remove(aanvraag);
+            SaveChanges();
+        }
+
+        public IQueryable<StageBegeleidAanvraag> FindAllAanvragen()
+        {
+            return aanvragen.OrderBy(sba => sba.Begeleider.Familienaam).Include(sba => sba.Begeleider).Include(sba => sba.Stageopdracht);
+        }
+
+        public IQueryable<StageBegeleidAanvraag> FindAllAanvragenFrom(Begeleider begeleider)
+        {
+            return FindAllAanvragen().Where(sba => sba.Begeleider.Id == begeleider.Id);
+        }
+
         public void SaveChanges()
         {
             try
@@ -138,6 +178,5 @@ namespace StageBeheersTool.Models.DAL
                 throw new ApplicationException("" + message);
             }
         }
-
     }
 }

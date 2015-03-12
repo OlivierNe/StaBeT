@@ -30,7 +30,7 @@
                     else if (User.IsInRole("student"))
                     {
                         <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
-                        <li>@Html.ActionLink("Mijn voorkeurstages", "MijnVoorkeurStages", "Stageopdracht")</li>
+                        <li>@Html.ActionLink("voorkeurstages", "MijnVoorkeurStages", "Stageopdracht")</li>
                     }
                     else if (User.IsInRole("admin"))
                     {
@@ -42,6 +42,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                                 <li>@Html.ActionLink("stageopdracht voorstellen", "Voorstellen", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
+                                <li>@Html.ActionLink("begeleider aanvragen", "aanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
                             </ul>
                         </li>
                     }
@@ -55,7 +56,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                                 <li>@Html.ActionLink("Goedgekeurde stages", "GoedgekeurdeStages", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
-                                <li>@Html.ActionLink("Mijn voorkeurstages", "MijnVoorkeurStages", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                                <li>@Html.ActionLink("Aanvragen begeleider", "AanvragenBegeleider", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                             </ul>
                         </li>
                     }

@@ -10,6 +10,7 @@ using AutoMapper;
 using System.Net;
 using System.IO;
 using StageBeheersTool.Models.Services;
+using PagedList;
 
 namespace StageBeheersTool.Controllers
 {
@@ -31,10 +32,33 @@ namespace StageBeheersTool.Controllers
             this.userService = userService;
         }
 
-        [Authorize(Roles = "student")]
-        public ActionResult Details()
+        [Authorize(Roles = "admin, begeleider")]
+        public ActionResult Index(int page = 1)
         {
-            var student = studentRepository.FindByEmail(User.Identity.Name);
+            var studenten = studentRepository.FindAll();
+            return View(studenten.ToPagedList(page, 10));
+        }
+
+        [Authorize(Roles="admin, begeleider")]
+        public ActionResult LijstStudentenMetGoedgekeurdeStageopdrachtEnBegeleider(){
+            var studenten = studentRepository.FindStudentenMetStageopdrachtEnBegeleider();
+            return View(studenten);
+        }
+
+        [Authorize(Roles = "admin, begeleider, student")]
+        public ActionResult Details(int? id)
+        {
+            Student student = null;
+            if (userService.IsStudent())
+            {
+                student = studentRepository.FindByEmail(User.Identity.Name);
+                return View(student);
+            }
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+            student = studentRepository.FindById((int)id);
             return View(student);
         }
 

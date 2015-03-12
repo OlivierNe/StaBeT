@@ -20,7 +20,8 @@ $(function () {
 
     var ajaxDone = function (data) {
         $("#grid-tableDiv").html(data);
-        history.pushState({ url: this.url }, "", this.url);
+        var ajaxUrl = this.url + "&a=1";
+        history.pushState({ url: ajaxUrl }, "", ajaxUrl);
         registerListener();
     };
 
@@ -47,14 +48,18 @@ $(function () {
         });
     }
     registerListener();
+
     $(window).on("popstate", function (e) {
-        $.ajax({
-            method: "get", url: history.state.url,
-            headers: { "X-Requested-With": "XMLHttpRequest" }
-        }).done(function (data) {
-            $("#grid-tableDiv").html(data);
-            registerListener();
-        });
+        if (e.originalEvent.state !== null) {
+            $.ajax({
+                method: "get", url: history.state.url,
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                cache: false
+            }).done(function (data) {
+                $("#grid-tableDiv").html(data);
+                registerListener();
+            });
+        }
     });
 
 });

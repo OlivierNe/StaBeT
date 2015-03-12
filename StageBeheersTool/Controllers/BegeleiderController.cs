@@ -15,23 +15,37 @@ namespace StageBeheersTool.Controllers
     {
         private IBegeleiderRepository begeleiderRepository;
         private IImageService imageService;
+        private IUserService userService;
 
-        public BegeleiderController(IBegeleiderRepository begeleiderRepository, IImageService imageService)
+        public BegeleiderController(IBegeleiderRepository begeleiderRepository, IImageService imageService,
+            IUserService userservice)
         {
             this.begeleiderRepository = begeleiderRepository;
             this.imageService = imageService;
+            this.userService = userservice;
         }
 
-        public ActionResult Details()
+        [Authorize(Roles = "begeleider, admin")]
+        public ActionResult Details(int? id)
         {
-            var begeleider = CurrentBegeleider();
-            return View(begeleider);
+            Begeleider begeleider = null;
+            if (id == null)
+            {
+                begeleider = userService.FindBegeleider();
+                return View(new BegeleiderDetailsVM() { Begeleider = begeleider, ToonEdit = true });
+            }
+            begeleider = begeleiderRepository.FindById((int)id);
+            if (begeleider == null)
+            {
+                return HttpNotFound();
+            }
+            return View(new BegeleiderDetailsVM() { Begeleider = begeleider });
         }
 
         [Authorize(Roles = "begeleider")]
         public ActionResult Edit()
         {
-            var begeleider = CurrentBegeleider();
+            var begeleider = userService.FindBegeleider();
             var model = Mapper.Map<BegeleiderEditVM>(begeleider);
             return View(model);
         }
@@ -41,7 +55,7 @@ namespace StageBeheersTool.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(BegeleiderEditVM model, HttpPostedFileBase fotoFile)
         {
-            var begeleider = CurrentBegeleider();
+            var begeleider = userService.FindBegeleider();
             if (imageService.IsValidImage(fotoFile))
             {
                 if (imageService.HasValidSize(fotoFile))
@@ -60,13 +74,6 @@ namespace StageBeheersTool.Controllers
             TempData["message"] = "Gegevens gewijzigd.";
             return RedirectToAction("Details");
         }
-
-        #region Helpers
-        private Begeleider CurrentBegeleider()
-        {
-            return begeleiderRepository.FindByEmail(User.Identity.Name);
-        }
-        #endregion
 
     }
 }

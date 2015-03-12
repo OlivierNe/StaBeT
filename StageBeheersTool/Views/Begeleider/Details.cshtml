@@ -1,4 +1,4 @@
-﻿@model Begeleider
+﻿@model BegeleiderDetailsVM
 
 @{
     ViewBag.Title = "Details";
@@ -13,47 +13,50 @@
     <h4>Begeleider</h4>
     <hr />
     <div class="row">
-        <img class="col-sm-push-1 col-xs-2 img-responsive" src="@Url.Content(Model.FotoUrl)" />
+        <img class="col-sm-push-1 col-xs-2 img-responsive" src="@Url.Content(Model.Begeleider.FotoUrl)" />
     </div>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Naam)
+            @Html.DisplayNameFor(model => model.Begeleider.Naam)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Naam)
+            @Html.DisplayFor(model => model.Begeleider.Naam)
         </dd>
         <dt>
             Hogent E-mail
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.HogentEmail)
+            @Html.DisplayFor(model => model.Begeleider.HogentEmail)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.Begeleider.Email)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.Begeleider.Email)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Gsmnummer)
+            @Html.DisplayNameFor(model => model.Begeleider.Gsmnummer)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Gsmnummer)
+            @Html.DisplayFor(model => model.Begeleider.Gsmnummer)
         </dd>
         <dt>
             Adres
         </dt>
         <dd>
-            @Model.Gemeente @Model.Postcode
+            @Model.Begeleider.Gemeente @Model.Begeleider.Postcode
         </dd>
-        <dd>@Model.Straat @Model.Straatnummer</dd>
+        <dd>@Model.Begeleider.Straat @Model.Begeleider.Straatnummer</dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Gegevens wijzigen", "Edit")
+    @if (Model.ToonEdit)
+    {
+        @Html.ActionLink("Gegevens wijzigen", "Edit")
+    }
 </p>

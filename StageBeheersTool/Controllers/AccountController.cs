@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -16,6 +15,7 @@ using AutoMapper;
 using System.Web.Security;
 using Newtonsoft.Json;
 using StageBeheersTool.Models.Authentication;
+using System.Collections.Generic;
 
 namespace StageBeheersTool.Controllers
 {
@@ -77,6 +77,8 @@ namespace StageBeheersTool.Controllers
                     Student student = new Student() { HogentEmail = model.Email };
                     userService.CreateUser<Student>(student);
                     userService.SaveChanges();
+                    await SignInManager.SignInAsync(user, model.RememberMe, false);
+                    return RedirectToAction("Edit", "Student");
                 }
                 await SignInManager.SignInAsync(user, model.RememberMe, false);
                 return RedirectToAction("Index", "Stageopdracht");
@@ -86,7 +88,7 @@ namespace StageBeheersTool.Controllers
                 //TODO: service aanspreken:
                 //https://webservice.hogent.be/ldap/ldap.wsdl
                 //TODO: if( geldig hogent account + wachtwoord)...
-                
+
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null)
                 {
@@ -96,6 +98,8 @@ namespace StageBeheersTool.Controllers
                     Begeleider begeleider = new Begeleider() { HogentEmail = model.Email };
                     userService.CreateUser<Begeleider>(begeleider);
                     userService.SaveChanges();
+                    await SignInManager.SignInAsync(user, model.RememberMe, false);
+                    return RedirectToAction("Edit", "Begeleider");
                 }
                 await SignInManager.SignInAsync(user, model.RememberMe, false);
                 return RedirectToAction("Index", "Stageopdracht");
@@ -196,10 +200,15 @@ namespace StageBeheersTool.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-        // GET: /Manage/ChangePassword
+        // GET: /Manage/ChangePassword 
+        [Authorize]
         public ActionResult ChangePassword()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
+            if (UserManager.IsInBedrijfRoleOfGeenRole(user.Id))
+            {
+                return new HttpStatusCodeResult(403);
+            }
             return View(new ChangePasswordViewModel() { FirstLogin = !user.EmailConfirmed });
         }
 
@@ -209,11 +218,15 @@ namespace StageBeheersTool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (UserManager.IsInBedrijfRoleOfGeenRole(user.Id))
+            {
+                return new HttpStatusCodeResult(403);
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             IdentityResult result = null;
             if (!user.EmailConfirmed)
             {

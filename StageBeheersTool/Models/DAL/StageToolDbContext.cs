@@ -34,6 +34,7 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new ContactpersoonMapper());
             modelBuilder.Configurations.Add(new StudentMapper());
             modelBuilder.Configurations.Add(new BegeleiderMapper());
+            modelBuilder.Configurations.Add(new StageBegeleidAanvraagMapper());
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
@@ -51,11 +52,13 @@ namespace StageBeheersTool.Models.DAL
         public DbSet<Contactpersoon> Contactpersonen { get; set; }
         public DbSet<Begeleider> Begeleiders { get; set; }
         public DbSet<Student> Studenten { get; set; }
+        public DbSet<StageBegeleidAanvraag> StageBegeleidAanvragen { get; set; }
 
         public static StageToolDbContext Create()
         {
             return DependencyResolver.Current.GetService(typeof(StageToolDbContext)) as StageToolDbContext;
         }
+
     }
 
 }

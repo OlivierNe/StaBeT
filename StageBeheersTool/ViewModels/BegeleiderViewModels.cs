@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.ViewModels
 {
@@ -25,7 +26,12 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "Nummer")]
         public string Straatnummer { get; set; }
         public string FotoUrl { get; set; }
+    }
 
 
+    public class BegeleiderDetailsVM
+    {
+        public Begeleider Begeleider { get; set; }
+        public bool ToonEdit { get; set; }
     }
 }

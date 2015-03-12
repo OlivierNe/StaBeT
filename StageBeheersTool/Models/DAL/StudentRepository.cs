@@ -37,7 +37,15 @@ namespace StageBeheersTool.Models.DAL
 
         public IQueryable<Student> FindAll()
         {
-            return studenten;
+            return studenten.OrderBy(student => student.Familienaam).OrderBy(student => student.Voornaam);
+        }
+
+        public IQueryable<Student> FindStudentenMetStageopdrachtEnBegeleider()
+        {
+            return FindAll().Include(student => student.Stageopdracht)
+                .Where(student => student.Stageopdracht != null &&
+                    student.Stageopdracht.Status == StageopdrachtStatus.Goedgekeurd &&
+                    student.Stageopdracht.Stagebegeleider != null);
         }
 
         public void Update(Student student, Student model)
@@ -79,5 +87,6 @@ namespace StageBeheersTool.Models.DAL
                 throw new ApplicationException("" + message);
             }
         }
+
     }
 }

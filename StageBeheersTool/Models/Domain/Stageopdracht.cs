@@ -47,6 +47,27 @@ namespace StageBeheersTool.Models.Domain
             }
         }
 
+        public string ToonStudenten
+        {
+            get
+            {
+                var retVal = "";
+                if (Studenten.Count == 0)
+                {
+                    return "";
+                }
+                var studenten = Studenten.ToList();
+                int i = 0;
+                while (i < (studenten.Count - 1))
+                {
+                    retVal += studenten[i].Naam + ", ";
+                    i++;
+                }
+                retVal += studenten[i].Naam;
+                return retVal;
+            }
+        }
+
         public bool Semester1 { get; set; }
         public bool Semester2 { get; set; }
         public int AantalStudenten { get; set; }
@@ -98,6 +119,11 @@ namespace StageBeheersTool.Models.Domain
         public bool IsVolledigIngenomen()
         {
             return AantalToegewezenStudenten == AantalStudenten;
+        }
+
+        public bool HeeftStageBegeleider()
+        {
+            return Stagebegeleider != null;
         }
         #endregion
 

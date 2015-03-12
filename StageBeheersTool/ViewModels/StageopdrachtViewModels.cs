@@ -37,8 +37,6 @@ namespace StageBeheersTool.ViewModels
             SpecialisatieList = new SelectList(specialisaties, "Id", "Naam", SpecialisatieId == null ? "" : SpecialisatieId.ToString());
             AantalStudentenList = new SelectList(new string[] { "1", "2", "3" }, AantalStudenten == null ? "" : AantalStudenten.ToString());
             SemesterList = new SelectList(new string[] { "1", "2" }, Semester == null ? "" : Semester.ToString());
-            ToonSearchForm = true;
-            ToonZoekenOpStudent = false;
         }
     }
 
@@ -50,10 +48,10 @@ namespace StageBeheersTool.ViewModels
         public bool ToonEdit { get; set; }
         public StageopdrachtDetailsVM()
         {
-            ToonEdit = false;
-            ToonVerwijderenBtn = false;
-            ToonToevoegen = false;
         }
+
+        public bool ToonAanvraagIndienen { get; set; }
+        public bool ToonAanvraagAnnuleren { get; set; }
     }
 
     public class StageopdrachtCreateVM : IValidatableObject

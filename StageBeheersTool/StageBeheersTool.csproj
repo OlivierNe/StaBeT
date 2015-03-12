@@ -208,9 +208,13 @@
     <Compile Include="Models\Authentication\ApplicationUser.cs" />
     <Compile Include="Models\Authentication\ApplicationUserManager.cs" />
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
+    <Compile Include="Models\DAL\Mapping\StageBegeleidAanvraagMapper.cs" />
+    <Compile Include="Models\Domain\Admin.cs" />
+    <Compile Include="Models\Domain\BegeleidAanvraagStatus.cs" />
     <Compile Include="Models\Domain\HoGentPersoon.cs" />
     <Compile Include="Models\Domain\IContactpersoonRepository.cs" />
     <Compile Include="Models\Domain\IImageService.cs" />
+    <Compile Include="Models\Domain\StageBegeleidAanvraag.cs" />
     <Compile Include="Models\Services\ImageService.cs" />
     <Compile Include="Models\Services\UserService.cs" />
     <Compile Include="Models\Domain\IUserService.cs" />
@@ -339,6 +343,8 @@
     <Content Include="Views\Begeleider\Details.cshtml" />
     <Content Include="Views\Begeleider\Edit.cshtml" />
     <Content Include="Views\Stageopdracht\Afkeuren.cshtml" />
+    <Content Include="Views\Student\Index.cshtml" />
+    <Content Include="Views\Stageopdracht\Aanvragen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

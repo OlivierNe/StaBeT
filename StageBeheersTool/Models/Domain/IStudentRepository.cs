@@ -11,8 +11,8 @@ namespace StageBeheersTool.Models.Domain
         Student FindByEmail(string hoGentEmail);
         Student FindById(int id);
         IQueryable<Student> FindAll();
+        IQueryable<Student> FindStudentenMetStageopdrachtEnBegeleider();
         void SaveChanges();
         void Update(Student student, Student model);
-
     }
 }

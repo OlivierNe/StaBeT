@@ -62,7 +62,7 @@
             @Html.DisplayNameFor(model => model.Stageopdracht.Contractondertekenaar)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Naam)  / @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Email)
+            @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Naam) / @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Email)
             / @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Gsmnummer)
         </dd>
         <dt>
@@ -72,8 +72,20 @@
             @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Naam) / @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Email)
             / @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Gsmnummer)
         </dd>
-        @if (User.IsInRole("admin"))
+        <dt>
+            @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)
+        </dt>
+        <dd>
+             @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
+        </dd>
+        @if (User.IsInRole("admin") || User.IsInRole("begeleider"))
         {
+            <dt>
+                @Html.DisplayNameFor(model => model.Stageopdracht.Studenten)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Stageopdracht.ToonStudenten) 
+            </dd>
             <dt>
                 Status
             </dt>
@@ -82,7 +94,6 @@
             </dd>
         }
     </dl>
-
 </div>
 <p>
     @Html.ActionLink("Terug naar overzicht", "Index")
@@ -106,6 +117,17 @@
         @Html.ActionLink("Verwijderen uit mijn voorkeurstages", "VerwijderenUitVoorkeur", "Stageopdracht",
             new { ids = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Verwijderen uit mijn voorkeurstages." })
     }
+    @if (Model.ToonAanvraagIndienen)
+    {
+        @Html.ActionLink("Deze stage begeleiden", "AanvraagIndienen", "Stageopdracht",
+            new { id = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Aanvraag om deze stage te begeleiden indienen" })
+    }
+    @if (Model.ToonAanvraagAnnuleren)
+    {
+        @Html.ActionLink("Aanvraag annuleren", "AanvraagAnnuleren", "Stageopdracht",
+            new { id = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Aanvraag om deze stage te begeleiden annuleren" })
+    }
+
     @if (User.IsInRole("admin"))
     {
         @Html.Raw("|")
