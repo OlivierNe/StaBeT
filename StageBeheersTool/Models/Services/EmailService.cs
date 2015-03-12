@@ -38,7 +38,7 @@ namespace StageBeheersTool.Models.Services
                 smtp.Port = int.Parse(ConfigurationManager.AppSettings["smtpPort"]);
                 try
                 {
-                  //  smtp.Send(mailMessage);
+                    smtp.Send(mailMessage);
                 }
                 catch (Exception)
                 {
