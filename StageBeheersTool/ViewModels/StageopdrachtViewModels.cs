@@ -46,6 +46,32 @@ namespace StageBeheersTool.ViewModels
         public bool ToonToevoegen { get; set; }
         public bool ToonVerwijderenBtn { get; set; }
         public bool ToonEdit { get; set; }
+        public string Stagementor
+        {
+            get
+            {
+                if (Stageopdracht.Stagementor == null)
+                {
+                    return "/";
+                }
+                return Stageopdracht.Stagementor.Naam + " / " +
+                    Stageopdracht.Stagementor.Email + " / " +
+                    Stageopdracht.Stagementor.Gsmnummer;
+            }
+        }
+        public string Contractondertekenaar
+        {
+            get
+            {
+                if (Stageopdracht.Contractondertekenaar == null)
+                {
+                    return "/";
+                }
+                return Stageopdracht.Contractondertekenaar.Naam + " / " + 
+                    Stageopdracht.Contractondertekenaar.Email + " / " + 
+                    Stageopdracht.Contractondertekenaar.Gsmnummer;
+            }
+        }
         public StageopdrachtDetailsVM()
         {
         }

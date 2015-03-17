@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using StageBeheersTool.Models.Authentication;
+using System.Threading.Tasks;
 
 
 namespace StageBeheersTool.Controllers
@@ -350,12 +351,12 @@ namespace StageBeheersTool.Controllers
 
         [Authorize(Roles = "admin")]
         [ActionName("Goedkeuren")]
-        public ActionResult StageopdrachtGoedkeuren(int id)
+        public async Task<ActionResult> StageopdrachtGoedkeuren(int id)
         {
             var stageopdracht = stageopdrachtRepository.FindById(id);
             Admin.KeurStageopdrachtGoed(stageopdracht);
             var emailService = Request.GetOwinContext().GetUserManager<ApplicationUserManager>().EmailService;
-            emailService.Send(new IdentityMessage()
+            await emailService.SendAsync(new IdentityMessage()
             {
                 Destination = stageopdracht.Bedrijf.Email,
                 Subject = "Stageopdracht goedgekeurd.",
@@ -379,14 +380,14 @@ namespace StageBeheersTool.Controllers
         [HttpPost]
         [ActionName("Afkeuren")]
         [ValidateAntiForgeryToken]
-        public ActionResult StageopdrachtAfkeurenConfirmed(StageopdrachtAfkeurenVM model)
+        public async Task<ActionResult> StageopdrachtAfkeurenConfirmed(StageopdrachtAfkeurenVM model)
         {
             if (ModelState.IsValid)
             {
                 var stageopdracht = stageopdrachtRepository.FindById(model.Id);
                 Admin.KeurStageopdrachtAf(stageopdracht);
                 var emailService = Request.GetOwinContext().GetUserManager<ApplicationUserManager>().EmailService;
-                emailService.Send(new IdentityMessage()
+                await emailService.SendAsync(new IdentityMessage()
                 {
                     Destination = stageopdracht.Bedrijf.Email,
                     Subject = model.Onderwerp,
