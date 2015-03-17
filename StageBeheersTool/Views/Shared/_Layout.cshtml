@@ -45,6 +45,9 @@
                                 <li>@Html.ActionLink("begeleider aanvragen", "aanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
                             </ul>
                         </li>
+                        <li>
+                            @Html.ActionLink("Instellingen academiejaar", "Index", "Academiejaar")
+                        </li>
                     }
                     else if (User.IsInRole("begeleider"))
                     {

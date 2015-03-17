@@ -11,8 +11,8 @@ var showRequired = function () {
 };
 
 $(function () {
-
     $("input[type='text'], input[type='email'], textarea").each(showRequired);
+    $('.datepicker').datepicker({ dateFormat: "dd/mm/yy" });
 
 });
 

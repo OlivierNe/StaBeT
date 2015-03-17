@@ -35,6 +35,7 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new StudentMapper());
             modelBuilder.Configurations.Add(new BegeleiderMapper());
             modelBuilder.Configurations.Add(new StageBegeleidAanvraagMapper());
+            modelBuilder.Configurations.Add(new AcademiejaarInstellingenMapper());
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
@@ -53,6 +54,7 @@ namespace StageBeheersTool.Models.DAL
         public DbSet<Begeleider> Begeleiders { get; set; }
         public DbSet<Student> Studenten { get; set; }
         public DbSet<StageBegeleidAanvraag> StageBegeleidAanvragen { get; set; }
+        public DbSet<AcademiejaarInstellingen> AcademiejarenInstellingen { get; set; }
 
         public static StageToolDbContext Create()
         {

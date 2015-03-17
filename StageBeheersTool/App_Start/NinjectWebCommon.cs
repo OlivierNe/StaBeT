@@ -74,6 +74,7 @@ namespace StageBeheersTool.App_Start
             kernel.Bind<IUserService>().To<UserService>().InRequestScope();
             kernel.Bind<IContactpersoonRepository>().To<ContactpersoonRepository>().InRequestScope();
             kernel.Bind<IImageService>().To<ImageService>().InRequestScope();
+            kernel.Bind<IAcademiejaarRepository>().To<AcademiejaarRepository>().InRequestScope();
             kernel.Bind<StageToolDbContext>().ToSelf().InRequestScope();
         }
     }

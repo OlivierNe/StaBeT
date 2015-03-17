@@ -1,0 +1,65 @@
+﻿@model AcademiejaarInstellingenVM
+
+@{
+    ViewBag.Title = "Instellingen Academiejaar " + Model.Academiejaar;
+}
+<h2>@ViewBag.Title</h2>
+<hr />
+@using (Html.BeginForm("Edit", "Academiejaar", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true, "Opslaan mislukt:", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Academiejaar)
+    <div class="form-group">
+        <label class="control-label col-md-3">begin/einde stageperiode semester 1</label>
+        <div class="form-inline">
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Semester1Begin)
+            </div>
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Semester1Einde)
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-3">begin/einde stageperiode semester 2</label>
+        <div class="form-inline">
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Semester2Begin)
+            </div>
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Semester2Einde)
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.DeadlineBedrijfStageEdit, new { @class = "control-label col-md-3" })
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.DeadlineBedrijfStageEdit)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-3 col-md-10">
+            <input type="submit" value="Opslaan" class="btn btn-default" />
+        </div>
+    </div>
+}
+<ul>
+    <li>
+        @Html.ActionLink("Overzicht instellingen alle academiejaren", "Lijst")
+    </li>
+    <li>
+        @Html.ActionLink("Instellingen aanmaken voor nieuw academiejaar", "Create")
+    </li>
+</ul>
+@section scripts{
+    <script src="~/Scripts/lib/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/stagetool-form.js"></script>
+    <script src="~/Scripts/lib/datepicker-nl-BE.js"></script>
+}
+@section styles{
+    @*@Styles.Render("~/Content/themes/base/css/datepicker")*@
+    <link href="~/Content/themes/base/core.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/datepicker.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/theme.css" rel="stylesheet" />
+}

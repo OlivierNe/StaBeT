@@ -1,0 +1,55 @@
+﻿@model IEnumerable<AcademiejaarInstellingenVM>
+
+@{
+    ViewBag.Title = "Lijst";
+}
+
+<h2>Instellingen Academiejaren</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Academiejaar)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Semester1Begin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Semester1Einde)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Semester2Begin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Semester2Einde)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DeadlineBedrijfStageEdit)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Academiejaar, "Create", "Academiejaar", new { item.Academiejaar }, new { })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester1Begin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester1Einde)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester2Begin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester2Einde)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeadlineBedrijfStageEdit)
+            </td>
+        </tr>
+    }
+</table>

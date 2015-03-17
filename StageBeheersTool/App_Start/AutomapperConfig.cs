@@ -28,6 +28,8 @@ namespace StageBeheersTool.App_Start
             Mapper.CreateMap<Begeleider, BegeleiderEditVM>();
             Mapper.CreateMap<BegeleiderEditVM, Begeleider>();
             Mapper.CreateMap<Stageopdracht, StageopdrachtAfkeurenVM>();
+            Mapper.CreateMap<AcademiejaarInstellingen, AcademiejaarInstellingenVM>();
+            Mapper.CreateMap<AcademiejaarInstellingenVM, AcademiejaarInstellingen>();
         }
     }
 }
