@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using System.Web.Services;
+using System.Xml;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -16,6 +20,7 @@ using System.Web.Security;
 using Newtonsoft.Json;
 using StageBeheersTool.Models.Authentication;
 using System.Collections.Generic;
+using StageBeheersTool.be.hogent.webservice;
 
 namespace StageBeheersTool.Controllers
 {
@@ -66,6 +71,7 @@ namespace StageBeheersTool.Controllers
             if (model.Email.EndsWith("@student.hogent.be")) //student
             {
                 //TODO: service aanspreken:
+                
                 //https://webservice.hogent.be/ldap/ldap.wsdl
                 //TODO: if( geldig hogent account + wachtwoord)...
                 var user = await UserManager.FindByNameAsync(model.Email);
@@ -85,24 +91,29 @@ namespace StageBeheersTool.Controllers
             }
             else if (model.Email.EndsWith("@hogent.be")) //begeleider of admin
             {
-                //TODO: service aanspreken:
+                var loginClient = new ldap_wrapService();
+                var resp = loginClient.authenticate(model.Email, model.Password);
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                dynamic dataUser = serializer.Deserialize<object>(resp);
                 //https://webservice.hogent.be/ldap/ldap.wsdl
                 //TODO: if( geldig hogent account + wachtwoord)...
-
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null)
+                if (dataUser["ACTIVE"] != 0)
                 {
-                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
-                    await UserManager.CreateAsync(user);
-                    await UserManager.AddToRoleAsync(user.Id, "begeleider");//of admin
-                    Begeleider begeleider = new Begeleider() { HogentEmail = model.Email };
-                    userService.CreateUser<Begeleider>(begeleider);
-                    userService.SaveChanges();
+                    var user = await UserManager.FindByNameAsync(model.Email);
+                    if (user == null)
+                    {
+                        user = new ApplicationUser {UserName = model.Email, Email = model.Email, EmailConfirmed = true};
+                        await UserManager.CreateAsync(user);
+                        await UserManager.AddToRoleAsync(user.Id, "begeleider"); //of admin
+                        Begeleider begeleider = new Begeleider() {HogentEmail = model.Email,Familienaam = dataUser["LASTNAME"], Voornaam = dataUser["FIRSTNAME"]};
+                        userService.CreateUser<Begeleider>(begeleider);
+                        userService.SaveChanges();
+                        await SignInManager.SignInAsync(user, model.RememberMe, false);
+                        return RedirectToAction("Edit", "Begeleider");
+                    }
                     await SignInManager.SignInAsync(user, model.RememberMe, false);
-                    return RedirectToAction("Edit", "Begeleider");
+                    return RedirectToAction("Index", "Stageopdracht");
                 }
-                await SignInManager.SignInAsync(user, model.RememberMe, false);
-                return RedirectToAction("Index", "Stageopdracht");
             }
             else if (model.Email.EndsWith("@admin.be"))//tijdelijk
             {

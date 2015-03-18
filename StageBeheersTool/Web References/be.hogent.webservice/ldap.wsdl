@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:intf="http://webservice.hogent.be/ldap/ldap.cfc" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://webservice.hogent.be/ldap/ldap.cfc" targetNamespace="http://webservice.hogent.be/ldap/ldap.cfc" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xml.apache.org/xml-soap">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:complexType name="mapItem">
+        <xsd:sequence>
+          <xsd:element name="key" nillable="true" type="xsd:anyType" />
+          <xsd:element name="value" nillable="true" type="xsd:anyType" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Map">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="item" type="apachesoap:mapItem" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="accountInfoResponse">
+    <wsdl:part name="accountInfoReturn" type="apachesoap:Map" />
+  </wsdl:message>
+  <wsdl:message name="getAttributesByBarcodeResponse">
+    <wsdl:part name="getAttributesByBarcodeReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="loginCheckRequest">
+    <wsdl:part name="account" type="xsd:string" />
+    <wsdl:part name="attributes" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="authenticateRequest">
+    <wsdl:part name="user" type="xsd:string" />
+    <wsdl:part name="passwd" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="loginCheckResponse">
+    <wsdl:part name="loginCheckReturn" type="apachesoap:Map" />
+  </wsdl:message>
+  <wsdl:message name="authenticateAUGentRequest">
+    <wsdl:part name="account" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="authenticateAUGentResponse">
+    <wsdl:part name="authenticateAUGentReturn" type="apachesoap:Map" />
+  </wsdl:message>
+  <wsdl:message name="authenticateResponse">
+    <wsdl:part name="authenticateReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="accountInfoRequest">
+    <wsdl:part name="hgIDencrypted" type="xsd:string" />
+    <wsdl:part name="userIDencrypted" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getAttributesByBarcodeRequest">
+    <wsdl:part name="barcode" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:portType name="ldap_wrap">
+    <wsdl:operation name="loginCheck" parameterOrder="account attributes">
+      <wsdl:input name="loginCheckRequest" message="impl:loginCheckRequest" />
+      <wsdl:output name="loginCheckResponse" message="impl:loginCheckResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="authenticateAUGent" parameterOrder="account">
+      <wsdl:input name="authenticateAUGentRequest" message="impl:authenticateAUGentRequest" />
+      <wsdl:output name="authenticateAUGentResponse" message="impl:authenticateAUGentResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getAttributesByBarcode" parameterOrder="barcode">
+      <wsdl:input name="getAttributesByBarcodeRequest" message="impl:getAttributesByBarcodeRequest" />
+      <wsdl:output name="getAttributesByBarcodeResponse" message="impl:getAttributesByBarcodeResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="accountInfo" parameterOrder="hgIDencrypted userIDencrypted">
+      <wsdl:input name="accountInfoRequest" message="impl:accountInfoRequest" />
+      <wsdl:output name="accountInfoResponse" message="impl:accountInfoResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="authenticate" parameterOrder="user passwd">
+      <wsdl:input name="authenticateRequest" message="impl:authenticateRequest" />
+      <wsdl:output name="authenticateResponse" message="impl:authenticateResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ldap.cfcSoapBinding" type="impl:ldap_wrap">
+    <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="loginCheck">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="loginCheckRequest">
+        <wsdlsoap:body use="encoded" namespace="http://ldap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="loginCheckResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.hogent.be/ldap/ldap.cfc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authenticateAUGent">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="authenticateAUGentRequest">
+        <wsdlsoap:body use="encoded" namespace="http://ldap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="authenticateAUGentResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.hogent.be/ldap/ldap.cfc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAttributesByBarcode">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getAttributesByBarcodeRequest">
+        <wsdlsoap:body use="encoded" namespace="http://ldap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getAttributesByBarcodeResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.hogent.be/ldap/ldap.cfc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="accountInfo">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="accountInfoRequest">
+        <wsdlsoap:body use="encoded" namespace="http://ldap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="accountInfoResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.hogent.be/ldap/ldap.cfc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authenticate">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="authenticateRequest">
+        <wsdlsoap:body use="encoded" namespace="http://ldap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="authenticateResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.hogent.be/ldap/ldap.cfc" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ldap_wrapService">
+    <wsdl:port name="ldap.cfc" binding="impl:ldap.cfcSoapBinding">
+      <wsdlsoap:address location="https://webservice.hogent.be/ldap/ldap.cfc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
