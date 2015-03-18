@@ -8,6 +8,12 @@ namespace StageBeheersTool
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     public class AuthorizeAttribute : System.Web.Mvc.AuthorizeAttribute
     {
+        public AuthorizeAttribute(params string[] roles)
+            : base()
+        {
+            Roles = string.Join(",", roles);
+        }
+
         protected override void HandleUnauthorizedRequest(System.Web.Mvc.AuthorizationContext filterContext)
         {
             if (filterContext.HttpContext.Request.IsAuthenticated)

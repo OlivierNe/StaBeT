@@ -127,6 +127,27 @@ namespace StageBeheersTool.Models.Domain
             return false;
         }
 
+        public bool MagWijzigen(Stageopdracht opdracht, DateTime? deadline)
+        {
+            if (opdracht == null)
+            {
+                return false;
+            }
+            if (deadline == null)
+            {
+                return true;
+            }
+            if (!opdracht.Academiejaar.Equals(Helpers.HuidigAcademiejaar()))
+            {
+                return false;
+            }
+            if (DateTime.Now.Date <= ((DateTime)deadline).Date)
+            {
+                return true;
+            }
+            return false;
+        }
+
         #endregion
 
 

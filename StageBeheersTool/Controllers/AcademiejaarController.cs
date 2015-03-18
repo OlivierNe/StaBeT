@@ -42,7 +42,8 @@ namespace StageBeheersTool.Controllers
             {
                 var academiejaarInstellingen = Mapper.Map<AcademiejaarInstellingen>(model);
                 academiejaarRepository.Update(academiejaarInstellingen);
-                return RedirectToAction("Index");
+                ViewBag.message = "Wijzigingen opgeslagen";
+                return View("Index", model);
             }
             return View("Index", model);
         }

@@ -22,17 +22,22 @@ namespace StageBeheersTool.Controllers
     {
         private ISpecialisatieRepository specialisatieRepository;
         private IStageopdrachtRepository stageopdrachtRepository;
+        private IAcademiejaarRepository academiejaarRepository;
         private IUserService userService;
 
         public StageopdrachtController(IStageopdrachtRepository stageopdrachtRepository,
-            ISpecialisatieRepository specialisatieRepository, IUserService userService)
+            ISpecialisatieRepository specialisatieRepository, IUserService userService,
+            IAcademiejaarRepository academiejaarRepository)
         {
             this.stageopdrachtRepository = stageopdrachtRepository;
             this.specialisatieRepository = specialisatieRepository;
+            this.academiejaarRepository = academiejaarRepository;
             this.userService = userService;
         }
 
-        [Authorize(Roles = "bedrijf,student,begeleider,admin")]
+        #region lijst stageopdrachten
+
+        [Authorize(Role.student, Role.Bedrijf, Role.Begeleider, Role.Admin)]
         public ActionResult Index(StageopdrachtIndexVM model)
         {
             IEnumerable<Stageopdracht> stageopdrachten = null;
@@ -59,7 +64,7 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "begeleider")]
+        [Authorize(Role.Begeleider)]
         public ActionResult GoedgekeurdeStages(StageopdrachtIndexVM model)
         {
             var stageopdrachten = stageopdrachtRepository.FindGoedgekeurdeStageopdrachtenByFilter(model.Semester, model.AantalStudenten,
@@ -74,7 +79,7 @@ namespace StageBeheersTool.Controllers
             return View("Index", model);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Role.Admin)]
         [ActionName("Voorstellen")]
         public ActionResult VoorstellenVanBedrijven(StageopdrachtIndexVM model)
         {
@@ -88,7 +93,10 @@ namespace StageBeheersTool.Controllers
             return View("Index", model);
         }
 
-        [Authorize(Roles = "bedrijf")]
+        #endregion
+
+        #region create
+        [Authorize(Role.Bedrijf)]
         public ActionResult Create(bool isStagementor = false, bool isContractOndertekenaar = false)
         {
             if (Request.IsAjaxRequest())
@@ -107,15 +115,17 @@ namespace StageBeheersTool.Controllers
             var stagementors = bedrijf.FindAllStagementors();
             var model = new StageopdrachtCreateVM(specialisatieRepository.FindAll(),
                 bedrijf.FindAllContractOndertekenaars(), bedrijf.FindAllStagementors());
-            model.setAdres(bedrijf.Gemeente, bedrijf.Postcode, bedrijf.Straat, bedrijf.Straatnummer);
-
+            model.SetAdres(bedrijf.Gemeente, bedrijf.Postcode, bedrijf.Straat, bedrijf.Straatnummer);
+            var academiejaarInstellingen = academiejaarRepository.FindByHuidigAcademiejaar();
+            model.StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
+            model.StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
             return View(model);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult Create(StageopdrachtCreateVM model)
         {
             var bedrijf = userService.FindBedrijf();
@@ -128,7 +138,6 @@ namespace StageBeheersTool.Controllers
                 {
                     stageopdracht.Stagementor = model.StagementorId != null ? bedrijf.FindContactpersoonById((int)model.StagementorId) : null;
                 }
-
                 if (model.StagementorId == -1)
                 {
                     stageopdracht.Stagementor = stageopdracht.Contractondertekenaar;
@@ -151,7 +160,6 @@ namespace StageBeheersTool.Controllers
                 {
                     bedrijf.AddContactpersoon(stageopdracht.Contractondertekenaar);
                 }
-
                 bedrijf.AddStageopdracht(stageopdracht);
                 userService.SaveChanges();
                 TempData["message"] = "Stageopdracht succesvol aangemaakt.";
@@ -159,18 +167,31 @@ namespace StageBeheersTool.Controllers
             }
             model.SetSelectLists(specialisatieRepository.FindAll(), bedrijf.FindAllContractOndertekenaars(),
                 bedrijf.FindAllStagementors());
+            var academiejaarInstellingen = academiejaarRepository.FindByHuidigAcademiejaar();
+            model.StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
+            model.StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
             return View(model);
         }
+        #endregion
 
-        [Authorize(Roles = "bedrijf,student,admin,begeleider")]
+        #region details
+        [Authorize(Role.student, Role.Admin, Role.Begeleider, Role.Bedrijf)]
         public ActionResult Details(int id)
         {
             var model = new StageopdrachtDetailsVM();
+            AcademiejaarInstellingen academiejaarInstellingen;
             if (userService.IsBedrijf())
             {
                 var bedrijf = userService.FindBedrijf();
-                model.Stageopdracht = bedrijf.FindStageopdrachtById(id);
-                model.ToonEdit = true;
+                var stageopdracht = bedrijf.FindStageopdrachtById(id);
+                academiejaarInstellingen = academiejaarRepository.FindByAcademiejaar(stageopdracht.Academiejaar);
+                model.ToonEdit = bedrijf.MagWijzigen(model.Stageopdracht, academiejaarInstellingen.DeadlineBedrijfStageEdit);
+                model.EditDeadline = academiejaarInstellingen.DeadlineBedrijfStageEditToString();
+                if (stageopdracht == null)
+                {
+                    return HttpNotFound();
+                }
+                model.Stageopdracht = stageopdracht;
             }
             else if (userService.IsStudent())
             {
@@ -183,30 +204,37 @@ namespace StageBeheersTool.Controllers
             {
                 var begeleider = userService.FindBegeleider();
                 var stageopdracht = stageopdrachtRepository.FindById(id);
-                model.Stageopdracht = stageopdracht;
-                model.ToonAanvraagIndienen = model.Stageopdracht.IsGoedgekeurd()
+                if (stageopdracht == null)
+                {
+                    return HttpNotFound();
+                }
+                model.ToonAanvraagIndienen = stageopdracht.IsGoedgekeurd()
                     && !model.Stageopdracht.HeeftStageBegeleider() && !begeleider.HeeftStageBegeleidingAangevraagd(id);
-                model.ToonAanvraagAnnuleren = model.Stageopdracht.IsGoedgekeurd() && !stageopdracht.HeeftStageBegeleider() &&
+                model.ToonAanvraagAnnuleren = stageopdracht.IsGoedgekeurd() && !stageopdracht.HeeftStageBegeleider() &&
                     begeleider.HeeftStageBegeleidingAangevraagd(stageopdracht.Id);
                 if (stageopdracht.Stagebegeleider != null && begeleider.Id == stageopdracht.Stagebegeleider.Id)
                 {
                     model.ToonEdit = true;
                 }
+                model.Stageopdracht = stageopdracht;
             }
             else
             {
                 model.Stageopdracht = stageopdrachtRepository.FindById(id);
             }
-
             if (model.Stageopdracht == null)
             {
                 return HttpNotFound();
             }
+            academiejaarInstellingen = academiejaarRepository.FindByAcademiejaar(model.Stageopdracht.Academiejaar);
+            model.StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
+            model.StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
             return View(model);
         }
+        #endregion
 
-
-        [Authorize(Roles = "bedrijf,begeleider")]
+        #region edit
+        [Authorize(Role.Bedrijf, Role.Begeleider)]
         public ActionResult Edit(int id)
         {
             Stageopdracht stageopdracht = null;
@@ -215,16 +243,25 @@ namespace StageBeheersTool.Controllers
             {
                 var begeleider = userService.FindBegeleider();
                 stageopdracht = begeleider.FindStage(id);
+                if (stageopdracht == null)
+                {
+                    return HttpNotFound();
+                }
                 bedrijf = stageopdracht.Bedrijf;
             }
             else if (userService.IsBedrijf())
             {
                 bedrijf = userService.FindBedrijf();
                 stageopdracht = bedrijf.FindStageopdrachtById(id);
-            }
-            if (stageopdracht == null)
-            {
-                return HttpNotFound();
+                if (stageopdracht == null)
+                {
+                    return HttpNotFound();
+                }
+                var deadline = academiejaarRepository.FindByAcademiejaar(stageopdracht.Academiejaar).DeadlineBedrijfStageEdit;
+                if (bedrijf.MagWijzigen(stageopdracht, deadline) == false)
+                {
+                    return new HttpStatusCodeResult(403);
+                }
             }
             var model = Mapper.Map<Stageopdracht, StageopdrachtEditVM>(stageopdracht);
             model.SpecialisatieId = stageopdracht.Specialisatie == null ? null : (int?)stageopdracht.Specialisatie.Id;
@@ -238,7 +275,7 @@ namespace StageBeheersTool.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "bedrijf, begeleider")]
+        [Authorize(Role.Bedrijf, Role.Begeleider)]
         public ActionResult Edit(StageopdrachtEditVM model)
         {
             Bedrijf bedrijf = null;
@@ -270,8 +307,10 @@ namespace StageBeheersTool.Controllers
                 bedrijf.FindAllStagementors());
             return View(model);
         }
+#endregion
 
-        [Authorize(Roles = "bedrijf")]
+        #region stageopdracht verwijderen
+        [Authorize(Role.Bedrijf)]
         public ActionResult Delete(int id)
         {
             var bedrijf = userService.FindBedrijf();
@@ -286,7 +325,7 @@ namespace StageBeheersTool.Controllers
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult DeleteConfirmed(int id)
         {
             var bedrijf = userService.FindBedrijf();
@@ -305,8 +344,10 @@ namespace StageBeheersTool.Controllers
             TempData["message"] = "Stageopdracht '" + stageopdracht.Titel + "' succesvol verwijderd.";
             return RedirectToAction("Index");
         }
+        #endregion
 
-        [Authorize(Roles = "student")]
+        #region student voorkeurstages
+        [Authorize(Role.student)]
         public ActionResult ToevoegenAanVoorkeur(int id)
         {
             var stageopdracht = stageopdrachtRepository.FindGeldigeStageopdrachtById(id);
@@ -321,7 +362,7 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("MijnVoorkeurStages");
         }
 
-        [Authorize(Roles = "student")]
+        [Authorize(Role.student)]
         public ActionResult VerwijderenUitVoorkeur(int[] ids)
         {
             var stageopdracht = stageopdrachtRepository.FindById(ids[0]);
@@ -335,7 +376,7 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("MijnVoorkeurStages");
         }
 
-        [Authorize(Roles = "student")]
+        [Authorize(Role.student)]
         public ActionResult MijnVoorkeurStages()
         {
             IEnumerable<Stageopdracht> stageopdrachten = null;
@@ -348,8 +389,10 @@ namespace StageBeheersTool.Controllers
             }
             return View("Index", model);
         }
+        #endregion
 
-        [Authorize(Roles = "admin")]
+        #region stageopdracht beoordelen
+        [Authorize(Role.Admin)]
         [ActionName("Goedkeuren")]
         public async Task<ActionResult> StageopdrachtGoedkeuren(int id)
         {
@@ -366,7 +409,7 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("Voorstellen");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Role.Admin)]
         [ActionName("Afkeuren")]
         public ActionResult StageopdrachtAfkeuren(int id)
         {
@@ -379,6 +422,7 @@ namespace StageBeheersTool.Controllers
 
         [HttpPost]
         [ActionName("Afkeuren")]
+        [Authorize(Role.Admin)]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> StageopdrachtAfkeurenConfirmed(StageopdrachtAfkeurenVM model)
         {
@@ -398,8 +442,10 @@ namespace StageBeheersTool.Controllers
             }
             return View("Afkeuren", model);
         }
+        #endregion
 
-        [Authorize(Roles = "begeleider")]
+        #region begeleider voorkeuren
+        [Authorize(Role.Begeleider)]
         public ActionResult AanvraagIndienen(int id)
         {
             var stageopdracht = stageopdrachtRepository.FindById(id);
@@ -413,7 +459,7 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("Details", new { id = id });
         }
 
-        [Authorize(Roles = "begeleider")]
+        [Authorize(Role.Begeleider)]
         public ActionResult AanvraagAnnuleren(int id)
         {
             var stageopdracht = stageopdrachtRepository.FindById(id);
@@ -431,7 +477,7 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("Details", new { id = id });
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Role.Admin)]
         [ActionName("Aanvragen")]
         public ActionResult StageBegeleiderAanvragen()
         {
@@ -439,7 +485,7 @@ namespace StageBeheersTool.Controllers
             return View(aanvragen);
         }
 
-        [Authorize(Roles = "begeleider")]
+        [Authorize(Role.Begeleider)]
         public ActionResult AanvragenBegeleider()
         {
             var begeleider = userService.FindBegeleider();
@@ -447,8 +493,7 @@ namespace StageBeheersTool.Controllers
             return View("Aanvragen", aanvragen);
         }
 
-
-        [Authorize(Roles = "admin")]
+        [Authorize(Role.Admin)]
         public ActionResult AanvraagGoedkeuren(int id)
         {
             var aanvraag = stageopdrachtRepository.FindAanvraagById(id);
@@ -461,7 +506,7 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("Aanvragen");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Role.Admin)]
         public ActionResult AanvraagAfkeuren(int id)
         {
             var aanvraag = stageopdrachtRepository.FindAanvraagById(id);
@@ -473,8 +518,7 @@ namespace StageBeheersTool.Controllers
             stageopdrachtRepository.SaveChanges();
             return RedirectToAction("Aanvragen");
         }
-
-
+        #endregion
 
     }
 

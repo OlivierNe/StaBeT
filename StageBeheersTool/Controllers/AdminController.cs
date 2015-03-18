@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace StageBeheersTool.Controllers
 {
-    [Authorize(Roles="admin")]
+    [Authorize(Role.Admin)]
     public class AdminController : Controller
     {
         private ApplicationUserManager _userManager;

@@ -8,10 +8,11 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using System.Data.Entity.Infrastructure;
+using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.Controllers
 {
-    [Authorize(Roles = "bedrijf")]
+    [Authorize(Role.Bedrijf)]
     public class ContactpersoonController : Controller
     {
         private IUserService userService;
@@ -23,14 +24,14 @@ namespace StageBeheersTool.Controllers
             this.contactpersoonRepository = contactpersoonRepository;
         }
 
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult Index(int page = 1)
         {
             var contactPersonen = userService.FindBedrijf().Contactpersonen;
             return View(contactPersonen.ToPagedList(page, 10));
         }
 
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult Create()
         {
             return View();
@@ -38,7 +39,7 @@ namespace StageBeheersTool.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult Create(ContactpersoonCreateVM model)
         {
             if (ModelState.IsValid)
@@ -52,7 +53,7 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult Details(int id)
         {
             var contactpersoon = userService.FindBedrijf().FindContactpersoonById(id);
@@ -63,7 +64,7 @@ namespace StageBeheersTool.Controllers
             return View(contactpersoon);
         }
 
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult Edit(int id)
         {
             var contactpersoon = userService.FindBedrijf().FindContactpersoonById(id);
@@ -77,7 +78,7 @@ namespace StageBeheersTool.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult Edit(ContactpersoonEditVM model)
         {
             if (ModelState.IsValid)
@@ -91,7 +92,7 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult Delete(int id)
         {
             var bedrijf = userService.FindBedrijf();
@@ -106,7 +107,7 @@ namespace StageBeheersTool.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult DeleteConfirmed(int id)
         {
             var bedrijf = userService.FindBedrijf();

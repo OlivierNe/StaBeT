@@ -46,7 +46,7 @@ namespace StageBeheersTool.ViewModels
             {
                 errors.Add(new ValidationResult("Ongeldig Academiejaar(beginjaar-eindjaar)"));
             }
-            if (beginJaar < DateTime.Now.Year)
+            if (beginJaar < (DateTime.Now.Year-1))
             {
                 errors.Add(new ValidationResult("Academiejaar mag niet tot het verleden behoren."));
             }

@@ -11,6 +11,7 @@ using System.Net;
 using System.IO;
 using StageBeheersTool.Models.Services;
 using PagedList;
+using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.Controllers
 {
@@ -32,20 +33,20 @@ namespace StageBeheersTool.Controllers
             this.userService = userService;
         }
 
-        [Authorize(Roles = "admin, begeleider")]
+        [Authorize(Role.Admin, Role.Begeleider)]
         public ActionResult Index(int page = 1)
         {
             var studenten = studentRepository.FindAll();
             return View(studenten.ToPagedList(page, 10));
         }
 
-        [Authorize(Roles="admin, begeleider")]
+       [Authorize(Role.Admin, Role.Begeleider)]
         public ActionResult LijstStudentenMetGoedgekeurdeStageopdrachtEnBegeleider(){
             var studenten = studentRepository.FindStudentenMetStageopdrachtEnBegeleider();
             return View(studenten);
         }
 
-        [Authorize(Roles = "admin, begeleider, student")]
+        [Authorize(Role.Admin, Role.Begeleider, Role.student)]
         public ActionResult Details(int? id)
         {
             Student student = null;
@@ -62,7 +63,7 @@ namespace StageBeheersTool.Controllers
             return View(student);
         }
 
-        [Authorize(Roles = "student")]
+        [Authorize(Role.student)]
         [ActionName("Edit")]
         public ActionResult Edit()
         {
@@ -73,7 +74,7 @@ namespace StageBeheersTool.Controllers
             return View("Edit", model);
         }
 
-        [Authorize(Roles = "student")]
+        [Authorize(Role.student)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(StudentEditVM model, HttpPostedFileBase fotoFile)

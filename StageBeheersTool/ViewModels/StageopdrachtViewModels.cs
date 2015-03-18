@@ -43,9 +43,36 @@ namespace StageBeheersTool.ViewModels
     public class StageopdrachtDetailsVM
     {
         public Stageopdracht Stageopdracht { get; set; }
+        public string Semester
+        {
+            get
+            {
+                string semester = "";
+                if (Stageopdracht.Semester1)
+                {
+                    semester += "1 " + StageperiodeSem1;
+                }
+                if (Stageopdracht.Semester1 && Stageopdracht.Semester2)
+                {
+                    semester += "\n";
+                }
+                if (Stageopdracht.Semester2)
+                {
+                    semester += "2 " + StageperiodeSem2;
+                }
+
+                return semester;
+            }
+        }
+        public string StageperiodeSem1 { get; set; }
+        public string StageperiodeSem2 { get; set; }
+        public string EditDeadline { get; set; }
+
         public bool ToonToevoegen { get; set; }
         public bool ToonVerwijderenBtn { get; set; }
         public bool ToonEdit { get; set; }
+        public bool ToonAanvraagIndienen { get; set; }
+        public bool ToonAanvraagAnnuleren { get; set; }
         public string Stagementor
         {
             get
@@ -67,17 +94,11 @@ namespace StageBeheersTool.ViewModels
                 {
                     return "/";
                 }
-                return Stageopdracht.Contractondertekenaar.Naam + " / " + 
-                    Stageopdracht.Contractondertekenaar.Email + " / " + 
+                return Stageopdracht.Contractondertekenaar.Naam + " / " +
+                    Stageopdracht.Contractondertekenaar.Email + " / " +
                     Stageopdracht.Contractondertekenaar.Gsmnummer;
             }
         }
-        public StageopdrachtDetailsVM()
-        {
-        }
-
-        public bool ToonAanvraagIndienen { get; set; }
-        public bool ToonAanvraagAnnuleren { get; set; }
     }
 
     public class StageopdrachtCreateVM : IValidatableObject
@@ -101,6 +122,8 @@ namespace StageBeheersTool.ViewModels
         public int? SpecialisatieId { get; set; }
         public bool Semester1 { get; set; }
         public bool Semester2 { get; set; }
+        public string StageperiodeSem1 { get; set; }
+        public string StageperiodeSem2 { get; set; }
         [Range(1, 3)]
         [Display(Name = "Aantal Studenten")]
         public int AantalStudenten { get; set; }
@@ -167,15 +190,15 @@ namespace StageBeheersTool.ViewModels
             return errors;
         }
 
-        public void setAdres(string gemeente, string postcode, string straat, string nummer)
+        public void SetAdres(string gemeente, string postcode, string straat, string nummer)
         {
             this.Gemeente = gemeente;
             this.Postcode = postcode;
             this.Straat = straat;
             this.Straatnummer = nummer;
         }
-        #endregion
 
+        #endregion
     }
 
     public class StageopdrachtEditVM : StageopdrachtCreateVM, IValidatableObject

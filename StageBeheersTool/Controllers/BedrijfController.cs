@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
 using System;
@@ -9,7 +10,7 @@ using System.Web.Mvc;
 
 namespace StageBeheersTool.Controllers
 {
-    [Authorize(Roles = "bedrijf")]
+    [Authorize(Role.Bedrijf)]
     public class BedrijfController : Controller
     {
         private IBedrijfRepository bedrijfRepository;
@@ -22,21 +23,21 @@ namespace StageBeheersTool.Controllers
             this.userService = userService;
         }
 
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult Details()
         {
             var bedrijf = userService.FindBedrijf();
             return View(bedrijf);
         }
 
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         public ActionResult Edit()
         {
             var bedrijf = userService.FindBedrijf();
             return View(Mapper.Map<EditBedrijfVM>(bedrijf));
         }
 
-        [Authorize(Roles = "bedrijf")]
+        [Authorize(Role.Bedrijf)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(EditBedrijfVM model)

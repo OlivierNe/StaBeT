@@ -2,4 +2,4 @@
 @{
   string modelDate = (Model == null) ? (string)null : Model.Value.Date.ToString("dd/MM/yyyy");
 }
-@Html.TextBox("", modelDate, new{@class="datepicker form-control"})
+@Html.TextBox("", modelDate, new{@class="datepicker form-control", autocomplete="off"})

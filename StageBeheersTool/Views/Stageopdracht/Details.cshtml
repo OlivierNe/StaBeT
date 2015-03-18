@@ -32,9 +32,7 @@
             @Html.DisplayNameFor(model => model.Stageopdracht.Semester)
         </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Semester)
-        </dd>
+        <dd style="white-space: pre-line">@Html.DisplayFor(model => model.Semester)</dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Stageopdracht.AantalStudenten)
@@ -74,7 +72,7 @@
             @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)
         </dt>
         <dd>
-             @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
+            @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
         </dd>
         @if (User.IsInRole("admin") || User.IsInRole("begeleider"))
         {
@@ -82,7 +80,7 @@
                 @Html.DisplayNameFor(model => model.Stageopdracht.Studenten)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Stageopdracht.ToonStudenten) 
+                @Html.DisplayFor(model => model.Stageopdracht.ToonStudenten)
             </dd>
             <dt>
                 Status
@@ -93,6 +91,13 @@
         }
     </dl>
 </div>
+@if (Model.ToonEdit)
+{
+    <div class="text-warning">
+        @Model.EditDeadline
+    </div>
+}
+
 <p>
     @Html.ActionLink("Terug naar overzicht", "Index")
     @if (Model.ToonEdit)

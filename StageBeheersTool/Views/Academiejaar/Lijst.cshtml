@@ -33,8 +33,19 @@
     {
         <tr>
             <td>
-                @Html.ActionLink(item.Academiejaar, "Create", "Academiejaar", new { item.Academiejaar }, new { })
+                @{
+        var huidigAcademiejaar = StageBeheersTool.Helpers.HuidigAcademiejaar();
+                }
+                @if (int.Parse(item.Academiejaar.Substring(0, 4)) >= int.Parse(huidigAcademiejaar.Substring(0, 4)))
+                {
+                    @Html.ActionLink(item.Academiejaar, "Create", "Academiejaar", new { item.Academiejaar }, new { })
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Academiejaar)
+                }
             </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.Semester1Begin)
             </td>

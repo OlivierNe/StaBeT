@@ -210,6 +210,7 @@
     <Compile Include="Models\Authentication\ApplicationSignInManager.cs" />
     <Compile Include="Models\Authentication\ApplicationUser.cs" />
     <Compile Include="Models\Authentication\ApplicationUserManager.cs" />
+    <Compile Include="Models\Authentication\Role.cs" />
     <Compile Include="Models\DAL\AcademiejaarRepository.cs" />
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
     <Compile Include="Models\DAL\Mapping\AcademiejaarInstellingenMapper.cs" />
@@ -315,6 +316,7 @@
     <Content Include="Images\foto-5.jpg" />
     <Content Include="Images\foto-6.jpg" />
     <Content Include="Images\profiel.jpg" />
+    <Content Include="Scripts\academiejaarInstellingen.js" />
     <Content Include="Scripts\createStageForm.js" />
     <None Include="Scripts\lib\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\lib\datepicker-nl-BE.js" />

@@ -4,8 +4,9 @@
     @Html.Grid(Model.Stageopdrachten).Columns(columns =>
 {
     columns.Add(so => so.Titel).Titled("Titel")
-        .Encoded(false).Sanitized(false)
-        .RenderValueAs(so => Html.ActionLink(so.Titel, "Details", new { id = so.Id }));
+    .Encoded(false).Sanitized(false)
+    .RenderValueAs(so => Html.ActionLink(so.Titel, "Details", new { id = so.Id }));
+
     columns.Add(so => so.ToonSpecialisatie).Titled("Specialisatie");
     columns.Add(so => so.Semester).Titled("Semester");
     columns.Add(so => so.Academiejaar);

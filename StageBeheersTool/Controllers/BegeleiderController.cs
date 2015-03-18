@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using System.IO;
+using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.Controllers
 {
@@ -25,7 +26,7 @@ namespace StageBeheersTool.Controllers
             this.userService = userservice;
         }
 
-        [Authorize(Roles = "begeleider, admin")]
+        [Authorize(Role.Begeleider, Role.Admin)]
         public ActionResult Details(int? id)
         {
             Begeleider begeleider = null;
@@ -42,7 +43,7 @@ namespace StageBeheersTool.Controllers
             return View(new BegeleiderDetailsVM() { Begeleider = begeleider });
         }
 
-        [Authorize(Roles = "begeleider")]
+        [Authorize(Role.Begeleider)]
         public ActionResult Edit()
         {
             var begeleider = userService.FindBegeleider();
@@ -50,7 +51,7 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "begeleider")]
+        [Authorize(Role.Begeleider)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(BegeleiderEditVM model, HttpPostedFileBase fotoFile)

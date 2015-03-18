@@ -5,7 +5,10 @@
 }
 <h2>@ViewBag.Title</h2>
 <hr />
-@using (Html.BeginForm("Edit", "Academiejaar", FormMethod.Post, new { @class = "form-horizontal" }))
+<div class="text-success">
+    @ViewBag.message
+</div>
+@using (Html.BeginForm("Index", "Academiejaar", FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.ValidationSummary(true, "Opslaan mislukt:", new { @class = "text-danger" })
     @Html.AntiForgeryToken()
@@ -54,8 +57,8 @@
 </ul>
 @section scripts{
     <script src="~/Scripts/lib/jquery-ui-1.11.4.min.js"></script>
-    <script src="~/Scripts/stagetool-form.js"></script>
     <script src="~/Scripts/lib/datepicker-nl-BE.js"></script>
+    <script src="~/Scripts/academiejaarInstellingen.js"></script>
 }
 @section styles{
     @*@Styles.Render("~/Content/themes/base/css/datepicker")*@
