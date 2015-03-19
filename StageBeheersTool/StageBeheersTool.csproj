@@ -414,15 +414,6 @@
     <Content Include="Views\Academiejaar\Lijst.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\NullableDateTime.cshtml" />
     <Content Include="Views\Academiejaar\Create.cshtml" />
-    <Content Include="Views\Bedrijf\Index.cshtml" />
-    <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
-    <Content Include="Web References\be.hogent.webservice\Map.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </Content>
-    <Content Include="Web References\be.hogent.webservice\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -438,20 +429,7 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferences Include="Web References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferenceUrl Include="https://webservice.hogent.be/ldap/ldap.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\be.hogent.webservice\</RelPath>
-      <UpdateFromURL>https://webservice.hogent.be/ldap/ldap.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>StageBeheersTool_be_hogent_webservice_ldap_wrapService</CachedSettingsPropName>
-    </WebReferenceUrl>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OudeGegevens\OudeGegevens.csproj">
