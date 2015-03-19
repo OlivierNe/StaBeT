@@ -12,8 +12,8 @@ namespace StageBeheersTool.Models.DAL
 {
     public class BedrijfRepository : IBedrijfRepository
     {
-        private StageToolDbContext ctx;
-        private DbSet<Bedrijf> bedrijven;
+        private readonly StageToolDbContext ctx;
+        private readonly DbSet<Bedrijf> bedrijven;
 
         public BedrijfRepository(StageToolDbContext ctx)
         {
@@ -46,7 +46,7 @@ namespace StageBeheersTool.Models.DAL
             bedrijf.Straat = model.Straat;
             bedrijf.Straatnummer = model.Straatnummer;
             bedrijf.Bereikbaarheid = model.Bereikbaarheid;
-            bedrijf.BedrijfsActiviteiten = model.BedrijfsActiviteiten;
+            bedrijf.Bedrijfsactiviteiten = model.Bedrijfsactiviteiten;
             bedrijf.Telefoonnummer = model.Telefoonnummer;
             SaveChanges();
         }
@@ -77,5 +77,9 @@ namespace StageBeheersTool.Models.DAL
             }
         }
 
+        public IQueryable<Bedrijf> FindAll()
+        {
+            return bedrijven.OrderBy(b => b.Naam);
+        }
     }
 }

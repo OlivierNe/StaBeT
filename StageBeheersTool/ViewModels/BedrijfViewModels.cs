@@ -36,6 +36,6 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "Telefoon/gsm")]
         public string Telefoonnummer { get; set; }
         public string Bereikbaarheid { get; set; }
-        public string BedrijfsActiviteiten { get; set; }
+        public string Bedrijfsactiviteiten { get; set; }
     }
 }

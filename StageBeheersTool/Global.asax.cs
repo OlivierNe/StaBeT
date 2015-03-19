@@ -24,11 +24,12 @@ namespace StageBeheersTool
             AutomapperConfig.Configure();
 
             DbConfiguration.SetConfiguration(new MySql.Data.Entity.MySqlEFConfiguration());
-            
-            Database.SetInitializer<StageToolDbContext>(new StageToolDbInitializer());
+            var init = new StageToolDbInitializer();
+            Database.SetInitializer<StageToolDbContext>(init);
             var ctx = new StageToolDbContext();
             ctx.Database.Initialize(true);
             var bedrijven = ctx.Bedrijven.ToList();
+            //init.AddOudeGegevens(ctx);
         }
     }
 }

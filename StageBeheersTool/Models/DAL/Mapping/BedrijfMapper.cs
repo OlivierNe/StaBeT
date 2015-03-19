@@ -14,8 +14,7 @@ namespace StageBeheersTool.Models.DAL.Mapping
         public BedrijfMapper()
         {
             this.ToTable("Bedrijven");
-            this.Property(bedrijf => bedrijf.Naam).IsRequired().HasMaxLength(100)
-              .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("BedrijfdsnaamIndex") { IsUnique = true }));
+            this.Property(bedrijf => bedrijf.Naam).IsRequired().HasMaxLength(100);
             this.Property(bedrijf => bedrijf.Email).IsRequired().HasMaxLength(100);
             this.HasMany(bedrijf => bedrijf.Contactpersonen).WithRequired();
             this.HasMany(bedrijf => bedrijf.Stageopdrachten).WithRequired(so => so.Bedrijf);

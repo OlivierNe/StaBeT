@@ -215,6 +215,8 @@
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
     <Compile Include="Models\DAL\Mapping\AcademiejaarInstellingenMapper.cs" />
     <Compile Include="Models\DAL\Mapping\StageBegeleidAanvraagMapper.cs" />
+    <Compile Include="Models\DAL\oudeGegevens\Converter.cs" />
+    <Compile Include="Models\DAL\oudeGegevens\OudeGegevensDbContext.cs" />
     <Compile Include="Models\Domain\AcademiejaarInstellingen.cs" />
     <Compile Include="Models\Domain\Admin.cs" />
     <Compile Include="Models\Domain\BegeleidAanvraagStatus.cs" />
@@ -396,6 +398,7 @@
     <Content Include="Views\Academiejaar\Lijst.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\NullableDateTime.cshtml" />
     <Content Include="Views\Academiejaar\Create.cshtml" />
+    <Content Include="Views\Bedrijf\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -412,6 +415,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OudeGegevens\OudeGegevens.csproj">
+      <Project>{16592152-d170-4b4c-945e-fb2eff3fe0ca}</Project>
+      <Name>OudeGegevens</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

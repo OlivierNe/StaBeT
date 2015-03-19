@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using OudeGegevens;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,13 @@ using System.Linq;
 using System.Web;
 using StageBeheersTool;
 using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.OudeGegevens;
+using System.Data.Entity.Migrations;
 
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        //DropCreateDatabaseAlways<StageToolDbContext>
+        //   DropCreateDatabaseAlways<StageToolDbContext>
      DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
         public void RunSeed(StageToolDbContext ctx)
@@ -94,7 +97,7 @@ namespace StageBeheersTool.Models.DAL
                       Email = "test@bedrijf.be",
                       Naam = "bedrijf1",
                       Telefoonnummer = "?",
-                      BedrijfsActiviteiten = "?",
+                      Bedrijfsactiviteiten = "?",
                       Bereikbaarheid = "?",
                       Postcode = "1243",
                       Straatnummer = "1",
@@ -264,6 +267,40 @@ namespace StageBeheersTool.Models.DAL
                 }
                 throw new ApplicationException("Fout bij aanmaken database " + message);
             }
+            AddOudeGegevens(context);
         }
+
+        public void AddOudeGegevens(StageToolDbContext context)
+        {
+            try
+            {
+                using (var oudeContext = new OudeGegevensDbContext())
+                {
+                    var bedrijven = Converter.Bedrijven(oudeContext.Stagebedrijf.ToList());
+                    context.Bedrijven.AddRange(bedrijven);
+                }
+                context.SaveChanges();
+
+            }
+            catch (DbEntityValidationException e)
+            {
+                string message = String.Empty;
+                foreach (var eve in e.EntityValidationErrors)
+                {
+
+                    message +=
+                        String.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.GetValidationResult());
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        message +=
+                            String.Format("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw new ApplicationException("Fout bij aanmaken database " + message);
+            }
+        }
+
     }
 }

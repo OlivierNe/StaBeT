@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Bedrijven";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@model IEnumerable<Bedrijf>
+
+<div id="grid-tableDiv">
+    @Html.Grid(Model).Columns(columns =>
+    {
+        columns.Add(b => b.Naam);
+        columns.Add(b => b.Bedrijfsactiviteiten);
+        columns.Add(b => b.Gemeente);
+    }).WithPaging(10).Sortable().EmptyText("")
+</div>

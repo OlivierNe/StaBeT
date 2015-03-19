@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StageBeheersTool", "StageBe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StageBeheersTool.Tests", "StageBeheersTool.Tests\StageBeheersTool.Tests.csproj", "{646F37C7-3699-46F1-862F-2F1D7CC71792}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OudeGegevens", "OudeGegevens\OudeGegevens.csproj", "{16592152-D170-4B4C-945E-FB2EFF3FE0CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{646F37C7-3699-46F1-862F-2F1D7CC71792}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{646F37C7-3699-46F1-862F-2F1D7CC71792}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{646F37C7-3699-46F1-862F-2F1D7CC71792}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16592152-D170-4B4C-945E-FB2EFF3FE0CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16592152-D170-4B4C-945E-FB2EFF3FE0CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16592152-D170-4B4C-945E-FB2EFF3FE0CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16592152-D170-4B4C-945E-FB2EFF3FE0CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
