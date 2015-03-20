@@ -19,7 +19,7 @@ namespace OudeGegevens
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            modelBuilder.Entity<stagebedrijf>().HasMany(b => b.stage).WithRequired(s => s.stagebedrijf).HasForeignKey(s => s.stagebedrijfID);
+            //modelBuilder.Entity<stagebedrijf>().HasMany(b => b.stage).WithRequired(s => s.stagebedrijf).HasForeignKey(s => s.stagebedrijfID);
         }
 
         public DbSet<docent> Docenten { get; set; } 

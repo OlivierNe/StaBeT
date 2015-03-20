@@ -212,8 +212,11 @@ namespace StageBeheersTool.Controllers
                 return HttpNotFound();
             }
             academiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(model.Stageopdracht.Academiejaar);
-            model.StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
-            model.StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
+            if (academiejaarInstellingen != null)
+            {
+                model.StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
+                model.StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
+            }
             return View(model);
         }
         #endregion

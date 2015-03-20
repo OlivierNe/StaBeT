@@ -42,10 +42,11 @@ namespace StageBeheersTool.Models.DAL
 
         public IQueryable<Student> FindStudentenMetStageopdrachtEnBegeleider()
         {
-            return FindAll().Include(student => student.Stageopdracht)
-                .Where(student => student.Stageopdracht != null &&
-                    student.Stageopdracht.Status == StageopdrachtStatus.Goedgekeurd &&
-                    student.Stageopdracht.Stagebegeleider != null);
+            throw new NotSupportedException();
+            //return FindAll().Include(student => student.Stageopdrachten)
+            //    .Where(student => student.Stageopdrachten != null &&
+            //        student.Stageopdracht.Status == StageopdrachtStatus.Goedgekeurd &&
+            //        student.Stageopdracht.Stagebegeleider != null);
         }
 
         public void Update(Student student, Student model)

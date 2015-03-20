@@ -12,7 +12,7 @@ namespace StageBeheersTool.Models.Domain
         public virtual Keuzepakket Keuzepakket { get; set; }
         //public virtual Begeleider Begeleider { get; set; }
         public virtual ICollection<Stageopdracht> VoorkeurStages { get; set; }
-        public virtual Stageopdracht Stageopdracht { get; set; }
+        public virtual ICollection<Stageopdracht> Stageopdrachten { get; set; }
 
         #endregion
 
@@ -20,6 +20,7 @@ namespace StageBeheersTool.Models.Domain
         public Student()
         {
             VoorkeurStages = new List<Stageopdracht>();
+            Stageopdrachten = new List<Stageopdracht>();
         }
         #endregion
 

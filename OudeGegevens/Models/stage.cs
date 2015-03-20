@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OudeGegevens.Models
 {
     public class stage
     {
+        public stage()
+        {
+            studenten = new List<student>();
+        }
+
         public int stageID { get; set; }
         public string titel { get; set; }
         public string omschrijving { get; set; }
@@ -31,8 +38,7 @@ namespace OudeGegevens.Models
         public string lokaal { get; set; }
         public string bijzitter { get; set; }
         public string acjaar { get; set; }
-
-
+        
         [ForeignKey("databaseUsed")]
         public virtual database database { get; set; }
 
@@ -53,5 +59,8 @@ namespace OudeGegevens.Models
 
         [ForeignKey("contractondertekenaar")]
         public virtual relatie relatie1 { get; set; }
+
+        public virtual ICollection<student> studenten { get; set; }
+    
     }
 }

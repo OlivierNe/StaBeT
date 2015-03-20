@@ -16,7 +16,7 @@ using System.Data.Entity.Migrations;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        //   DropCreateDatabaseAlways<StageToolDbContext>
+        // DropCreateDatabaseAlways<StageToolDbContext>
      DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
         public void RunSeed(StageToolDbContext ctx)
@@ -276,8 +276,67 @@ namespace StageBeheersTool.Models.DAL
             {
                 using (var oudeContext = new OudeGegevensDbContext())
                 {
-                    var bedrijven = Converter.Bedrijven(oudeContext.Stagebedrijf.ToList());
-                    context.Bedrijven.AddRange(bedrijven);
+                    var begeleiders = new List<Begeleider>();
+                    foreach (var docent in oudeContext.Docenten)
+                    {
+                        var begeleider = Converter.ToBegeleider(docent);
+                        if (!context.Begeleiders.Any(b => b.HogentEmail == docent.email)
+                            && begeleiders.All(s => s.HogentEmail != docent.email))
+                        {
+                            begeleiders.Add(begeleider);
+                        }
+                    }
+                    context.Begeleiders.AddRange(begeleiders);
+                    context.SaveChanges();
+
+                    var studenten = new List<Student>();
+                    foreach (var oudeStudent in oudeContext.Studenten)
+                    {
+                        var student = Converter.ToStudent(oudeStudent);
+                        if (!context.Studenten.Any(s => s.HogentEmail == oudeStudent.email)
+                            && studenten.All(s => s.HogentEmail != oudeStudent.email))
+                        {
+                            studenten.Add(student);
+                        }
+                    }
+                    context.Studenten.AddRange(studenten);
+                    context.SaveChanges();
+
+                    foreach (var stagebedrijf in oudeContext.Stagebedrijf.Include(b => b.relatie).Include(b => b.stage).ToList())
+                    {
+                        var bedrijf = Converter.ToBedrijf(stagebedrijf);
+
+                        context.Bedrijven.AddOrUpdate(bedrijf);
+                        var stageopdrachten = new List<Stageopdracht>();
+                        foreach (var stage in stagebedrijf.stage.ToList()) //relatie: mentor, relatie: constractond
+                        {
+                            var stageopdracht = Converter.ToStageopdracht(stage);
+                            if (stage.relatie != null)
+                            {
+                                stageopdracht.Stagementor =
+                                    bedrijf.Contactpersonen.FirstOrDefault(c => c.Familienaam == stage.relatie.naam
+                                                                                && c.Voornaam == stage.relatie.voornaam);
+                            }
+                            if (stage.relatie1 != null)
+                            {
+                                stageopdracht.Contractondertekenaar =
+                                    bedrijf.Contactpersonen.FirstOrDefault(c => c.Familienaam == stage.relatie1.naam
+                                                                                && c.Voornaam == stage.relatie1.voornaam);
+                            }
+                            if (stage.docent != null)
+                            {
+                                stageopdracht.Stagebegeleider =
+                                    context.Begeleiders.FirstOrDefault(d => d.HogentEmail == stage.docent.email);
+                            }
+                            var stageopdrachtstudenten = stage.studenten
+                                .Select(oudeStudent => context.Studenten.FirstOrDefault(s => s.HogentEmail == oudeStudent.email))
+                                .Where(student => student != null).ToList();
+                            stageopdracht.Studenten = stageopdrachtstudenten;
+                            stageopdracht.Bedrijf = bedrijf;
+                            stageopdrachten.Add(stageopdracht);
+                        }
+                        bedrijf.Stageopdrachten = stageopdrachten;
+                    }
                 }
                 context.SaveChanges();
 
