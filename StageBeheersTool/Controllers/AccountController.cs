@@ -71,33 +71,41 @@ namespace StageBeheersTool.Controllers
             if (model.Email.EndsWith("@student.hogent.be")) //student
             {
                 //TODO: service aanspreken:
-                
+                var loginStudent = new ldap_wrapService();
+                var respStudent = loginStudent.authenticate(model.Email, model.Password);
+                var serStudent = new JavaScriptSerializer();
+                dynamic dataStudent = serStudent.Deserialize<object>(respStudent);
                 //https://webservice.hogent.be/ldap/ldap.wsdl
                 //TODO: if( geldig hogent account + wachtwoord)...
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null) //eerste login
+                if (dataStudent["ACTIVE"] != 0)
                 {
-                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
-                    await UserManager.CreateAsync(user);
-                    await UserManager.AddToRoleAsync(user.Id, "student");
-                    Student student = new Student() { HogentEmail = model.Email };
-                    userService.CreateUser<Student>(student);
-                    userService.SaveChanges();
+                    //https://webservice.hogent.be/ldap/ldap.wsdl
+                    //TODO: if( geldig hogent account + wachtwoord)...
+                    var user = await UserManager.FindByNameAsync(model.Email);
+                    if (user == null) //eerste login
+                    {
+                        user = new ApplicationUser {UserName = model.Email, Email = model.Email, EmailConfirmed = true};
+                        await UserManager.CreateAsync(user);
+                        await UserManager.AddToRoleAsync(user.Id, "student");
+                        Student student = new Student() {HogentEmail = model.Email};
+                        userService.CreateUser<Student>(student);
+                        userService.SaveChanges();
+                        await SignInManager.SignInAsync(user, model.RememberMe, false);
+                        return RedirectToAction("Edit", "Student");
+                    }
                     await SignInManager.SignInAsync(user, model.RememberMe, false);
-                    return RedirectToAction("Edit", "Student");
+                    return RedirectToAction("Index", "Stageopdracht");
                 }
-                await SignInManager.SignInAsync(user, model.RememberMe, false);
-                return RedirectToAction("Index", "Stageopdracht");
             }
             else if (model.Email.EndsWith("@hogent.be")) //begeleider of admin
             {
-                var loginClient = new ldap_wrapService();
-                var resp = loginClient.authenticate(model.Email, model.Password);
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                dynamic dataUser = serializer.Deserialize<object>(resp);
+                var loginDocent = new ldap_wrapService();
+                var respDocent = loginDocent.authenticate(model.Email, model.Password);
+                var serDocent = new JavaScriptSerializer();
+                dynamic dataDocent = serDocent.Deserialize<object>(respDocent);
                 //https://webservice.hogent.be/ldap/ldap.wsdl
                 //TODO: if( geldig hogent account + wachtwoord)...
-                if (dataUser["ACTIVE"] != 0)
+                if (dataDocent["ACTIVE"] != 0)
                 {
                     var user = await UserManager.FindByNameAsync(model.Email);
                     if (user == null)
@@ -105,7 +113,7 @@ namespace StageBeheersTool.Controllers
                         user = new ApplicationUser {UserName = model.Email, Email = model.Email, EmailConfirmed = true};
                         await UserManager.CreateAsync(user);
                         await UserManager.AddToRoleAsync(user.Id, "begeleider"); //of admin
-                        Begeleider begeleider = new Begeleider() {HogentEmail = model.Email,Familienaam = dataUser["LASTNAME"], Voornaam = dataUser["FIRSTNAME"]};
+                        Begeleider begeleider = new Begeleider() {HogentEmail = model.Email,Familienaam = dataDocent["LASTNAME"], Voornaam = dataDocent["FIRSTNAME"]};
                         userService.CreateUser<Begeleider>(begeleider);
                         userService.SaveChanges();
                         await SignInManager.SignInAsync(user, model.RememberMe, false);
@@ -195,7 +203,7 @@ namespace StageBeheersTool.Controllers
                         bedrijf.Email, generatedPassword)
                     };
 
-                    await UserManager.EmailService.SendAsync(message);
+                    //await UserManager.EmailService.SendAsync(message);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
