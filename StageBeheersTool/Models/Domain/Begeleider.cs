@@ -9,6 +9,7 @@ namespace StageBeheersTool.Models.Domain
     {
 
         #region Properties
+        public string Aanspreking { get; set; }
         /// <summary>
         /// stages begeleid door deze begeleider
         /// </summary>

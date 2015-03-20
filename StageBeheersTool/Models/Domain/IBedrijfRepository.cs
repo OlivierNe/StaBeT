@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace StageBeheersTool.Models.Domain
 {
     public interface IBedrijfRepository
     {
         void Add(Bedrijf bedrijf);
+        IQueryable<Bedrijf> FindAll();
         Bedrijf FindByEmail(string email);
         Bedrijf FindById(int id);
         void SaveChanges();

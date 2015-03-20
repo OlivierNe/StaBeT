@@ -10,30 +10,37 @@ using System.Web.Mvc;
 
 namespace StageBeheersTool.Controllers
 {
-    [Authorize(Role.Bedrijf)]
     public class BedrijfController : Controller
     {
-        private IBedrijfRepository bedrijfRepository;
-        private IUserService userService;
+        private readonly IBedrijfRepository _bedrijfRepository;
+        private readonly IUserService _userService;
 
         public BedrijfController(IBedrijfRepository bedrijfRepository,
             IUserService userService)
         {
-            this.bedrijfRepository = bedrijfRepository;
-            this.userService = userService;
+            _bedrijfRepository = bedrijfRepository;
+            _userService = userService;
+        }
+
+        [Authorize(Role.Admin,Role.Begeleider)]
+        public ActionResult Index()
+        {
+            var bedrijven = _bedrijfRepository.FindAll();
+
+            return View(bedrijven);
         }
 
         [Authorize(Role.Bedrijf)]
         public ActionResult Details()
         {
-            var bedrijf = userService.FindBedrijf();
+            var bedrijf = _userService.FindBedrijf();
             return View(bedrijf);
         }
 
         [Authorize(Role.Bedrijf)]
         public ActionResult Edit()
         {
-            var bedrijf = userService.FindBedrijf();
+            var bedrijf = _userService.FindBedrijf();
             return View(Mapper.Map<EditBedrijfVM>(bedrijf));
         }
 
@@ -42,10 +49,10 @@ namespace StageBeheersTool.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(EditBedrijfVM model)
         {
-            var bedrijf = userService.FindBedrijf();
+            var bedrijf = _userService.FindBedrijf();
             var newBedrijf = Mapper.Map<Bedrijf>(model);
-            bedrijfRepository.Update(bedrijf, newBedrijf);
-            bedrijfRepository.SaveChanges();
+            _bedrijfRepository.Update(bedrijf, newBedrijf);
+            _bedrijfRepository.SaveChanges();
             TempData["message"] = "Gegevens gewijzigd.";
             return RedirectToAction("Details");
         }

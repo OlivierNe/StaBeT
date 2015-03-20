@@ -18,7 +18,13 @@ namespace StageBeheersTool.Models.DAL.Mapping
             this.HasOptional(so => so.Stagementor).WithMany().WillCascadeOnDelete(false);
             this.HasOptional(so => so.Contractondertekenaar).WithMany().WillCascadeOnDelete(false);
             this.HasOptional(so => so.Specialisatie);
-            this.HasMany(so => so.Studenten).WithOptional(s => s.Stageopdracht).Map(m => m.MapKey("stageopdracht_id"));
+            this.HasMany(so => so.Studenten).WithMany(s => s.Stageopdrachten).Map(m =>
+            {
+                m.MapLeftKey("Stageopdracht_id");
+                m.MapRightKey("Student_id");
+                m.ToTable("Student_Stageopdracht");
+            });
+
             //this.HasOptional(so => so.Stagebegeleider).WithMany().WillCascadeOnDelete(false);
         }
     }

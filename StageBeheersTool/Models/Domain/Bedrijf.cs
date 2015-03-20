@@ -23,7 +23,7 @@ namespace StageBeheersTool.Models.Domain
         public string Straatnummer { get; set; }
         public string Telefoonnummer { get; set; }
         public string Bereikbaarheid { get; set; } //(wagen – openbaar vervoer – georganiseerd vervoer door bedrijf) 
-        public string BedrijfsActiviteiten { get; set; } //(bank – software ontwikkelaar – openbare diensten ….)
+        public string Bedrijfsactiviteiten { get; set; } //(bank – software ontwikkelaar – openbare diensten ….)
         public virtual ICollection<Stageopdracht> Stageopdrachten { get; set; }
         public virtual ICollection<Contactpersoon> Contactpersonen { get; set; }
         #endregion

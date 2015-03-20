@@ -12,8 +12,8 @@ namespace StageBeheersTool.Models.DAL.Mapping
         public ContactpersoonMapper()
         {
             this.ToTable("Contactpersonen");
-            this.Property(cp => cp.Voornaam).IsRequired().HasMaxLength(50);
-            this.Property(cp => cp.Email).IsRequired().HasMaxLength(50);
+            this.Property(cp => cp.Voornaam).HasMaxLength(50);
+            this.Property(cp => cp.Email).HasMaxLength(50);
             this.Property(cp => cp.Familienaam).IsRequired().HasMaxLength(50);
             this.Property(cp => cp.Bedrijfsfunctie).HasMaxLength(200);
 

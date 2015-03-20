@@ -29,7 +29,7 @@ namespace StageBeheersTool.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private IUserService userService;
+        private readonly IUserService userService;
 
         public ApplicationSignInManager SignInManager
         {
