@@ -16,6 +16,12 @@ namespace StageBeheersTool.OudeGegevens
         public static Bedrijf ToBedrijf(stagebedrijf stagebedrijf)
         {
             var contactpersonen = stagebedrijf.relatie.Select(ToContactpersoon).ToList();
+            String email = "";
+            foreach (var contact in contactpersonen)
+            {
+                if (contact.Email != String.Empty) email = contact.Email;
+                break;
+            }
             return new Bedrijf()
             {
                 Naam = stagebedrijf.naam,
@@ -27,7 +33,7 @@ namespace StageBeheersTool.OudeGegevens
                 Bereikbaarheid = stagebedrijf.bereikbaarheid,
                 Bedrijfsactiviteiten = stagebedrijf.sector,
                 Contactpersonen = contactpersonen,
-                Email = "geenEmail" + Guid.NewGuid()//geen email
+                Email = (!String.IsNullOrEmpty(email)) ? email : ""
                 //Stageopdrachten = GetStageopdrachten(stagebedrijf.stage)
             };
         }
@@ -99,11 +105,11 @@ namespace StageBeheersTool.OudeGegevens
         {
             switch (status)
             {
-                case "A":
-                case "C": // C = ?
+                case "A": //Approved
+                case "C": // C = Created
                 case "BETAALD":
                     return StageopdrachtStatus.Afgekeurd;
-                case "G":
+                case "G": //Granted
                     return StageopdrachtStatus.Goedgekeurd;
                 default: //C, betaald, NA, null
                     return StageopdrachtStatus.NietBeoordeeld;

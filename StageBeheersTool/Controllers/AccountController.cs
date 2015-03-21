@@ -188,19 +188,22 @@ namespace StageBeheersTool.Controllers
 #if DEBUG
                 generatedPassword = "wachtwoord";
 #endif
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
                 var result = await UserManager.CreateAsync(user, generatedPassword);
                 if (result.Succeeded)
                 {
-                    Bedrijf bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
+                    var bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
+                    
                     userService.CreateUser<Bedrijf>(bedrijf);
                     userService.SaveChanges();
                     IdentityMessage message = new IdentityMessage()
                     {
                         Subject = "Registratie",
                         Destination = bedrijf.Email,
-                        Body = string.Format("<strong>Account aangemaakt: </strong><ul><li>Login: {0}</li><li>Wachtwoord: {1}</li></ul>",
-                        bedrijf.Email, generatedPassword)
+                        Body =
+                            string.Format(
+                                "<strong>Account aangemaakt: </strong><ul><li>Login: {0}</li><li>Wachtwoord: {1}</li></ul>",
+                                bedrijf.Email, generatedPassword)
                     };
 
                     //await UserManager.EmailService.SendAsync(message);
@@ -214,8 +217,9 @@ namespace StageBeheersTool.Controllers
                     return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
+                
             }
-
+           
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -273,7 +277,57 @@ namespace StageBeheersTool.Controllers
             AddErrors(result);
             return View(model);
         }
+        //
+        // GET: /Account/Register
+        [AllowAnonymous]
+        public ActionResult Activate()
+        {
+            return View();
+        }
 
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Activate(ForgotViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Random r = new Random();
+                string generatedPassword = Membership.GeneratePassword(r.Next(10, 12), 0);
+#if DEBUG
+                generatedPassword = model.Email;
+#endif
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var result = await UserManager.CreateAsync(user, generatedPassword);
+                if (result.Succeeded)
+                {
+                    var resultSI = await SignInManager.PasswordSignInAsync(model.Email, generatedPassword, false, shouldLockout: false);
+                    switch (resultSI)
+                    {
+                        case SignInStatus.Success:
+                                return RedirectToAction("ChangePassword");
+                        case SignInStatus.Failure:
+                        default:
+                            ModelState.AddModelError("", "Invalid login attempt.");
+                            return View(model);
+                    }
+                    
+                    
+                    //await SignInManager.SignInAsync(user, false, false);
+                    //return RedirectToAction("Index", "Stageopdracht");
+                    //var bedrijfRep = new BedrijfRepository(new StageToolDbContext());
+                    //Bedrijf bedrijf = bedrijfRep.FindByEmail(model.Email);
+                    //return RedirectToAction("Login", "Account");
+                }
+                AddErrors(result);
+
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
 
 
 

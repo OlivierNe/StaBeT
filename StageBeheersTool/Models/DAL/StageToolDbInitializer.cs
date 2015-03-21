@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using OudeGegevens;
+using StageBeheersTool.Controllers;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -10,19 +12,24 @@ using System.Linq;
 using System.Web;
 using StageBeheersTool;
 using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.Services;
 using StageBeheersTool.OudeGegevens;
 using System.Data.Entity.Migrations;
+using StageBeheersTool.ViewModels;
+
 
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        // DropCreateDatabaseAlways<StageToolDbContext>
+        //DropCreateDatabaseAlways<StageToolDbContext>
      DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
+        
         public void RunSeed(StageToolDbContext ctx)
         {
             this.Seed(ctx);
         }
+        
         protected override void Seed(StageToolDbContext context)
         {
             base.Seed(context);
@@ -270,7 +277,7 @@ namespace StageBeheersTool.Models.DAL
             AddOudeGegevens(context);
         }
 
-        public void AddOudeGegevens(StageToolDbContext context)
+        public async void AddOudeGegevens(StageToolDbContext context)
         {
             try
             {
@@ -307,6 +314,7 @@ namespace StageBeheersTool.Models.DAL
                         var bedrijf = Converter.ToBedrijf(stagebedrijf);
 
                         context.Bedrijven.AddOrUpdate(bedrijf);
+                        
                         var stageopdrachten = new List<Stageopdracht>();
                         foreach (var stage in stagebedrijf.stage.ToList()) //relatie: mentor, relatie: constractond
                         {

@@ -414,6 +414,7 @@
     <Content Include="Views\Academiejaar\Lijst.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\NullableDateTime.cshtml" />
     <Content Include="Views\Academiejaar\Create.cshtml" />
+    <Content Include="Views\Account\Activate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
