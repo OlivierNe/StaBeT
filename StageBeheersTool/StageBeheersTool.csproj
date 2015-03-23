@@ -415,7 +415,14 @@
     <Content Include="Views\Academiejaar\Lijst.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\NullableDateTime.cshtml" />
     <Content Include="Views\Academiejaar\Create.cshtml" />
+    <Content Include="Views\Account\Activate.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\StageopdrachtStatus.cshtml" />
+    <Content Include="Views\Stageopdracht\Voorstellen.cshtml" />
+    <Content Include="Views\Stageopdracht\_ZoekFormulier.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\BegeleidAanvraagStatus.cshtml" />
+    <Content Include="Views\Stageopdracht\GoedgekeurdeStages.cshtml" />
+    <Content Include="Views\Stageopdracht\Archief.cshtml" />
+    <Content Include="Views\Stageopdracht\VanAcademiejaar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -453,7 +460,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>62048</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace StageBeheersTool.ViewModels
 {
@@ -12,6 +13,41 @@ namespace StageBeheersTool.ViewModels
     public class StageopdrachtIndexVM
     {
         public IEnumerable<Stageopdracht> Stageopdrachten { get; set; }
+        public bool ToonSearchForm { get; set; }
+        public bool ToonZoekenOpStudent { get; set; }
+        public bool ToonOordelen { get; set; }
+        public string Title { get; set; }
+        public string OverzichtAction { get; set; }
+        public RouteValueDictionary ActionParams { get; set; }
+
+        public void InitializeItems(IEnumerable<Stageopdracht> stageopdrachten)
+        {
+            ActionParams = new RouteValueDictionary();
+            Stageopdrachten = stageopdrachten;
+        }
+
+        private SelectList _aantalStudentenList;
+        private SelectList _semesterList;
+
+        public SelectList AantalStudentenList
+        {
+            get
+            {
+                return _aantalStudentenList ??
+                       (_aantalStudentenList = new SelectList(new[] { "1", "2", "3" },
+                           AantalStudenten == null ? "" : AantalStudenten.ToString()));
+            }
+        }
+
+        public SelectList SemesterList
+        {
+            get
+            {
+                return _semesterList ??
+                    (_semesterList = new SelectList(new[] { "1", "2" }, Semester == null ? "" : Semester.ToString()));
+            }
+        }
+
         public int? Semester { get; set; }
         [Display(Name = "Studenten")]
         public int? AantalStudenten { get; set; }
@@ -19,18 +55,6 @@ namespace StageBeheersTool.ViewModels
         public string Bedrijf { get; set; }
         public string Student { get; set; }
         public string Specialisatie { get; set; }
-        public SelectList AantalStudentenList { get; set; }
-        public SelectList SemesterList { get; set; }
-        public bool ToonSearchForm { get; set; }
-        public bool ToonZoekenOpStudent { get; set; }
-        public bool ToonOordelen { get; set; }
-
-        public void InitializeItems(IEnumerable<Stageopdracht> stageopdrachten)
-        {
-            Stageopdrachten = stageopdrachten;
-            AantalStudentenList = new SelectList(new string[] { "1", "2", "3" }, AantalStudenten == null ? "" : AantalStudenten.ToString());
-            SemesterList = new SelectList(new string[] { "1", "2" }, Semester == null ? "" : Semester.ToString());
-        }
     }
 
     public class StageopdrachtDetailsVM
@@ -66,17 +90,23 @@ namespace StageBeheersTool.ViewModels
         public bool ToonEdit { get; set; }
         public bool ToonAanvraagIndienen { get; set; }
         public bool ToonAanvraagAnnuleren { get; set; }
+
+        private string _overzichtAction = null;
+        public string OverzichtAction { get { return _overzichtAction ?? "Index"; } set { _overzichtAction = value; } }
+
         public string Stagementor
         {
             get
             {
                 if (Stageopdracht.Stagementor == null)
                 {
-                    return "/";
+                    return "";
                 }
-                return Stageopdracht.Stagementor.Naam + " / " +
-                    Stageopdracht.Stagementor.Email + " / " +
-                    Stageopdracht.Stagementor.Gsmnummer;
+                return string.Join(" / ", 
+                    new[] { Stageopdracht.Stagementor.Naam,
+                        Stageopdracht.Stagementor.Email,
+                        Stageopdracht.Stagementor.Gsmnummer }
+                        .Where(s => !string.IsNullOrEmpty(s) ));
             }
         }
         public string Contractondertekenaar
@@ -85,11 +115,13 @@ namespace StageBeheersTool.ViewModels
             {
                 if (Stageopdracht.Contractondertekenaar == null)
                 {
-                    return "/";
+                    return "";
                 }
-                return Stageopdracht.Contractondertekenaar.Naam + " / " +
-                    Stageopdracht.Contractondertekenaar.Email + " / " +
-                    Stageopdracht.Contractondertekenaar.Gsmnummer;
+                return string.Join(" / ",
+                    new[] { Stageopdracht.Contractondertekenaar.Naam,
+                        Stageopdracht.Contractondertekenaar.Email,
+                        Stageopdracht.Contractondertekenaar.Gsmnummer }
+                        .Where(s => !string.IsNullOrEmpty(s)));
             }
         }
     }
@@ -232,6 +264,5 @@ namespace StageBeheersTool.ViewModels
         [DataType(DataType.MultilineText)]
         [Required]
         public string Reden { get; set; }
-
     }
 }

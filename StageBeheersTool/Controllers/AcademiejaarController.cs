@@ -12,24 +12,24 @@ namespace StageBeheersTool.Controllers
     [Authorize(Roles = "admin")]
     public class AcademiejaarController : Controller
     {
-        private IAcademiejaarRepository academiejaarRepository;
+        private readonly IAcademiejaarRepository _academiejaarRepository;
 
         public AcademiejaarController(IAcademiejaarRepository academiejaarRepository)
         {
-            this.academiejaarRepository = academiejaarRepository;
+            _academiejaarRepository = academiejaarRepository;
         }
 
         // GET: Academiejaar
         public ActionResult Index()
         {
-            var academiejaarInstellingen = academiejaarRepository.FindByHuidigAcademiejaar();
+            var academiejaarInstellingen = _academiejaarRepository.FindByHuidigAcademiejaar();
             if (academiejaarInstellingen == null)
             {
                 academiejaarInstellingen = new AcademiejaarInstellingen()
                 {
                     Academiejaar = Helpers.HuidigAcademiejaar()
                 };
-                academiejaarRepository.Add(academiejaarInstellingen);
+                _academiejaarRepository.Add(academiejaarInstellingen);
             }
             return View(Mapper.Map<AcademiejaarInstellingenVM>(academiejaarInstellingen));
         }
@@ -41,7 +41,7 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 var academiejaarInstellingen = Mapper.Map<AcademiejaarInstellingen>(model);
-                academiejaarRepository.Update(academiejaarInstellingen);
+                _academiejaarRepository.Update(academiejaarInstellingen);
                 ViewBag.message = "Wijzigingen opgeslagen";
                 return View("Index", model);
             }
@@ -50,14 +50,14 @@ namespace StageBeheersTool.Controllers
 
         public ActionResult Lijst()
         {
-            return View(Mapper.Map<IEnumerable<AcademiejaarInstellingen>, IEnumerable<AcademiejaarInstellingenVM>>(academiejaarRepository.FindAll()));
+            return View(Mapper.Map<IEnumerable<AcademiejaarInstellingen>, IEnumerable<AcademiejaarInstellingenVM>>(_academiejaarRepository.FindAll()));
         }
 
         public ActionResult Create(string academiejaar = null)
         {
             if (academiejaar != null)
             {
-                academiejaarRepository.FindByAcademiejaar(academiejaar);
+                _academiejaarRepository.FindByAcademiejaar(academiejaar);
             }
             return View();
         }
@@ -68,7 +68,7 @@ namespace StageBeheersTool.Controllers
         {
             if (ModelState.IsValid)
             {
-                academiejaarRepository.Add(Mapper.Map<AcademiejaarInstellingen>(model));
+                _academiejaarRepository.Add(Mapper.Map<AcademiejaarInstellingen>(model));
                 ViewBag.success = "instellingen opgeslagen";
                 return View(model);
             }

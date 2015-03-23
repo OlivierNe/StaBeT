@@ -51,7 +51,7 @@ namespace StageBeheersTool.Models.Domain
             {
                 return "";
             }
-            return "Gegevens stageopdracht mogen aangepast worden tot: " + ((DateTime)DeadlineBedrijfStageEdit).ToString("dd/MM/yyyy");
+            return "Gegevens mogen aangepast worden tot: " + ((DateTime)DeadlineBedrijfStageEdit).ToString("dd/MM/yyyy");
         }
     }
 }

@@ -1,0 +1,13 @@
+﻿@model string[]
+@{
+    ViewBag.Title = "Archief";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<ul>
+    @foreach (var academiejaar in Model)
+    {
+        <li> @Html.ActionLink("Academiejaar " + academiejaar, "VanAcademiejaar", new { academiejaar = academiejaar })</li>
+    }
+</ul>

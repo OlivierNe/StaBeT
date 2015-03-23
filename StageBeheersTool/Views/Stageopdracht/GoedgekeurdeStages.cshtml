@@ -11,12 +11,7 @@
 {
     @Html.Partial("_ZoekFormulier")
 }
-@if (User.IsInRole("bedrijf"))
-{
-    <p>
-        @Html.ActionLink("Nieuwe stageopdracht aanmaken", "Create")
-    </p>
-}
+
 @Html.Partial("_StageopdrachtList")
 
 @section scripts{

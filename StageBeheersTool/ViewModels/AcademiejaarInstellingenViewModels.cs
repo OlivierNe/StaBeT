@@ -8,6 +8,8 @@ namespace StageBeheersTool.ViewModels
 {
     public class AcademiejaarInstellingenVM : IValidatableObject
     {
+        [RegularExpression("[0-9]{4}-[0-9]{4}", ErrorMessage = "Ongeldig academiejaar")]
+        [Required]
         public string Academiejaar { get; set; }
         [UIHint("NullableDateTime")]
         [Display(Name = "Begin Semester 1")]

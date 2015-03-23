@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using StageBeheersTool
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -40,9 +41,10 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                                <li>@Html.ActionLink("Overzicht stageopdrachten " + Helpers.HuidigAcademiejaar(), "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                                 <li>@Html.ActionLink("stageopdracht voorstellen", "Voorstellen", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
                                 <li>@Html.ActionLink("begeleider aanvragen", "aanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
+                                <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                             </ul>
                         </li>
                         <li>
@@ -57,9 +59,10 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-                                <li>@Html.ActionLink("Goedgekeurde stages", "GoedgekeurdeStages", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
+                                <li>@Html.ActionLink("Overzicht stageopdrachten " + Helpers.HuidigAcademiejaar(), "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                                <li>@Html.ActionLink("Stageopdrachten zonder begeleider", "GoedgekeurdeStages", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
                                 <li>@Html.ActionLink("Aanvragen begeleider", "AanvragenBegeleider", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                                <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                             </ul>
                         </li>
                     }

@@ -71,33 +71,41 @@ namespace StageBeheersTool.Controllers
             if (model.Email.EndsWith("@student.hogent.be")) //student
             {
                 //TODO: service aanspreken:
-                
+                var loginStudent = new ldap_wrapService();
+                var respStudent = loginStudent.authenticate(model.Email, model.Password);
+                var serStudent = new JavaScriptSerializer();
+                dynamic dataStudent = serStudent.Deserialize<object>(respStudent);
                 //https://webservice.hogent.be/ldap/ldap.wsdl
                 //TODO: if( geldig hogent account + wachtwoord)...
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null) //eerste login
+                if (dataStudent["ACTIVE"] != 0)
                 {
-                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
-                    await UserManager.CreateAsync(user);
-                    await UserManager.AddToRoleAsync(user.Id, "student");
-                    Student student = new Student() { HogentEmail = model.Email };
-                    userService.CreateUser<Student>(student);
-                    userService.SaveChanges();
+                    //https://webservice.hogent.be/ldap/ldap.wsdl
+                    //TODO: if( geldig hogent account + wachtwoord)...
+                    var user = await UserManager.FindByNameAsync(model.Email);
+                    if (user == null) //eerste login
+                    {
+                        user = new ApplicationUser {UserName = model.Email, Email = model.Email, EmailConfirmed = true};
+                        await UserManager.CreateAsync(user);
+                        await UserManager.AddToRoleAsync(user.Id, "student");
+                        Student student = new Student() {HogentEmail = model.Email};
+                        userService.CreateUser<Student>(student);
+                        userService.SaveChanges();
+                        await SignInManager.SignInAsync(user, model.RememberMe, false);
+                        return RedirectToAction("Edit", "Student");
+                    }
                     await SignInManager.SignInAsync(user, model.RememberMe, false);
-                    return RedirectToAction("Edit", "Student");
+                    return RedirectToAction("Index", "Stageopdracht");
                 }
-                await SignInManager.SignInAsync(user, model.RememberMe, false);
-                return RedirectToAction("Index", "Stageopdracht");
             }
             else if (model.Email.EndsWith("@hogent.be")) //begeleider of admin
             {
-                var loginClient = new ldap_wrapService();
-                var resp = loginClient.authenticate(model.Email, model.Password);
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                dynamic dataUser = serializer.Deserialize<object>(resp);
+                var loginDocent = new ldap_wrapService();
+                var respDocent = loginDocent.authenticate(model.Email, model.Password);
+                var serDocent = new JavaScriptSerializer();
+                dynamic dataDocent = serDocent.Deserialize<object>(respDocent);
                 //https://webservice.hogent.be/ldap/ldap.wsdl
                 //TODO: if( geldig hogent account + wachtwoord)...
-                if (dataUser["ACTIVE"] != 0)
+                if (dataDocent["ACTIVE"] != 0)
                 {
                     var user = await UserManager.FindByNameAsync(model.Email);
                     if (user == null)
@@ -105,7 +113,7 @@ namespace StageBeheersTool.Controllers
                         user = new ApplicationUser {UserName = model.Email, Email = model.Email, EmailConfirmed = true};
                         await UserManager.CreateAsync(user);
                         await UserManager.AddToRoleAsync(user.Id, "begeleider"); //of admin
-                        Begeleider begeleider = new Begeleider() {HogentEmail = model.Email,Familienaam = dataUser["LASTNAME"], Voornaam = dataUser["FIRSTNAME"]};
+                        Begeleider begeleider = new Begeleider() {HogentEmail = model.Email,Familienaam = dataDocent["LASTNAME"], Voornaam = dataDocent["FIRSTNAME"]};
                         userService.CreateUser<Begeleider>(begeleider);
                         userService.SaveChanges();
                         await SignInManager.SignInAsync(user, model.RememberMe, false);
@@ -180,22 +188,25 @@ namespace StageBeheersTool.Controllers
 #if DEBUG
                 generatedPassword = "wachtwoord";
 #endif
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
                 var result = await UserManager.CreateAsync(user, generatedPassword);
                 if (result.Succeeded)
                 {
-                    Bedrijf bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
+                    var bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
+                    
                     userService.CreateUser<Bedrijf>(bedrijf);
                     userService.SaveChanges();
                     IdentityMessage message = new IdentityMessage()
                     {
                         Subject = "Registratie",
                         Destination = bedrijf.Email,
-                        Body = string.Format("<strong>Account aangemaakt: </strong><ul><li>Login: {0}</li><li>Wachtwoord: {1}</li></ul>",
-                        bedrijf.Email, generatedPassword)
+                        Body =
+                            string.Format(
+                                "<strong>Account aangemaakt: </strong><ul><li>Login: {0}</li><li>Wachtwoord: {1}</li></ul>",
+                                bedrijf.Email, generatedPassword)
                     };
 
-                    await UserManager.EmailService.SendAsync(message);
+                    //await UserManager.EmailService.SendAsync(message);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -206,8 +217,9 @@ namespace StageBeheersTool.Controllers
                     return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
+                
             }
-
+           
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -265,7 +277,57 @@ namespace StageBeheersTool.Controllers
             AddErrors(result);
             return View(model);
         }
+        //
+        // GET: /Account/Register
+        [AllowAnonymous]
+        public ActionResult Activate()
+        {
+            return View();
+        }
 
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Activate(ForgotViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Random r = new Random();
+                string generatedPassword = Membership.GeneratePassword(r.Next(10, 12), 0);
+#if DEBUG
+                generatedPassword = model.Email;
+#endif
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var result = await UserManager.CreateAsync(user, generatedPassword);
+                if (result.Succeeded)
+                {
+                    var resultSI = await SignInManager.PasswordSignInAsync(model.Email, generatedPassword, false, shouldLockout: false);
+                    switch (resultSI)
+                    {
+                        case SignInStatus.Success:
+                                return RedirectToAction("ChangePassword");
+                        case SignInStatus.Failure:
+                        default:
+                            ModelState.AddModelError("", "Invalid login attempt.");
+                            return View(model);
+                    }
+                    
+                    
+                    //await SignInManager.SignInAsync(user, false, false);
+                    //return RedirectToAction("Index", "Stageopdracht");
+                    //var bedrijfRep = new BedrijfRepository(new StageToolDbContext());
+                    //Bedrijf bedrijf = bedrijfRep.FindByEmail(model.Email);
+                    //return RedirectToAction("Login", "Account");
+                }
+                AddErrors(result);
+
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
 
 
 

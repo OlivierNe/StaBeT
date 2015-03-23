@@ -3,14 +3,21 @@
 <div id="grid-tableDiv">
     @Html.Grid(Model.Stageopdrachten).Columns(columns =>
 {
+
+
     columns.Add(so => so.Titel).Titled("Titel")
     .Encoded(false).Sanitized(false)
-    .RenderValueAs(so => Html.ActionLink(so.Titel, "Details", new { id = so.Id }));
+    .RenderValueAs(so =>
+    {
+        var parameters = Model.ActionParams!=null? new RouteValueDictionary(Model.ActionParams): new RouteValueDictionary();
+        parameters.Add("id", so.Id);
+        parameters.Add("overzicht", Model.OverzichtAction);
+        return Html.ActionLink(so.Titel, "Details", parameters);
+    });
 
     columns.Add(so => so.Specialisatie);
     columns.Add(so => so.Semester1).Titled("Semester")
         .RenderValueAs(so => so.Semester).Sortable(true).ThenSortBy(so => so.Semester2);
-    columns.Add(so => so.Academiejaar);
     columns.Add(so => so.AantalToegewezenStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
     if (User.IsInRole("bedrijf") == false)
     {
@@ -36,7 +43,7 @@
     if (User.IsInRole("admin"))
     {
         columns.Add(so => so.Status).Titled("Status").Sanitized(false).Encoded(false)
-            .RenderValueAs(so => Html.DisplayFor(model => so.Status)).SetWidth(120);
+            .RenderValueAs(so => Html.DisplayFor(model => so.Status)).SetWidth(130);
         if (Model.ToonOordelen)
         {
             columns.Add().Sanitized(false).Encoded(false)

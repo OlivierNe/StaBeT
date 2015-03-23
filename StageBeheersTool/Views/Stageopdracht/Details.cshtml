@@ -97,9 +97,8 @@
         @Model.EditDeadline
     </div>
 }
-
 <p>
-    @Html.ActionLink("Terug naar overzicht", "Index")
+    @Html.ActionLink("Terug naar overzicht", Model.OverzichtAction)
     @if (Model.ToonEdit)
     {
         @Html.Raw("|")

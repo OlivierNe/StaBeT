@@ -1,0 +1,17 @@
+﻿@model BegeleidAanvraagStatus
+    @{
+        var status = "";
+        switch (Model)
+        {
+            case BegeleidAanvraagStatus.Goedgekeurd:
+                status = "Goedgekeurd";
+                break;
+            case BegeleidAanvraagStatus.Afgekeurd:
+                status = "Afgekeurd;";
+                break;
+            case BegeleidAanvraagStatus.NietBeoordeeld:
+                status = "Niet beoordeeld";
+                break;
+        }
+    }
+    @status
