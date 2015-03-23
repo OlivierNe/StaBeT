@@ -8,42 +8,23 @@ namespace StageBeheersTool.Models.Domain
 {
     public class Stageopdracht
     {
-
         #region Properties
         public int Id { get; set; }
         public string Titel { get; set; }
         public string Omschrijving { get; set; }
-        public virtual Specialisatie Specialisatie { get; set; }
+        public string Specialisatie { get; set; }
 
-        public string ToonSpecialisatie
-        {
-            get
-            {
-                if (Specialisatie == null) { return ""; }
-                else { return Specialisatie.Naam; }
-            }
-        }
-
-        public string ToonStatus
-        {
-            get
-            {
-                if (Status == StageopdrachtStatus.NietBeoordeeld)
-                {
-                    return "Niet beoordeeld";
-                }
-                return Status.ToString();
-            }
-        }
         public string Semester
         {
             get
             {
                 if (Semester1 && Semester2)
                     return "1 & 2";
-                else if (Semester1)
+                if (Semester1)
                     return "1";
-                return "2";
+                if (Semester2)
+                    return "2";
+                return null;
             }
         }
 

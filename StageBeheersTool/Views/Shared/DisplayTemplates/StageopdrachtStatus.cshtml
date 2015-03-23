@@ -1,0 +1,17 @@
+﻿@model StageopdrachtStatus
+@{
+    var status = "";
+    switch (Model)
+    {
+        case StageopdrachtStatus.Goedgekeurd:
+            status = "Goedgekeurd";
+            break;
+        case StageopdrachtStatus.Afgekeurd:
+            status = "Afgekeurd;";
+            break;
+        case StageopdrachtStatus.NietBeoordeeld:
+            status = "Niet beoordeeld";
+            break;
+    }
+}
+@status

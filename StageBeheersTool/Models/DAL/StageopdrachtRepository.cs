@@ -31,7 +31,6 @@ namespace StageBeheersTool.Models.DAL
         public Stageopdracht FindById(int id)
         {
             return _stageopdrachten
-                .Include(so => so.Specialisatie)
                 .Include(so => so.Bedrijf)
                 .Include(so => so.Stagementor)
                 .Include(so => so.Contractondertekenaar)
@@ -47,55 +46,55 @@ namespace StageBeheersTool.Models.DAL
                 return _userService.FindBedrijf().Stageopdrachten.AsQueryable()
                     .OrderBy(so => so.Titel)
                     .Include(so => so.Bedrijf)
-                    .Include(so => so.Specialisatie);
+                    .Include(so => so.Studenten);
             }
             if (_userService.IsStudent())
             {
                 return _stageopdrachten.Where(_goedGekeurd)
                     .OrderBy(so => so.Titel)
                     .Include(so => so.Bedrijf)
-                    .Include(so => so.Specialisatie);
+                    .Include(so => so.Studenten);
             }
             return _stageopdrachten.OrderBy(so => so.Titel)
                 .Include(so => so.Bedrijf)
-                .Include(so => so.Specialisatie);
+                .Include(so => so.Studenten);
         }
 
-        public IQueryable<Stageopdracht> FindAllByFilter(int? semester, int? aantalStudenten, int? specialisatieId,
+        public IQueryable<Stageopdracht> FindAllByFilter(int? semester, int? aantalStudenten, string specialisatie,
             string bedrijf, string locatie, string student)
         {
-            if (semester == null && aantalStudenten == null && specialisatieId == null && bedrijf == null && locatie == null && student == null)
+            if (semester == null && aantalStudenten == null && specialisatie == null && bedrijf == null && locatie == null && student == null)
             {
                 return FindAll();
             }
             if (_userService.IsBedrijf())
             {
                 return _userService.FindBedrijf().Stageopdrachten.AsQueryable()
-                    .Where(Filter(semester, aantalStudenten, specialisatieId, null, locatie, student))
+                    .Where(Filter(semester, aantalStudenten, specialisatie, null, locatie, student))
                     .OrderBy(so => so.Titel);
             }
             if (_userService.IsStudent())
             {
-                return FindGeldigeStageopdrachten(semester, aantalStudenten, specialisatieId,
-                       bedrijf, locatie);
+                return FindGeldigeStageopdrachten(semester, aantalStudenten, specialisatie,
+                       bedrijf, locatie).OrderBy(so => so.Titel); ;
             }
-            return FindByFilter(semester, aantalStudenten, specialisatieId,
-                bedrijf, locatie);
-
+            return _stageopdrachten.Include(so => so.Studenten)
+                .Where(Filter(semester, aantalStudenten, specialisatie,bedrijf, locatie, student))
+                                   .OrderBy(so => so.Titel);
         }
 
-        public IQueryable<Stageopdracht> FindByFilter(int? semester, int? aantalStudenten, int? specialisatieId, string bedrijf, string locatie)
+        public IQueryable<Stageopdracht> FindByFilter(int? semester, int? aantalStudenten, string specialisatie, string bedrijf, string locatie)
         {
-            if (semester == null && aantalStudenten == null && specialisatieId == null && bedrijf == null && locatie == null)
+            if (semester == null && aantalStudenten == null && specialisatie == null && bedrijf == null && locatie == null)
             {
                 return FindAll();
             }
-            return FindAll().Where(Filter(semester, aantalStudenten, specialisatieId, bedrijf, locatie, null));
+            return FindAll().Where(Filter(semester, aantalStudenten, specialisatie, bedrijf, locatie, null));
         }
 
-        public IQueryable<Stageopdracht> FindGeldigeStageopdrachten(int? semester, int? aantalStudenten, int? specialisatieId, string bedrijf, string locatie)
+        public IQueryable<Stageopdracht> FindGeldigeStageopdrachten(int? semester, int? aantalStudenten, string specialisatie, string bedrijf, string locatie)
         {
-            return FindByFilter(semester, aantalStudenten, specialisatieId, bedrijf, locatie).AsEnumerable()
+            return FindByFilter(semester, aantalStudenten, specialisatie, bedrijf, locatie).AsEnumerable()
                 .Where(_geldig).AsQueryable();
         }
 
@@ -126,9 +125,9 @@ namespace StageBeheersTool.Models.DAL
         }
 
         public IQueryable<Stageopdracht> FindGoedgekeurdeStageopdrachtenByFilter(int? semester, int? aantalStudenten,
-            int? specialisatieId, string bedrijf, string locatie, string student)
+           string specialisatie, string bedrijf, string locatie, string student)
         {
-            return FindByFilter(semester, aantalStudenten, specialisatieId, bedrijf, locatie)
+            return FindByFilter(semester, aantalStudenten, specialisatie, bedrijf, locatie)
                 .Where(so => (so.Status == StageopdrachtStatus.Goedgekeurd)
                     && (student == null || (student == "" || so.Studenten.Any(st => student.ToLower().Contains(st.Voornaam.ToLower())
                         || student.ToLower().Contains(st.Familienaam.ToLower()))))).AsEnumerable()
@@ -216,13 +215,17 @@ namespace StageBeheersTool.Models.DAL
 
         #region private helpers
         private Expression<Func<Stageopdracht, bool>> Filter(int? semester, int? aantalStudenten,
-            int? specialisatieId, string bedrijf, string locatie, string student)
+            string specialisatie, string bedrijf, string locatie, string student)
         {
             return so => (semester == null || ((so.Semester1 && semester == 1) || (so.Semester2 && semester == 2))) &&
-                      (aantalStudenten == null || so.AantalStudenten == aantalStudenten) &&
-                      ((specialisatieId == null || so.Specialisatie == null) || (specialisatieId == so.Specialisatie.Id)) &&
-                      (string.IsNullOrEmpty(bedrijf) || so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower())) &&
-                      (string.IsNullOrEmpty(locatie) || so.Gemeente.ToLower().Contains(locatie.ToLower()));
+                         (aantalStudenten == null || so.AantalStudenten == aantalStudenten) &&
+                         (string.IsNullOrEmpty(specialisatie) ||
+                          so.Specialisatie.ToLower().Contains(specialisatie.ToLower())) &&
+                         (string.IsNullOrEmpty(bedrijf) || so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower())) &&
+                         (string.IsNullOrEmpty(locatie) || so.Gemeente.ToLower().Contains(locatie.ToLower())) &&
+                         (string.IsNullOrEmpty(student) || so.Studenten.Any(s => 
+                             (s.Familienaam != null && s.Familienaam.ToLower().Contains(student.ToLower())) ||
+                                   (s.Voornaam != null && s.Voornaam.ToLower().Contains(student.ToLower()))));
         }
 
         private readonly Expression<Func<Stageopdracht, bool>> _goedGekeurd = so => so.Status == StageopdrachtStatus.Goedgekeurd;
@@ -231,6 +234,16 @@ namespace StageBeheersTool.Models.DAL
             so => so.IsGoedgekeurd() && !so.IsVolledigIngenomen() && so.IsInHuidigAcademiejaar();
 
         #endregion
+
+    }
+
+    public static class StringExtensions
+    {
+        public static bool ContainsIgnoreCase(this string source, string toCheck)
+        {
+            return source.IndexOf(toCheck, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
 
     }
 }

@@ -18,23 +18,16 @@ namespace StageBeheersTool.ViewModels
         public string Locatie { get; set; }
         public string Bedrijf { get; set; }
         public string Student { get; set; }
-        [Display(Name = "Specialisatie")]
-        public int? SpecialisatieId { get; set; }
+        public string Specialisatie { get; set; }
         public SelectList AantalStudentenList { get; set; }
         public SelectList SemesterList { get; set; }
-        public SelectList SpecialisatieList { get; set; }
         public bool ToonSearchForm { get; set; }
         public bool ToonZoekenOpStudent { get; set; }
         public bool ToonOordelen { get; set; }
 
-        public StageopdrachtIndexVM()
-        {
-        }
-
-        public void setItems(IEnumerable<Stageopdracht> stageopdrachten, IEnumerable<Specialisatie> specialisaties)
+        public void InitializeItems(IEnumerable<Stageopdracht> stageopdrachten)
         {
             Stageopdrachten = stageopdrachten;
-            SpecialisatieList = new SelectList(specialisaties, "Id", "Naam", SpecialisatieId == null ? "" : SpecialisatieId.ToString());
             AantalStudentenList = new SelectList(new string[] { "1", "2", "3" }, AantalStudenten == null ? "" : AantalStudenten.ToString());
             SemesterList = new SelectList(new string[] { "1", "2" }, Semester == null ? "" : Semester.ToString());
         }
@@ -118,6 +111,7 @@ namespace StageBeheersTool.ViewModels
         [Required]
         [RegularExpression("[0-9]{4}-[0-9]{4}", ErrorMessage = "Ongeldig academiejaar")]
         public string Academiejaar { get; set; }
+        public string Specialisatie { get; set; }
         [Display(Name = "Specialisatie")]
         public int? SpecialisatieId { get; set; }
         public bool Semester1 { get; set; }

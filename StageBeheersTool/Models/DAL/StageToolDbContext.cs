@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Infrastructure.Annotations;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using MySql.Data.Entity;
 using System;
@@ -38,12 +40,13 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new AcademiejaarInstellingenMapper());
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
 
             modelBuilder.Entity<IdentityRole>()
                 .Property(c => c.Name).HasMaxLength(128).IsRequired();
             modelBuilder.Entity<ApplicationUser>().ToTable("aspNetUsers")
-                .Property(c => c.UserName).HasMaxLength(128).IsRequired();
+                .Property(c => c.UserName).HasMaxLength(128).IsRequired()
+                 ;//.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("UserNameIndex") { IsUnique = false }));
         }
 
         public DbSet<Bedrijf> Bedrijven { get; set; }

@@ -16,8 +16,8 @@ using System.Data.Entity.Migrations;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        // DropCreateDatabaseAlways<StageToolDbContext>
-     DropCreateDatabaseIfModelChanges<StageToolDbContext>
+       //DropCreateDatabaseAlways<StageToolDbContext>
+    DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
         public void RunSeed(StageToolDbContext ctx)
         {
@@ -47,12 +47,22 @@ namespace StageBeheersTool.Models.DAL
 
                 ApplicationUser user3 = new ApplicationUser()
                 {
-                    Email = "olivier.neirynck.q1177@student.hogent.be",
-                    UserName = "olivier.neirynck.q1177@student.hogent.be",
+                    Email = "student@test.be",
+                    UserName = "student@test.be",
                     EmailConfirmed = true
                 };
-                userManager.Create(user3);
+                userManager.Create(user3, "wachtwoord");
                 userManager.AddToRole(user3.Id, "student");
+
+                ApplicationUser user4 = new ApplicationUser()
+                {
+                    Email = "begeleider@test.be",
+                    UserName = "begeleider@test.be",
+                    EmailConfirmed = true
+                };
+                userManager.Create(user4, "wachtwoord");
+                userManager.AddToRole(user4.Id, "begeleider");
+
                 #endregion
 
                 #region specialisaties
@@ -63,6 +73,7 @@ namespace StageBeheersTool.Models.DAL
                 Specialisatie specialisatie5 = new Specialisatie() { Naam = "Mainframe" };
                 Specialisatie specialisatie6 = new Specialisatie() { Naam = "E-business" };
                 Specialisatie specialisatie7 = new Specialisatie() { Naam = "Systeembeheer" };
+                Specialisatie andere = new Specialisatie() { Naam = "Andere" };
 
                 IList<Specialisatie> specialisaties = new List<Specialisatie>();
                 specialisaties.Add(specialisatie1);
@@ -72,6 +83,7 @@ namespace StageBeheersTool.Models.DAL
                 specialisaties.Add(specialisatie5);
                 specialisaties.Add(specialisatie6);
                 specialisaties.Add(specialisatie7);
+                specialisaties.Add(andere);
                 context.Specialisaties.AddRange(specialisaties);
                 #endregion
 
@@ -146,7 +158,7 @@ namespace StageBeheersTool.Models.DAL
                     Stageopdracht stageopdracht = new Stageopdracht()
                     {
                         Titel = "titel" + i,
-                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count))],
+                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count))].Naam,
                         Semester1 = random.Next(0, 2) == 0,
                         Semester2 = random.Next(0, 2) == 0,
                         Omschrijving = "omschrijving" + i,
@@ -215,7 +227,7 @@ namespace StageBeheersTool.Models.DAL
                     Stageopdracht stageopdracht = new Stageopdracht()
                     {
                         Titel = "opdracht " + i,
-                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count - 1))],
+                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count - 1))].Naam,
                         Semester1 = random.Next(0, 2) == 0,
                         Semester2 = random.Next(0, 2) == 0,
                         Omschrijving = "omschrijving " + i,

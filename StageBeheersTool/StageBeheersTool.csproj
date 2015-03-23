@@ -359,6 +359,7 @@
     <Content Include="Scripts\lib\modernizr-2.6.2.js" />
     <Content Include="Scripts\lib\respond.js" />
     <Content Include="Scripts\lib\respond.min.js" />
+    <Content Include="Scripts\specialisatie.js" />
     <Content Include="Scripts\stagetool-form.js" />
     <Content Include="Scripts\stagetool.js" />
     <Content Include="Scripts\_references.js" />
@@ -414,6 +415,7 @@
     <Content Include="Views\Academiejaar\Lijst.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\NullableDateTime.cshtml" />
     <Content Include="Views\Academiejaar\Create.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\StageopdrachtStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

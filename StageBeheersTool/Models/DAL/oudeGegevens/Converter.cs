@@ -28,7 +28,6 @@ namespace StageBeheersTool.OudeGegevens
                 Bedrijfsactiviteiten = stagebedrijf.sector,
                 Contactpersonen = contactpersonen,
                 Email = "geenEmail" + Guid.NewGuid()//geen email
-                //Stageopdrachten = GetStageopdrachten(stagebedrijf.stage)
             };
         }
 
@@ -87,11 +86,9 @@ namespace StageBeheersTool.OudeGegevens
                 Straat = stage.straat,
                 Gemeente = stage.gemeente,
                 Postcode = stage.pc,
-                //mentor, contractondertekenaar, docent
                 Status = ToStageopdrachtStatus(stage.statusOpdracht),
-                Academiejaar = stage.acjaar
-                //Stagebegeleider = begeleider,
-                // Studenten = studentenVanDezeStage
+                Academiejaar = stage.acjaar,
+                Specialisatie = stage.typeStage
             };
         }
 

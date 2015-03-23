@@ -91,12 +91,15 @@
                 @Html.ValidationMessageFor(model => model.Straatnummer, "", new { @class = "text-danger" })
             </div>
         </div>
-       
+
         <div class="form-group">
             @Html.LabelFor(model => model.SpecialisatieId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-4">
                 @Html.DropDownListFor(model => model.SpecialisatieId, Model.SpecialisatieSelectList, "-- Selecteer een specialisatie --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SpecialisatieId, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Specialisatie, new { @class = "form-control", style = "display:none" })
             </div>
         </div>
 
@@ -129,4 +132,5 @@
 </div>
 @section scripts{
     <script src="~/Scripts/stagetool-form.js"></script>
+    <script src="~/Scripts/specialisatie.js"></script>
 }

@@ -28,10 +28,9 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.SpecialisatieId, htmlAttributes: new { @class = "control-label col-md-1" })
+            @Html.LabelFor(model => model.Specialisatie, htmlAttributes: new { @class = "control-label col-md-1" })
             <div class="col-md-11">
-                @Html.DropDownListFor(model => model.SpecialisatieId, Model.SpecialisatieList, "--specialisatie--",
-                new { @class = "form-control", style = "width:auto" })
+                @Html.EditorFor(model => model.Specialisatie, new {@class = "form-control"})
             </div>
         </div>
         if (User.IsInRole("bedrijf") == false)

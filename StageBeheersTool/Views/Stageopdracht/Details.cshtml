@@ -52,7 +52,7 @@
             @Html.DisplayNameFor(model => model.Stageopdracht.Specialisatie)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Specialisatie.Naam)
+            @Html.DisplayFor(model => model.Stageopdracht.Specialisatie)
         </dd>
         <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Bedrijf) </dt>
         <dd>@Html.DisplayFor(model => model.Stageopdracht.Bedrijf.Naam)</dd>
@@ -86,7 +86,7 @@
                 Status
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Stageopdracht.ToonStatus)
+                @Html.DisplayFor(model => model.Stageopdracht.Status)
             </dd>
         }
     </dl>
