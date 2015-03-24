@@ -9,7 +9,7 @@ namespace OudeGegevens
     public class OudeGegevensDbContext : DbContext
     {
         public OudeGegevensDbContext()
-            : base("oudeGegevensConnectionString")
+            : base("OudeGegevens")
         {
 
         }
