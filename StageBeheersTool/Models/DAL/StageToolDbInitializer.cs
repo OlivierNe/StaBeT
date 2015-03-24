@@ -21,13 +21,13 @@ using StageBeheersTool.ViewModels;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        // DropCreateDatabaseAlways<StageToolDbContext>
+        //DropCreateDatabaseAlways<StageToolDbContext>
      DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
         public void RunSeed(StageToolDbContext ctx)
         {
-            this.Seed(ctx);
+            //this.Seed(ctx);
         }
 
         protected override void Seed(StageToolDbContext context)
