@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
+using StageBeheersTool.Models.DAL;
 
 namespace StageBeheersTool.Controllers
 {
@@ -22,6 +23,7 @@ namespace StageBeheersTool.Controllers
         // GET: Admin
         public ActionResult Index()
         {
+
             return View();
         }
 
@@ -48,20 +50,6 @@ namespace StageBeheersTool.Controllers
         {
             return View();
         }
-
-        public ActionResult Delete()
-        {
-            return View();
-        }
-        
-        [ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeletePost()
-        {
-            return View();
-        }
-
-
 
     }
 }

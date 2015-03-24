@@ -50,11 +50,16 @@ namespace StageBeheersTool.Models.Domain
         /// <returns></returns>
         IQueryable<Stageopdracht> FindGeldigeBegeleiderStageopdrachtenWithFilter(int? semester, int? aantalStudenten, string specialisatie, string bedrijf, string locatie, string student);
 
+        /// <summary>
+        /// </summary>
+        /// <returns>Stageopdrachten van huidig academiejaar van ingelogde begeleider</returns>
+        IQueryable<Stageopdracht> FindStageopdrachtenVanBegeleider();
+
         void Update(Stageopdracht stageopdracht);
         void Delete(Stageopdracht stageopdracht);
 
         StageBegeleidAanvraag FindAanvraagById(int id);
-    
+
         /// <summary>
         /// alle begeleider aanvragen van het huidige academiejaar
         /// </summary>
@@ -77,8 +82,16 @@ namespace StageBeheersTool.Models.Domain
         /// </returns>
         string[] FindAllAcademiejaren();
 
-        IQueryable<Stageopdracht> FindAllVanAcademiejaar(string academiejaar);
+        /// <summary>
+        /// </summary>
+        /// <returns>Lijst academiejaren waar begeleider stages in had</returns>
+        string[] FindAllAcademiejarenVanBegeleider();
+
+        IQueryable<Stageopdracht> FindAllVanAcademiejaar(string academiejaar, string student, string bedrijf);
+
+        IQueryable<Stageopdracht> FindMijnStagesVanAcademiejaar(string academiejaar, string student, string bedrijf);
 
         void SaveChanges();
+
     }
 }

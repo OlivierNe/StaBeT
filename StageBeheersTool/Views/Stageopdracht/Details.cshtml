@@ -55,18 +55,34 @@
             @Html.DisplayFor(model => model.Stageopdracht.Specialisatie)
         </dd>
         <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Bedrijf) </dt>
-        <dd>@Html.DisplayFor(model => model.Stageopdracht.Bedrijf.Naam)</dd>
+        <dd style="white-space: pre-line">@Html.DisplayFor(model => model.Stageopdracht.Bedrijf.Naam)
+            <a href="https://maps.google.com/?q=@Model.Stageopdracht.Bedrijf.Adres" target="_blank">@Model.Stageopdracht.Bedrijf.Adres</a>
+            @if (Model.BedrijfHeeftGeldigEmail())
+            {
+                <a href="mailto:@Model.Stageopdracht.Bedrijf.Email">@Model.Stageopdracht.Bedrijf.Email</a>
+            }
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Stageopdracht.Contractondertekenaar)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Contractondertekenaar)
+            @if (Model.Stageopdracht.Contractondertekenaar != null)
+            {
+                @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Naam)
+                <a href="mailto:@Model.Stageopdracht.Contractondertekenaar.Email"> @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Email)</a>
+                @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Gsmnummer)
+            }
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Stageopdracht.Stagementor)
+            @Html.NameFor(model => model.Stagementor)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Stagementor)
+            @if (Model.Stageopdracht.Stagementor != null)
+            {
+                @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Naam)
+                <a href="mailto:@Model.Stageopdracht.Stagementor.Email"> @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Email)</a>
+                @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Gsmnummer)
+            }
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)
@@ -90,6 +106,7 @@
             </dd>
         }
     </dl>
+
 </div>
 @if (Model.ToonEdit)
 {

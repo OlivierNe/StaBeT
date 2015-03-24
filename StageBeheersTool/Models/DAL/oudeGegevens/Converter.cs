@@ -95,7 +95,8 @@ namespace StageBeheersTool.OudeGegevens
                 Postcode = stage.pc,
                 Status = ToStageopdrachtStatus(stage.statusOpdracht),
                 Academiejaar = stage.acjaar,
-                Specialisatie = stage.typeStage
+                Specialisatie = stage.typeStage,
+                Semester2 = true
             };
         }
 
@@ -113,6 +114,6 @@ namespace StageBeheersTool.OudeGegevens
                     return StageopdrachtStatus.NietBeoordeeld;
             }
         }
-     
+
     }
 }

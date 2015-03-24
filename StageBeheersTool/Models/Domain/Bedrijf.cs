@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -26,6 +27,15 @@ namespace StageBeheersTool.Models.Domain
         public string Bedrijfsactiviteiten { get; set; } //(bank – software ontwikkelaar – openbare diensten ….)
         public virtual ICollection<Stageopdracht> Stageopdrachten { get; set; }
         public virtual ICollection<Contactpersoon> Contactpersonen { get; set; }
+
+        public string Adres
+        {
+            get
+            {
+                return string.Format("{0} {1}, {2} {3}", Postcode, Gemeente, Straat, Straatnummer);
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -61,7 +71,6 @@ namespace StageBeheersTool.Models.Domain
                 teUpdatenOpdracht.Specialisatie = stageopdracht.Specialisatie;
                 teUpdatenOpdracht.Academiejaar = stageopdracht.Academiejaar;
                 teUpdatenOpdracht.AantalStudenten = stageopdracht.AantalStudenten;
-                teUpdatenOpdracht.AantalToegewezenStudenten = stageopdracht.AantalToegewezenStudenten;
                 teUpdatenOpdracht.Stagementor = stageopdracht.Stagementor;
                 teUpdatenOpdracht.Contractondertekenaar = stageopdracht.Contractondertekenaar;
                 teUpdatenOpdracht.Gemeente = stageopdracht.Gemeente;

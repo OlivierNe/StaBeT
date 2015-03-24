@@ -9,7 +9,7 @@
     @ViewBag.success
 </div>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
@@ -19,7 +19,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Academiejaar, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-2">
-                @Html.EditorFor(model => model.Academiejaar, new { htmlAttributes = new { @class = "form-control",autofocus="" } })
+                @Html.EditorFor(model => model.Academiejaar, new { htmlAttributes = new { @class = "form-control", autofocus = "" } })
                 @Html.ValidationMessageFor(model => model.Academiejaar, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -63,7 +63,7 @@
 @section scripts{
     <script src="~/Scripts/lib/jquery-ui-1.11.4.min.js"></script>
     <script src="~/Scripts/lib/datepicker-nl-BE.js"></script>
-<script src="~/Scripts/academiejaarInstellingen.js"></script>
+    <script src="~/Scripts/academiejaarInstellingen.js"></script>
 }
 @section styles{
     @*@Styles.Render("~/Content/themes/base/css/datepicker")*@

@@ -423,12 +423,15 @@
     <Content Include="Views\Stageopdracht\GoedgekeurdeStages.cshtml" />
     <Content Include="Views\Stageopdracht\Archief.cshtml" />
     <Content Include="Views\Stageopdracht\VanAcademiejaar.cshtml" />
+    <Content Include="Views\Stageopdracht\MijnStages.cshtml" />
+    <Content Include="Views\Stageopdracht\MijnArchief.cshtml" />
+    <Content Include="Views\Stageopdracht\_ZoekFormulierArchief.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\Begeleider\" />
     <Folder Include="Images\Student\" />
-    <Folder Include="Views\Admin\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

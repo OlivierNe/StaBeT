@@ -15,14 +15,13 @@ using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.Services;
 using StageBeheersTool.OudeGegevens;
 using System.Data.Entity.Migrations;
-using StageBeheersTool.ViewModels;
 
 
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        // DropCreateDatabaseAlways<StageToolDbContext>
-     DropCreateDatabaseIfModelChanges<StageToolDbContext>
+        //  DropCreateDatabaseAlways<StageToolDbContext>
+    DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
         public void RunSeed(StageToolDbContext ctx)
@@ -178,7 +177,6 @@ namespace StageBeheersTool.Models.DAL
                         Bedrijf = bedrijf1,
                         Gemeente = "Gemeente1"
                     };
-                    stageopdracht.AantalToegewezenStudenten = random.Next(0, stageopdracht.AantalStudenten);
                     if (i % 2 == 0)
                     {
                         stageopdracht.Status = StageopdrachtStatus.Goedgekeurd;
@@ -248,7 +246,6 @@ namespace StageBeheersTool.Models.DAL
                         Gemeente = "Gemeente2",
                         Status = StageopdrachtStatus.Goedgekeurd
                     };
-                    stageopdracht.AantalToegewezenStudenten = random.Next(0, stageopdracht.AantalStudenten);
                     bedrijf2.AddStageopdracht(stageopdracht);
                 }
 

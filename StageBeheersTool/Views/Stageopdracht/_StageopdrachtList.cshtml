@@ -18,7 +18,7 @@
     columns.Add(so => so.Specialisatie);
     columns.Add(so => so.Semester1).Titled("Semester")
         .RenderValueAs(so => so.Semester).Sortable(true).ThenSortBy(so => so.Semester2);
-    columns.Add(so => so.AantalToegewezenStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
+    columns.Add(so => so.AantalStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
     if (User.IsInRole("bedrijf") == false)
     {
         columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf");

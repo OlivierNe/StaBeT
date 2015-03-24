@@ -52,7 +52,7 @@ namespace StageBeheersTool.Models.Domain
         public bool Semester1 { get; set; }
         public bool Semester2 { get; set; }
         public int AantalStudenten { get; set; }
-        public int AantalToegewezenStudenten { get; set; }
+        public int AantalToegewezenStudenten { get { return Studenten.Count; } }
         public string Academiejaar { get; set; }
         public virtual Contactpersoon Contractondertekenaar { get; set; }
         public virtual Contactpersoon Stagementor { get; set; }

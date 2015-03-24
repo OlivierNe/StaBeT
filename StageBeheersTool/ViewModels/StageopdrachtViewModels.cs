@@ -55,6 +55,7 @@ namespace StageBeheersTool.ViewModels
         public string Bedrijf { get; set; }
         public string Student { get; set; }
         public string Specialisatie { get; set; }
+        public string Academiejaar { get; set; }
     }
 
     public class StageopdrachtDetailsVM
@@ -122,6 +123,21 @@ namespace StageBeheersTool.ViewModels
                         Stageopdracht.Contractondertekenaar.Email,
                         Stageopdracht.Contractondertekenaar.Gsmnummer }
                         .Where(s => !string.IsNullOrEmpty(s)));
+            }
+        }
+
+        public bool BedrijfHeeftGeldigEmail()
+        {
+            return new EmailAddressAttribute().IsValid(Stageopdracht.Bedrijf.Email);
+        }
+
+        public string Bedrijf
+        {
+            get
+            {
+                var retVal = Stageopdracht.Bedrijf.Naam;
+                retVal += "\n" + Stageopdracht.Bedrijf.Adres;
+                return retVal;
             }
         }
     }

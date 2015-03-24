@@ -1,18 +1,10 @@
-﻿using System.Web.Routing;
-using AutoMapper;
-using OudeGegevens.Models;
+﻿using AutoMapper;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using PagedList;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
 using StageBeheersTool.Models.Authentication;
 using System.Threading.Tasks;
 
@@ -58,11 +50,13 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Begeleider)]
         public ActionResult GoedgekeurdeStages(StageopdrachtIndexVM model)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindGeldigeBegeleiderStageopdrachtenWithFilter(model.Semester,
+            var stageopdrachten = _stageopdrachtRepository.FindGeldigeBegeleiderStageopdrachtenWithFilter(
+                model.Semester,
                 model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, model.Student);
             model.InitializeItems(stageopdrachten);
             model.ToonSearchForm = true;
             model.ToonZoekenOpStudent = true;
+            model.Title = "Toegewezen stages zonder begeleider";
             model.OverzichtAction = "GoedgekeurdeStages";
             if (Request.IsAjaxRequest())
             {
@@ -88,6 +82,22 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
+        [Authorize(Role.Begeleider)]
+        public ActionResult MijnStages()
+        {
+            var stageopdrachten = _stageopdrachtRepository.FindStageopdrachtenVanBegeleider();
+            var model = new StageopdrachtIndexVM
+            {
+                Stageopdrachten = stageopdrachten,
+                Title = "Mijn stages"
+            };
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_StageopdrachtList", model);
+            }
+            return View(model);
+        }
+
         [Authorize(Role.Admin, Role.Begeleider)]
         public ActionResult Archief()
         {
@@ -95,16 +105,47 @@ namespace StageBeheersTool.Controllers
             return View(academiejaren);
         }
 
-        [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult VanAcademiejaar(string academiejaar)
+        [Authorize(Role.Begeleider)]
+        public ActionResult MijnArchief()
         {
-            var stageopdrachten = _stageopdrachtRepository.FindAllVanAcademiejaar(academiejaar);
+            var academiejaren = _stageopdrachtRepository.FindAllAcademiejarenVanBegeleider();
+            return View(academiejaren);
+        }
+
+        [Authorize(Role.Admin, Role.Begeleider)]
+        public ActionResult VanAcademiejaar(string academiejaar, string student, string bedrijf)
+        {
+            var stageopdrachten = _stageopdrachtRepository.FindAllVanAcademiejaar(academiejaar, student, bedrijf);
             var model = new StageopdrachtIndexVM
             {
                 Stageopdrachten = stageopdrachten,
-                OverzichtAction = "Archief"
+                OverzichtAction = "Archief",
+                Title = "Stageopdrachten - " + academiejaar,
+                Academiejaar = academiejaar
             };
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_StageopdrachtList", model);
+            }
             return View(model);
+        }
+
+        [Authorize(Role.Begeleider)]
+        public ActionResult MijnStagesVanAcademiejaar(string academiejaar, string student, string bedrijf)
+        {
+            var stageopdrachten = _stageopdrachtRepository.FindMijnStagesVanAcademiejaar(academiejaar, student, bedrijf);
+            var model = new StageopdrachtIndexVM
+            {
+                Stageopdrachten = stageopdrachten,
+                OverzichtAction = "MijnStagesVanAcademiejaar",
+                Title = "Mijn stages - " + academiejaar,
+                Academiejaar = academiejaar
+            };
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_StageopdrachtList", model);
+            }
+            return View("MijnStages", model);
         }
         #endregion
 
