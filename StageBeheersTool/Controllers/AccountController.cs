@@ -80,11 +80,8 @@ namespace StageBeheersTool.Controllers
                         await UserManager.CreateAsync(user);
                         await UserManager.AddToRoleAsync(user.Id, "student");
                         Student student = new Student() { HogentEmail = model.Email };
-                        if (_userService.UserExists(student))
-                        {
-                            _userService.CreateUser<Student>(student);
-                            _userService.SaveChanges();
-                        }
+                        _userService.CreateUser(student);
+
                         await SignInManager.SignInAsync(user, model.RememberMe, false);
                         return RedirectToAction("Edit", "Student");
                     }
@@ -109,11 +106,7 @@ namespace StageBeheersTool.Controllers
                         await UserManager.CreateAsync(user);
                         await UserManager.AddToRoleAsync(user.Id, "begeleider"); //of admin
                         Begeleider begeleider = new Begeleider() { HogentEmail = model.Email, Familienaam = dataDocent["LASTNAME"], Voornaam = dataDocent["FIRSTNAME"] };
-                        if (_userService.UserExists(begeleider))
-                        {
-                            _userService.CreateUser<Begeleider>(begeleider);
-                            _userService.SaveChanges();
-                        }
+                        _userService.CreateUser(begeleider);
                         await SignInManager.SignInAsync(user, model.RememberMe, false);
                         return RedirectToAction("Edit", "Begeleider");
                     }
@@ -131,7 +124,7 @@ namespace StageBeheersTool.Controllers
                     await UserManager.AddToRoleAsync(user.Id, "admin");
                 }
                 await SignInManager.SignInAsync(user, model.RememberMe, false);
-                
+
                 return RedirectToAction("Index", "Stageopdracht");
 
             }
@@ -193,11 +186,7 @@ namespace StageBeheersTool.Controllers
                 {
                     var bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
 
-                    if (_userService.UserExists(bedrijf))
-                    {
-                        _userService.CreateUser<Bedrijf>(bedrijf);
-                        _userService.SaveChanges();
-                    }
+                    _userService.CreateUser(bedrijf);
                     IdentityMessage message = new IdentityMessage()
                     {
                         Subject = "Registratie",
@@ -328,7 +317,7 @@ namespace StageBeheersTool.Controllers
 
 
 
-    
+
         ////
         //// GET: /Account/ForgotPassword
         //[AllowAnonymous]

@@ -10,10 +10,9 @@ namespace StageBeheersTool.Models.Domain
         bool IsBedrijf();
         bool IsStudent();
         bool IsBegeleider();
-        void CreateUser<T>(T userObject) where T : class;
-        bool UserExists(Student student);
-        bool UserExists(Begeleider begeleider);
-        bool UserExists(Bedrijf bedrijf);
+        bool CreateUser(Bedrijf bedrijf);
+        bool CreateUser(Begeleider begeleider);
+        bool CreateUser(Student student);
         void SaveChanges();
     }
 }

@@ -320,10 +320,16 @@ namespace StageBeheersTool.Controllers
             Stageopdracht stageopdracht;
             if (ModelState.IsValid)
             {
+                var opdracht = _stageopdrachtRepository.FindById(model.Id);
+                if (opdracht == null)
+                {
+                    return HttpNotFound();
+                }
+                var bedrijf = opdracht.Bedrijf;
                 stageopdracht = Mapper.Map<StageopdrachtEditVM, Stageopdracht>(model);
-                stageopdracht.Stagementor = model.StagementorId != null ? stageopdracht.Bedrijf.FindContactpersoonById((int)model.StagementorId) : null;
+                stageopdracht.Stagementor = model.StagementorId != null ? bedrijf.FindContactpersoonById((int)model.StagementorId) : null;
                 stageopdracht.Contractondertekenaar = model.ContractondertekenaarId
-                    != null ? stageopdracht.Bedrijf.FindContactpersoonById((int)model.ContractondertekenaarId) : null;
+                    != null ? bedrijf.FindContactpersoonById((int)model.ContractondertekenaarId) : null;
                 _stageopdrachtRepository.Update(stageopdracht);
                 _userService.SaveChanges();
                 return RedirectToAction("Details", new { id = model.Id });

@@ -32,28 +32,6 @@ namespace StageBeheersTool.Models.Services
             return ctx.Begeleiders.FirstOrDefault(begeleider => begeleider.HogentEmail == HttpContext.Current.User.Identity.Name);
         }
 
-        public void CreateUser<T>(T userObject) where T : class
-        {
-            ctx.Set<T>().Add(userObject);
-        }
-
-        private bool UserExists<T>(T userObject) where T : class
-        {
-            //return ctx.Set<T>().Local.Any<T>(obj => obj.Equals(userObject));
-            if (userObject.GetType() == typeof(Student))
-            {
-                return ctx.Studenten.Any(s => s.HogentEmail.Equals(userObject));
-            }
-
-
-            return false;
-        }
-
-        /*private bool Exists<T>(params object[] keys)
-        {
-            return (ctx.Set<T>().Find(keys) != null);
-        }*/
-
         public bool IsAdmin()
         {
             return HttpContext.Current.User.IsInRole("admin");
@@ -79,19 +57,48 @@ namespace StageBeheersTool.Models.Services
             ctx.SaveChanges();
         }
 
-        public bool UserExists(Student student)
+        public bool CreateUser(Bedrijf bedrijf)
+        {
+            if (UserExists(bedrijf))
+                return false;
+            ctx.Bedrijven.Add(bedrijf);
+            SaveChanges();
+            return true;
+        }
+
+        public bool CreateUser(Begeleider begeleider)
+        {
+            if (UserExists(begeleider))
+                return false;
+            ctx.Begeleiders.Add(begeleider);
+            SaveChanges();
+            return true;
+        }
+
+        public bool CreateUser(Student student)
+        {
+            if (UserExists(student))
+                return false;
+            ctx.Studenten.Add(student);
+            SaveChanges();
+            return true;
+        }
+
+        #region helpers
+        private bool UserExists(Student student)
         {
             return ctx.Studenten.Any(s => s.HogentEmail == student.HogentEmail);
         }
 
-        public bool UserExists(Begeleider begeleider)
+        private bool UserExists(Begeleider begeleider)
         {
             return ctx.Begeleiders.Any(s => s.HogentEmail == begeleider.HogentEmail);
         }
 
-        public bool UserExists(Bedrijf bedrijf)
+        private bool UserExists(Bedrijf bedrijf)
         {
             return ctx.Bedrijven.Any(s => s.Email == bedrijf.Email);
         }
+        #endregion
     }
 }
