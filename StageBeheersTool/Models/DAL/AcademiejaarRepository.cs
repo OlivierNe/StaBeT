@@ -1,4 +1,5 @@
-﻿using StageBeheersTool.Models.Domain;
+﻿using StageBeheersTool.Helpers;
+using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -28,7 +29,7 @@ namespace StageBeheersTool.Models.DAL
 
         public AcademiejaarInstellingen FindByHuidigAcademiejaar()
         {
-            string huidigAcademiejaar = Helpers.HuidigAcademiejaar();
+            string huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
             return academiejaren.SingleOrDefault(aj => aj.Academiejaar.Equals(huidigAcademiejaar));
         }
 

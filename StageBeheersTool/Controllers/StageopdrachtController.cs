@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
 using System.Collections.Generic;
@@ -34,12 +35,12 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.student, Role.Bedrijf, Role.Begeleider, Role.Admin)]
         public ActionResult Index(StageopdrachtIndexVM model)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindAllWithFilter(model.Semester,
-                model.AantalStudenten, model.Specialisatie, model.Bedrijf,
-                model.Locatie, model.Student);
-            model.Title = "Overzicht stageopdrachten " + Helpers.HuidigAcademiejaar();
+            var stageopdrachten = _stageopdrachtRepository.FindAll().WithFilter(model.Semester,
+                model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, model.Student);
+            model.Title = "Overzicht stageopdrachten " + AcademiejaarHelper.HuidigAcademiejaar();
             model.InitializeItems(stageopdrachten);
             model.ToonSearchForm = true;
+            model.ToonStudenten = _userService.IsBegeleider() || _userService.IsAdmin();
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageopdrachtList", model);
@@ -50,12 +51,12 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Begeleider)]
         public ActionResult GoedgekeurdeStages(StageopdrachtIndexVM model)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindGeldigeBegeleiderStageopdrachtenWithFilter(
-                model.Semester,
+            var stageopdrachten = _stageopdrachtRepository.FindGeldigeBegeleiderStageopdrachten().WithFilter(model.Semester,
                 model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, model.Student);
             model.InitializeItems(stageopdrachten);
             model.ToonSearchForm = true;
             model.ToonZoekenOpStudent = true;
+            model.ToonStudenten = true;
             model.Title = "Toegewezen stages zonder begeleider";
             model.OverzichtAction = "GoedgekeurdeStages";
             if (Request.IsAjaxRequest())
@@ -69,11 +70,12 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Admin)]
         public ActionResult Voorstellen(StageopdrachtIndexVM model)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindStageopdrachtVoorstellen();
+            var stageopdrachten = _stageopdrachtRepository.FindStageopdrachtVoorstellen()
+               .WithFilter(model.Semester, model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, null);
             model.ToonOordelen = true;
             model.ToonSearchForm = true;
             model.InitializeItems(stageopdrachten);
-            model.Title = "Stage voorstellen bedrijven " + Helpers.HuidigAcademiejaar();
+            model.Title = "Stage voorstellen bedrijven " + AcademiejaarHelper.HuidigAcademiejaar();
             model.OverzichtAction = "Voorstellen";
             if (Request.IsAjaxRequest())
             {
@@ -89,7 +91,8 @@ namespace StageBeheersTool.Controllers
             var model = new StageopdrachtIndexVM
             {
                 Stageopdrachten = stageopdrachten,
-                Title = "Mijn stages"
+                Title = "Mijn stages",
+                ToonStudenten = true
             };
             if (Request.IsAjaxRequest())
             {
@@ -115,13 +118,15 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Admin, Role.Begeleider)]
         public ActionResult VanAcademiejaar(string academiejaar, string student, string bedrijf)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindAllVanAcademiejaar(academiejaar, student, bedrijf);
+            var stageopdrachten = _stageopdrachtRepository.FindAllVanAcademiejaar(academiejaar)
+                .WithFilter(student: student, bedrijf: bedrijf);
             var model = new StageopdrachtIndexVM
             {
                 Stageopdrachten = stageopdrachten,
                 OverzichtAction = "Archief",
                 Title = "Stageopdrachten - " + academiejaar,
-                Academiejaar = academiejaar
+                Academiejaar = academiejaar,
+                ToonStudenten = true
             };
             if (Request.IsAjaxRequest())
             {
@@ -133,13 +138,15 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Begeleider)]
         public ActionResult MijnStagesVanAcademiejaar(string academiejaar, string student, string bedrijf)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindMijnStagesVanAcademiejaar(academiejaar, student, bedrijf);
+            var stageopdrachten = _stageopdrachtRepository.FindMijnStagesVanAcademiejaar(academiejaar)
+                .WithFilter(student: student, bedrijf: bedrijf);
             var model = new StageopdrachtIndexVM
             {
                 Stageopdrachten = stageopdrachten,
                 OverzichtAction = "MijnStagesVanAcademiejaar",
                 Title = "Mijn stages - " + academiejaar,
-                Academiejaar = academiejaar
+                Academiejaar = academiejaar,
+                ToonStudenten = true
             };
             if (Request.IsAjaxRequest())
             {

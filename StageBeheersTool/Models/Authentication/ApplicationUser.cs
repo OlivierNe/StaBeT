@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Web;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
-using StageBeheersTool.Models.Domain;
+using StageBeheersTool.Models.DAL;
+using Microsoft.AspNet.Identity.Owin;
+
 
 namespace StageBeheersTool.Models.Authentication
 {
@@ -14,9 +16,32 @@ namespace StageBeheersTool.Models.Authentication
     {
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
-            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-            // Add custom user claims here
+
+            var name = userIdentity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+            var display = name;
+            if (manager.IsInRole(Id, "bedrijf"))
+            {
+                var ctx = HttpContext.Current.GetOwinContext().Get<StageToolDbContext>();
+                var bedrijf = ctx.Bedrijven.FirstOrDefault(b => b.Email == name);
+                if (bedrijf != null)
+                    display = bedrijf.Naam;
+            }
+            else if (manager.IsInRole(Id, "student"))
+            {
+                var ctx = HttpContext.Current.GetOwinContext().Get<StageToolDbContext>();
+                var student = ctx.Studenten.FirstOrDefault(s => s.HogentEmail == name);
+                if (student != null && string.IsNullOrEmpty(student.Naam) == false)
+                    display = student.Naam;
+            }
+            else if (manager.IsInRole(Id, "begeleider"))
+            {
+                var ctx = HttpContext.Current.GetOwinContext().Get<StageToolDbContext>();
+                var begeleider = ctx.Begeleiders.FirstOrDefault(b => b.HogentEmail == name);
+                if (begeleider != null && string.IsNullOrEmpty(begeleider.Naam) == false)
+                    display = begeleider.Naam;
+            }
+            userIdentity.AddClaim(new Claim("Display", display));
             return userIdentity;
         }
     }

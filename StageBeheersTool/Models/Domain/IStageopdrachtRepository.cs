@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Linq;
+﻿using System.Linq;
 
 namespace StageBeheersTool.Models.Domain
 {
@@ -31,14 +30,6 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<Stageopdracht> FindStageopdrachtVoorstellen();
 
         /// <summary>
-        /// <para>- bedrijf: alleen stageopdrachten van huidig ingelogd bedrijf</para>
-        /// <para>- student: goedgekeurde van het huidig academiejaar die nog niet volledig ingenomen zijn</para>
-        /// <para>- admin/begeleider: alle goedgekeurde van het huidige academiejaar</para>
-        /// </summary>
-        /// <returns></returns>
-        IQueryable<Stageopdracht> FindAllWithFilter(int? semester, int? aantalStudenten, string specialisatie, string bedrijf, string locatie, string student);
-
-        /// <summary>
         /// </summary>
         /// <param name="academiejaar"></param>
         /// <returns>Alle stageopdrachten van een academiejaar</returns>
@@ -48,7 +39,7 @@ namespace StageBeheersTool.Models.Domain
         /// Alle goedgekeurde stageopdrachten van het huidige academiejaar die nog geen begeleider hebben
         /// </summary>
         /// <returns></returns>
-        IQueryable<Stageopdracht> FindGeldigeBegeleiderStageopdrachtenWithFilter(int? semester, int? aantalStudenten, string specialisatie, string bedrijf, string locatie, string student);
+        IQueryable<Stageopdracht> FindGeldigeBegeleiderStageopdrachten();
 
         /// <summary>
         /// </summary>
@@ -87,9 +78,9 @@ namespace StageBeheersTool.Models.Domain
         /// <returns>Lijst academiejaren waar begeleider stages in had</returns>
         string[] FindAllAcademiejarenVanBegeleider();
 
-        IQueryable<Stageopdracht> FindAllVanAcademiejaar(string academiejaar, string student, string bedrijf);
+        IQueryable<Stageopdracht> FindAllVanAcademiejaar(string academiejaar);
 
-        IQueryable<Stageopdracht> FindMijnStagesVanAcademiejaar(string academiejaar, string student, string bedrijf);
+        IQueryable<Stageopdracht> FindMijnStagesVanAcademiejaar(string academiejaar);
 
         void SaveChanges();
 

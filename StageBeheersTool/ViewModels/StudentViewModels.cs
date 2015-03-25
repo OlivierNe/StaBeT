@@ -34,4 +34,22 @@ namespace StageBeheersTool.ViewModels
             KeuzevakSelectList = new SelectList(keuzepakketten, "Id", "Naam", KeuzepakketId != 0 ? KeuzepakketId.ToString() : "");
         }
     }
+
+    public class StudentDetailsVM
+    {
+        public string Naam { get; set; }
+        [Display(Name = "HoGent E-mail")]
+        public string HogentEmail { get; set; }
+        [Display(Name = "E-mail")]
+        public string Email { get; set; }
+        public string Gemeente { get; set; }
+        public string Postcode { get; set; }
+        public string Straat { get; set; }
+        public string Straatnummer { get; set; }
+        public Keuzepakket Keuzepakket { get; set; }
+        public string Gsmnummer { get; set; }
+        public string FotoUrl { get; set; }
+        public bool ToonEdit { get; set; }
+    }
+
 }

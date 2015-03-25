@@ -20,7 +20,7 @@ using System.Data.Entity.Migrations;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        //DropCreateDatabaseAlways<StageToolDbContext>
+     //   DropCreateDatabaseAlways<StageToolDbContext>
      DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 

@@ -16,6 +16,8 @@ namespace StageBeheersTool.ViewModels
         public bool ToonSearchForm { get; set; }
         public bool ToonZoekenOpStudent { get; set; }
         public bool ToonOordelen { get; set; }
+        public bool ToonStudenten { get; set; }
+
         public string Title { get; set; }
         public string OverzichtAction { get; set; }
         public RouteValueDictionary ActionParams { get; set; }

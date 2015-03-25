@@ -1,25 +1,17 @@
 ﻿using System;
-using System.Collections;
-using System.IO;
-using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
-using System.Web.Services;
-using System.Xml;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using StageBeheersTool.Models;
 using StageBeheersTool.ViewModels;
-using StageBeheersTool.Models.DAL;
 using StageBeheersTool.Models.Domain;
 using AutoMapper;
 using System.Web.Security;
-using Newtonsoft.Json;
 using StageBeheersTool.Models.Authentication;
-using System.Collections.Generic;
 using StageBeheersTool.be.hogent.webservice;
 
 namespace StageBeheersTool.Controllers
@@ -29,7 +21,7 @@ namespace StageBeheersTool.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private readonly IUserService userService;
+        private readonly IUserService _userService;
 
         public ApplicationSignInManager SignInManager
         {
@@ -45,7 +37,7 @@ namespace StageBeheersTool.Controllers
 
         public AccountController(IUserService userService)
         {
-            this.userService = userService;
+            _userService = userService;
         }
 
         //
@@ -84,12 +76,15 @@ namespace StageBeheersTool.Controllers
                     var user = await UserManager.FindByNameAsync(model.Email);
                     if (user == null) //eerste login
                     {
-                        user = new ApplicationUser {UserName = model.Email, Email = model.Email, EmailConfirmed = true};
+                        user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
                         await UserManager.CreateAsync(user);
                         await UserManager.AddToRoleAsync(user.Id, "student");
-                        Student student = new Student() {HogentEmail = model.Email};
-                        userService.CreateUser<Student>(student);
-                        userService.SaveChanges();
+                        Student student = new Student() { HogentEmail = model.Email };
+                        if (_userService.UserExists(student))
+                        {
+                            _userService.CreateUser<Student>(student);
+                            _userService.SaveChanges();
+                        }
                         await SignInManager.SignInAsync(user, model.RememberMe, false);
                         return RedirectToAction("Edit", "Student");
                     }
@@ -110,12 +105,15 @@ namespace StageBeheersTool.Controllers
                     var user = await UserManager.FindByNameAsync(model.Email);
                     if (user == null)
                     {
-                        user = new ApplicationUser {UserName = model.Email, Email = model.Email, EmailConfirmed = true};
+                        user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
                         await UserManager.CreateAsync(user);
                         await UserManager.AddToRoleAsync(user.Id, "begeleider"); //of admin
-                        Begeleider begeleider = new Begeleider() {HogentEmail = model.Email,Familienaam = dataDocent["LASTNAME"], Voornaam = dataDocent["FIRSTNAME"]};
-                        userService.CreateUser<Begeleider>(begeleider);
-                        userService.SaveChanges();
+                        Begeleider begeleider = new Begeleider() { HogentEmail = model.Email, Familienaam = dataDocent["LASTNAME"], Voornaam = dataDocent["FIRSTNAME"] };
+                        if (_userService.UserExists(begeleider))
+                        {
+                            _userService.CreateUser<Begeleider>(begeleider);
+                            _userService.SaveChanges();
+                        }
                         await SignInManager.SignInAsync(user, model.RememberMe, false);
                         return RedirectToAction("Edit", "Begeleider");
                     }
@@ -133,6 +131,7 @@ namespace StageBeheersTool.Controllers
                     await UserManager.AddToRoleAsync(user.Id, "admin");
                 }
                 await SignInManager.SignInAsync(user, model.RememberMe, false);
+                
                 return RedirectToAction("Index", "Stageopdracht");
 
             }
@@ -188,14 +187,17 @@ namespace StageBeheersTool.Controllers
 #if DEBUG
                 generatedPassword = "wachtwoord";
 #endif
-                var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, generatedPassword);
                 if (result.Succeeded)
                 {
                     var bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
-                    
-                    userService.CreateUser<Bedrijf>(bedrijf);
-                    userService.SaveChanges();
+
+                    if (_userService.UserExists(bedrijf))
+                    {
+                        _userService.CreateUser<Bedrijf>(bedrijf);
+                        _userService.SaveChanges();
+                    }
                     IdentityMessage message = new IdentityMessage()
                     {
                         Subject = "Registratie",
@@ -206,23 +208,17 @@ namespace StageBeheersTool.Controllers
                                 bedrijf.Email, generatedPassword)
                     };
 
-                    //await UserManager.EmailService.SendAsync(message);
+                    await UserManager.EmailService.SendAsync(message);
 
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                     TempData["message"] = "Registratie e-mail verzonden.";
                     return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
-                
+
             }
-           
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
+
         // GET: /Manage/ChangePassword 
         [Authorize]
         public ActionResult ChangePassword()
@@ -307,14 +303,14 @@ namespace StageBeheersTool.Controllers
                     switch (resultSI)
                     {
                         case SignInStatus.Success:
-                                return RedirectToAction("ChangePassword");
+                            return RedirectToAction("ChangePassword");
                         case SignInStatus.Failure:
                         default:
                             ModelState.AddModelError("", "Invalid login attempt.");
                             return View(model);
                     }
-                    
-                    
+
+
                     //await SignInManager.SignInAsync(user, false, false);
                     //return RedirectToAction("Index", "Stageopdracht");
                     //var bedrijfRep = new BedrijfRepository(new StageToolDbContext());
@@ -332,19 +328,7 @@ namespace StageBeheersTool.Controllers
 
 
 
-        ////
-        //// GET: /Account/ConfirmEmail
-        //[AllowAnonymous]
-        //public async Task<ActionResult> ConfirmEmail(string userId, string code)
-        //{
-        //    if (userId == null || code == null)
-        //    {
-        //        return View("Error");
-        //    }
-        //    var result = await UserManager.ConfirmEmailAsync(userId, code);
-        //    return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        //}
-
+    
         ////
         //// GET: /Account/ForgotPassword
         //[AllowAnonymous]

@@ -208,7 +208,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AuthorizeAttribute.cs" />
-    <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="Helpers\AcademiejaarHelper.cs" />
+    <Compile Include="Helpers\MyIdentityExtensions.cs" />
+    <Compile Include="Helpers\QueryableStageopdrachtExtensions.cs" />
     <Compile Include="Models\Authentication\ApplicationSignInManager.cs" />
     <Compile Include="Models\Authentication\ApplicationUser.cs" />
     <Compile Include="Models\Authentication\ApplicationUserManager.cs" />
@@ -267,6 +269,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AccountViewModels.cs" />
+    <Compile Include="ViewModels\AdminViewModels.cs" />
     <Compile Include="ViewModels\BedrijfViewModels.cs" />
     <Compile Include="ViewModels\BegeleiderViewModels.cs" />
     <Compile Include="ViewModels\AcademiejaarInstellingenViewModels.cs" />
@@ -427,6 +430,7 @@
     <Content Include="Views\Stageopdracht\MijnArchief.cshtml" />
     <Content Include="Views\Stageopdracht\_ZoekFormulierArchief.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

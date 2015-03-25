@@ -24,7 +24,7 @@
         columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf");
         columns.Add(so => so.Gemeente).Titled("Locatie");
     }
-    if (User.IsInRole("admin") || User.IsInRole("begeleider"))
+    if (Model.ToonStudenten)
     {
         columns.Add().Titled("studenten")
             .Sanitized(false).Encoded(false)

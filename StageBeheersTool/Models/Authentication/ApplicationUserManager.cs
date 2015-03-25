@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using System.Runtime.CompilerServices;
+using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -70,10 +72,23 @@ namespace StageBeheersTool.Models.Authentication
 
         public async override Task<IdentityResult> AddToRoleAsync(string userId, string role)
         {
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new StageToolDbContext()));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(DependencyResolver.Current.GetService(typeof(StageToolDbContext)) as StageToolDbContext));
             if (!roleManager.RoleExists(role))
                 roleManager.Create(new IdentityRole(role));
             return await base.AddToRoleAsync(userId, role);
+        }
+
+        public void AddToRole(string userId, string role)
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(DependencyResolver.Current.GetService(typeof(StageToolDbContext)) as StageToolDbContext));
+            if (!roleManager.RoleExists(role))
+                roleManager.Create(new IdentityRole(role));
+            base.AddToRoleAsync(userId, role);
+        }
+
+        public IEnumerable<ApplicationUser> GetAdmins()
+        {
+            return Users.ToList().Where(u => this.GetRoles(u.Id).Contains("admin") || this.GetRoles(u.Id).Contains("adminDisabled"));
         }
 
         public bool IsInBedrijfRoleOfGeenRole(string userId)

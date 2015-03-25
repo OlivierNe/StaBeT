@@ -1,4 +1,4 @@
-﻿@using StageBeheersTool
+﻿@using StageBeheersTool.Helpers
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,6 +33,49 @@
                         <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
                         <li>@Html.ActionLink("voorkeurstages", "MijnVoorkeurStages", "Stageopdracht")</li>
                     }
+                    else if (User.IsInRole("admin") && User.IsInRole("begeleider"))
+                    {
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                                Stageopdrachten
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("stageopdracht voorstellen", "Voorstellen", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
+                                <li>
+                                    @Html.ActionLink("Overzicht stageopdrachten " + AcademiejaarHelper.HuidigAcademiejaar(), "Index", "Stageopdracht", new { },
+                                        new { role = "menuitem" })
+                                </li>
+                                <li>@Html.ActionLink("Stageopdrachten zonder begeleider", "GoedgekeurdeStages", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
+                            <li>@Html.ActionLink("begeleider aanvragen", "aanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
+                            <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                        </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                                Mijn Stages
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Mijn stages " + AcademiejaarHelper.HuidigAcademiejaar(), "MijnStages", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                                <li>@Html.ActionLink("Archief", "MijnArchief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                                Instellingen
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    @Html.ActionLink("Academiejaar", "Index", "Academiejaar")
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Admin rechten", "Index", "Admin")
+                                </li>
+                            </ul>
+                        </li>
+                    }
                     else if (User.IsInRole("admin"))
                     {
                         <li class="dropdown">
@@ -42,7 +85,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("stageopdracht voorstellen", "Voorstellen", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
-                                <li>@Html.ActionLink("Overzicht stageopdrachten " + Helpers.HuidigAcademiejaar(), "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                                <li>@Html.ActionLink("Overzicht stageopdrachten " + AcademiejaarHelper.HuidigAcademiejaar(), "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                                 <li>@Html.ActionLink("begeleider aanvragen", "aanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
                                 <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                             </ul>
@@ -70,7 +113,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Overzicht stageopdrachten " + Helpers.HuidigAcademiejaar(), "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                                <li>@Html.ActionLink("Overzicht stageopdrachten " + AcademiejaarHelper.HuidigAcademiejaar(), "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                                 <li>@Html.ActionLink("Stageopdrachten zonder begeleider", "GoedgekeurdeStages", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
                                 <li>@Html.ActionLink("Aanvragen begeleider", "AanvragenBegeleider", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                                 <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
@@ -82,14 +125,10 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Mijn stages " + Helpers.HuidigAcademiejaar(), "MijnStages", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                                <li>@Html.ActionLink("Mijn stages " + AcademiejaarHelper.HuidigAcademiejaar(), "MijnStages", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                                 <li>@Html.ActionLink("Archief", "MijnArchief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
                             </ul>
                         </li>
-                    }
-                    else if (User.IsInRole("admin") && User.IsInRole("begeleider"))
-                    {
-
                     }
                 </ul>
 

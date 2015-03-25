@@ -34,14 +34,25 @@ namespace StageBeheersTool.Models.Services
 
         public void CreateUser<T>(T userObject) where T : class
         {
-            if(!UserExists<T>(userObject))
-                ctx.Set<T>().Add(userObject);
+            ctx.Set<T>().Add(userObject);
         }
 
         private bool UserExists<T>(T userObject) where T : class
         {
-            return ctx.Set<T>().Local.Any(obj => obj == userObject);
+            //return ctx.Set<T>().Local.Any<T>(obj => obj.Equals(userObject));
+            if (userObject.GetType() == typeof(Student))
+            {
+                return ctx.Studenten.Any(s => s.HogentEmail.Equals(userObject));
+            }
+
+
+            return false;
         }
+
+        /*private bool Exists<T>(params object[] keys)
+        {
+            return (ctx.Set<T>().Find(keys) != null);
+        }*/
 
         public bool IsAdmin()
         {
@@ -66,6 +77,21 @@ namespace StageBeheersTool.Models.Services
         public void SaveChanges()
         {
             ctx.SaveChanges();
+        }
+
+        public bool UserExists(Student student)
+        {
+            return ctx.Studenten.Any(s => s.HogentEmail == student.HogentEmail);
+        }
+
+        public bool UserExists(Begeleider begeleider)
+        {
+            return ctx.Begeleiders.Any(s => s.HogentEmail == begeleider.HogentEmail);
+        }
+
+        public bool UserExists(Bedrijf bedrijf)
+        {
+            return ctx.Bedrijven.Any(s => s.Email == bedrijf.Email);
         }
     }
 }

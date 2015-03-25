@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
+﻿
 namespace StageBeheersTool.Models.Domain
 {
-    /*
-     * contactpersoon: naam - voornaam - e-mail - gsm - functie binnen het bedrijf - aanspreektitel - functie stageopdracht (mentor-contractondertekenaar.
-     * */
-    /*
-     * student: naam voornaam - adres - telefoon - gsm
-     * */
 
     public abstract class Persoon
     {
@@ -32,7 +22,6 @@ namespace StageBeheersTool.Models.Domain
                 return Familienaam + " " + Voornaam;
             }
         }
-
 
     }
 }
