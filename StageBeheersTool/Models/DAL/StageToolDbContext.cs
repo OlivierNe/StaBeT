@@ -21,7 +21,7 @@ namespace StageBeheersTool.Models.DAL
     public class StageToolDbContext : IdentityDbContext<ApplicationUser>
     {
         public StageToolDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("OnlineConnection", throwIfV1Schema: false)
         {
             Database.Log = message => Trace.WriteLine(message);
 
