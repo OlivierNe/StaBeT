@@ -1,13 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Infrastructure.Annotations;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using MySql.Data.Entity;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.DAL.Mapping;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -23,8 +16,9 @@ namespace StageBeheersTool.Models.DAL
         public StageToolDbContext()
             : base("OnlineConnection", throwIfV1Schema: false)
         {
+#if DEBUG
             Database.Log = message => Trace.WriteLine(message);
-
+#endif
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -45,8 +39,8 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Entity<IdentityRole>()
                 .Property(c => c.Name).HasMaxLength(128).IsRequired();
             modelBuilder.Entity<ApplicationUser>().ToTable("aspNetUsers")
-                .Property(c => c.UserName).HasMaxLength(128).IsRequired()
-                 ;//.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("UserNameIndex") { IsUnique = false }));
+                .Property(c => c.UserName).HasMaxLength(128).IsRequired();
+            //.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("UserNameIndex") { IsUnique = false }));
         }
 
         public DbSet<Bedrijf> Bedrijven { get; set; }

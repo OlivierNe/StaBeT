@@ -1,11 +1,15 @@
-﻿using StageBeheersTool.Models.Authentication;
-using System;
+﻿using System.Security.Claims;
+using System.Threading;
+using AutoMapper;
+using Microsoft.AspNet.Identity;
+using StageBeheersTool.Models.Authentication;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
-using StageBeheersTool.Models.DAL;
+using StageBeheersTool.ViewModels;
+
 
 namespace StageBeheersTool.Controllers
 {
@@ -23,8 +27,57 @@ namespace StageBeheersTool.Controllers
         // GET: Admin
         public ActionResult Index()
         {
+            var admins = UserManager.GetAdmins();
+            var model = admins.Select(admin =>
+                new AdminVm() { Id = admin.Id, Email = admin.Email, IsAdmin = UserManager.IsInRole(admin.Id, "admin") }).OrderBy(admin => admin.Email);
+            return View(model.ToList());
+        }
 
-            return View();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(IList<AdminVm> model)
+        {
+
+            foreach (var adminVm in model.Where(m => m.HasChanged))
+            {
+                if (string.IsNullOrEmpty(adminVm.Email) && string.IsNullOrEmpty(adminVm.Id))
+                {
+                    break;
+                }
+
+                if (string.IsNullOrEmpty(adminVm.Id))
+                {
+                    var newUser = new ApplicationUser()
+                    {
+                        Email = adminVm.Email,
+                        UserName = adminVm.Email,
+                        EmailConfirmed = true
+                    };
+                    var user = UserManager.FindByEmail(newUser.Email);
+                    if (user == null)
+                    {
+                        UserManager.Create(newUser);
+                        adminVm.Id = newUser.Id;
+                    }
+                    else
+                    {
+                        adminVm.Id = user.Id;
+                    }
+                }
+                if (adminVm.IsAdmin)
+                {
+                    UserManager.AddToRole(adminVm.Id, "admin");
+                    UserManager.RemoveFromRole(adminVm.Id, "adminDisabled");
+                }
+                else
+                {
+                    UserManager.AddToRole(adminVm.Id, "adminDisabled");
+                    UserManager.RemoveFromRole(adminVm.Id, "admin");
+                }
+                UserManager.UpdateSecurityStamp(adminVm.Id); 
+            }
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult Create()
@@ -40,15 +93,29 @@ namespace StageBeheersTool.Controllers
             return View();
         }
 
-        public ActionResult Edit()
+        public ActionResult Delete(string email)
         {
-            return View();
+            var user = UserManager.FindByEmail(email);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            var model = Mapper.Map<AdminVm>(user);
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult Edit(string id)
+        [ValidateAntiForgeryToken]
+        [ActionName("Delete")]
+        public ActionResult DeleteConfirmed(string email)
         {
-            return View();
+            var user = UserManager.FindByEmail(email);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            UserManager.Delete(user);
+            return RedirectToAction("Index");
         }
 
     }

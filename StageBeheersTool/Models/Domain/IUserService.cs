@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
+﻿
 namespace StageBeheersTool.Models.Domain
 {
     public interface IUserService
@@ -14,7 +10,9 @@ namespace StageBeheersTool.Models.Domain
         bool IsBedrijf();
         bool IsStudent();
         bool IsBegeleider();
-        void CreateUser<T>(T userObject) where T : class;
+        bool CreateUser(Bedrijf bedrijf);
+        bool CreateUser(Begeleider begeleider);
+        bool CreateUser(Student student);
         void SaveChanges();
     }
 }

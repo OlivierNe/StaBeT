@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace StageBeheersTool.Models.Domain
 {
@@ -10,16 +8,12 @@ namespace StageBeheersTool.Models.Domain
 
         #region Properties
         public string Aanspreking { get; set; }
-        /// <summary>
-        /// stages begeleid door deze begeleider
-        /// </summary>
         public virtual ICollection<Stageopdracht> Stages { get; set; }
         public virtual ICollection<StageBegeleidAanvraag> StageAanvragen { get; set; }
         #endregion
 
         #region Public Constructors
         public Begeleider()
-            : base()
         {
             Stages = new List<Stageopdracht>();
             StageAanvragen = new List<StageBegeleidAanvraag>();
@@ -39,7 +33,7 @@ namespace StageBeheersTool.Models.Domain
         {
             if (!HeeftStageBegeleidingAangevraagd(stageopdracht.Id))
             {
-                StageBegeleidAanvraag aanvraag = new StageBegeleidAanvraag()
+                var aanvraag = new StageBegeleidAanvraag
                 {
                     Stageopdracht = stageopdracht,
                     Begeleider = this
@@ -67,6 +61,7 @@ namespace StageBeheersTool.Models.Domain
         {
             return Stages.Any(so => so.Id == stageopdracht.Id);
         }
+
     }
 }
 

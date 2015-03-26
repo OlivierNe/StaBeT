@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
 using System;
@@ -30,6 +31,9 @@ namespace StageBeheersTool.App_Start
             Mapper.CreateMap<Stageopdracht, StageopdrachtAfkeurenVM>();
             Mapper.CreateMap<AcademiejaarInstellingen, AcademiejaarInstellingenVM>();
             Mapper.CreateMap<AcademiejaarInstellingenVM, AcademiejaarInstellingen>();
+            Mapper.CreateMap<AdminVm, ApplicationUser>();
+            Mapper.CreateMap<ApplicationUser, AdminVm>();
+            Mapper.CreateMap<Student, StudentDetailsVM>();
         }
     }
 }

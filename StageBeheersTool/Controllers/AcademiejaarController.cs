@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
 using System;
@@ -27,7 +28,7 @@ namespace StageBeheersTool.Controllers
             {
                 academiejaarInstellingen = new AcademiejaarInstellingen()
                 {
-                    Academiejaar = Helpers.HuidigAcademiejaar()
+                    Academiejaar = AcademiejaarHelper.HuidigAcademiejaar()
                 };
                 _academiejaarRepository.Add(academiejaarInstellingen);
             }

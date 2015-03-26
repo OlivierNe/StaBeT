@@ -1,4 +1,5 @@
-﻿@if (Request.IsAuthenticated)
+﻿@using StageBeheersTool.Helpers
+@if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
@@ -8,19 +9,19 @@
             <li>
                 @if (User.IsInRole("student"))
                 {
-                    @Html.ActionLink(User.Identity.GetUserName(), "Details", "Student")
+                    @Html.ActionLink(IdentityHelpers.GetDisplayName(), "Details", "Student")
                 }
                 else if (User.IsInRole("bedrijf"))
                 {
-                    @Html.ActionLink(User.Identity.GetUserName(), "Details", "Bedrijf")
+                    @Html.ActionLink(IdentityHelpers.GetDisplayName(), "Details", "Bedrijf")
                 }
                 else if (User.IsInRole("begeleider"))
                 {
-                    @Html.ActionLink(User.Identity.GetUserName(), "Details", "Begeleider")
+                    @Html.ActionLink(IdentityHelpers.GetDisplayName(), "Details", "Begeleider")
                 }
                 else if (User.IsInRole("admin"))
                 {
-                    @Html.ActionLink(User.Identity.GetUserName(), "", "")
+                    @Html.ActionLink(IdentityHelpers.GetDisplayName(), "", "")
                 }
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Afmelden</a></li>

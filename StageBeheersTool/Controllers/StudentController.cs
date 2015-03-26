@@ -11,7 +11,6 @@ namespace StageBeheersTool.Controllers
     [Authorize]
     public class StudentController : Controller
     {
-
         private readonly IStudentRepository _studentRepository;
         private readonly IKeuzepakketRepository _keuzepakketRepository;
         private readonly IUserService _userService;
@@ -46,15 +45,20 @@ namespace StageBeheersTool.Controllers
             Student student = null;
             if (_userService.IsStudent())
             {
-                student = _studentRepository.FindByEmail(User.Identity.Name);
-                return View(student);
+                student = _userService.FindStudent();
             }
-            if (id == null)
+            else if (id == null)
             {
                 return HttpNotFound();
             }
-            student = _studentRepository.FindById((int)id);
-            return View(student);
+            else
+            {
+                student = _studentRepository.FindById((int)id);
+            }
+            var model = Mapper.Map<StudentDetailsVM>(student);
+            model.ToonEdit = _userService.IsStudent();
+            return View(model);
+
         }
 
         [Authorize(Role.student)]

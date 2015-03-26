@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace StageBeheersTool
+namespace StageBeheersTool.Helpers
 {
-    public class Helpers
+    public class AcademiejaarHelper
     {
         public static string HuidigAcademiejaar()
         {

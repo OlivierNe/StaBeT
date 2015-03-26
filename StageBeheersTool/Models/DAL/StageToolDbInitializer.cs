@@ -20,13 +20,13 @@ using System.Data.Entity.Migrations;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        DropCreateDatabaseAlways<StageToolDbContext>
-     //DropCreateDatabaseIfModelChanges<StageToolDbContext>
+     //   DropCreateDatabaseAlways<StageToolDbContext>
+     DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
         public void RunSeed(StageToolDbContext ctx)
         {
-            this.Seed(ctx);
+            //this.Seed(ctx);
         }
 
         protected override void Seed(StageToolDbContext context)
@@ -43,35 +43,35 @@ namespace StageBeheersTool.Models.DAL
 
                 var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(new StageToolDbContext()));
 
-            //    ApplicationUser user = new ApplicationUser() { Email = "test@bedrijf.be", UserName = "test@bedrijf.be", EmailConfirmed = true };
-            //    userManager.Create(user, "wachtwoord");
-            //    userManager.AddToRole(user.Id, "bedrijf");
+                ApplicationUser user = new ApplicationUser() { Email = "test@bedrijf.be", UserName = "test@bedrijf.be", EmailConfirmed = true };
+                userManager.Create(user, "wachtwoord");
+                userManager.AddToRole(user.Id, "bedrijf");
 
-            //    ApplicationUser user2 = new ApplicationUser() { Email = "test@bedrijf2.be", UserName = "test@bedrijf2.be", EmailConfirmed = true };
-            //    userManager.Create(user2, "wachtwoord");
-            //    userManager.AddToRole(user2.Id, "bedrijf");
+                ApplicationUser user2 = new ApplicationUser() { Email = "test@bedrijf2.be", UserName = "test@bedrijf2.be", EmailConfirmed = true };
+                userManager.Create(user2, "wachtwoord");
+                userManager.AddToRole(user2.Id, "bedrijf");
 
-            //    ApplicationUser user3 = new ApplicationUser()
-            //    {
-            //        Email = "student@test.be",
-            //        UserName = "student@test.be",
-            //        EmailConfirmed = true
-            //    };
-            //    userManager.Create(user3, "student");
-            //    userManager.AddToRole(user3.Id, "student");
-            //    context.Studenten.Add(new Student() { HogentEmail = "student@test.be" });
+                ApplicationUser user3 = new ApplicationUser()
+                {
+                    Email = "student@test.be",
+                    UserName = "student@test.be",
+                    EmailConfirmed = true
+                };
+                userManager.Create(user3, "student");
+                userManager.AddToRole(user3.Id, "student");
+                context.Studenten.Add(new Student() { HogentEmail = "student@test.be" });
 
-            //    ApplicationUser user4 = new ApplicationUser()
-            //    {
-            //        Email = "begeleider@test.be",
-            //        UserName = "begeleider@test.be",
-            //        EmailConfirmed = true
-            //    };
-            //    userManager.Create(user4, "begeleider");
-            //    userManager.AddToRole(user4.Id, "begeleider");
-            //    context.Begeleiders.Add(new Begeleider() { HogentEmail = "begeleider@test.be" });
+                ApplicationUser user4 = new ApplicationUser()
+                {
+                    Email = "begeleider@test.be",
+                    UserName = "begeleider@test.be",
+                    EmailConfirmed = true
+                };
+                userManager.Create(user4, "begeleider");
+                userManager.AddToRole(user4.Id, "begeleider");
+                context.Begeleiders.Add(new Begeleider() { HogentEmail = "begeleider@test.be" });
 
-            #endregion
+                #endregion
 
                 #region specialisaties
                 Specialisatie specialisatie1 = new Specialisatie() { Naam = "Netwerken" };
@@ -110,160 +110,160 @@ namespace StageBeheersTool.Models.DAL
                 context.Keuzepakketten.AddRange(keuzepakketten);
                 #endregion
 
-            //    #region bedrijf1
+                #region bedrijf1
 
-            //    Bedrijf bedrijf1 = new Bedrijf()
-            //      {
-            //          Email = "test@bedrijf.be",
-            //          Naam = "bedrijf1",
-            //          Telefoonnummer = "?",
-            //          Bedrijfsactiviteiten = "?",
-            //          Bereikbaarheid = "?",
-            //          Postcode = "1243",
-            //          Straatnummer = "1",
-            //          Gemeente = "gemeente1",
-            //          Straat = "straat1"
-            //      };
+                Bedrijf bedrijf1 = new Bedrijf()
+                  {
+                      Email = "test@bedrijf.be",
+                      Naam = "bedrijf1",
+                      Telefoonnummer = "?",
+                      Bedrijfsactiviteiten = "?",
+                      Bereikbaarheid = "?",
+                      Postcode = "1243",
+                      Straatnummer = "1",
+                      Gemeente = "gemeente1",
+                      Straat = "straat1"
+                  };
 
-            //    context.SaveChanges();
-            //    var stagementors = new List<Contactpersoon>();
-            //    for (int i = 1; i <= 5; i++)
-            //    {
-            //        Contactpersoon stagementor1 = new Contactpersoon()
-            //        {
-            //            Voornaam = "voornaam" + i,
-            //            Familienaam = "Naam" + i,
-            //            Email = "stagementor" + i + "@bedrijf.be",
-            //            Gsmnummer = "123456",
-            //            Telefoonnummer = "1234567",
-            //            IsStagementor = true,
-            //            IsContractondertekenaar = false,
-            //            Bedrijfsfunctie = "bedrijfsfunctie",
-            //            Aanspreektitel = "meneer"
-            //        };
-            //        bedrijf1.AddContactpersoon(stagementor1);
-            //        stagementors.Add(stagementor1);
-            //    }
+                context.SaveChanges();
+                var stagementors = new List<Contactpersoon>();
+                for (int i = 1; i <= 5; i++)
+                {
+                    Contactpersoon stagementor1 = new Contactpersoon()
+                    {
+                        Voornaam = "voornaam" + i,
+                        Familienaam = "Naam" + i,
+                        Email = "stagementor" + i + "@bedrijf.be",
+                        Gsmnummer = "123456",
+                        Telefoonnummer = "1234567",
+                        IsStagementor = true,
+                        IsContractondertekenaar = false,
+                        Bedrijfsfunctie = "bedrijfsfunctie",
+                        Aanspreektitel = "meneer"
+                    };
+                    bedrijf1.AddContactpersoon(stagementor1);
+                    stagementors.Add(stagementor1);
+                }
 
-            //    Contactpersoon contractOndertekenaar1 = new Contactpersoon()
-            //    {
-            //        Voornaam = "voornaam0",
-            //        Familienaam = "Naam0",
-            //        Email = "contractondertekenaar1@bedrijf.be",
-            //        Gsmnummer = "123456",
-            //        Telefoonnummer = "1234567",
-            //        IsStagementor = false,
-            //        IsContractondertekenaar = true,
-            //        Bedrijfsfunctie = "bedrijfsfunctie",
-            //        Aanspreektitel = "meneer"
-            //    };
+                Contactpersoon contractOndertekenaar1 = new Contactpersoon()
+                {
+                    Voornaam = "voornaam0",
+                    Familienaam = "Naam0",
+                    Email = "contractondertekenaar1@bedrijf.be",
+                    Gsmnummer = "123456",
+                    Telefoonnummer = "1234567",
+                    IsStagementor = false,
+                    IsContractondertekenaar = true,
+                    Bedrijfsfunctie = "bedrijfsfunctie",
+                    Aanspreektitel = "meneer"
+                };
 
-            //    bedrijf1.AddContactpersoon(contractOndertekenaar1);
+                bedrijf1.AddContactpersoon(contractOndertekenaar1);
 
-            //    var random = new Random();
-            //    for (int i = 0; i < 15; i++)
-            //    {
-            //        Stageopdracht stageopdracht = new Stageopdracht()
-            //        {
-            //            Titel = "titel" + i,
-            //            Specialisatie = specialisaties[random.Next(0, (specialisaties.Count))].Naam,
-            //            Semester1 = random.Next(0, 2) == 0,
-            //            Semester2 = random.Next(0, 2) == 0,
-            //            Omschrijving = "omschrijving" + i,
-            //            Academiejaar = "2014-2015",
-            //            AantalStudenten = 2,
-            //            Contractondertekenaar = contractOndertekenaar1,
-            //            Stagementor = stagementors[random.Next(0, stagementors.Count)],
-            //            Bedrijf = bedrijf1,
-            //            Gemeente = "Gemeente1"
-            //        };
-            //        if (i % 2 == 0)
-            //        {
-            //            stageopdracht.Status = StageopdrachtStatus.Goedgekeurd;
-            //        }
-            //        bedrijf1.AddStageopdracht(stageopdracht);
-            //    }
+                var random = new Random();
+                for (int i = 0; i < 15; i++)
+                {
+                    Stageopdracht stageopdracht = new Stageopdracht()
+                    {
+                        Titel = "titel" + i,
+                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count))].Naam,
+                        Semester1 = random.Next(0, 2) == 0,
+                        Semester2 = random.Next(0, 2) == 0,
+                        Omschrijving = "omschrijving" + i,
+                        Academiejaar = "2014-2015",
+                        AantalStudenten = 2,
+                        Contractondertekenaar = contractOndertekenaar1,
+                        Stagementor = stagementors[random.Next(0, stagementors.Count)],
+                        Bedrijf = bedrijf1,
+                        Gemeente = "Gemeente1"
+                    };
+                    if (i % 2 == 0)
+                    {
+                        stageopdracht.Status = StageopdrachtStatus.Goedgekeurd;
+                    }
+                    bedrijf1.AddStageopdracht(stageopdracht);
+                }
 
-            //    context.Bedrijven.Add(bedrijf1);
-            //    context.SaveChanges();
-            //    #endregion
+                context.Bedrijven.Add(bedrijf1);
+                context.SaveChanges();
+                #endregion
 
-            //    #region bedrijf2
-            //    var bedrijf2 = new Bedrijf()
-            //              {
-            //                  Email = "test@bedrijf2.be",
-            //                  Naam = "bedrijf2",
-            //                  Telefoonnummer = "?",
-            //                  Postcode = "1243",
-            //                  Straatnummer = "2",
-            //                  Gemeente = "gemeente2",
-            //                  Straat = "straat2"
-            //              };
-            //    var stagementors2 = new List<Contactpersoon>();
-            //    for (int i = 1; i <= 5; i++)
-            //    {
-            //        Contactpersoon stagementor2 = new Contactpersoon()
-            //        {
-            //            Voornaam = "voornaam" + i,
-            //            Familienaam = "Naam" + i,
-            //            Email = "stagementor" + i + "@bedrijf2.be",
-            //            Gsmnummer = "123456",
-            //            Telefoonnummer = "1234567",
-            //            IsStagementor = true,
-            //            IsContractondertekenaar = false,
-            //            Bedrijfsfunctie = "bedrijfsfunctie",
-            //            Aanspreektitel = "meneer"
-            //        };
-            //        bedrijf2.AddContactpersoon(stagementor2);
-            //        stagementors2.Add(stagementor2);
-            //    }
-            //    Contactpersoon contractOndertekenaar2 = new Contactpersoon()
-            //    {
-            //        Voornaam = "voornaam0",
-            //        Familienaam = "Naam0",
-            //        Email = "contractondertekenaar1@bedrijf2.be",
-            //        Gsmnummer = "123456",
-            //        Telefoonnummer = "1234567",
-            //        IsStagementor = false,
-            //        IsContractondertekenaar = true,
-            //        Bedrijfsfunctie = "bedrijfsfunctie"
-            //    };
-            //    bedrijf2.AddContactpersoon(contractOndertekenaar2);
-            //    for (int i = 0; i < 5; i++)
-            //    {
-            //        Stageopdracht stageopdracht = new Stageopdracht()
-            //        {
-            //            Titel = "opdracht " + i,
-            //            Specialisatie = specialisaties[random.Next(0, (specialisaties.Count - 1))].Naam,
-            //            Semester1 = random.Next(0, 2) == 0,
-            //            Semester2 = random.Next(0, 2) == 0,
-            //            Omschrijving = "omschrijving " + i,
-            //            Academiejaar = "2014-2015",
-            //            AantalStudenten = random.Next(1, 4),
-            //            Contractondertekenaar = contractOndertekenaar2,
-            //            Stagementor = stagementors2[random.Next(0, stagementors2.Count)],
-            //            Bedrijf = bedrijf2,
-            //            Gemeente = "Gemeente2",
-            //            Status = StageopdrachtStatus.Goedgekeurd
-            //        };
-            //        bedrijf2.AddStageopdracht(stageopdracht);
-            //    }
+                #region bedrijf2
+                var bedrijf2 = new Bedrijf()
+                          {
+                              Email = "test@bedrijf2.be",
+                              Naam = "bedrijf2",
+                              Telefoonnummer = "?",
+                              Postcode = "1243",
+                              Straatnummer = "2",
+                              Gemeente = "gemeente2",
+                              Straat = "straat2"
+                          };
+                var stagementors2 = new List<Contactpersoon>();
+                for (int i = 1; i <= 5; i++)
+                {
+                    Contactpersoon stagementor2 = new Contactpersoon()
+                    {
+                        Voornaam = "voornaam" + i,
+                        Familienaam = "Naam" + i,
+                        Email = "stagementor" + i + "@bedrijf2.be",
+                        Gsmnummer = "123456",
+                        Telefoonnummer = "1234567",
+                        IsStagementor = true,
+                        IsContractondertekenaar = false,
+                        Bedrijfsfunctie = "bedrijfsfunctie",
+                        Aanspreektitel = "meneer"
+                    };
+                    bedrijf2.AddContactpersoon(stagementor2);
+                    stagementors2.Add(stagementor2);
+                }
+                Contactpersoon contractOndertekenaar2 = new Contactpersoon()
+                {
+                    Voornaam = "voornaam0",
+                    Familienaam = "Naam0",
+                    Email = "contractondertekenaar1@bedrijf2.be",
+                    Gsmnummer = "123456",
+                    Telefoonnummer = "1234567",
+                    IsStagementor = false,
+                    IsContractondertekenaar = true,
+                    Bedrijfsfunctie = "bedrijfsfunctie"
+                };
+                bedrijf2.AddContactpersoon(contractOndertekenaar2);
+                for (int i = 0; i < 5; i++)
+                {
+                    Stageopdracht stageopdracht = new Stageopdracht()
+                    {
+                        Titel = "opdracht " + i,
+                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count - 1))].Naam,
+                        Semester1 = random.Next(0, 2) == 0,
+                        Semester2 = random.Next(0, 2) == 0,
+                        Omschrijving = "omschrijving " + i,
+                        Academiejaar = "2014-2015",
+                        AantalStudenten = random.Next(1, 4),
+                        Contractondertekenaar = contractOndertekenaar2,
+                        Stagementor = stagementors2[random.Next(0, stagementors2.Count)],
+                        Bedrijf = bedrijf2,
+                        Gemeente = "Gemeente2",
+                        Status = StageopdrachtStatus.Goedgekeurd
+                    };
+                    bedrijf2.AddStageopdracht(stageopdracht);
+                }
 
-            //    context.Bedrijven.Add(bedrijf2);
-            //    context.SaveChanges();
-            //    #endregion
+                context.Bedrijven.Add(bedrijf2);
+                context.SaveChanges();
+                #endregion
 
-            //    #region student1
-            //    Student student1 = new Student()
-            //    {
-            //        Voornaam = "Olivier",
-            //        Familienaam = "Neirynck",
-            //        HogentEmail = "olivier.neirynck.q1177@student.hogent.be"
-            //    };
+                #region student1
+                Student student1 = new Student()
+                {
+                    Voornaam = "Olivier",
+                    Familienaam = "Neirynck",
+                    HogentEmail = "olivier.neirynck.q1177@student.hogent.be"
+                };
 
 
-            //    context.Studenten.Add(student1);
-            //    #endregion
+                context.Studenten.Add(student1);
+                #endregion
 
                 context.SaveChanges();
             }

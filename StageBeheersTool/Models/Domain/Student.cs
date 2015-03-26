@@ -56,6 +56,25 @@ namespace StageBeheersTool.Models.Domain
                 }
             }
         }
+
+        protected bool Equals(Student other)
+        {
+            return string.Equals(other.HogentEmail, HogentEmail);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Student)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (HogentEmail != null ? HogentEmail.GetHashCode() : 0);
+        }
+
         #endregion
     }
 }

@@ -1,4 +1,4 @@
-﻿@model Student
+﻿@model StudentDetailsVM
 @{
     var message = TempData["message"];
 }
@@ -58,8 +58,8 @@
     </dl>
 </div>
 <p>
-    @if (User.IsInRole("student"))
+    @if (Model.ToonEdit)
     {
-        Html.ActionLink("Gegevens wijzigen", "Edit");
+        @Html.ActionLink("Gegevens wijzigen", "Edit")
     }
 </p>

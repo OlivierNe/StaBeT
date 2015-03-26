@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using StageBeheersTool.Helpers;
 
 namespace StageBeheersTool.Models.Domain
 {
-    //Het bedrijf moet bij registratie volgende informatie ingeven: 
-    //Bedrijfsnaam – adres – url - e-mail (aanmeldingsaccount) – telefoon – 
-    //bereikbaarheid (wagen – openbaar vervoer – georganiseerd vervoer door bedrijf) 
-    //– soort bedrijfsactiviteiten (bank – software ontwikkelaar – openbare diensten ….)
-    //Na registratie ontvangt het bedrijf een bevestigings e-mail met gegenereerd wachtwoord 
-    //voor de eerste aanmelding. Bij de eerste aanmelding dient een nieuw wachtwoord te worden ingegeven.
+
     public class Bedrijf
     {
         #region Properties
@@ -62,7 +56,7 @@ namespace StageBeheersTool.Models.Domain
         public bool UpdateStageopdracht(Stageopdracht stageopdracht)
         {
             var teUpdatenOpdracht = FindStageopdrachtById(stageopdracht.Id);
-            if (stageopdracht != null)
+            if (teUpdatenOpdracht != null)
             {
                 teUpdatenOpdracht.Omschrijving = stageopdracht.Omschrijving;
                 teUpdatenOpdracht.Titel = stageopdracht.Titel;
@@ -77,7 +71,6 @@ namespace StageBeheersTool.Models.Domain
                 teUpdatenOpdracht.Postcode = stageopdracht.Postcode;
                 teUpdatenOpdracht.Straat = stageopdracht.Straat;
                 teUpdatenOpdracht.Straatnummer = stageopdracht.Straatnummer;
-
                 return true;
             }
             return false;
@@ -96,21 +89,18 @@ namespace StageBeheersTool.Models.Domain
         public bool UpdateContactpersoon(Contactpersoon contactpersoon)
         {
             var teUpdatenPersoon = FindContactpersoonById(contactpersoon.Id);
-            if (contactpersoon != null)
-            {
-                teUpdatenPersoon.Voornaam = contactpersoon.Voornaam;
-                teUpdatenPersoon.Familienaam = contactpersoon.Familienaam;
-                teUpdatenPersoon.Gsmnummer = contactpersoon.Gsmnummer;
-                teUpdatenPersoon.Telefoonnummer = contactpersoon.Telefoonnummer;
-                teUpdatenPersoon.IsStagementor = contactpersoon.IsStagementor;
-                teUpdatenPersoon.IsContractondertekenaar = contactpersoon.IsContractondertekenaar;
-                teUpdatenPersoon.Aanspreektitel = contactpersoon.Aanspreektitel;
-                teUpdatenPersoon.Bedrijfsfunctie = contactpersoon.Bedrijfsfunctie;
-                teUpdatenPersoon.Email = contactpersoon.Email;
-                return true;
-            }
-            return false;
-
+            if (teUpdatenPersoon == null)
+                return false;
+            teUpdatenPersoon.Voornaam = contactpersoon.Voornaam;
+            teUpdatenPersoon.Familienaam = contactpersoon.Familienaam;
+            teUpdatenPersoon.Gsmnummer = contactpersoon.Gsmnummer;
+            teUpdatenPersoon.Telefoonnummer = contactpersoon.Telefoonnummer;
+            teUpdatenPersoon.IsStagementor = contactpersoon.IsStagementor;
+            teUpdatenPersoon.IsContractondertekenaar = contactpersoon.IsContractondertekenaar;
+            teUpdatenPersoon.Aanspreektitel = contactpersoon.Aanspreektitel;
+            teUpdatenPersoon.Bedrijfsfunctie = contactpersoon.Bedrijfsfunctie;
+            teUpdatenPersoon.Email = contactpersoon.Email;
+            return true;
         }
 
         public IEnumerable<Contactpersoon> FindAllStagementors()
@@ -146,7 +136,7 @@ namespace StageBeheersTool.Models.Domain
             {
                 return true;
             }
-            if (!opdracht.Academiejaar.Equals(Helpers.HuidigAcademiejaar()))
+            if (!opdracht.Academiejaar.Equals(AcademiejaarHelper.HuidigAcademiejaar()))
             {
                 return false;
             }
@@ -156,10 +146,7 @@ namespace StageBeheersTool.Models.Domain
             }
             return false;
         }
-
         #endregion
-
-
 
     }
 }
