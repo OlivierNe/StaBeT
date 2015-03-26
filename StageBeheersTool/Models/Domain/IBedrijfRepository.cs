@@ -9,6 +9,6 @@ namespace StageBeheersTool.Models.Domain
         Bedrijf FindByEmail(string email);
         Bedrijf FindById(int id);
         void SaveChanges();
-        void Update(Bedrijf bedrijf, Bedrijf model);
+        void Update(Bedrijf bedrijf);
     }
 }

@@ -10,6 +10,6 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<Student> FindAll();
         IQueryable<Student> FindStudentenMetStageopdrachtEnBegeleider();
         void SaveChanges();
-        void Update(Student student, Student model);
+        void Update(Student student);
     }
 }

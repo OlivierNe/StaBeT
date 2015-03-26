@@ -49,18 +49,21 @@ namespace StageBeheersTool.Models.DAL
             //        student.Stageopdracht.Stagebegeleider != null);
         }
 
-        public void Update(Student student, Student model)
+        public void Update(Student student)
         {
-            student.Voornaam = model.Voornaam;
-            student.Familienaam = model.Familienaam;
-            student.Keuzepakket = model.Keuzepakket;
-            student.Email = model.Email;
-            student.Gsmnummer = model.Gsmnummer;
-            student.Postcode = model.Postcode;
-            student.Gemeente = model.Gemeente;
-            student.Straat = model.Straat;
-            student.Straatnummer = model.Straatnummer;
-            student.FotoUrl = model.FotoUrl;
+            var teUpdatenStudent = FindById(student.Id);
+            if (teUpdatenStudent == null)
+                return;
+            teUpdatenStudent.Voornaam = student.Voornaam;
+            teUpdatenStudent.Familienaam = student.Familienaam;
+            teUpdatenStudent.Keuzepakket = student.Keuzepakket;
+            teUpdatenStudent.Email = student.Email;
+            teUpdatenStudent.Gsmnummer = student.Gsmnummer;
+            teUpdatenStudent.Postcode = student.Postcode;
+            teUpdatenStudent.Gemeente = student.Gemeente;
+            teUpdatenStudent.Straat = student.Straat;
+            teUpdatenStudent.Straatnummer = student.Straatnummer;
+            teUpdatenStudent.FotoUrl = student.FotoUrl;
             SaveChanges();
         }
         public void SaveChanges()

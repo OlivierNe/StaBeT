@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using System.Threading;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNet.Identity;
 using StageBeheersTool.Models.Authentication;
 using System.Collections.Generic;

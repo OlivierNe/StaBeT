@@ -54,7 +54,12 @@
                 $self.change(function () {
                     var name = $self.attr("name");
                     var index = name.substring(1, name.indexOf("]"));
-                    $("input[type='hidden'][name='[" + index + "].HasChanged']").val(true);
+                    var hasChangedInput = $("input[type='hidden'][name='[" + index + "].HasChanged']");
+                    if (hasChangedInput.val() =="true" ) {
+                        hasChangedInput.val(false);
+                    } else {
+                        hasChangedInput.val(true);
+                    }
                 });
             });
 

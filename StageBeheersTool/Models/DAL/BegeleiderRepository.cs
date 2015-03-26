@@ -11,14 +11,12 @@ namespace StageBeheersTool.Models.DAL
     public class BegeleiderRepository : IBegeleiderRepository
     {
         private DbSet<Begeleider> begeleiders;
-        private DbSet<StageBegeleidAanvraag> aanvragen;
         private StageToolDbContext ctx;
 
         public BegeleiderRepository(StageToolDbContext ctx)
         {
             this.ctx = ctx;
             this.begeleiders = ctx.Begeleiders;
-            this.aanvragen = ctx.StageBegeleidAanvragen;
         }
 
         public void Add(Begeleider begeleider)
@@ -32,23 +30,26 @@ namespace StageBeheersTool.Models.DAL
             return begeleiders.SingleOrDefault(b => b.HogentEmail == hoGentEmail);
         }
 
-         public Begeleider FindById(int id)
+        public Begeleider FindById(int id)
         {
             return begeleiders.SingleOrDefault(b => b.Id == id);
         }
-        
-        public void Update(Begeleider begeleider, Begeleider model)
+
+        public void Update(Begeleider begeleider)
         {
-            begeleider.Voornaam = model.Voornaam;
-            begeleider.Familienaam = model.Familienaam;
-            begeleider.Email = model.Email;
-            begeleider.Gsmnummer = model.Gsmnummer;
-            begeleider.Telefoonnummer = model.Telefoonnummer;
-            begeleider.Postcode = model.Postcode;
-            begeleider.Gemeente = model.Gemeente;
-            begeleider.Straat = model.Straat;
-            begeleider.Straatnummer = model.Straatnummer;
-            begeleider.FotoUrl = model.FotoUrl;
+            var teUpdatenBegeleider = FindById(begeleider.Id);
+            if (teUpdatenBegeleider == null)
+                return;
+            teUpdatenBegeleider.Voornaam = begeleider.Voornaam;
+            teUpdatenBegeleider.Familienaam = begeleider.Familienaam;
+            teUpdatenBegeleider.Email = begeleider.Email;
+            teUpdatenBegeleider.Gsmnummer = begeleider.Gsmnummer;
+            teUpdatenBegeleider.Telefoonnummer = begeleider.Telefoonnummer;
+            teUpdatenBegeleider.Postcode = begeleider.Postcode;
+            teUpdatenBegeleider.Gemeente = begeleider.Gemeente;
+            teUpdatenBegeleider.Straat = begeleider.Straat;
+            teUpdatenBegeleider.Straatnummer = begeleider.Straatnummer;
+            teUpdatenBegeleider.FotoUrl = begeleider.FotoUrl;
             SaveChanges();
         }
 
@@ -78,6 +79,6 @@ namespace StageBeheersTool.Models.DAL
             }
         }
 
-       
+
     }
 }

@@ -20,8 +20,8 @@ using System.Data.Entity.Migrations;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-     //   DropCreateDatabaseAlways<StageToolDbContext>
-     DropCreateDatabaseIfModelChanges<StageToolDbContext>
+        //  DropCreateDatabaseAlways<StageToolDbContext>
+   DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
         public void RunSeed(StageToolDbContext ctx)
@@ -35,15 +35,15 @@ namespace StageBeheersTool.Models.DAL
             try
             {
                 #region logins/roles
-                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new StageToolDbContext()));
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
                 roleManager.Create(new IdentityRole("student"));
                 roleManager.Create(new IdentityRole("admin"));
                 roleManager.Create(new IdentityRole("begeleider"));
                 roleManager.Create(new IdentityRole("bedrijf"));
 
-                var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(new StageToolDbContext()));
+                var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
 
-                ApplicationUser user = new ApplicationUser() { Email = "test@bedrijf.be", UserName = "test@bedrijf.be", EmailConfirmed = true };
+                ApplicationUser user = new ApplicationUser() { Email = "bedrijf@test.be", UserName = "bedrijf@test.be", EmailConfirmed = true };
                 userManager.Create(user, "wachtwoord");
                 userManager.AddToRole(user.Id, "bedrijf");
 
@@ -57,9 +57,8 @@ namespace StageBeheersTool.Models.DAL
                     UserName = "student@test.be",
                     EmailConfirmed = true
                 };
-                userManager.Create(user3, "student");
+                userManager.Create(user3, "wachtwoord");
                 userManager.AddToRole(user3.Id, "student");
-                context.Studenten.Add(new Student() { HogentEmail = "student@test.be" });
 
                 ApplicationUser user4 = new ApplicationUser()
                 {
@@ -67,9 +66,17 @@ namespace StageBeheersTool.Models.DAL
                     UserName = "begeleider@test.be",
                     EmailConfirmed = true
                 };
-                userManager.Create(user4, "begeleider");
+                userManager.Create(user4, "wachtwoord");
                 userManager.AddToRole(user4.Id, "begeleider");
-                context.Begeleiders.Add(new Begeleider() { HogentEmail = "begeleider@test.be" });
+
+                ApplicationUser user5 = new ApplicationUser()
+                {
+                    Email = "admin@test.be",
+                    UserName = "admin@test.be",
+                    EmailConfirmed = true
+                };
+                userManager.Create(user5, "wachtwoord");
+                userManager.AddToRole(user5.Id, "admin");
 
                 #endregion
 
@@ -114,15 +121,14 @@ namespace StageBeheersTool.Models.DAL
 
                 Bedrijf bedrijf1 = new Bedrijf()
                   {
-                      Email = "test@bedrijf.be",
-                      Naam = "bedrijf1",
-                      Telefoonnummer = "?",
-                      Bedrijfsactiviteiten = "?",
-                      Bereikbaarheid = "?",
+                      Email = "bedrijf@test.be",
+                      Naam = "TESTbedrijf",
+                      Bedrijfsactiviteiten = "TEST",
+                      Bereikbaarheid = "TEST",
                       Postcode = "1243",
                       Straatnummer = "1",
-                      Gemeente = "gemeente1",
-                      Straat = "straat1"
+                      Gemeente = "TESTgemeente",
+                      Straat = "TESTstraat"
                   };
 
                 context.SaveChanges();
@@ -138,8 +144,7 @@ namespace StageBeheersTool.Models.DAL
                         Telefoonnummer = "1234567",
                         IsStagementor = true,
                         IsContractondertekenaar = false,
-                        Bedrijfsfunctie = "bedrijfsfunctie",
-                        Aanspreektitel = "meneer"
+                        Bedrijfsfunctie = "bedrijfsfunctie"
                     };
                     bedrijf1.AddContactpersoon(stagementor1);
                     stagementors.Add(stagementor1);
@@ -165,7 +170,7 @@ namespace StageBeheersTool.Models.DAL
                 {
                     Stageopdracht stageopdracht = new Stageopdracht()
                     {
-                        Titel = "titel" + i,
+                        Titel = "TEST " + i,
                         Specialisatie = specialisaties[random.Next(0, (specialisaties.Count))].Naam,
                         Semester1 = random.Next(0, 2) == 0,
                         Semester2 = random.Next(0, 2) == 0,
@@ -188,81 +193,72 @@ namespace StageBeheersTool.Models.DAL
                 context.SaveChanges();
                 #endregion
 
-                #region bedrijf2
-                var bedrijf2 = new Bedrijf()
-                          {
-                              Email = "test@bedrijf2.be",
-                              Naam = "bedrijf2",
-                              Telefoonnummer = "?",
-                              Postcode = "1243",
-                              Straatnummer = "2",
-                              Gemeente = "gemeente2",
-                              Straat = "straat2"
-                          };
-                var stagementors2 = new List<Contactpersoon>();
-                for (int i = 1; i <= 5; i++)
-                {
-                    Contactpersoon stagementor2 = new Contactpersoon()
-                    {
-                        Voornaam = "voornaam" + i,
-                        Familienaam = "Naam" + i,
-                        Email = "stagementor" + i + "@bedrijf2.be",
-                        Gsmnummer = "123456",
-                        Telefoonnummer = "1234567",
-                        IsStagementor = true,
-                        IsContractondertekenaar = false,
-                        Bedrijfsfunctie = "bedrijfsfunctie",
-                        Aanspreektitel = "meneer"
-                    };
-                    bedrijf2.AddContactpersoon(stagementor2);
-                    stagementors2.Add(stagementor2);
-                }
-                Contactpersoon contractOndertekenaar2 = new Contactpersoon()
-                {
-                    Voornaam = "voornaam0",
-                    Familienaam = "Naam0",
-                    Email = "contractondertekenaar1@bedrijf2.be",
-                    Gsmnummer = "123456",
-                    Telefoonnummer = "1234567",
-                    IsStagementor = false,
-                    IsContractondertekenaar = true,
-                    Bedrijfsfunctie = "bedrijfsfunctie"
-                };
-                bedrijf2.AddContactpersoon(contractOndertekenaar2);
-                for (int i = 0; i < 5; i++)
-                {
-                    Stageopdracht stageopdracht = new Stageopdracht()
-                    {
-                        Titel = "opdracht " + i,
-                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count - 1))].Naam,
-                        Semester1 = random.Next(0, 2) == 0,
-                        Semester2 = random.Next(0, 2) == 0,
-                        Omschrijving = "omschrijving " + i,
-                        Academiejaar = "2014-2015",
-                        AantalStudenten = random.Next(1, 4),
-                        Contractondertekenaar = contractOndertekenaar2,
-                        Stagementor = stagementors2[random.Next(0, stagementors2.Count)],
-                        Bedrijf = bedrijf2,
-                        Gemeente = "Gemeente2",
-                        Status = StageopdrachtStatus.Goedgekeurd
-                    };
-                    bedrijf2.AddStageopdracht(stageopdracht);
-                }
-
-                context.Bedrijven.Add(bedrijf2);
-                context.SaveChanges();
-                #endregion
-
                 #region student1
                 Student student1 = new Student()
                 {
-                    Voornaam = "Olivier",
-                    Familienaam = "Neirynck",
-                    HogentEmail = "olivier.neirynck.q1177@student.hogent.be"
+                    Voornaam = "TEST",
+                    Familienaam = "TEST",
+                    HogentEmail = "student@test.be"
                 };
 
-
                 context.Studenten.Add(student1);
+                #endregion
+
+                #region begeleider
+                var begeleider = new Begeleider()
+                {
+                    Voornaam = "TEST",
+                    Familienaam = "TEST",
+                    HogentEmail = "begeleider@test.be"
+                };
+                var studenten = new List<Student>() { { student1 } };
+
+                var stages = new List<Stageopdracht>();
+                for (int i = 0, acadJaar = 2008; i < 36; i++)
+                {
+                    if (i % 6 == 0)
+                    {
+                        acadJaar++;
+                    }
+                    var academiejaar = acadJaar + "-" + (acadJaar + 1);
+                    stages.Add(new Stageopdracht()
+                    {
+                        Omschrijving = "omschrijving",
+                        Titel = "stage " + academiejaar,
+                        Academiejaar = academiejaar,
+                        AantalStudenten = 1,
+                        Bedrijf = bedrijf1,
+                        Gemeente = "Gemeente123",
+                        Semester2 = true,
+                        Specialisatie = "TEST",
+                        Stagebegeleider = begeleider,
+                        Studenten = studenten,
+                        Status = StageopdrachtStatus.Goedgekeurd
+                    });
+                }
+                begeleider.Stages = stages;
+                context.Begeleiders.Add(begeleider);
+                #endregion
+
+                #region goedgekeurde/toegewezen test stages
+                var teststages = new List<Stageopdracht>();
+                for (int i = 15; i < 51; i++)
+                {
+                    teststages.Add(new Stageopdracht()
+                    {
+                        Omschrijving = "TEST" + i,
+                        Titel = "TEST " + i,
+                        Academiejaar = "2014-2015",
+                        AantalStudenten = 1,
+                        Bedrijf = bedrijf1,
+                        Gemeente = "Gemeente123",
+                        Semester2 = true,
+                        Specialisatie = "TEST",
+                        Studenten = studenten,
+                        Status = StageopdrachtStatus.Goedgekeurd
+                    });
+                }
+                context.Stageopdrachten.AddRange(teststages);
                 #endregion
 
                 context.SaveChanges();

@@ -146,6 +146,24 @@ namespace StageBeheersTool.Models.Domain
             }
             return false;
         }
+
+        protected bool Equals(Bedrijf other)
+        {
+            return string.Equals(other.Email, Email) && string.Equals(other.Naam, Naam);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+                return Equals((Bedrijf)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Email != null ? Email.GetHashCode() : 0);
+        }
         #endregion
 
     }

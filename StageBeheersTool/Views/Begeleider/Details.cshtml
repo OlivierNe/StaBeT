@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Details";
     var message = TempData["message"];
+    var imageUrl = string.IsNullOrWhiteSpace(Model.FotoUrl) ? "~/Images/profiel.jpg" : Model.FotoUrl;
 }
 
 <h2>Details</h2>
@@ -13,44 +14,44 @@
     <h4>Begeleider</h4>
     <hr />
     <div class="row">
-        <img class="col-sm-push-1 col-xs-2 img-responsive" src="@Url.Content(Model.Begeleider.FotoUrl)" />
+        <img class="col-sm-push-1 col-xs-2 img-responsive" src="@Url.Content(imageUrl)" />
     </div>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Begeleider.Naam)
+            @Html.DisplayNameFor(model => model.Naam)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Begeleider.Naam)
+            @Html.DisplayFor(model => model.Naam)
         </dd>
         <dt>
-            Hogent E-mail
+            @Html.DisplayNameFor(model => model.HogentEmail)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Begeleider.HogentEmail)
+            @Html.DisplayFor(model => model.HogentEmail)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Begeleider.Email)
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Begeleider.Email)
+            @Html.DisplayFor(model => model.Email)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Begeleider.Gsmnummer)
+            @Html.DisplayNameFor(model => model.Gsmnummer)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Begeleider.Gsmnummer)
+            @Html.DisplayFor(model => model.Gsmnummer)
         </dd>
         <dt>
             Adres
         </dt>
         <dd>
-            @Model.Begeleider.Gemeente @Model.Begeleider.Postcode
+            @Model.Gemeente @Model.Postcode
         </dd>
-        <dd>@Model.Begeleider.Straat @Model.Begeleider.Straatnummer</dd>
+        <dd>@Model.Straat @Model.Straatnummer</dd>
 
     </dl>
 </div>

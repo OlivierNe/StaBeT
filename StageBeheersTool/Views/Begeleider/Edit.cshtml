@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Begeleider - gegevens wijzigen";
+    var imageUrl = string.IsNullOrWhiteSpace(Model.FotoUrl) ? "~/Images/profiel.jpg" : Model.FotoUrl;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -9,7 +10,6 @@
 @using (Html.BeginForm("Edit", "Begeleider", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-
     <div class="form-horizontal">
         <h4>Begeleider</h4>
         <hr />
@@ -17,7 +17,7 @@
 
         <div class="form-group">
             <div class="row">
-                <img class="col-md-push-2 col-xs-2 img-responsive" src="@Url.Content(Model.FotoUrl)" id="foto" />
+                <img class="col-md-push-2 col-xs-2 img-responsive" src="@Url.Content(imageUrl)" id="foto" />
             </div>
             <div class="row">
                 <input class="col-md-push-2 col-xs-4" type="file" name="fotoFile" id="fotoFile" accept="image/*" onchange="showpreview(this);" />

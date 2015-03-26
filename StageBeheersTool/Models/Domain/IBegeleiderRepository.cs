@@ -6,7 +6,7 @@ namespace StageBeheersTool.Models.Domain
         Begeleider FindByEmail(string hoGentEmail);
         Begeleider FindById(int id);
         void SaveChanges();
-        void Update(Begeleider begeleider, Begeleider model);
+        void Update(Begeleider begeleider);
         void Add(Begeleider begeleider);
     }
 }

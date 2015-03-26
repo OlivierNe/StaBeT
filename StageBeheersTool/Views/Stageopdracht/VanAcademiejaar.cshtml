@@ -1,10 +1,19 @@
 ﻿@model StageopdrachtIndexVM
 
-<h2>@Model.Title</h2>
+<h2 id="title">@Model.Title</h2>
 @Html.Partial("_ZoekFormulierArchief")
 
 @Html.Partial("_StageopdrachtList")
 
 @section scripts{
     <script src="~/Scripts/stagetool.js"></script>
+    <script>
+        $(function () {
+            var $academiejaar = $("#Academiejaar");
+            var $title = $("#title");
+            $("#zoekenSubmit").on("click",function () {
+                $title.text("Stageopdrachten - " + $academiejaar.val());
+            });
+        });
+    </script>
 }

@@ -2,10 +2,6 @@
 using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace StageBeheersTool.App_Start
 {
@@ -34,6 +30,7 @@ namespace StageBeheersTool.App_Start
             Mapper.CreateMap<AdminVm, ApplicationUser>();
             Mapper.CreateMap<ApplicationUser, AdminVm>();
             Mapper.CreateMap<Student, StudentDetailsVM>();
+            Mapper.CreateMap<Begeleider, BegeleiderDetailsVM>();
         }
     }
 }

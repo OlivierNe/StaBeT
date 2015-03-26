@@ -1,52 +1,51 @@
 ﻿using AutoMapper;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using System.IO;
 using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.Controllers
 {
     public class BegeleiderController : Controller
     {
-        private IBegeleiderRepository begeleiderRepository;
-        private IImageService imageService;
-        private IUserService userService;
+        private readonly IBegeleiderRepository _begeleiderRepository;
+        private readonly IImageService _imageService;
+        private readonly IUserService _userService;
 
         public BegeleiderController(IBegeleiderRepository begeleiderRepository, IImageService imageService,
             IUserService userservice)
         {
-            this.begeleiderRepository = begeleiderRepository;
-            this.imageService = imageService;
-            this.userService = userservice;
+            _begeleiderRepository = begeleiderRepository;
+            _imageService = imageService;
+            _userService = userservice;
         }
 
         [Authorize(Role.Begeleider, Role.Admin)]
         public ActionResult Details(int? id)
         {
-            Begeleider begeleider = null;
+            Begeleider begeleider;
             if (id == null)
             {
-                begeleider = userService.FindBegeleider();
-                return View(new BegeleiderDetailsVM() { Begeleider = begeleider, ToonEdit = true });
+                begeleider = _userService.FindBegeleider();
             }
-            begeleider = begeleiderRepository.FindById((int)id);
+            else
+            {
+                begeleider = _begeleiderRepository.FindById((int)id);
+            }
             if (begeleider == null)
             {
                 return HttpNotFound();
             }
-            return View(new BegeleiderDetailsVM() { Begeleider = begeleider });
+            var model = Mapper.Map<BegeleiderDetailsVM>(begeleider);
+            model.ToonEdit = begeleider.Equals(_userService.FindBegeleider());
+            return View(model);
         }
 
         [Authorize(Role.Begeleider)]
         public ActionResult Edit()
         {
-            var begeleider = userService.FindBegeleider();
+            var begeleider = _userService.FindBegeleider();
             var model = Mapper.Map<BegeleiderEditVM>(begeleider);
             return View(model);
         }
@@ -56,22 +55,21 @@ namespace StageBeheersTool.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(BegeleiderEditVM model, HttpPostedFileBase fotoFile)
         {
-            var begeleider = userService.FindBegeleider();
-            if (imageService.IsValidImage(fotoFile))
+            var begeleider = _userService.FindBegeleider();
+            if (_imageService.IsValidImage(fotoFile))
             {
-                if (imageService.HasValidSize(fotoFile))
+                if (_imageService.HasValidSize(fotoFile))
                 {
-                    model.FotoUrl = imageService.SaveImage(fotoFile, begeleider.FotoUrl, "~/Images/Begeleider");
+                    model.FotoUrl = _imageService.SaveImage(fotoFile, begeleider.FotoUrl, "~/Images/Begeleider");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Ongeldige afbeelding grootte, max. " + (imageService.MaxSize() / 1024) + " Kb.");
+                    ModelState.AddModelError(string.Empty, "Ongeldige afbeelding grootte, max. " + (_imageService.MaxSize() / 1024) + " Kb.");
                     return View(model);
                 }
             }
-            var newBegeleider = Mapper.Map<Begeleider>(model);
-            begeleiderRepository.Update(begeleider, newBegeleider);
-            begeleiderRepository.SaveChanges();
+            var begeleiderModel = Mapper.Map<Begeleider>(model);
+            _begeleiderRepository.Update(begeleiderModel);
             TempData["message"] = "Gegevens gewijzigd.";
             return RedirectToAction("Details");
         }

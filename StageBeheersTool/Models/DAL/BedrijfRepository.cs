@@ -1,12 +1,8 @@
 ﻿using StageBeheersTool.Models.Domain;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
-using System.Data;
 using System.Data.Entity.Validation;
-using System.Diagnostics;
 
 namespace StageBeheersTool.Models.DAL
 {
@@ -38,16 +34,19 @@ namespace StageBeheersTool.Models.DAL
             return bedrijven.SingleOrDefault(bedrijf => bedrijf.Id == id);
         }
 
-        public void Update(Bedrijf bedrijf, Bedrijf model)
+        public void Update(Bedrijf bedrijf)
         {
-            bedrijf.Naam = model.Naam;
-            bedrijf.Gemeente = model.Gemeente;
-            bedrijf.Postcode = model.Postcode;
-            bedrijf.Straat = model.Straat;
-            bedrijf.Straatnummer = model.Straatnummer;
-            bedrijf.Bereikbaarheid = model.Bereikbaarheid;
-            bedrijf.Bedrijfsactiviteiten = model.Bedrijfsactiviteiten;
-            bedrijf.Telefoonnummer = model.Telefoonnummer;
+            var teUpdatenBedrijf = FindById(bedrijf.Id);
+            if (teUpdatenBedrijf == null)
+                return;
+            teUpdatenBedrijf.Naam = bedrijf.Naam;
+            teUpdatenBedrijf.Gemeente = bedrijf.Gemeente;
+            teUpdatenBedrijf.Postcode = bedrijf.Postcode;
+            teUpdatenBedrijf.Straat = bedrijf.Straat;
+            teUpdatenBedrijf.Straatnummer = bedrijf.Straatnummer;
+            teUpdatenBedrijf.Bereikbaarheid = bedrijf.Bereikbaarheid;
+            teUpdatenBedrijf.Bedrijfsactiviteiten = bedrijf.Bedrijfsactiviteiten;
+            teUpdatenBedrijf.Telefoonnummer = bedrijf.Telefoonnummer;
             SaveChanges();
         }
 

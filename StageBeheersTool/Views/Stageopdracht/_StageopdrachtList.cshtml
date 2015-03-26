@@ -3,26 +3,18 @@
 <div id="grid-tableDiv">
     @Html.Grid(Model.Stageopdrachten).Columns(columns =>
 {
-
-
     columns.Add(so => so.Titel).Titled("Titel")
     .Encoded(false).Sanitized(false)
-    .RenderValueAs(so =>
-    {
-        var parameters = Model.ActionParams!=null? new RouteValueDictionary(Model.ActionParams): new RouteValueDictionary();
-        parameters.Add("id", so.Id);
-        parameters.Add("overzicht", Model.OverzichtAction);
-        return Html.ActionLink(so.Titel, "Details", parameters);
-    });
+    .RenderValueAs(so => Html.ActionLink(so.Titel, "Details", new { id = so.Id, overzicht = Model.OverzichtAction }));
 
     columns.Add(so => so.Specialisatie);
     columns.Add(so => so.Semester1).Titled("Semester")
         .RenderValueAs(so => so.Semester).Sortable(true).ThenSortBy(so => so.Semester2);
     columns.Add(so => so.AantalStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
-    if (User.IsInRole("bedrijf") == false)
+    if (Model.ToonBedrijf)
     {
-        columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf");
-        columns.Add(so => so.Gemeente).Titled("Locatie");
+        columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf")
+            .RenderValueAs(so => so.Bedrijf.Naam + (string.IsNullOrWhiteSpace(so.Gemeente) ? "" : (" - " + so.Gemeente)));
     }
     if (Model.ToonStudenten)
     {
@@ -40,7 +32,7 @@
             }
             ).SetWidth(200);
     }
-    if (User.IsInRole("admin"))
+    if (Model.ToonStatus)
     {
         columns.Add(so => so.Status).Titled("Status").Sanitized(false).Encoded(false)
             .RenderValueAs(so => Html.DisplayFor(model => so.Status)).SetWidth(130);

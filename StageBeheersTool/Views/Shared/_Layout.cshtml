@@ -25,7 +25,17 @@
                 <ul class="nav navbar-nav">
                     @if (User.IsInRole("bedrijf"))
                     {
-                        <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                                Stageopdrachten
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Nieuwe stageopdracht", "Create", "Stageopdracht")</li>
+                                <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
+                                <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                            </ul>
+                        </li>
                         <li>@Html.ActionLink("Contactpersonen", "Index", "Contactpersoon")</li>
                     }
                     else if (User.IsInRole("student"))
@@ -44,12 +54,12 @@
                                 <li>@Html.ActionLink("stageopdracht voorstellen", "Voorstellen", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
                                 <li>
                                     @Html.ActionLink("Overzicht stageopdrachten " + AcademiejaarHelper.HuidigAcademiejaar(), "Index", "Stageopdracht", new { },
-                                        new { role = "menuitem" })
+                                    new { role = "menuitem" })
                                 </li>
                                 <li>@Html.ActionLink("Stageopdrachten zonder begeleider", "GoedgekeurdeStages", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
-                            <li>@Html.ActionLink("begeleider aanvragen", "aanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
-                            <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-                        </ul>
+                                <li>@Html.ActionLink("begeleider aanvragen", "aanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
+                                <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                            </ul>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="">

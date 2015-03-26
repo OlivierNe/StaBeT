@@ -1,6 +1,7 @@
 ﻿@model StudentDetailsVM
 @{
     var message = TempData["message"];
+    var imageUrl = string.IsNullOrWhiteSpace(Model.FotoUrl) ? "~/Images/profiel.jpg" : Model.FotoUrl;
 }
 
 <div>
@@ -10,7 +11,7 @@
     </div>
     <hr />
     <div class="row">
-        <img class="col-sm-push-1 col-xs-2 img-responsive" src="@Url.Content(Model.FotoUrl)" />
+        <img class="col-sm-push-1 col-xs-2 img-responsive" src="@Url.Content(imageUrl)" />
     </div>
 
     <dl class="dl-horizontal">

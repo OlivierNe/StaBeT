@@ -42,7 +42,7 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Admin, Role.Begeleider, Role.student)]
         public ActionResult Details(int? id)
         {
-            Student student = null;
+            Student student;
             if (_userService.IsStudent())
             {
                 student = _userService.FindStudent();
@@ -91,9 +91,9 @@ namespace StageBeheersTool.Controllers
                 }
             }
             var studentModel = Mapper.Map<StudentEditVM, Student>(model);
+            studentModel.Id = student.Id;
             studentModel.Keuzepakket = model.KeuzepakketId == null ? null : _keuzepakketRepository.FindBy((int)model.KeuzepakketId);
-            _studentRepository.Update(student, studentModel);
-
+            _studentRepository.Update(studentModel);
             TempData["message"] = "Gegevens gewijzigd.";
             return RedirectToAction("Details");
         }

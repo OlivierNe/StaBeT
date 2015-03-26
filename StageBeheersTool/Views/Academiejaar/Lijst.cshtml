@@ -1,10 +1,12 @@
-﻿@model IEnumerable<AcademiejaarInstellingenVM>
+﻿@using StageBeheersTool.Helpers
+@model IEnumerable<AcademiejaarInstellingenVM>
 
 @{
-    ViewBag.Title = "Lijst";
+    ViewBag.Title = "Instellingen academiejaren";
+    var huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
 }
 
-<h2>Instellingen Academiejaren</h2>
+<h2>@ViewBag.Title</h2>
 
 <table class="table">
     <tr>
@@ -28,14 +30,10 @@
         </th>
         <th></th>
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
             <td>
-                @{
-        var huidigAcademiejaar = StageBeheersTool.Helpers.HuidigAcademiejaar();
-                }
                 @if (int.Parse(item.Academiejaar.Substring(0, 4)) >= int.Parse(huidigAcademiejaar.Substring(0, 4)))
                 {
                     @Html.ActionLink(item.Academiejaar, "Create", "Academiejaar", new { item.Academiejaar }, new { })

@@ -10,4 +10,8 @@
     {
         <li> @Html.ActionLink("Academiejaar " + academiejaar, "MijnStagesVanAcademiejaar", new { academiejaar = academiejaar })</li>
     }
+    @if (Model.Length != 0)
+    {
+        <li> @Html.ActionLink("Alle academiejaren", "MijnStagesVanAcademiejaar", new { })</li>
+    }
 </ul>

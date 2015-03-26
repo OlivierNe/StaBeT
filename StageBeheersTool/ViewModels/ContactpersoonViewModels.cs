@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StageBeheersTool.ViewModels
 {
-    /**
-     *  naam - voornaam - e-mail - gsm - functie binnen het bedrijf - aanspreektitel - functie stageopdracht (mentor-contractondertekenaar.
-     * */
     public class ContactpersoonCreateVM
     {
         [Required]

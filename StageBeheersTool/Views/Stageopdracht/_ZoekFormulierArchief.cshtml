@@ -3,7 +3,13 @@
 <a id="searchA" class="btn btn-default" style="display:compact">Zoeken</a>
 @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-horizontal" }))
 {
-    @Html.HiddenFor(model => model.Academiejaar)
+    <div class="form-group">
+        @Html.LabelFor(model => model.Academiejaar, new { @class = "control-label col-md-1" })
+        <div class="col-md-11">
+            @Html.DropDownListFor(model => model.Academiejaar, Model.AcademiejaarSelectList, "--Academiejaar--",
+                new { @class = "form-control", style = "width:auto" })
+        </div>
+    </div>
     <div class="form-group">
         @Html.LabelFor(model => model.Bedrijf, new { @class = "control-label col-md-1" })
         <div class="col-md-11">
@@ -17,6 +23,6 @@
         </div>
     </div>
     <div class="col-md-offset-1">
-        <button type="submit" class="btn btn-default">Zoeken</button>
+        <button type="submit" class="btn btn-default" id="zoekenSubmit">Zoeken</button>
     </div>
 }

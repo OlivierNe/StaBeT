@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 
 namespace StageBeheersTool.ViewModels
 {
@@ -17,26 +15,27 @@ namespace StageBeheersTool.ViewModels
         public bool ToonZoekenOpStudent { get; set; }
         public bool ToonOordelen { get; set; }
         public bool ToonStudenten { get; set; }
+        public bool ToonStatus { get; set; }
+        public bool ToonBedrijf { get; set; }
+        public bool ToonAantalStudenten { get; set; }
 
         public string Title { get; set; }
         public string OverzichtAction { get; set; }
-        public RouteValueDictionary ActionParams { get; set; }
 
         public void InitializeItems(IEnumerable<Stageopdracht> stageopdrachten)
         {
-            ActionParams = new RouteValueDictionary();
             Stageopdrachten = stageopdrachten;
         }
 
         private SelectList _aantalStudentenList;
         private SelectList _semesterList;
+        private SelectList _academiejaarList;
 
         public SelectList AantalStudentenList
         {
             get
             {
-                return _aantalStudentenList ??
-                       (_aantalStudentenList = new SelectList(new[] { "1", "2", "3" },
+                return _aantalStudentenList ?? (_aantalStudentenList = new SelectList(new[] { "1", "2", "3" },
                            AantalStudenten == null ? "" : AantalStudenten.ToString()));
             }
         }
@@ -50,6 +49,15 @@ namespace StageBeheersTool.ViewModels
             }
         }
 
+        public SelectList AcademiejaarSelectList
+        {
+            get
+            {
+                return _academiejaarList ??
+                    (_academiejaarList = new SelectList(Academiejaren, Academiejaar ?? ""));
+            }
+        }
+
         public int? Semester { get; set; }
         [Display(Name = "Studenten")]
         public int? AantalStudenten { get; set; }
@@ -58,6 +66,7 @@ namespace StageBeheersTool.ViewModels
         public string Student { get; set; }
         public string Specialisatie { get; set; }
         public string Academiejaar { get; set; }
+        public string[] Academiejaren { get; set; }
     }
 
     public class StageopdrachtDetailsVM
@@ -209,7 +218,6 @@ namespace StageBeheersTool.ViewModels
             var aantalStudentenOpties = new SelectListItem[] { new SelectListItem() { Value = "1", Text = "1"},
                      new SelectListItem() { Value = "2", Text = "2"}, new SelectListItem() { Value = "3", Text = "3" } };
             AantalStudentenSelectList = new SelectList(aantalStudentenOpties, "Value", "Text");
-            this.AantalStudenten = 2;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

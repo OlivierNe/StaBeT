@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using StageBeheersTool.Models.Domain;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StageBeheersTool.ViewModels
 {
@@ -31,7 +26,17 @@ namespace StageBeheersTool.ViewModels
 
     public class BegeleiderDetailsVM
     {
-        public Begeleider Begeleider { get; set; }
+        public string Naam { get; set; }
+        [Display(Name = "HoGent E-mail")]
+        public string HogentEmail { get; set; }
+        [Display(Name = "E-mail")]
+        public string Email { get; set; }
+        public string Gemeente { get; set; }
+        public string Postcode { get; set; }
+        public string Straat { get; set; }
+        public string Straatnummer { get; set; }
+        public string Gsmnummer { get; set; }
+        public string FotoUrl { get; set; }
         public bool ToonEdit { get; set; }
     }
 }

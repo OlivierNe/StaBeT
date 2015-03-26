@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace StageBeheersTool.ViewModels
@@ -36,7 +32,7 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "Telefoon/gsm")]
         public string Telefoonnummer { get; set; }
         public string Bereikbaarheid { get; set; }
-        public string BedrijfsActiviteiten { get; set; }
+        public string Bedrijfsactiviteiten { get; set; }
     }
     
 }

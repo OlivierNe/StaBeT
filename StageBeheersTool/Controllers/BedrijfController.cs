@@ -50,9 +50,9 @@ namespace StageBeheersTool.Controllers
         public ActionResult Edit(EditBedrijfVM model)
         {
             var bedrijf = _userService.FindBedrijf();
-            var newBedrijf = Mapper.Map<Bedrijf>(model);
-            _bedrijfRepository.Update(bedrijf, newBedrijf);
-            _bedrijfRepository.SaveChanges();
+            var bedrijfModel = Mapper.Map<Bedrijf>(model);
+            bedrijfModel.Id = bedrijf.Id;
+            _bedrijfRepository.Update(bedrijfModel);
             TempData["message"] = "Gegevens gewijzigd.";
             return RedirectToAction("Details");
         }
