@@ -2,15 +2,20 @@
 
 <div id="grid-tableDiv">
     @Html.Grid(Model.Stageopdrachten).Columns(columns =>
-{
-    columns.Add(so => so.Titel).Titled("Titel")
-    .Encoded(false).Sanitized(false)
-    .RenderValueAs(so => Html.ActionLink(so.Titel, "Details", new { id = so.Id, overzicht = Model.OverzichtAction }));
+    {
+        
+        columns.Add(so => so.Titel).Titled("Titel")
+            .Encoded(false).Sanitized(false)
+            .RenderValueAs(so => Html.ActionLink(so.Titel, "Details", new {id = so.Id, overzicht = Model.OverzichtAction})).SetWidth(300);
 
-    columns.Add(so => so.Specialisatie);
-    columns.Add(so => so.Semester1).Titled("Semester")
-        .RenderValueAs(so => so.Semester).Sortable(true).ThenSortBy(so => so.Semester2);
-    columns.Add(so => so.AantalStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
+        
+        columns.Add(so => so.Specialisatie);
+            columns.Add(so => so.Semester1).Titled("Semester")
+                .RenderValueAs(so => so.Semester).Sortable(true).ThenSortBy(so => so.Semester2);
+            columns.Add(so => so.AantalStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
+       
+        
+            
     if (Model.ToonBedrijf)
     {
         columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf")
