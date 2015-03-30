@@ -18,7 +18,7 @@ namespace StageBeheersTool.Helpers
             var display = claims.Where(c => c.Type == "Display").Select(c => c.Value).SingleOrDefault();
             if (string.IsNullOrWhiteSpace(display))
             {
-                return identity.GetUserName();
+                return identity.Name;
             }
             return display;
         }

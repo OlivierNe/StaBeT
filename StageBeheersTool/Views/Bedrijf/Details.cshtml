@@ -11,6 +11,17 @@
     <div class="text-success">
         @message
     </div>
+    @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id })
+    @if (User.IsInRole(Role.Bedrijf))
+    {
+        @Html.Raw("|")
+        @Html.ActionLink("Wachtwoord wijzigen", "ChangePassword", "Account")
+    }
+    else if (User.IsInRole(Role.Admin) || User.IsInRole(Role.Begeleider))
+    {
+        @Html.Raw("|")
+        @Html.ActionLink("Terug naar lijst", "Index", "Bedrijf")
+    }
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -18,7 +29,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Email)
+            <a href="mailto:@Html.DisplayFor(model => model.Email)">@Html.DisplayFor(model => model.Email)</a>
         </dd>
 
         <dt>
@@ -33,9 +44,9 @@
             Adres
         </dt>
         <dd>
-            @Model.Gemeente @Model.Postcode
+            <a href="https://maps.google.com/?q=@Model.Adres" target="_blank">@Model.Adres</a>
         </dd>
-        <dd>@Model.Straat @Model.Straatnummer</dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.Telefoonnummer)
         </dt>
@@ -59,12 +70,18 @@
         <dd>
             @Html.DisplayFor(model => model.Bedrijfsactiviteiten)
         </dd>
-
     </dl>
+    @if (User.IsInRole(Role.Admin) || User.IsInRole(Role.Begeleider))
+    {
+        <b>@Html.NameFor(model => model.Stageopdrachten)</b>
+        <ul>
+            @foreach (var stage in Model.Stageopdrachten)
+            {
+                <li>
+                    @Html.ActionLink(stage.Titel, "Details", "Stageopdracht", new { id = stage.Id }, new { })
+                </li>
+            }
+        </ul>
+    }
+
 </div>
-<p>
-    @Html.ActionLink("Gegevens wijzigen", "Edit")
-</p>
-<p>
-    @Html.ActionLink("Wachtwoord wijzigen", "ChangePassword", "Account")
-</p>

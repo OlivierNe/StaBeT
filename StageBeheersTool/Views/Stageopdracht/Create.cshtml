@@ -21,6 +21,17 @@
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @if (User.IsInRole(Role.Admin))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.BedrijfId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.BedrijfId, Model.BedrijvenSelectList, "-- Selecteer een bedrijf --",
+                        new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.BedrijfId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
         <div class="form-group">
             @Html.LabelFor(model => model.Titel, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-6">
@@ -164,4 +175,8 @@
     <script src="~/Scripts/stagetool-form.js"></script>
     <script src="~/Scripts/createStageForm.js"></script>
     <script src="~/Scripts/specialisatie.js"></script>
+    @if (User.IsInRole(Role.Admin))
+    {
+        <script src="~/Scripts/createStageFormAdmin.js"></script>
+    }
 }

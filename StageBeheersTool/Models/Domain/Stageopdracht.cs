@@ -47,6 +47,14 @@ namespace StageBeheersTool.Models.Domain
             }
         }
 
+        public string Stageplaats
+        {
+            get
+            {
+                return string.Format("{0} {1}\n {2} {3}", Postcode, Gemeente, Straat, Straatnummer);
+            }
+        }
+
         public bool Semester1 { get; set; }
         public bool Semester2 { get; set; }
         public int AantalStudenten { get; set; }

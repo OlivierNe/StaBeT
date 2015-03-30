@@ -56,56 +56,59 @@
         </dd>
         <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Bedrijf) </dt>
         <dd style="white-space: pre-line">@Html.DisplayFor(model => model.Stageopdracht.Bedrijf.Naam)
-            <a href="https://maps.google.com/?q=@Model.Stageopdracht.Bedrijf.Adres" target="_blank">@Model.Stageopdracht.Bedrijf.Adres</a>
-            @if (Model.BedrijfHeeftGeldigEmail())
-            {
-                <a href="mailto:@Model.Stageopdracht.Bedrijf.Email">@Model.Stageopdracht.Bedrijf.Email</a>
-            }
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Stageopdracht.Contractondertekenaar)
-        </dt>
-        <dd>
-            @if (Model.Stageopdracht.Contractondertekenaar != null)
-            {
-                @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Naam)
-                <a href="mailto:@Model.Stageopdracht.Contractondertekenaar.Email"> @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Email)</a>
-                @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Gsmnummer)
-            }
-        </dd>
-        <dt>
-            @Html.NameFor(model => model.Stagementor)
-        </dt>
-        <dd>
-            @if (Model.Stageopdracht.Stagementor != null)
-            {
-                @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Naam)
-                <a href="mailto:@Model.Stageopdracht.Stagementor.Email"> @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Email)</a>
-                @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Gsmnummer)
-            }
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
-        </dd>
-        @if (User.IsInRole("admin") || User.IsInRole("begeleider"))
+        @if (!string.IsNullOrWhiteSpace(@Model.Stageopdracht.Stageplaats))
         {
-            <dt>
-                @Html.DisplayNameFor(model => model.Stageopdracht.Studenten)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Stageopdracht.ToonStudenten)
-            </dd>
-            <dt>
-                Status
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Stageopdracht.Status)
-            </dd>
+            <a href="https://maps.google.com/?q=@Model.Stageopdracht.Stageplaats" target="_blank">@Model.Stageopdracht.Stageplaats</a>
         }
-    </dl>
+        @if (Model.BedrijfHeeftGeldigEmail())
+        {
+            <a href="mailto:@Model.Stageopdracht.Bedrijf.Email">@Model.Stageopdracht.Bedrijf.Email</a>
+        }
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Stageopdracht.Contractondertekenaar)
+    </dt>
+    <dd>
+        @if (Model.Stageopdracht.Contractondertekenaar != null)
+        {
+            @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Naam)
+            <a href="mailto:@Model.Stageopdracht.Contractondertekenaar.Email"> @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Email)</a>
+            @Html.DisplayFor(model => model.Stageopdracht.Contractondertekenaar.Gsmnummer)
+        }
+    </dd>
+    <dt>
+        @Html.NameFor(model => model.Stagementor)
+    </dt>
+    <dd>
+        @if (Model.Stageopdracht.Stagementor != null)
+        {
+            @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Naam)
+            <a href="mailto:@Model.Stageopdracht.Stagementor.Email"> @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Email)</a>
+            @Html.DisplayFor(model => model.Stageopdracht.Stagementor.Gsmnummer)
+        }
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
+    </dd>
+    @if (User.IsInRole("admin") || User.IsInRole("begeleider"))
+    {
+        <dt>
+            @Html.DisplayNameFor(model => model.Stageopdracht.Studenten)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stageopdracht.ToonStudenten)
+        </dd>
+        <dt>
+            Status
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stageopdracht.Status)
+        </dd>
+    }
+</dl>
 
 </div>
 @if (Model.ToonEdit)
@@ -116,12 +119,12 @@
 }
 <p>
     @Html.ActionLink("Terug naar overzicht", Model.OverzichtAction)
-    @if (Model.ToonEdit)
+    @if (User.IsInRole(Role.Admin) || Model.ToonEdit)
     {
         @Html.Raw("|")
         @Html.ActionLink("Aanpassen", "Edit", new { id = Model.Stageopdracht.Id })
     }
-    @if (User.IsInRole("bedrijf") && Model.Stageopdracht.IsGoedgekeurd() == false)
+    @if (User.IsInRole(Role.Admin) || User.IsInRole("bedrijf") && (Model.Stageopdracht.IsGoedgekeurd() == false))
     {
         @Html.Raw("|")
         @Html.ActionLink("Verwijderen", "Delete", new { id = Model.Stageopdracht.Id })

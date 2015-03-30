@@ -10,11 +10,13 @@ namespace StageBeheersTool.Models.DAL
     {
         private readonly StageToolDbContext ctx;
         private readonly DbSet<Bedrijf> bedrijven;
+        private readonly IUserService _userService;
 
-        public BedrijfRepository(StageToolDbContext ctx)
+        public BedrijfRepository(StageToolDbContext ctx, IUserService userService)
         {
             this.ctx = ctx;
             this.bedrijven = ctx.Bedrijven;
+            this._userService = userService;
         }
 
         public void Add(Bedrijf bedrijf)
@@ -29,8 +31,16 @@ namespace StageBeheersTool.Models.DAL
                 .SingleOrDefault(bedrijf => bedrijf.Email == email);
         }
 
-        public Bedrijf FindById(int id)
+        public Bedrijf FindById(int? id)
         {
+            if (_userService.IsBedrijf())
+            {
+                return _userService.FindBedrijf();
+            }
+            if (id == null)
+            {
+                return null;
+            }
             return bedrijven.SingleOrDefault(bedrijf => bedrijf.Id == id);
         }
 

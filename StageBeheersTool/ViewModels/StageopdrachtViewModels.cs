@@ -1,4 +1,7 @@
-﻿using StageBeheersTool.Models.Domain;
+﻿using System.Web;
+using StageBeheersTool.Helpers;
+using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -114,11 +117,11 @@ namespace StageBeheersTool.ViewModels
                 {
                     return "";
                 }
-                return string.Join(" / ", 
+                return string.Join(" / ",
                     new[] { Stageopdracht.Stagementor.Naam,
                         Stageopdracht.Stagementor.Email,
                         Stageopdracht.Stagementor.Gsmnummer }
-                        .Where(s => !string.IsNullOrEmpty(s) ));
+                        .Where(s => !string.IsNullOrEmpty(s)));
             }
         }
         public string Contractondertekenaar
@@ -184,10 +187,14 @@ namespace StageBeheersTool.ViewModels
         public int? ContractondertekenaarId { get; set; }
         [Display(Name = "Stagementor")]
         public int? StagementorId { get; set; }
+        [Display(Name = "Bedrijf")]
+        public int? BedrijfId { get; set; }
+
         public SelectList SpecialisatieSelectList { get; set; }
         public SelectList ContractondertekenaarsSelectList { get; set; }
         public SelectList StagementorsSelectList { get; set; }
         public SelectList AantalStudentenSelectList { get; set; }
+        public SelectList BedrijvenSelectList { get; set; }
 
         public ContactpersoonCreateVM Stagementor { get; set; }
         public ContactpersoonCreateVM Contractondertekenaar { get; set; }
@@ -200,9 +207,22 @@ namespace StageBeheersTool.ViewModels
         {
             SetSelectLists(specialisaties, contractondertekenaars, stagementors);
         }
+
+        public StageopdrachtCreateVM(IEnumerable<Bedrijf> bedrijven, IEnumerable<Specialisatie> specialisaties)
+            : this()
+        {
+            SetBedrijfSelectList(bedrijven, specialisaties);
+        }
+
+        public void SetBedrijfSelectList(IEnumerable<Bedrijf> bedrijven, IEnumerable<Specialisatie> specialisaties)
+        {
+            BedrijvenSelectList = new SelectList(bedrijven, "Id", "Naam", BedrijfId != null ? BedrijfId.ToString() : "");
+            SetSelectLists(specialisaties, new List<Contactpersoon>(), new List<Contactpersoon>());
+        }
+
         public StageopdrachtCreateVM()
         {
-            Academiejaar = DateTime.Now.Year + "-" + (DateTime.Now.Year + 1);
+            Academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
             Semester2 = true;
         }
         #endregion
@@ -238,7 +258,6 @@ namespace StageBeheersTool.ViewModels
             {
                 errors.Add(new ValidationResult("Geen semester geselecteerd."));
             }
-
             return errors;
         }
 

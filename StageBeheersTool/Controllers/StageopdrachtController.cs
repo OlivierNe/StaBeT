@@ -15,16 +15,18 @@ namespace StageBeheersTool.Controllers
     [Authorize]
     public class StageopdrachtController : Controller
     {
-        private readonly ISpecialisatieRepository _specialisatieRepository;
         private readonly IStageopdrachtRepository _stageopdrachtRepository;
+        private readonly IBedrijfRepository _bedrijfRepository;
+        private readonly ISpecialisatieRepository _specialisatieRepository;
         private readonly IAcademiejaarRepository _academiejaarRepository;
         private readonly IUserService _userService;
 
         public StageopdrachtController(IStageopdrachtRepository stageopdrachtRepository,
-            ISpecialisatieRepository specialisatieRepository, IUserService userService,
-            IAcademiejaarRepository academiejaarRepository)
+            IBedrijfRepository bedrijfRepository, ISpecialisatieRepository specialisatieRepository,
+            IUserService userService, IAcademiejaarRepository academiejaarRepository)
         {
             _stageopdrachtRepository = stageopdrachtRepository;
+            _bedrijfRepository = bedrijfRepository;
             _specialisatieRepository = specialisatieRepository;
             _academiejaarRepository = academiejaarRepository;
             _userService = userService;
@@ -172,7 +174,7 @@ namespace StageBeheersTool.Controllers
         #endregion
 
         #region create
-        [Authorize(Role.Bedrijf)]
+        [Authorize(Role.Bedrijf, Role.Admin)]
         public ActionResult Create(bool isStagementor = false, bool isContractOndertekenaar = false)
         {
             if (Request.IsAjaxRequest())
@@ -186,10 +188,18 @@ namespace StageBeheersTool.Controllers
                     return PartialView("_CreateContractOndertekenaarForm");
                 }
             }
-            var bedrijf = _userService.FindBedrijf();
-            var model = new StageopdrachtCreateVM(_specialisatieRepository.FindAll(),
-                bedrijf.FindAllContractOndertekenaars(), bedrijf.FindAllStagementors());
-            model.SetAdres(bedrijf.Gemeente, bedrijf.Postcode, bedrijf.Straat, bedrijf.Straatnummer);
+            StageopdrachtCreateVM model;
+            if (_userService.IsBedrijf())
+            {
+                var bedrijf = _userService.FindBedrijf();
+                model = new StageopdrachtCreateVM(_specialisatieRepository.FindAll(),
+                    bedrijf.FindAllContractOndertekenaars(), bedrijf.FindAllStagementors());
+                model.SetAdres(bedrijf.Gemeente, bedrijf.Postcode, bedrijf.Straat, bedrijf.Straatnummer);
+            }
+            else //admin
+            {
+                model = new StageopdrachtCreateVM(_bedrijfRepository.FindAll(), _specialisatieRepository.FindAll());
+            }
             model.AantalStudenten = 2;
             var academiejaarInstellingen = _academiejaarRepository.FindByHuidigAcademiejaar();
             if (academiejaarInstellingen != null)
@@ -200,13 +210,16 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Role.Bedrijf)]
+        [Authorize(Role.Bedrijf, Role.Admin)]
         public ActionResult Create(StageopdrachtCreateVM model)
         {
-            var bedrijf = _userService.FindBedrijf();
+            if (_userService.IsAdmin() && model.BedrijfId == null)
+            {
+                ModelState.AddModelError("BedrijfId", "Het veld bedrijf is verplicht.");
+            }
+            var bedrijf = _bedrijfRepository.FindById(model.BedrijfId);
             if (ModelState.IsValid)
             {
                 var stageopdracht = Mapper.Map<Stageopdracht>(model);
@@ -241,8 +254,16 @@ namespace StageBeheersTool.Controllers
                 TempData["message"] = "Stageopdracht succesvol aangemaakt.";
                 return RedirectToAction("Details", new { id = stageopdracht.Id });
             }
-            model.SetSelectLists(_specialisatieRepository.FindAll(), bedrijf.FindAllContractOndertekenaars(),
-                bedrijf.FindAllStagementors());
+            if (_userService.IsBedrijf())
+            {
+                model.SetSelectLists(_specialisatieRepository.FindAll(), bedrijf.FindAllContractOndertekenaars(),
+                    bedrijf.FindAllStagementors());
+            }
+            else //admin
+            {
+                model.SetBedrijfSelectList(_bedrijfRepository.FindAll(), _specialisatieRepository.FindAll());
+            }
+
             var academiejaarInstellingen = _academiejaarRepository.FindByHuidigAcademiejaar();
             if (academiejaarInstellingen != null)
             {
@@ -306,7 +327,7 @@ namespace StageBeheersTool.Controllers
         #endregion
 
         #region edit
-        [Authorize(Role.Bedrijf, Role.Begeleider)]
+        [Authorize(Role.Bedrijf, Role.Begeleider, Role.Admin)]
         public ActionResult Edit(int id)
         {
             var stageopdracht = _stageopdrachtRepository.FindById(id);
@@ -334,7 +355,7 @@ namespace StageBeheersTool.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Role.Bedrijf, Role.Begeleider)]
+        [Authorize(Role.Bedrijf, Role.Begeleider, Role.Admin)]
         public ActionResult Edit(StageopdrachtEditVM model)
         {
             Stageopdracht stageopdracht;
@@ -367,11 +388,10 @@ namespace StageBeheersTool.Controllers
         #endregion
 
         #region stageopdracht verwijderen
-        [Authorize(Role.Bedrijf)]
+        [Authorize(Role.Bedrijf, Role.Admin)]
         public ActionResult Delete(int id)
         {
-            var bedrijf = _userService.FindBedrijf();
-            var stageopdracht = bedrijf.FindStageopdrachtById(id);
+            var stageopdracht = _stageopdrachtRepository.FindById(id);
             if (stageopdracht == null)
             {
                 return HttpNotFound();
@@ -382,22 +402,20 @@ namespace StageBeheersTool.Controllers
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Role.Bedrijf)]
+        [Authorize(Role.Bedrijf, Role.Admin)]
         public ActionResult DeleteConfirmed(int id)
         {
-            var bedrijf = _userService.FindBedrijf();
-            var stageopdracht = bedrijf.FindStageopdrachtById(id);
+            var stageopdracht = _stageopdrachtRepository.FindById(id);
             if (stageopdracht == null)
             {
                 return HttpNotFound();
             }
-            if (stageopdracht.IsGoedgekeurd())
+            if (!_userService.IsAdmin() && stageopdracht.IsGoedgekeurd())
             {
                 TempData["message"] = "Goegekeurde stages kunnen niet meer verwijderd worden.";
                 return RedirectToAction("Index");
             }
             _stageopdrachtRepository.Delete(stageopdracht);
-            _userService.SaveChanges();
             TempData["message"] = "Stageopdracht '" + stageopdracht.Titel + "' succesvol verwijderd.";
             return RedirectToAction("Index");
         }
