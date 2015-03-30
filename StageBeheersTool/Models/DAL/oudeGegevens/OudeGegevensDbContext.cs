@@ -9,7 +9,8 @@ namespace OudeGegevens
     public class OudeGegevensDbContext : DbContext
     {
         public OudeGegevensDbContext()
-            : base("OnlineOudeGegevens")
+            //: base("OnlineOudeGegevens")
+            : base("OudeGegevens")
         {
 
         }
@@ -22,7 +23,7 @@ namespace OudeGegevens
             //modelBuilder.Entity<stagebedrijf>().HasMany(b => b.stage).WithRequired(s => s.stagebedrijf).HasForeignKey(s => s.stagebedrijfID);
         }
 
-        public DbSet<docent> Docenten { get; set; } 
+        public DbSet<docent> Docenten { get; set; }
         public DbSet<stage> Stages { get; set; }
         public DbSet<relatie> Relaties { get; set; }//contactpersonen
         public DbSet<student> Studenten { get; set; }

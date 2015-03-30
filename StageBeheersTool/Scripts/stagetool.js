@@ -28,7 +28,10 @@ $(function () {
     $searchForm.submit(function () {
         $.ajax({
             method: "get", url: $(this).attr("action"),
-            headers: { "X-Requested-Width": "XMLHttpRequest" },
+            headers: {
+                "X-Requested-Width": "XMLHttpRequest",
+                "Cache-Control": "no-store"
+            },
             data: $(this).serialize()
         }).done(ajaxDone);
 
@@ -41,7 +44,10 @@ $(function () {
             $a.on("click", function () {
                 $.ajax({
                     method: "get", url: a.href,
-                    headers: { "X-Requested-With": "XMLHttpRequest" }
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "Cache-Control": "no-store"
+                    }
                 }).success(ajaxDone);
                 return false;
             });
@@ -53,7 +59,10 @@ $(function () {
         if (e.originalEvent.state !== null) {
             $.ajax({
                 method: "get", url: history.state.url,
-                headers: { "X-Requested-With": "XMLHttpRequest" },
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Cache-Control": "no-store"
+                },
                 cache: false
             }).done(function (data) {
                 $("#grid-tableDiv").html(data);
