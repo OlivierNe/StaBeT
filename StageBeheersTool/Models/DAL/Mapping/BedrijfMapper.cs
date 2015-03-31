@@ -14,7 +14,7 @@ namespace StageBeheersTool.Models.DAL.Mapping
 
             this.Property(bedrijf => bedrijf.Naam).IsRequired().HasMaxLength(100);
             this.Property(bedrijf => bedrijf.Email).IsRequired().HasMaxLength(100);
-            this.HasMany(bedrijf => bedrijf.Contactpersonen).WithRequired();
+            this.HasMany(bedrijf => bedrijf.Contactpersonen).WithRequired(cp => cp.Bedrijf);
             this.HasMany(bedrijf => bedrijf.Stageopdrachten).WithRequired(so => so.Bedrijf);
         }
     }

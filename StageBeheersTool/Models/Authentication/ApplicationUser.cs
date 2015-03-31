@@ -41,6 +41,11 @@ namespace StageBeheersTool.Models.Authentication
                 if (begeleider != null && string.IsNullOrEmpty(begeleider.Naam) == false)
                     display = begeleider.Naam;
             }
+            if (manager.IsInRole(Id, Role.Begeleider) && manager.IsInRole(Id, Role.Admin)) 
+            {
+                userIdentity.AddClaim(new Claim("Mode", Role.Begeleider)); //om te switchen tussen admin en begeleider
+            }
+
             userIdentity.AddClaim(new Claim("Display", display));
             return userIdentity;
         }

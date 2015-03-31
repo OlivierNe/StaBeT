@@ -15,6 +15,26 @@
                 {
                     @Html.ActionLink(IdentityHelpers.GetDisplayName(), "Details", "Bedrijf")
                 }
+                else if (CurrentUser.IsAdmin() && CurrentUser.IsBegeleider())
+                {
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                        <span class="caret"></span>
+                        @IdentityHelpers.GetDisplayName()
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            @Html.ActionLink("Persoonlijke gegevens", "Details", "Begeleider")
+                        </li>
+                        <li>
+                            @Html.ActionLink("Admin mode", "SwitchLoginMode", "Account", new { mode = Role.Admin }, new { })
+                        </li>
+                        <li>
+                            @Html.ActionLink("Begeleider mode", "SwitchLoginMode", "Account", new { mode = Role.Begeleider }, new { })
+                        </li>
+                    </ul>
+                </li>
+                }
                 else if (User.IsInRole("begeleider"))
                 {
                     @Html.ActionLink(IdentityHelpers.GetDisplayName(), "Details", "Begeleider")
@@ -23,9 +43,9 @@
                 {
                     @Html.ActionLink(IdentityHelpers.GetDisplayName(), "", "")
                 }
-            </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Afmelden</a></li>
-        </ul>
+                </li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Afmelden</a></li>
+            </ul>
     }
 }
 else

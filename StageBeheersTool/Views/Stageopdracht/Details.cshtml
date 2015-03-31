@@ -1,12 +1,5 @@
 ﻿@model StageopdrachtDetailsVM
 
-@{
-    ViewBag.Title = "Details";
-    var message = TempData["message"];
-}
-<h4 class="text-success">
-    @message
-</h4>
 <h2>Details</h2>
 <div>
     <h4>Stageopdracht</h4>
@@ -24,9 +17,7 @@
             @Html.DisplayNameFor(model => model.Stageopdracht.Omschrijving)
         </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Omschrijving)
-        </dd>
+        <dd style="white-space: pre-line">@Html.DisplayFor(model => model.Stageopdracht.Omschrijving)</dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Stageopdracht.Semester)
@@ -56,13 +47,13 @@
         </dd>
         <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Bedrijf) </dt>
         <dd style="white-space: pre-line">@Html.DisplayFor(model => model.Stageopdracht.Bedrijf.Naam)
-        @if (!string.IsNullOrWhiteSpace(@Model.Stageopdracht.Stageplaats))
-        {
-            <a href="https://maps.google.com/?q=@Model.Stageopdracht.Stageplaats" target="_blank">@Model.Stageopdracht.Stageplaats</a>
-        }
         @if (Model.BedrijfHeeftGeldigEmail())
         {
             <a href="mailto:@Model.Stageopdracht.Bedrijf.Email">@Model.Stageopdracht.Bedrijf.Email</a>
+        }
+        @if (!string.IsNullOrWhiteSpace(@Model.Stageopdracht.Stageplaats))
+        {
+            <a href="https://maps.google.com/?q=@Model.Stageopdracht.Stageplaats" target="_blank">@Model.Stageopdracht.Stageplaats</a>
         }
     </dd>
     <dt>
@@ -109,6 +100,8 @@
         </dd>
     }
 </dl>
+
+
 
 </div>
 @if (Model.ToonEdit)

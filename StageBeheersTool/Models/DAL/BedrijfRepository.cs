@@ -9,25 +9,29 @@ namespace StageBeheersTool.Models.DAL
     public class BedrijfRepository : IBedrijfRepository
     {
         private readonly StageToolDbContext ctx;
-        private readonly DbSet<Bedrijf> bedrijven;
+        private readonly DbSet<Bedrijf> _bedrijven;
         private readonly IUserService _userService;
 
         public BedrijfRepository(StageToolDbContext ctx, IUserService userService)
         {
             this.ctx = ctx;
-            this.bedrijven = ctx.Bedrijven;
+            this._bedrijven = ctx.Bedrijven;
             this._userService = userService;
         }
 
         public void Add(Bedrijf bedrijf)
         {
-            bedrijven.Add(bedrijf);
+            _bedrijven.Add(bedrijf);
             SaveChanges();
         }
 
         public Bedrijf FindByEmail(string email)
         {
-            return bedrijven
+            if (_userService.IsBedrijf())
+            {
+                return _userService.FindBedrijf();
+            }
+            return _bedrijven
                 .SingleOrDefault(bedrijf => bedrijf.Email == email);
         }
 
@@ -41,7 +45,7 @@ namespace StageBeheersTool.Models.DAL
             {
                 return null;
             }
-            return bedrijven.SingleOrDefault(bedrijf => bedrijf.Id == id);
+            return _bedrijven.SingleOrDefault(bedrijf => bedrijf.Id == id);
         }
 
         public void Update(Bedrijf bedrijf)
@@ -88,7 +92,7 @@ namespace StageBeheersTool.Models.DAL
 
         public IQueryable<Bedrijf> FindAll()
         {
-            return bedrijven.OrderBy(b => b.Naam);
+            return _bedrijven.OrderBy(b => b.Naam);
         }
     }
 }

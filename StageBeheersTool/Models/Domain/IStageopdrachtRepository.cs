@@ -45,7 +45,7 @@ namespace StageBeheersTool.Models.Domain
         /// </summary>
         /// <returns>Stageopdrachten van huidig academiejaar van ingelogde begeleider</returns>
         IQueryable<Stageopdracht> FindStageopdrachtenVanBegeleider();
-
+        
         void Update(Stageopdracht stageopdracht);
         void Delete(Stageopdracht stageopdracht);
 
@@ -83,6 +83,6 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<Stageopdracht> FindMijnStagesVanAcademiejaar(string academiejaar);
 
         void SaveChanges();
-
+        
     }
 }

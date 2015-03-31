@@ -1,13 +1,13 @@
 ﻿@model StageopdrachtCreateVM
 @{
     ViewBag.Title = "Nieuwe stageopdracht";
-    var ajaxOptions = new AjaxOptions()
+    var ajaxOptions = new AjaxOptions
     {
         HttpMethod = "GET",
         UpdateTargetId = "stagementorForm",
         InsertionMode = InsertionMode.Replace
     };
-    var ajaxOptions2 = new AjaxOptions()
+    var ajaxOptions2 = new AjaxOptions
     {
         HttpMethod = "GET",
         UpdateTargetId = "contractondertekenaarForm",
@@ -68,7 +68,7 @@
             @Html.LabelFor(model => model.AantalStudenten, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.AantalStudenten, Model.AantalStudentenSelectList,
-                        new { @class = "form-control", @style = "max-width:80px" })
+                    new { @class = "form-control", @style = "max-width:80px" })
                 @Html.ValidationMessageFor(model => model.AantalStudenten, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -143,7 +143,7 @@
                 </div>
                 @Html.HiddenFor(model => model.ContractondertekenaarId, new { @id = "ContractondertekenaarIdHidden" })
                 @Ajax.ActionLink("+", "Create", new { isContractondertekenaar = true }, ajaxOptions2,
-                       new { @class = "btn btn-default", @id = "controndBtn", title = "Nieuwe Contractondertekenaar" })
+                    new { @class = "btn btn-default", @id = "controndBtn", title = "Nieuwe Contractondertekenaar" })
             </div>
             <div id="contractondertekenaarForm" class="col-md-12">
                 @if (Model.Contractondertekenaar != null)
@@ -161,7 +161,7 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Opslaan" class="btn btn-default" />
+                <input type="submit" value="Opslaan" class="btn btn-default" id="saveBtn" />
             </div>
         </div>
     </div>
@@ -169,6 +169,11 @@
 <div>
     @Html.ActionLink("Terug naar overzicht", "Index")
 </div>
+
+@section styles
+{
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+}
 
 @section Scripts {
     @*@Scripts.Render("~/bundles/jqueryval")*@

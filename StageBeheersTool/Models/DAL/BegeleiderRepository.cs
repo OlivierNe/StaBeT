@@ -10,29 +10,34 @@ namespace StageBeheersTool.Models.DAL
 {
     public class BegeleiderRepository : IBegeleiderRepository
     {
-        private DbSet<Begeleider> begeleiders;
-        private StageToolDbContext ctx;
+        private readonly DbSet<Begeleider> _begeleiders;
+        private readonly StageToolDbContext _dbContext;
 
         public BegeleiderRepository(StageToolDbContext ctx)
         {
-            this.ctx = ctx;
-            this.begeleiders = ctx.Begeleiders;
+            this._dbContext = ctx;
+            this._begeleiders = ctx.Begeleiders;
         }
 
         public void Add(Begeleider begeleider)
         {
-            begeleiders.Add(begeleider);
+            _begeleiders.Add(begeleider);
             SaveChanges();
+        }
+
+        public IQueryable<Begeleider> FindAll()
+        {
+            return _begeleiders.OrderBy(b => b.Naam);
         }
 
         public Begeleider FindByEmail(string hoGentEmail)
         {
-            return begeleiders.SingleOrDefault(b => b.HogentEmail == hoGentEmail);
+            return _begeleiders.SingleOrDefault(b => b.HogentEmail == hoGentEmail);
         }
 
         public Begeleider FindById(int id)
         {
-            return begeleiders.SingleOrDefault(b => b.Id == id);
+            return _begeleiders.SingleOrDefault(b => b.Id == id);
         }
 
         public void Update(Begeleider begeleider)
@@ -57,7 +62,7 @@ namespace StageBeheersTool.Models.DAL
         {
             try
             {
-                ctx.SaveChanges();
+                _dbContext.SaveChanges();
             }
             catch (DbEntityValidationException e)
             {
@@ -78,7 +83,5 @@ namespace StageBeheersTool.Models.DAL
                 throw new ApplicationException("" + message);
             }
         }
-
-
     }
 }

@@ -1,7 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
+using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.ViewModels
 {
+    public class ContactpersoonIndexVM
+    {
+        public IEnumerable<Contactpersoon> Contactpersonen { get; set; }
+        public bool ToonBedrijf { get; set; }
+        public string Naam { get; set; }
+        public string Bedrijf { get; set; }
+    }
+
     public class ContactpersoonCreateVM
     {
         [Required]
@@ -23,6 +35,14 @@ namespace StageBeheersTool.ViewModels
         [Required]
         [Display(Name = "Contractondertekenaar")]
         public bool IsContractondertekenaar { get; set; }
+        [Display(Name = "Bedrijf")]
+        public int BedrijfId { get; set; }
+        public SelectList BedrijvenSelectList { get; set; }
+
+        public void SetBedrijven(IEnumerable<Bedrijf> bedrijven)
+        {
+            BedrijvenSelectList = new SelectList(bedrijven, "Id", "Naam", BedrijfId != 0 ? BedrijfId.ToString() : "");
+        }
     }
 
     public class ContactpersoonEditVM : ContactpersoonCreateVM

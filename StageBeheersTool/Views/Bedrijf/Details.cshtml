@@ -73,15 +73,7 @@
     </dl>
     @if (User.IsInRole(Role.Admin) || User.IsInRole(Role.Begeleider))
     {
-        <b>@Html.NameFor(model => model.Stageopdrachten)</b>
-        <ul>
-            @foreach (var stage in Model.Stageopdrachten)
-            {
-                <li>
-                    @Html.ActionLink(stage.Titel, "Details", "Stageopdracht", new { id = stage.Id }, new { })
-                </li>
-            }
-        </ul>
+        @Html.ActionLink("Contactpersonen", "VanBedrijf", "Contactpersoon", new { bedrijfId = Model.Id }, new { })
     }
 
 </div>

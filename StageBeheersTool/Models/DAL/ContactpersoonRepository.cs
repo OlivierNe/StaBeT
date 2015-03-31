@@ -10,36 +10,61 @@ namespace StageBeheersTool.Models.DAL
 {
     public class ContactpersoonRepository : IContactpersoonRepository
     {
-        private DbSet<Contactpersoon> contactpersonen;
-        private StageToolDbContext ctx;
+        private readonly DbSet<Contactpersoon> _contactpersonen;
+        private readonly StageToolDbContext _dbContext;
 
-        public ContactpersoonRepository(StageToolDbContext ctx)
+        public ContactpersoonRepository(StageToolDbContext dbContext)
         {
-            this.ctx = ctx;
-            contactpersonen = ctx.Contactpersonen;
+            this._dbContext = dbContext;
+            this._contactpersonen = dbContext.Contactpersonen;
+        }
+
+        public IQueryable<Contactpersoon> FindAll()
+        {
+            return _contactpersonen.OrderBy(cp => cp.Id).Include(cp => cp.Bedrijf);
+        }
+
+        public IQueryable<Contactpersoon> FindAllVanBedrijf(int bedrijfId)
+        {
+            return _contactpersonen.Where(cp => cp.Bedrijf.Id == bedrijfId)
+                .OrderBy(cp => cp.Id).Include(cp => cp.Bedrijf);
         }
 
         public Contactpersoon FindById(int id)
         {
-            return contactpersonen.SingleOrDefault(cp => cp.Id == id);
-        }
-
-        public IQueryable<Contactpersoon> Contactpersonen()
-        {
-            return contactpersonen;
+            return _contactpersonen.SingleOrDefault(cp => cp.Id == id);
         }
 
         public void Delete(Contactpersoon contactpersoon)
         {
-            contactpersonen.Remove(contactpersoon);
+            _contactpersonen.Remove(contactpersoon);
             SaveChanges();
+        }
+
+        public bool Update(Contactpersoon contactpersoon)
+        {
+            var teUpdatenPersoon = FindById(contactpersoon.Id);
+            if (teUpdatenPersoon == null)
+                return false;
+            teUpdatenPersoon.Voornaam = contactpersoon.Voornaam;
+            teUpdatenPersoon.Familienaam = contactpersoon.Familienaam;
+            teUpdatenPersoon.Gsmnummer = contactpersoon.Gsmnummer;
+            teUpdatenPersoon.Telefoonnummer = contactpersoon.Telefoonnummer;
+            teUpdatenPersoon.IsStagementor = contactpersoon.IsStagementor;
+            teUpdatenPersoon.IsContractondertekenaar = contactpersoon.IsContractondertekenaar;
+            teUpdatenPersoon.Aanspreektitel = contactpersoon.Aanspreektitel;
+            teUpdatenPersoon.Bedrijfsfunctie = contactpersoon.Bedrijfsfunctie;
+            teUpdatenPersoon.Email = contactpersoon.Email;
+
+            SaveChanges();
+            return true;
         }
 
         public void SaveChanges()
         {
             try
             {
-                ctx.SaveChanges();
+                _dbContext.SaveChanges();
             }
             catch (DbEntityValidationException e)
             {
@@ -60,5 +85,6 @@ namespace StageBeheersTool.Models.DAL
                 throw new ApplicationException("" + message);
             }
         }
+
     }
 }

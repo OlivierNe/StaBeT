@@ -209,11 +209,13 @@
     </Compile>
     <Compile Include="Helpers\AuthorizeAttribute.cs" />
     <Compile Include="Helpers\AcademiejaarHelper.cs" />
-    <Compile Include="Helpers\MyIdentityExtensions.cs" />
+    <Compile Include="Helpers\IdentityHelpers.cs" />
+    <Compile Include="Helpers\QueryableContactpersoonExtensions.cs" />
     <Compile Include="Helpers\QueryableStageopdrachtExtensions.cs" />
     <Compile Include="Models\Authentication\ApplicationSignInManager.cs" />
     <Compile Include="Models\Authentication\ApplicationUser.cs" />
     <Compile Include="Models\Authentication\ApplicationUserManager.cs" />
+    <Compile Include="Models\Authentication\CurrentUser.cs" />
     <Compile Include="Models\Authentication\Role.cs" />
     <Compile Include="Models\DAL\AcademiejaarRepository.cs" />
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
@@ -285,8 +287,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\favicon.ico" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -322,7 +329,6 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
-    <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -334,7 +340,14 @@
     <Content Include="Images\foto-6.jpg" />
     <Content Include="Images\profiel.jpg" />
     <Content Include="Scripts\academiejaarInstellingen.js" />
+    <Content Include="Scripts\lib\bootstrap.js" />
+    <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Scripts\createStageForm.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -351,8 +364,6 @@
     <Content Include="Scripts\lib\gridmvc.min.js" />
     <Content Include="Scripts\lib\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\lib\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\lib\bootstrap.js" />
-    <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Models\Domain\Domain.cd" />
     <Content Include="Scripts\lib\jquery-2.1.3.min.map" />
     <None Include="Scripts\lib\jquery.validate-vsdoc.js" />
@@ -437,6 +448,11 @@
     </Content>
     <Content Include="Views\Bedrijf\_BedrijfList.cshtml" />
     <Content Include="Views\Bedrijf\Create.cshtml" />
+    <Content Include="Views\Shared\_StudentHeader.cshtml" />
+    <Content Include="Views\Shared\_BedrijfHeader.cshtml" />
+    <Content Include="Views\Shared\_BegeleiderHeader.cshtml" />
+    <Content Include="Views\Shared\_AdminHeader.cshtml" />
+    <Content Include="Views\Contactpersoon\_ContactpersoonList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -444,9 +460,6 @@
     <Folder Include="Images\Student\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>

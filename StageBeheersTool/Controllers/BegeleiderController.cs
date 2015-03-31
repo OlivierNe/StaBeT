@@ -21,6 +21,13 @@ namespace StageBeheersTool.Controllers
             _userService = userservice;
         }
 
+        [Authorize(Role.Admin, Role.Begeleider)]
+        public ActionResult Index()
+        {
+            var begeleiders = _begeleiderRepository.FindAll();
+            return View();
+        }
+
         [Authorize(Role.Begeleider, Role.Admin)]
         public ActionResult Details(int? id)
         {

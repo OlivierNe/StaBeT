@@ -1,6 +1,4 @@
-﻿using System.Web;
-using StageBeheersTool.Helpers;
-using StageBeheersTool.Models.Authentication;
+﻿using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;

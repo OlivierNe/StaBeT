@@ -9,8 +9,10 @@
     @RenderSection("styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
     <meta name="description" content="" />
+    <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
 </head>
 <body>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -23,126 +25,32 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @if (User.IsInRole("bedrijf"))
+                    @if (CurrentUser.IsBedrijf())
                     {
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                Stageopdrachten
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Nieuwe stageopdracht", "Create", "Stageopdracht")</li>
-                                <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
-                                <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-                            </ul>
-                        </li>
-                        <li>@Html.ActionLink("Contactpersonen", "Index", "Contactpersoon")</li>
+                        @Html.Partial("_BedrijfHeader")
                     }
-                    else if (User.IsInRole("student"))
+                    else if (CurrentUser.IsStudent())
                     {
-                        <li>@Html.ActionLink("Stageopdrachten", "Index", "Stageopdracht")</li>
-                        <li>@Html.ActionLink("Voorkeurstages", "MijnVoorkeurStages", "Stageopdracht")</li>
+                        @Html.Partial("_StudentHeader")
                     }
-                    else if (User.IsInRole("admin") && User.IsInRole("begeleider"))
+                    else if (CurrentUser.IsAdmin() && CurrentUser.IsBegeleider())
                     {
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                Stageopdrachten @(AcademiejaarHelper.HuidigAcademiejaar())
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Nieuwe stageopdracht", "Create", "Stageopdracht")</li>
-                                <li>@Html.ActionLink("Aanvragen stages", "Voorstellen", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
-                                <li>
-                                    @Html.ActionLink("alle stages", "Index", "Stageopdracht", new { }, new { role = "menuitem" })
-                                </li>
-                                <li>@Html.ActionLink("Stages zonder begeleider", "GoedgekeurdeStages", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
-                                <li>@Html.ActionLink("Aanvragen begeleiders", "aanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
-                                <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                Mijn Stages
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Mijn stages " + AcademiejaarHelper.HuidigAcademiejaar(), "MijnStages", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-                                <li>@Html.ActionLink("Archief", "MijnArchief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                Instellingen
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    @Html.ActionLink("Academiejaar", "Index", "Academiejaar")
-                                </li>
-                                <li>
-                                    @Html.ActionLink("Admin rechten", "Index", "Admin")
-                                </li>
-                            </ul>
-                        </li>
+                        if (IdentityHelpers.GetMode() == Role.Admin)
+                        {
+                            @Html.Partial("_AdminHeader")
+                        }
+                        else if (IdentityHelpers.GetMode() == Role.Begeleider)
+                        {
+                            @Html.Partial("_BegeleiderHeader")
+                        }
                     }
-                    else if (User.IsInRole("admin"))
+                    else if (CurrentUser.IsAdmin())
                     {
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                Stageopdrachten  @AcademiejaarHelper.HuidigAcademiejaar()
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Nieuwe stageopdracht", "Create", "Stageopdracht")</li>
-                                <li>@Html.ActionLink("Aanvragen stages", "Voorstellen", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
-                                <li>@Html.ActionLink("Alle stages", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-                                <li>@Html.ActionLink("Aanvragen begeleiders", "aanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
-
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                Instellingen
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    @Html.ActionLink("Parameters academiejaar", "Index", "Academiejaar")
-                                </li>
-                                <li>
-                                    @Html.ActionLink("Administratie rechten", "Index", "Admin")
-                                </li>
-                            </ul>
-                        </li>
-                        <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                        @Html.Partial("_AdminHeader")
                     }
-                    else if (User.IsInRole("begeleider"))
+                    else if (CurrentUser.IsBegeleider())
                     {
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                Stageopdrachten @(AcademiejaarHelper.HuidigAcademiejaar())
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Nieuwe stageopdracht", "Create", "Stageopdracht")</li>
-                                <li>@Html.ActionLink("Alle stages ", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-                                <li>@Html.ActionLink("Stages zonder begeleider", "GoedgekeurdeStages", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
-                                <li>@Html.ActionLink("Aanvragen begeleiding", "AanvragenBegeleider", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                Mijn Stages
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink(AcademiejaarHelper.HuidigAcademiejaar(), "MijnStages", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-                                <li>@Html.ActionLink("Per academiejaar", "MijnArchief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-                            </ul>
-                        </li>
-                        <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+                        @Html.Partial("_BegeleiderHeader")
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -150,6 +58,13 @@
         </div>
     </div>
     <div class="container body-content">
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @TempData["message"]
+            </div>
+        }
         @RenderBody()
         <hr />
         <footer>

@@ -3,6 +3,7 @@
 $(function () {
     var $inputs = $("#searchForm input, #searchForm select");
     var $searchA = $("#searchA");
+    var $cancelBtn = $("#CancelBtn");
     var $searchForm = $("#searchForm");
     var emptyInputs = $inputs.filter(function () {
         return !$(this).val();
@@ -11,11 +12,16 @@ $(function () {
         $searchForm.css("display", "none");
     }
     else {
-        $searchA.remove();
+        $searchA.css("display", "none");
     }
     $searchA.on("click", function () {
         $searchForm.css("display", "block");
-        $searchA.remove();
+        $searchA.css("display", "none");
+    });
+
+    $cancelBtn.on("click", function() {
+        $searchA.css("display", "inline");
+        $searchForm.css("display", "none");
     });
 
     var ajaxDone = function (data) {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -314,9 +316,26 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
-
-
-
+        //Tussen admin en begeleider view switchen
+        [Authorize(Role.Admin, Role.Begeleider)]
+        public ActionResult SwitchLoginMode(string mode)
+        {
+            if ((CurrentUser.IsAdmin() && CurrentUser.IsBegeleider()) == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var identity = (ClaimsIdentity)User.Identity;
+            var user = UserManager.FindByName(User.Identity.Name);
+            var claim = identity.Claims.FirstOrDefault(c => c.Type == "Mode");
+            if (claim != null)
+            {
+                UserManager.RemoveClaim(user.Id, claim);
+            }
+            UserManager.AddClaim(user.Id, new Claim("Mode", mode));
+            AuthenticationManager.SignOut();
+            SignInManager.SignInAsync(user, false, false);
+            return RedirectToAction("Index", "Home");
+        }
 
         ////
         //// GET: /Account/ForgotPassword

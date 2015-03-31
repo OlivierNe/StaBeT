@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading;
 using System.Web;
-using Microsoft.AspNet.Identity;
 
 namespace StageBeheersTool.Helpers
 {
@@ -21,6 +17,14 @@ namespace StageBeheersTool.Helpers
                 return identity.Name;
             }
             return display;
+        }
+
+        public static string GetMode()
+        {
+            var identity = (ClaimsIdentity)HttpContext.Current.User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var mode = claims.Where(c => c.Type == "Mode").Select(c => c.Value).FirstOrDefault();
+            return mode;
         }
 
     }

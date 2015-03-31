@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
@@ -8,7 +9,6 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
 using StageBeheersTool.Models.Authentication;
 using System.Threading.Tasks;
-
 
 namespace StageBeheersTool.Controllers
 {
@@ -103,7 +103,8 @@ namespace StageBeheersTool.Controllers
             {
                 Stageopdrachten = stageopdrachten,
                 Title = "Mijn stages",
-                ToonStudenten = true
+                ToonStudenten = true,
+                OverzichtAction = "MijnStages"
             };
             if (Request.IsAjaxRequest())
             {
@@ -347,8 +348,7 @@ namespace StageBeheersTool.Controllers
             var model = Mapper.Map<Stageopdracht, StageopdrachtEditVM>(stageopdracht);
             model.ContractondertekenaarId = stageopdracht.Contractondertekenaar == null ? null : (int?)stageopdracht.Contractondertekenaar.Id;
             model.StagementorId = stageopdracht.Stagementor == null ? null : (int?)stageopdracht.Stagementor.Id;
-            model.SetSelectLists(_specialisatieRepository.FindAll(),
-                stageopdracht.Bedrijf.FindAllContractOndertekenaars(),
+            model.SetSelectLists(_specialisatieRepository.FindAll(), stageopdracht.Bedrijf.FindAllContractOndertekenaars(),
                 stageopdracht.Bedrijf.FindAllStagementors());
             return View(model);
         }
@@ -506,12 +506,12 @@ namespace StageBeheersTool.Controllers
                 var stageopdracht = _stageopdrachtRepository.FindById(model.Id);
                 Admin.KeurStageopdrachtAf(stageopdracht);
                 var emailService = Request.GetOwinContext().GetUserManager<ApplicationUserManager>().EmailService;
-                /* await emailService.SendAsync(new IdentityMessage()
-                 {
-                     Destination = stageopdracht.Bedrijf.Email,
-                     Subject = model.Onderwerp,
-                     Body = model.Reden
-                 });*/
+                await emailService.SendAsync(new IdentityMessage()
+                {
+                    Destination = stageopdracht.Bedrijf.Email,
+                    Subject = model.Onderwerp,
+                    Body = model.Reden
+                });
                 _stageopdrachtRepository.SaveChanges();
                 return RedirectToAction("Voorstellen");
             }

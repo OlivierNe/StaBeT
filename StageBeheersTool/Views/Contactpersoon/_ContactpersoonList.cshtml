@@ -1,0 +1,28 @@
+﻿@model ContactpersoonIndexVM
+
+<div id="grid-tableDiv">
+    @Html.Grid(Model.Contactpersonen).Columns(columns =>
+{
+    columns.Add(cp => cp.Voornaam).Titled("Naam").Encoded(false).Sanitized(false)
+        .RenderValueAs(cp => Html.ActionLink(cp.Naam, "Details", new { id = cp.Id })).SetWidth(200);
+
+    columns.Add(cp => cp.Email).Titled("E-mail").Encoded(false).Sanitized(false)
+            .RenderValueAs(cp => Html.DisplayFor(model => cp.Email));
+
+    if (Model.ToonBedrijf)
+    {
+
+        columns.Add(cp => cp.Bedrijf.Naam).Titled("Bedrijf").Sanitized(false).Encoded(false)
+            .RenderValueAs(cp => Html.ActionLink(string.IsNullOrWhiteSpace(cp.Bedrijf.Naam) ? "/" :
+                cp.Bedrijf.Naam, "Details", "Bedrijf", new { id = cp.Id }, new { }));
+    }
+
+    columns.Add(cp => cp.IsStagementor).Titled("Stagementor").Encoded(false).Sanitized(false)
+            .RenderValueAs(cp => Html.DisplayFor(model => cp.IsStagementor)); ;
+
+    columns.Add(cp => cp.IsContractondertekenaar).Titled("Contractondertekenaar")
+        .Encoded(false).Sanitized(false)
+        .RenderValueAs(cp => Html.DisplayFor(model => cp.IsContractondertekenaar));
+
+}).WithPaging(10).Sortable().EmptyText("Geen contactpersonen gevonden")
+</div>

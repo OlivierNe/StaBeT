@@ -20,7 +20,7 @@ using System.Data.Entity.Migrations;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        //DropCreateDatabaseAlways<StageToolDbContext>
+       // DropCreateDatabaseAlways<StageToolDbContext>
    DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
@@ -328,15 +328,19 @@ namespace StageBeheersTool.Models.DAL
                             var stageopdracht = Converter.ToStageopdracht(stage);
                             if (stage.relatie != null)
                             {
-                                stageopdracht.Stagementor =
-                                    bedrijf.Contactpersonen.FirstOrDefault(c => c.Familienaam == stage.relatie.naam
+                                var stagementor = bedrijf.Contactpersonen.FirstOrDefault(c => c.Familienaam == stage.relatie.naam
                                                                                 && c.Voornaam == stage.relatie.voornaam);
+                                if(stagementor!=null)
+                                    stagementor.IsStagementor = true;
+                                stageopdracht.Stagementor = stagementor;
                             }
                             if (stage.relatie1 != null)
                             {
-                                stageopdracht.Contractondertekenaar =
-                                    bedrijf.Contactpersonen.FirstOrDefault(c => c.Familienaam == stage.relatie1.naam
+                                var contrOnd =  bedrijf.Contactpersonen.FirstOrDefault(c => c.Familienaam == stage.relatie1.naam
                                                                                 && c.Voornaam == stage.relatie1.voornaam);
+                                stageopdracht.Contractondertekenaar = contrOnd;
+                                if (contrOnd != null)
+                                    contrOnd.IsContractondertekenaar = true;
                             }
                             if (stage.docent != null)
                             {

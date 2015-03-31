@@ -34,7 +34,6 @@ namespace StageBeheersTool.OudeGegevens
                 Bedrijfsactiviteiten = stagebedrijf.sector,
                 Contactpersonen = contactpersonen,
                 Email = (!String.IsNullOrEmpty(email)) ? email : ""
-                //Stageopdrachten = GetStageopdrachten(stagebedrijf.stage)
             };
         }
 
