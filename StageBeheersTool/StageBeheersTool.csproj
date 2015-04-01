@@ -270,6 +270,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="ViewModels\AdminViewModels.cs" />
     <Compile Include="ViewModels\BedrijfViewModels.cs" />
@@ -340,6 +345,7 @@
     <Content Include="Images\foto-6.jpg" />
     <Content Include="Images\profiel.jpg" />
     <Content Include="Scripts\academiejaarInstellingen.js" />
+    <Content Include="Scripts\AddAdmin.js" />
     <Content Include="Scripts\lib\bootstrap.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Scripts\createStageForm.js" />
@@ -376,6 +382,7 @@
     <Content Include="Scripts\lib\respond.min.js" />
     <Content Include="Scripts\specialisatie.js" />
     <Content Include="Scripts\stagetool-form.js" />
+    <Content Include="Scripts\stagetool-list.js" />
     <Content Include="Scripts\stagetool.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -453,6 +460,9 @@
     <Content Include="Views\Shared\_BegeleiderHeader.cshtml" />
     <Content Include="Views\Shared\_AdminHeader.cshtml" />
     <Content Include="Views\Contactpersoon\_ContactpersoonList.cshtml" />
+    <Content Include="Views\Student\_studentList.cshtml" />
+    <Content Include="Views\Begeleider\_begeleidersList.cshtml" />
+    <Content Include="Views\Begeleider\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -471,6 +481,13 @@
       <Project>{16592152-d170-4b4c-945e-fb2eff3fe0ca}</Project>
       <Name>OudeGegevens</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

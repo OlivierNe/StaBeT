@@ -6,10 +6,6 @@ namespace StageBeheersTool.Models.Domain
         Bedrijf FindBedrijf();
         Student FindStudent();
         Begeleider FindBegeleider();
-        bool IsAdmin();
-        bool IsBedrijf();
-        bool IsStudent();
-        bool IsBegeleider();
         bool CreateUser(Bedrijf bedrijf);
         bool CreateUser(Begeleider begeleider);
         bool CreateUser(Student student);

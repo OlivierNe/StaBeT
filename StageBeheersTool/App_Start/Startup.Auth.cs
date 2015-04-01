@@ -24,6 +24,7 @@ namespace StageBeheersTool
             // Configure the sign in cookie
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
+                //ExpireTimeSpan = TimeSpan.FromMinutes(30), //uitloggen na 30 minuten inactive
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
                 Provider = new CookieAuthenticationProvider

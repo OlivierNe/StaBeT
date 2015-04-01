@@ -6,12 +6,12 @@
 @Html.Partial("_StageopdrachtList")
 
 @section scripts{
-    <script src="~/Scripts/stagetool.js"></script>
+    <script src="~/Scripts/stagetool-list.js"></script>
     <script>
         $(function () {
             var $academiejaar = $("#Academiejaar");
             var $title = $("#title");
-            $("#zoekenSubmit").on("click",function () {
+            $("#zoekenSubmit").on("click", function () {
                 $title.text("Stageopdrachten - " + $academiejaar.val());
             });
         });

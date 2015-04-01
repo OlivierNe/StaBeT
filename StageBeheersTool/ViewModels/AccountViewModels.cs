@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Web;
-using Microsoft.AspNet.Identity.Owin;
-using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.ViewModels
 {
@@ -11,18 +8,18 @@ namespace StageBeheersTool.ViewModels
     {
         //[Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Huidig wachtwoord")]
+        [Display(ResourceType = typeof (Resources), Name = "DisplayOldPassword")]
         public string OldPassword { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        //[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Nieuw wachtwoord")]
+        [Display(ResourceType = typeof (Resources), Name = "DisplayNewPassword")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Nieuw wachtwoord bevestigen")]
-        [Compare("NewPassword", ErrorMessage = "Het nieuwe wachtwoord en het bevestigde antwoord komen niet overeen.")]
+        [Display(ResourceType = typeof (Resources), Name = "DisplayNieuwWachtwoordBevestigen")]
+        [Compare("NewPassword", ErrorMessageResourceType = typeof (Resources), ErrorMessageResourceName = "ErrorNieuwEnBevestigdWachtwoord")]
         public string ConfirmPassword { get; set; }
 
         public bool FirstLogin { get; set; }
@@ -30,10 +27,9 @@ namespace StageBeheersTool.ViewModels
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();
-            var manager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             if (!FirstLogin && string.IsNullOrEmpty(OldPassword))
             {
-                results.Add(new ValidationResult("Verplicht oud wachtwoord in te vullen."));
+                results.Add(new ValidationResult(Resources.ErrorOudWachtwoordVerplicht));
             }
             return results;
         }
@@ -41,7 +37,8 @@ namespace StageBeheersTool.ViewModels
     public class ForgotViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "E-mail")]
+        [EmailAddress]
         public string Email { get; set; }
     }
 
@@ -54,31 +51,29 @@ namespace StageBeheersTool.ViewModels
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Wachtwoord")]
+        [Display(ResourceType = typeof (Resources), Name = "DisplayWachtwoord")]
         public string Password { get; set; }
 
         [Display(Name = "Onthouden")]
         public bool RememberMe { get; set; }
     }
 
-
-
     public class ResetPasswordViewModel
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "E-mail")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        //[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Wachtwoord")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(ResourceType = typeof(Resources), Name = "DisplayNieuwWachtwoordBevestigen")]
+        [Compare("Password", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorNieuwEnBevestigdWachtwoord")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
@@ -88,7 +83,7 @@ namespace StageBeheersTool.ViewModels
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "E-mail")]
         public string Email { get; set; }
     }
 }

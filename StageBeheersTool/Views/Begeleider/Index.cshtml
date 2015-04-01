@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Begeleider>
+
+@{
+    ViewBag.Title = "Begeleiders";
+}
+
+<h2>@ViewBag.Title</h2>
+@Html.Partial("_begeleidersList")
+
+@section scripts{
+        <script src="~/Scripts/stagetool-list.js"></script>
+}
+
+

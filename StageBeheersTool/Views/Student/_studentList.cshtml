@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Student>
+
+<div id="grid-tableDiv">
+    @Html.Grid(Model).Columns(column =>
+{
+    column.Add(s => s.Familienaam).Encoded(false).Sanitized(false)
+        .RenderValueAs(s => Html.ActionLink(s.Naam, "Details", "Student", new { id = s.Id }, new { })).Titled("Naam");
+    column.Add(s => s.HogentEmail).Titled("HoGent E-mail").Encoded(false).Sanitized(false)
+        .RenderValueAs(s => "<a href=\"mailto:" + s.HogentEmail + "\">" + s.HogentEmail + "</a>");
+
+}).Sortable(true).WithPaging(10)
+</div>

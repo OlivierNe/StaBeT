@@ -1,11 +1,10 @@
 ﻿@model AdminVm
 
 @{
-    ViewBag.Title = "Admin verwijderen";
+    ViewBag.Title = Resources.TitelAdminVerwijderen;
 }
 
 <h2>@ViewBag.Title</h2>
-
 <div>
     <hr />
     <h4>Deze gebruiker verwijderen?</h4>
@@ -25,11 +24,12 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Verwijderen" class="btn btn-default" /> 
+            <input type="submit" value="Verwijderen" class="btn btn-default" />
             @Html.ActionLink("Annuleren", "Index", new { }, new { @class = "btn btn-default" })
         </div>
     }

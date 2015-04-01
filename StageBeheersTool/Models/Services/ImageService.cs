@@ -1,7 +1,4 @@
 ﻿using StageBeheersTool.Models.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using System.IO;
@@ -10,7 +7,7 @@ namespace StageBeheersTool.Models.Services
 {
     public class ImageService : IImageService
     {
-        private readonly int maxSize = 512000;
+        private const int _maxSize = 512000;
 
         public string SaveImage(HttpPostedFileBase image, string currentImageUrl, string dest)
         {
@@ -19,7 +16,7 @@ namespace StageBeheersTool.Models.Services
                 File.Delete(currentImageUrl);
             }
             string filename = HttpContext.Current.User.Identity.GetUserId() + Path.GetExtension(image.FileName);
-            string newImageUrl = dest + "/" +  filename;
+            string newImageUrl = dest + "/" + filename;
             string absolutePath = Path.Combine(HttpContext.Current.Server.MapPath(dest), Path.GetFileName(filename));
             image.SaveAs(absolutePath);
             return newImageUrl;
@@ -33,12 +30,12 @@ namespace StageBeheersTool.Models.Services
 
         public bool HasValidSize(HttpPostedFileBase fotoFile)
         {
-            return fotoFile.ContentLength <= maxSize;
+            return fotoFile.ContentLength <= _maxSize;
         }
 
         public int MaxSize()
         {
-            return maxSize;
+            return _maxSize;
         }
     }
 }

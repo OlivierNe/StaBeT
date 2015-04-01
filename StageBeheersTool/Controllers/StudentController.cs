@@ -3,7 +3,6 @@ using StageBeheersTool.ViewModels;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
-using PagedList;
 using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.Controllers
@@ -26,10 +25,14 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult Index(int page = 1)
+        public ActionResult Index()
         {
             var studenten = _studentRepository.FindAll();
-            return View(studenten.ToPagedList(page, 10));
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_studentList", studenten);
+            }
+            return View(studenten);
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
@@ -39,45 +42,45 @@ namespace StageBeheersTool.Controllers
             return View(studenten);
         }
 
-        [Authorize(Role.Admin, Role.Begeleider, Role.student)]
+        [Authorize(Role.Admin, Role.Begeleider, Role.Student)]
         public ActionResult Details(int? id)
         {
-            Student student;
-            if (_userService.IsStudent())
-            {
-                student = _userService.FindStudent();
-            }
-            else if (id == null)
+            var student = FindStudent(id);
+            if (student == null)
             {
                 return HttpNotFound();
             }
-            else
-            {
-                student = _studentRepository.FindById((int)id);
-            }
             var model = Mapper.Map<StudentDetailsVM>(student);
-            model.ToonEdit = _userService.IsStudent();
+            model.ToonEdit = CurrentUser.IsStudent() || CurrentUser.IsAdmin();
+            model.ToonTerugNaarLijst = CurrentUser.IsAdmin() || CurrentUser.IsBegeleider();
             return View(model);
-
         }
 
-        [Authorize(Role.student)]
+        [Authorize(Role.Student, Role.Admin)]
         [ActionName("Edit")]
-        public ActionResult Edit()
+        public ActionResult Edit(int? id)
         {
-            var student = _userService.FindStudent();
+            var student = FindStudent(id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
             var model = Mapper.Map<Student, StudentEditVM>(student);
             model.InitSelectList(_keuzepakketRepository.FindAll());
             model.KeuzepakketId = student.Keuzepakket == null ? null : (int?)student.Keuzepakket.Id;
             return View("Edit", model);
         }
 
-        [Authorize(Role.student)]
+        [Authorize(Role.Student, Role.Admin)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(StudentEditVM model, HttpPostedFileBase fotoFile)
         {
-            var student = _userService.FindStudent();
+            var student = FindStudent(model.Id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
             if (_imageService.IsValidImage(fotoFile))
             {
                 if (_imageService.HasValidSize(fotoFile))
@@ -86,7 +89,7 @@ namespace StageBeheersTool.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Ongeldige afbeelding grootte, max. " + (_imageService.MaxSize() / 1024) + " Kb.");
+                    ModelState.AddModelError("", string.Format(Resources.ErrorOngeldigeAfbeeldingGrootte, (_imageService.MaxSize() / 1024)));
                     return View(model);
                 }
             }
@@ -95,9 +98,23 @@ namespace StageBeheersTool.Controllers
             studentModel.Keuzepakket = model.KeuzepakketId == null ? null : _keuzepakketRepository.FindBy((int)model.KeuzepakketId);
             _studentRepository.Update(studentModel);
             TempData["message"] = "Gegevens gewijzigd.";
-            return RedirectToAction("Details");
+            return RedirectToAction("Details", new { studentModel.Id });
         }
 
+        #region helpers
 
+        private Student FindStudent(int? id)
+        {
+            if (CurrentUser.IsStudent())
+            {
+                return _userService.FindStudent();
+            }
+            if (id == null)
+            {
+                return null;
+            }
+            return _studentRepository.FindById((int)id);//admin/begeleider
+        }
+        #endregion
     }
 }

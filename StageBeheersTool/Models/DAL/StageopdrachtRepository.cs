@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Data.Entity;
@@ -10,14 +11,14 @@ namespace StageBeheersTool.Models.DAL
 {
     public class StageopdrachtRepository : IStageopdrachtRepository
     {
-        private readonly StageToolDbContext _ctx;
+        private readonly StageToolDbContext _dbContext;
         private readonly DbSet<Stageopdracht> _stageopdrachten;
         private readonly DbSet<StageBegeleidAanvraag> _aanvragen;
         private readonly IUserService _userService;
 
         public StageopdrachtRepository(StageToolDbContext ctx, IUserService userService)
         {
-            _ctx = ctx;
+            _dbContext = ctx;
             _userService = userService;
             _aanvragen = ctx.StageBegeleidAanvragen;
             _stageopdrachten = ctx.Stageopdrachten;
@@ -26,12 +27,12 @@ namespace StageBeheersTool.Models.DAL
         public Stageopdracht FindById(int id)
         {
             Stageopdracht stageopdracht;
-            if (_userService.IsBedrijf())
+            if (CurrentUser.IsBedrijf())
             {
                 var bedrijf = _userService.FindBedrijf();
                 stageopdracht = bedrijf.FindStageopdrachtById(id);
             }
-            else if (_userService.IsStudent())
+            else if (CurrentUser.IsStudent())
             {
                 stageopdracht = _stageopdrachten.Where(IsGeldig())
                     .IncludeAndOrder()
@@ -48,12 +49,12 @@ namespace StageBeheersTool.Models.DAL
         public IQueryable<Stageopdracht> FindAll()
         {
             IQueryable<Stageopdracht> stageopdrachten;
-            if (_userService.IsBedrijf())
+            if (CurrentUser.IsBedrijf())
             {
                 var bedrijf = _userService.FindBedrijf();
                 stageopdrachten = bedrijf.Stageopdrachten.OrderByDescending(so => so.Academiejaar).AsQueryable();
             }
-            else if (_userService.IsStudent())
+            else if (CurrentUser.IsStudent())
             {
                 stageopdrachten = _stageopdrachten.Where(IsGeldig()).IncludeAndOrder();
             }
@@ -159,7 +160,7 @@ namespace StageBeheersTool.Models.DAL
 
         public string[] FindAllAcademiejaren()
         {
-            if (_userService.IsBedrijf())
+            if (CurrentUser.IsBedrijf())
             {
                 var bedrijf = _userService.FindBedrijf();
                 return _stageopdrachten
@@ -171,7 +172,7 @@ namespace StageBeheersTool.Models.DAL
 
         public IQueryable<Stageopdracht> FindAllVanAcademiejaar(string academiejaar)
         {
-            if (_userService.IsBedrijf())
+            if (CurrentUser.IsBedrijf())
             {
                 var bedrijf = _userService.FindBedrijf();
                 return _stageopdrachten.Where(b => b.Bedrijf.Email == bedrijf.Email)
@@ -203,7 +204,7 @@ namespace StageBeheersTool.Models.DAL
         {
             try
             {
-                _ctx.SaveChanges();
+                _dbContext.SaveChanges();
             }
             catch (DbEntityValidationException e)
             {

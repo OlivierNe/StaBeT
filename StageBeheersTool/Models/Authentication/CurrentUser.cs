@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using StageBeheersTool.Helpers;
 
 namespace StageBeheersTool.Models.Authentication
 {
@@ -6,7 +7,12 @@ namespace StageBeheersTool.Models.Authentication
     {
         public static bool IsAdmin()
         {
-            return HttpContext.Current.User.IsInRole("admin");
+            var user = HttpContext.Current.User;
+            if (user.IsInRole(Role.Admin) && user.IsInRole(Role.Begeleider))
+            {
+                return IdentityHelpers.GetMode() == Role.Admin;
+            }
+            return user.IsInRole(Role.Admin);
         }
 
         public static bool IsBedrijf()
@@ -21,10 +27,20 @@ namespace StageBeheersTool.Models.Authentication
 
         public static bool IsBegeleider()
         {
-            return HttpContext.Current.User.IsInRole("begeleider");
+            var user = HttpContext.Current.User;
+            if (user.IsInRole(Role.Admin) && user.IsInRole(Role.Begeleider))
+            {
+                return IdentityHelpers.GetMode() == Role.Begeleider;
+            }
+
+            return user.IsInRole(Role.Begeleider);
         }
 
-
+        public static bool IsBegeleiderEnAdmin()
+        {
+            var user = HttpContext.Current.User;
+            return user.IsInRole(Role.Admin) && user.IsInRole(Role.Begeleider);
+        }
 
     }
 }

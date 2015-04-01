@@ -1,5 +1,4 @@
-﻿@using StageBeheersTool.Helpers
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -12,7 +11,6 @@
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
 </head>
 <body>
-
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -33,7 +31,7 @@
                     {
                         @Html.Partial("_StudentHeader")
                     }
-                    else if (CurrentUser.IsAdmin() && CurrentUser.IsBegeleider())
+                    else if (CurrentUser.IsBegeleiderEnAdmin())
                     {
                         if (IdentityHelpers.GetMode() == Role.Admin)
                         {
@@ -60,9 +58,16 @@
     <div class="container body-content">
         @if (TempData["message"] != null)
         {
-            <div class="alert alert-success alert-dismissible" role="alert">
+            <div class="alert alert-success alert-dismissible" role="alert" id="messageId">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 @TempData["message"]
+            </div>
+        }
+        @if (TempData["error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @TempData["error"]
             </div>
         }
         @RenderBody()
@@ -74,6 +79,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/stagetool.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

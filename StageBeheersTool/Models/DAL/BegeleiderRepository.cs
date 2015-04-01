@@ -27,7 +27,7 @@ namespace StageBeheersTool.Models.DAL
 
         public IQueryable<Begeleider> FindAll()
         {
-            return _begeleiders.OrderBy(b => b.Naam);
+            return _begeleiders.OrderBy(b => b.Familienaam);
         }
 
         public Begeleider FindByEmail(string hoGentEmail)

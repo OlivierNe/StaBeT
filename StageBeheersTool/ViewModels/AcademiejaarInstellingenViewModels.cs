@@ -6,26 +6,27 @@ namespace StageBeheersTool.ViewModels
 {
     public class AcademiejaarInstellingenVM : IValidatableObject
     {
-        [RegularExpression("[0-9]{4}-[0-9]{4}", ErrorMessage = "Ongeldig academiejaar")]
+        [RegularExpression("[0-9]{4}-[0-9]{4}", ErrorMessageResourceType = typeof(Resources),
+            ErrorMessageResourceName = "ErrorOngeldigAcademiejaarFormaat")]
         [Required]
         public string Academiejaar { get; set; }
         [UIHint("NullableDateTime")]
-        [Display(Name = "Begin Semester 1")]
+        [Display(Name = "DisplayBeginSem1", ResourceType = typeof(Resources))]
         public DateTime? Semester1Begin { get; set; }
 
-        [Display(Name = "Einde Semester 1")]
+        [Display(Name = "DisplayEindeSem1", ResourceType = typeof(Resources))]
         [UIHint("NullableDateTime")]
         public DateTime? Semester1Einde { get; set; }
 
-        [Display(Name = "Begin Semester 2")]
+        [Display(Name = "DisplayBeginSem2", ResourceType = typeof(Resources))]
         [UIHint("NullableDateTime")]
         public DateTime? Semester2Begin { get; set; }
 
-        [Display(Name = "Einde Semester 1")]
+        [Display(Name = "DisplayEindeSem2", ResourceType = typeof(Resources))]
         [UIHint("NullableDateTime")]
         public DateTime? Semester2Einde { get; set; }
 
-        [Display(Name = "Deadline voor bedrijven om stageopdrachten te wijzigen")]
+        [Display(ResourceType = typeof(Resources), Name = "DisplayDeadlineBedrijfMagStageWijzigen")]
         [UIHint("NullableDateTime")]
         public DateTime? DeadlineBedrijfStageEdit { get; set; }
 
@@ -34,21 +35,21 @@ namespace StageBeheersTool.ViewModels
             var errors = new List<ValidationResult>();
             if (Semester1Begin != null && Semester1Einde != null && (DateTime.Compare((DateTime)Semester1Begin, (DateTime)Semester1Einde) > 0))
             {
-                errors.Add(new ValidationResult("Foute stageperiode voor semester 1: begindatum moet na de einddatum liggen"));
+                errors.Add(new ValidationResult(Resources.ErrorStageperiodeSem1));
             }
             if (Semester2Begin != null && Semester2Einde != null && (DateTime.Compare((DateTime)Semester2Begin, (DateTime)Semester2Einde) > 0))
             {
-                errors.Add(new ValidationResult("Foute stageperiode voor semester 2: begindatum moet na de einddatum liggen"));
+                errors.Add(new ValidationResult(Resources.ErrorStageperiodeSem2));
             }
             var beginJaar = int.Parse(Academiejaar.Substring(0, 4));
             var eindJaar = int.Parse(Academiejaar.Substring(5, 4));
             if (beginJaar != (eindJaar - 1))
             {
-                errors.Add(new ValidationResult("Ongeldig Academiejaar(beginjaar-eindjaar)"));
+                errors.Add(new ValidationResult(Resources.ErrorOngeldigAcademiejaarFormaat));
             }
-            if (beginJaar < (DateTime.Now.Year-1))
+            if (beginJaar < (DateTime.Now.Year - 1))
             {
-                errors.Add(new ValidationResult("Academiejaar mag niet tot het verleden behoren."));
+                errors.Add(new ValidationResult(Resources.ErrorAcademiejaarInVerleden));
             }
             return errors;
         }

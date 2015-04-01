@@ -1,14 +1,10 @@
 ﻿@model StudentDetailsVM
 @{
-    var message = TempData["message"];
+    ViewBag.Title = "Details student";
     var imageUrl = string.IsNullOrWhiteSpace(Model.FotoUrl) ? "~/Images/profiel.jpg" : Model.FotoUrl;
 }
-
+<h2>@ViewBag.Title</h2>
 <div>
-    <h4>Student</h4>
-    <div class="text-success">
-        @message
-    </div>
     <hr />
     <div class="row">
         <img class="col-sm-push-1 col-xs-2 img-responsive" src="@Url.Content(imageUrl)" />
@@ -23,14 +19,14 @@
             @Html.DisplayFor(model => model.Naam)
         </dd>
         <dt>
-            Hogent E-mail
+            @Html.DisplayNameFor(model => model.HogentEmail)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.HogentEmail)
         </dd>
 
         <dt>
-            E-mail
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
 
         <dd>
@@ -61,6 +57,11 @@
 <p>
     @if (Model.ToonEdit)
     {
-        @Html.ActionLink("Gegevens wijzigen", "Edit")
+        @Html.ActionLink("Gegevens wijzigen", "Edit", new { Model.Id })
+    }
+    @if (Model.ToonTerugNaarLijst)
+    {
+        @Html.Raw("|")
+        @Html.ActionLink("Terug naar lijst", "Index", "Student")
     }
 </p>

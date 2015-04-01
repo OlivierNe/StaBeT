@@ -25,44 +25,66 @@ namespace StageBeheersTool.Controllers
         public ActionResult Index()
         {
             var begeleiders = _begeleiderRepository.FindAll();
-            return View();
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_begeleidersList", begeleiders);
+            }
+            return View(begeleiders);
         }
 
         [Authorize(Role.Begeleider, Role.Admin)]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            Begeleider begeleider;
-            if (id == null)
-            {
-                begeleider = _userService.FindBegeleider();
-            }
-            else
-            {
-                begeleider = _begeleiderRepository.FindById((int)id);
-            }
+            var begeleider = FindBegeleider(id);
             if (begeleider == null)
             {
                 return HttpNotFound();
             }
             var model = Mapper.Map<BegeleiderDetailsVM>(begeleider);
             model.ToonEdit = begeleider.Equals(_userService.FindBegeleider());
+            model.ToonTerugNaarLijst = id != 0;
             return View(model);
         }
 
-        [Authorize(Role.Begeleider)]
-        public ActionResult Edit()
+        [Authorize(Role.Begeleider, Role.Admin)]
+        public ActionResult Edit(int id)
         {
-            var begeleider = _userService.FindBegeleider();
+            Begeleider begeleider;
+            if (CurrentUser.IsAdmin())
+            {
+                begeleider = FindBegeleider(id);
+                if (begeleider == null)
+                {
+                    return HttpNotFound();
+                }
+            }
+            else
+            {
+                begeleider = _userService.FindBegeleider();
+            }
             var model = Mapper.Map<BegeleiderEditVM>(begeleider);
             return View(model);
         }
 
-        [Authorize(Role.Begeleider)]
+        [Authorize(Role.Begeleider, Role.Admin)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(BegeleiderEditVM model, HttpPostedFileBase fotoFile)
         {
-            var begeleider = _userService.FindBegeleider();
+            Begeleider begeleider;
+            if (CurrentUser.IsAdmin())
+            {
+                begeleider = FindBegeleider(model.Id);
+                if (begeleider == null)
+                {
+                    return HttpNotFound();
+                }
+            }
+            else
+            {
+                begeleider = _userService.FindBegeleider();
+            }
+
             if (_imageService.IsValidImage(fotoFile))
             {
                 if (_imageService.HasValidSize(fotoFile))
@@ -71,15 +93,30 @@ namespace StageBeheersTool.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Ongeldige afbeelding grootte, max. " + (_imageService.MaxSize() / 1024) + " Kb.");
+                    ModelState.AddModelError("", string.Format(Resources.ErrorOngeldigeAfbeeldingGrootte, (_imageService.MaxSize() / 1024)));
                     return View(model);
                 }
             }
             var begeleiderModel = Mapper.Map<Begeleider>(model);
             _begeleiderRepository.Update(begeleiderModel);
             TempData["message"] = "Gegevens gewijzigd.";
-            return RedirectToAction("Details");
+            return RedirectToAction("Details", new { id = model.Id });
         }
 
+
+        #region helpers
+
+        private Begeleider FindBegeleider(int id)
+        {
+            if (id == 0)
+            {
+                return _userService.FindBegeleider();
+            }
+            else
+            {
+                return _begeleiderRepository.FindById(id);
+            }
+        }
+        #endregion
     }
 }

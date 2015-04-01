@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -48,6 +47,7 @@ namespace StageBeheersTool.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+
             return View();
         }
 
@@ -62,79 +62,36 @@ namespace StageBeheersTool.Controllers
             {
                 return View(model);
             }
-            if (model.Email.EndsWith("@student.hogent.be")) //student
+            var user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null) //geen login gevonden
             {
-                //TODO: service aanspreken:
-                var loginStudent = new ldap_wrapService();
-                var respStudent = loginStudent.authenticate(model.Email, model.Password);
-                var serStudent = new JavaScriptSerializer();
-                dynamic dataStudent = serStudent.Deserialize<object>(respStudent);
-                //https://webservice.hogent.be/ldap/ldap.wsdl
-                //TODO: if( geldig hogent account + wachtwoord)...
-                if (dataStudent["ACTIVE"] != 0)
+                ModelState.AddModelError("", Resources.ErrorOngeldigeLoginPoging);
+                return View(model);
+            }
+            if (user.PasswordHash == null) //gebruiker heeft geen wachtwoord. Inloggen met hogent webservice
+            {
+                var webservice = new ldap_wrapService(); //https://webservice.hogent.be/ldap/ldap.wsdl
+                var response = webservice.authenticate(model.Email, model.Password);
+                var serializer = new JavaScriptSerializer();
+                dynamic dataStudent = serializer.Deserialize<object>(response);
+                if (dataStudent["ACTIVE"] != 0) //inloggen gelukt
                 {
-                    //https://webservice.hogent.be/ldap/ldap.wsdl
-                    //TODO: if( geldig hogent account + wachtwoord)...
-                    var user = await UserManager.FindByNameAsync(model.Email);
-                    if (user == null) //eerste login
-                    {
-                        user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
-                        await UserManager.CreateAsync(user);
-                        await UserManager.AddToRoleAsync(user.Id, "student");
-                        Student student = new Student() { HogentEmail = model.Email };
-                        _userService.CreateUser(student);
-
-                        await SignInManager.SignInAsync(user, model.RememberMe, false);
-                        return RedirectToAction("Edit", "Student");
-                    }
                     await SignInManager.SignInAsync(user, model.RememberMe, false);
                     return RedirectToAction("Index", "Stageopdracht");
                 }
-            }
-            else if (model.Email.EndsWith("@hogent.be")) //begeleider of admin
-            {
-                var loginDocent = new ldap_wrapService();
-                var respDocent = loginDocent.authenticate(model.Email, model.Password);
-                var serDocent = new JavaScriptSerializer();
-                dynamic dataDocent = serDocent.Deserialize<object>(respDocent);
-                //https://webservice.hogent.be/ldap/ldap.wsdl
-                //TODO: if( geldig hogent account + wachtwoord)...
-                if (dataDocent["ACTIVE"] != 0)
+                else //inloggen mislukt
                 {
-                    var user = await UserManager.FindByNameAsync(model.Email);
-                    if (user == null)
-                    {
-                        user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
-                        await UserManager.CreateAsync(user);
-                        await UserManager.AddToRoleAsync(user.Id, "begeleider"); //of admin
-                        Begeleider begeleider = new Begeleider() { HogentEmail = model.Email, Familienaam = dataDocent["LASTNAME"], Voornaam = dataDocent["FIRSTNAME"] };
-                        _userService.CreateUser(begeleider);
-                        await SignInManager.SignInAsync(user, model.RememberMe, false);
-                        return RedirectToAction("Edit", "Begeleider");
-                    }
-                    await SignInManager.SignInAsync(user, model.RememberMe, false);
-                    return RedirectToAction("Index", "Stageopdracht");
+                    ModelState.AddModelError("", Resources.ErrorOngeldigeLoginPoging);
+                    return View(model);
                 }
             }
-            else if (model.Email.EndsWith("@admin.be"))//tijdelijk
-            {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null)
-                {
-                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
-                    await UserManager.CreateAsync(user);
-                    await UserManager.AddToRoleAsync(user.Id, "admin");
-                }
-                await SignInManager.SignInAsync(user, model.RememberMe, false);
-
-                return RedirectToAction("Index", "Stageopdracht");
-
-            }
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            //wel een wachtwoord aanwezig(bedrijven) - niet inloggen met hogent webservice
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password,
+                 model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    var user = await UserManager.FindByEmailAsync(model.Email);
+                    user = await UserManager.FindByEmailAsync(model.Email);
                     if (user.EmailConfirmed)
                     {
                         return RedirectToAction("Index", "Stageopdracht");
@@ -145,7 +102,7 @@ namespace StageBeheersTool.Controllers
                     }
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", Resources.ErrorOngeldigeLoginPoging);
                     return View(model);
             }
         }
@@ -193,19 +150,13 @@ namespace StageBeheersTool.Controllers
                     {
                         Subject = "Registratie",
                         Destination = bedrijf.Email,
-                        Body =
-                            string.Format(
-                                "<strong>Account aangemaakt: </strong><ul><li>Login: {0}</li><li>Wachtwoord: {1}</li></ul>",
-                                bedrijf.Email, generatedPassword)
+                        Body = string.Format(Resources.EmailRegistratieBedrijf, bedrijf.Email, generatedPassword)
                     };
-
                     await UserManager.EmailService.SendAsync(message);
-
-                    TempData["message"] = "Registratie e-mail verzonden.";
+                    TempData["message"] = Resources.SuccesEmailRegistratieBedrijfVerzonden;
                     return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
-
             }
             return View(model);
         }
@@ -215,7 +166,7 @@ namespace StageBeheersTool.Controllers
         public ActionResult ChangePassword()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
-            if (UserManager.IsInBedrijfRoleOfGeenRole(user.Id))
+            if (UserManager.IsInBedrijfRoleOfGeenRole(user.Id) == false)
             {
                 return new HttpStatusCodeResult(403);
             }
@@ -229,7 +180,7 @@ namespace StageBeheersTool.Controllers
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            if (UserManager.IsInBedrijfRoleOfGeenRole(user.Id))
+            if (UserManager.IsInBedrijfRoleOfGeenRole(user.Id) == false)
             {
                 return new HttpStatusCodeResult(403);
             }
@@ -254,10 +205,7 @@ namespace StageBeheersTool.Controllers
             result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                if (user != null)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                }
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 TempData["message"] = "Wachtwoord gewijzigd.";
                 return RedirectToAction("Details", "Bedrijf");
             }
@@ -297,7 +245,7 @@ namespace StageBeheersTool.Controllers
                             return RedirectToAction("ChangePassword");
                         case SignInStatus.Failure:
                         default:
-                            ModelState.AddModelError("", "Invalid login attempt.");
+                            ModelState.AddModelError("", Resources.ErrorOngeldigeLoginPoging);
                             return View(model);
                     }
 
@@ -320,16 +268,19 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Admin, Role.Begeleider)]
         public ActionResult SwitchLoginMode(string mode)
         {
-            if ((CurrentUser.IsAdmin() && CurrentUser.IsBegeleider()) == false)
+            if (CurrentUser.IsBegeleiderEnAdmin() == false)
             {
-                return RedirectToAction("Index", "Home");
+                return new HttpStatusCodeResult(403);
             }
             var identity = (ClaimsIdentity)User.Identity;
             var user = UserManager.FindByName(User.Identity.Name);
-            var claim = identity.Claims.FirstOrDefault(c => c.Type == "Mode");
-            if (claim != null)
+            var claims = identity.Claims.Where(c => c.Type == "Mode").ToList();
+            if (claims.Count != 0)
             {
-                UserManager.RemoveClaim(user.Id, claim);
+                foreach (var claim in claims)
+                {
+                    UserManager.RemoveClaim(user.Id, claim);
+                }
             }
             UserManager.AddClaim(user.Id, new Claim("Mode", mode));
             AuthenticationManager.SignOut();
@@ -337,91 +288,89 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        ////
-        //// GET: /Account/ForgotPassword
-        //[AllowAnonymous]
-        //public ActionResult ForgotPassword()
-        //{
-        //    return View();
-        //}
+        //
+        // GET: /Account/ForgotPassword
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
 
-        ////
-        //// POST: /Account/ForgotPassword
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await UserManager.FindByNameAsync(model.Email);
-        //        if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-        //        {
-        //            // Don't reveal that the user does not exist or is not confirmed
-        //            return View("ForgotPasswordConfirmation");
-        //        }
+        //
+        // POST: /Account/ForgotPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id))
+                    || UserManager.IsInRole(user.Id, Role.Bedrijf) == false)
+                {
+                    return View("ForgotPasswordConfirmation");
+                }
+                // Send an email with this link
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account",
+                    new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Reset Password",
+                    "klik <a href=\"" + callbackUrl + "\">hier</a> om uw wachtwoord te resetten.");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
+            }
+            return View(model);
+        }
 
-        //        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-        //        // Send an email with this link
-        //        // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-        //        // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-        //        // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-        //        // return RedirectToAction("ForgotPasswordConfirmation", "Account");
-        //    }
+        //
+        // GET: /Account/ForgotPasswordConfirmation
+        [AllowAnonymous]
+        public ActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
 
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
+        //
+        // GET: /Account/ResetPassword
+        [AllowAnonymous]
+        public ActionResult ResetPassword(string code)
+        {
+            return code == null ? View("Error") : View();
+        }
 
-        ////
-        //// GET: /Account/ForgotPasswordConfirmation
-        //[AllowAnonymous]
-        //public ActionResult ForgotPasswordConfirmation()
-        //{
-        //    return View();
-        //}
+        //
+        // POST: /Account/ResetPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null || UserManager.IsInRole(user.Id, Role.Bedrijf) == false)
+            {
+                // Don't reveal that the user does not exist of geen bedrijf is
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+            AddErrors(result);
+            return View();
+        }
 
-        ////
-        //// GET: /Account/ResetPassword
-        //[AllowAnonymous]
-        //public ActionResult ResetPassword(string code)
-        //{
-        //    return code == null ? View("Error") : View();
-        //}
-
-        ////
-        //// POST: /Account/ResetPassword
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-        //    var user = await UserManager.FindByNameAsync(model.Email);
-        //    if (user == null)
-        //    {
-        //        // Don't reveal that the user does not exist
-        //        return RedirectToAction("ResetPasswordConfirmation", "Account");
-        //    }
-        //    var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-        //    if (result.Succeeded)
-        //    {
-        //        return RedirectToAction("ResetPasswordConfirmation", "Account");
-        //    }
-        //    AddErrors(result);
-        //    return View();
-        //}
-
-        ////
-        //// GET: /Account/ResetPasswordConfirmation
-        //[AllowAnonymous]
-        //public ActionResult ResetPasswordConfirmation()
-        //{
-        //    return View();
-        //}
+        //
+        // GET: /Account/ResetPasswordConfirmation
+        [AllowAnonymous]
+        public ActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -460,14 +409,6 @@ namespace StageBeheersTool.Controllers
             }
         }
 
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index", "Home");
-        }
         #endregion
     }
 }

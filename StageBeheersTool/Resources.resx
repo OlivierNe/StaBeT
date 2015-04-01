@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TitelAdminIndex" xml:space="preserve">
+    <value>Administratie rechten</value>
+  </data>
+  <data name="TitelBedrijvenIndex" xml:space="preserve">
+    <value>Overzicht bedrijven</value>
+  </data>
+  <data name="TitelContactpersoonIndex" xml:space="preserve">
+    <value>Overzicht contactpersonen</value>
+  </data>
+  <data name="TitelNieuwBedrijf" xml:space="preserve">
+    <value>Nieuw bedrijf</value>
+  </data>
+  <data name="TitelNieuwContactpersoon" xml:space="preserve">
+    <value>Nieuw contactpersoon</value>
+  </data>
+  <data name="TitelParametersAcademiejaar" xml:space="preserve">
+    <value>Parameters academiejaar</value>
+  </data>
+  <data name="TitelStageopdrachtIndex" xml:space="preserve">
+    <value>Overzicht stageopdracht</value>
+  </data>
+  <data name="TitelNieuweStageopdracht" xml:space="preserve">
+    <value>Nieuwe stageopdracht</value>
+  </data>
+  <data name="SuccesParametersAcademiejaar" xml:space="preserve">
+    <value>Parameters voor academiejaar {0} succesvol opgeslagen.</value>
+    <comment>0=academiejaar</comment>
+  </data>
+  <data name="WarningBedrijfMagStageWijzigenTot" xml:space="preserve">
+    <value>Gegevens mogen aangepast worden tot: {0}</value>
+    <comment>0=einddatum</comment>
+  </data>
+  <data name="DisplayBeginEindeSemester1" xml:space="preserve">
+    <value>begin/einde stageperiode semester 1</value>
+  </data>
+  <data name="DisplayBeginEindeSemester2" xml:space="preserve">
+    <value>begin/einde stageperiode semester 2</value>
+  </data>
+  <data name="DisplayBeginSem1" xml:space="preserve">
+    <value>Begin Semester 1</value>
+  </data>
+  <data name="DisplayBeginSem2" xml:space="preserve">
+    <value>Begin Semester2</value>
+  </data>
+  <data name="DisplayDeadlineBedrijfMagStageWijzigen" xml:space="preserve">
+    <value>Deadline voor bedrijven om stageopdrachten te wijzigen</value>
+  </data>
+  <data name="DisplayEindeSem1" xml:space="preserve">
+    <value>Einde Semester 1</value>
+  </data>
+  <data name="DisplayEindeSem2" xml:space="preserve">
+    <value>Einde Semester 2</value>
+  </data>
+  <data name="ErrorAcademiejaarInVerleden" xml:space="preserve">
+    <value>Academiejaar mag niet tot het verleden behoren</value>
+  </data>
+  <data name="ErrorOngeldigAcademiejaarFormaat" xml:space="preserve">
+    <value>Ongeldig Academiejaar formaat. beginjaar-eindjaar</value>
+  </data>
+  <data name="ErrorStageperiodeSem1" xml:space="preserve">
+    <value>Foute stageperiode voor semester 1: begindatum moet na de einddatum liggen</value>
+  </data>
+  <data name="ErrorStageperiodeSem2" xml:space="preserve">
+    <value>Foute stageperiode voor semester 2: begindatum moet na de einddatum liggen</value>
+  </data>
+  <data name="TitelNieuweAcademiejaarParameters" xml:space="preserve">
+    <value>Parameters nieuw academiejaar</value>
+  </data>
+  <data name="TitelOverzichtParametersAcademiejaren" xml:space="preserve">
+    <value>Overzicht parameters academiejaren</value>
+  </data>
+  <data name="SuccesAdminsGewijzigd" xml:space="preserve">
+    <value>Gegevens succesvol opgeslagen.</value>
+  </data>
+  <data name="SuccesAdminVerwijderd" xml:space="preserve">
+    <value>Admin {0} succesvol verwijderd.</value>
+    <comment>0=email admin</comment>
+  </data>
+  <data name="TitelAdminVerwijderen" xml:space="preserve">
+    <value>Admin verwijderen</value>
+  </data>
+  <data name="ErrorOngeldigeAfbeeldingGrootte" xml:space="preserve">
+    <value>Ongeldige afbeelding grootte, max. {0} Kb.</value>
+    <comment>0=grootte bestand in kb</comment>
+  </data>
+  <data name="TitelWachtwoordVergeten" xml:space="preserve">
+    <value>Wachtwoord vergeten?</value>
+  </data>
+  <data name="DisplayWachtwoord" xml:space="preserve">
+    <value>Wachtwoord</value>
+  </data>
+  <data name="DisplayNieuwWachtwoordBevestigen" xml:space="preserve">
+    <value>Nieuw wachtwoord bevestigen</value>
+  </data>
+  <data name="ErrorNieuwEnBevestigdWachtwoord" xml:space="preserve">
+    <value>Het nieuwe wachtwoord en het bevestigde antwoord komen niet overeen.</value>
+  </data>
+  <data name="DisplayOldPassword" xml:space="preserve">
+    <value>Huidig wachtwoord</value>
+  </data>
+  <data name="DisplayNewPassword" xml:space="preserve">
+    <value>Nieuw wachtwoord</value>
+  </data>
+  <data name="EmailRegistratieBedrijf" xml:space="preserve">
+    <value>&lt;strong&gt;Account aangemaakt: &lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Login: {0}&lt;/li&gt;&lt;li&gt;Wachtwoord: {1}&lt;/li&gt;&lt;/ul&gt;</value>
+    <comment>0 = email bedrijf, 1=wachtwoord</comment>
+  </data>
+  <data name="ErrorOngeldigeLoginPoging" xml:space="preserve">
+    <value>Het ingevoerde e-mailadres of wachtwoord is onjuist.</value>
+  </data>
+  <data name="ErrorOudWachtwoordVerplicht" xml:space="preserve">
+    <value>Verplicht oud wachtwoord in te vullen.</value>
+  </data>
+  <data name="InfoResetWachtwoordVerzonden" xml:space="preserve">
+    <value>Link om wachtwoord te resetten is naar uw e-mail verzonden.</value>
+  </data>
+  <data name="SuccesEmailRegistratieBedrijfVerzonden" xml:space="preserve">
+    <value>Registratie e-mail verzonden.</value>
+  </data>
+  <data name="TitelLogin" xml:space="preserve">
+    <value>Aanmelden</value>
+  </data>
+  <data name="TitelWachtwoordResetten" xml:space="preserve">
+    <value>Reset wachtwoord</value>
+  </data>
+</root>

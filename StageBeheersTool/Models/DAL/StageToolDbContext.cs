@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System.Linq;
+using Microsoft.AspNet.Identity.EntityFramework;
 using MySql.Data.Entity;
 using System.Data.Entity;
 using StageBeheersTool.Models.Domain;
@@ -17,9 +18,9 @@ namespace StageBeheersTool.Models.DAL
             //: base("OnlineConnection", throwIfV1Schema: false)
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-#if DEBUG
-            Database.Log = message => Trace.WriteLine(message);
-#endif
+//#if DEBUG
+//            Database.Log = message => Trace.WriteLine(message);
+//#endif
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -41,6 +42,9 @@ namespace StageBeheersTool.Models.DAL
                 .Property(c => c.Name).HasMaxLength(128).IsRequired();
             modelBuilder.Entity<ApplicationUser>().ToTable("aspNetUsers")
                 .Property(c => c.UserName).HasMaxLength(128).IsRequired();
+            //modelBuilder.Entity<IdentityUserRole>().ToTable("aspNetUsers");
+
+
             //.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("UserNameIndex") { IsUnique = false }));
         }
 

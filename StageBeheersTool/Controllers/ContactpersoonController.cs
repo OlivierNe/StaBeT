@@ -118,7 +118,7 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 var contactpersoon = Mapper.Map<ContactpersoonEditVM, Contactpersoon>(model);
-                if (_userService.IsBedrijf())
+                if (CurrentUser.IsBedrijf())
                 {
                     var bedrijf = _userService.FindBedrijf();
                     bedrijf.UpdateContactpersoon(contactpersoon);
@@ -172,7 +172,7 @@ namespace StageBeheersTool.Controllers
 
         private Contactpersoon FindContactpersoon(int id)
         {
-            if (_userService.IsBedrijf())
+            if (CurrentUser.IsBedrijf())
             {
                 var bedrijf = _userService.FindBedrijf();
                 return bedrijf.FindContactpersoonById(id); //bedrijf mag enkel zijn eigen contactpersonen beheren

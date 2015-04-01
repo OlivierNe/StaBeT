@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
 using StageBeheersTool.Helpers;
+using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace StageBeheersTool.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = Role.Admin)]
     public class AcademiejaarController : Controller
     {
         private readonly IAcademiejaarRepository _academiejaarRepository;
@@ -26,7 +24,7 @@ namespace StageBeheersTool.Controllers
             var academiejaarInstellingen = _academiejaarRepository.FindByHuidigAcademiejaar();
             if (academiejaarInstellingen == null)
             {
-                academiejaarInstellingen = new AcademiejaarInstellingen()
+                academiejaarInstellingen = new AcademiejaarInstellingen
                 {
                     Academiejaar = AcademiejaarHelper.HuidigAcademiejaar()
                 };
@@ -43,7 +41,7 @@ namespace StageBeheersTool.Controllers
             {
                 var academiejaarInstellingen = Mapper.Map<AcademiejaarInstellingen>(model);
                 _academiejaarRepository.Update(academiejaarInstellingen);
-                ViewBag.message = "Wijzigingen opgeslagen";
+                TempData["message"] = string.Format(Resources.SuccesParametersAcademiejaar, model.Academiejaar);
                 return View("Index", model);
             }
             return View("Index", model);
@@ -56,11 +54,16 @@ namespace StageBeheersTool.Controllers
 
         public ActionResult Create(string academiejaar = null)
         {
+            AcademiejaarInstellingen academiejaarInstellingen;
             if (academiejaar != null)
             {
-                _academiejaarRepository.FindByAcademiejaar(academiejaar);
+                academiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(academiejaar);
             }
-            return View();
+            else
+            {
+                academiejaarInstellingen = new AcademiejaarInstellingen();
+            }
+            return View(Mapper.Map<AcademiejaarInstellingenVM>(academiejaarInstellingen));
         }
 
         [HttpPost]
@@ -70,7 +73,7 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 _academiejaarRepository.Add(Mapper.Map<AcademiejaarInstellingen>(model));
-                ViewBag.success = "instellingen opgeslagen";
+                TempData["message"] = string.Format(Resources.SuccesParametersAcademiejaar, model.Academiejaar);
                 return View(model);
             }
             return View(model);

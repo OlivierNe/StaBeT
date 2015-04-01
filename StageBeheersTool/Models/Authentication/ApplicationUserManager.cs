@@ -86,15 +86,46 @@ namespace StageBeheersTool.Models.Authentication
             base.AddToRoleAsync(userId, role);
         }
 
-        public IEnumerable<ApplicationUser> GetAdmins()
+        public IList<ApplicationUser> GetAdmins()
         {
-            return Users.ToList().Where(u => this.GetRoles(u.Id).Contains("admin") || this.GetRoles(u.Id).Contains("adminDisabled"));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(DependencyResolver.Current.GetService(typeof(StageToolDbContext)) as StageToolDbContext));
+
+            var role = roleManager.FindByName(Role.Admin);
+            var admins = this.Users.Where(user => user.Roles.Select(r => r.RoleId).Contains(role.Id)).ToList();
+
+            role = roleManager.FindByName(Role.AdminDisabled);
+            var disabledadmins = this.Users.Where(user => user.Roles.Select(r => r.RoleId).Contains(role.Id));
+
+            var users = admins.Union(disabledadmins);
+            return users.ToList();
         }
+
+        public IList<ApplicationUser> GetStudenten()
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(DependencyResolver.Current.GetService(typeof(StageToolDbContext)) as StageToolDbContext));
+            var role = roleManager.FindByName(Role.Student);
+            return this.Users.Where(user => user.Roles.Select(r => r.RoleId).Contains(role.Id)).ToList();
+        }
+
+        public IList<ApplicationUser> GetBegeleiders()
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(DependencyResolver.Current.GetService(typeof(StageToolDbContext)) as StageToolDbContext));
+            var role = roleManager.FindByName(Role.Begeleider);
+            return this.Users.Where(user => user.Roles.Select(r => r.RoleId).Contains(role.Id)).ToList();
+        }
+
+        public IList<ApplicationUser> GetBedrijven()
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(DependencyResolver.Current.GetService(typeof(StageToolDbContext)) as StageToolDbContext));
+            var role = roleManager.FindByName(Role.Bedrijf);
+            return this.Users.Where(user => user.Roles.Select(r => r.RoleId).Contains(role.Id)).ToList();
+        }
+
 
         public bool IsInBedrijfRoleOfGeenRole(string userId)
         {
             IList<string> roles = this.GetRoles(userId);
-            return !(roles.Contains("bedrijf") || roles.Count == 0);
+            return roles.Contains("bedrijf") || roles.Count == 0;
         }
     }
 

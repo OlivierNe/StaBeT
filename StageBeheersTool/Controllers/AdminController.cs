@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using StageBeheersTool.Models.Authentication;
 using System.Collections.Generic;
@@ -27,7 +28,12 @@ namespace StageBeheersTool.Controllers
         {
             var admins = UserManager.GetAdmins();
             var model = admins.Select(admin =>
-                new AdminVm() { Id = admin.Id, Email = admin.Email, IsAdmin = UserManager.IsInRole(admin.Id, "admin") }).OrderBy(admin => admin.Email);
+                new AdminVm
+                {
+                    Id = admin.Id,
+                    Email = admin.Email,
+                    IsAdmin = UserManager.IsInRole(admin.Id, Role.Admin)
+                }).OrderBy(admin => admin.Email);
             return View(model.ToList());
         }
 
@@ -64,31 +70,18 @@ namespace StageBeheersTool.Controllers
                 }
                 if (adminVm.IsAdmin)
                 {
-                    UserManager.AddToRole(adminVm.Id, "admin");
-                    UserManager.RemoveFromRole(adminVm.Id, "adminDisabled");
+                    UserManager.AddToRole(adminVm.Id, Role.Admin);
+                    UserManager.RemoveFromRole(adminVm.Id, Role.AdminDisabled);
                 }
                 else
                 {
-                    UserManager.AddToRole(adminVm.Id, "adminDisabled");
-                    UserManager.RemoveFromRole(adminVm.Id, "admin");
+                    UserManager.AddToRole(adminVm.Id, Role.AdminDisabled);
+                    UserManager.RemoveFromRole(adminVm.Id, Role.Admin);
                 }
-                UserManager.UpdateSecurityStamp(adminVm.Id); 
+                UserManager.UpdateSecurityStamp(adminVm.Id);
             }
-
+            TempData["message"] = Resources.SuccesAdminsGewijzigd;
             return RedirectToAction("Index");
-        }
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public ActionResult Create(string id)
-        {
-
-            return View();
         }
 
         public ActionResult Delete(string email)
@@ -112,7 +105,13 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
+            var claims = user.Claims.ToArray();
+            foreach (var claim in claims)
+            {
+                UserManager.RemoveClaim(claim.UserId, new Claim(claim.ClaimType, claim.ClaimValue));
+            }
             UserManager.Delete(user);
+            TempData["message"] = string.Format(Resources.SuccesAdminVerwijderd, user.Email);
             return RedirectToAction("Index");
         }
 

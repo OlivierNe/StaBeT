@@ -11,7 +11,6 @@
 
     if (Model.ToonBedrijf)
     {
-
         columns.Add(cp => cp.Bedrijf.Naam).Titled("Bedrijf").Sanitized(false).Encoded(false)
             .RenderValueAs(cp => Html.ActionLink(string.IsNullOrWhiteSpace(cp.Bedrijf.Naam) ? "/" :
                 cp.Bedrijf.Naam, "Details", "Bedrijf", new { id = cp.Id }, new { }));

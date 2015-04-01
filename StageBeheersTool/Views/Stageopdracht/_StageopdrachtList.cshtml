@@ -3,7 +3,6 @@
 <div id="grid-tableDiv">
     @Html.Grid(Model.Stageopdrachten).Columns(columns =>
     {
-
         columns.Add(so => so.Titel).Titled("Titel")
             .Encoded(false).Sanitized(false)
             .RenderValueAs(so => Html.ActionLink(so.Titel, "Details", new { id = so.Id, overzicht = Model.OverzichtAction })).SetWidth(300);
@@ -48,5 +47,5 @@
                         ? Html.ActionLink("Afkeuren", "Afkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
             }
         }
-    }).WithPaging(10).Sortable().EmptyText("")
+    }).WithPaging(10).Sortable().EmptyText("Geen stageopdrachten gevonden")
 </div>

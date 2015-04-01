@@ -34,6 +34,7 @@ namespace StageBeheersTool.ViewModels
 
     public class StudentDetailsVM
     {
+        public int Id { get; set; }
         public string Naam { get; set; }
         [Display(Name = "HoGent E-mail")]
         public string HogentEmail { get; set; }
@@ -46,7 +47,9 @@ namespace StageBeheersTool.ViewModels
         public Keuzepakket Keuzepakket { get; set; }
         public string Gsmnummer { get; set; }
         public string FotoUrl { get; set; }
+
         public bool ToonEdit { get; set; }
+        public bool ToonTerugNaarLijst { get; set; }
     }
 
 }

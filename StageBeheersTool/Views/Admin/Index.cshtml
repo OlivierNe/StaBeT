@@ -1,7 +1,7 @@
 ﻿@model IList<AdminVm>
 
 @{
-    ViewBag.Title = "Rechten administrator";
+    ViewBag.Title = Resources.TitelAdminIndex;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -28,55 +28,24 @@
                     @Html.HiddenFor(model => model[i].Id)
                     @Html.HiddenFor(model => model[i].HasChanged)
                     <td class="col-md-8">
-                        @Html.ActionLink("Verwijderen", "Delete", new { Model[i].Email })
+                        @Html.ActionLink("Verwijderen", "Delete", new { Model[i].Email }, new { @class = "btn btn-default" })
                     </td>
                 </tr>
-
             }
             <tr id="addButtonRow">
                 <td>
-                    <button value="+" id="addButton" title="Nieuwe admin">+</button>
+                    <a value="+" id="addButton" title="Nieuwe admin" class="btn btn-default">+</a>
                 </td>
                 <td></td>
                 <td></td>
             </tr>
         </tbody>
     </table>
-    <input type="submit" value="Opslaan">
+    <input type="submit" value="Opslaan" class="btn btn-default">
+    @Html.ActionLink("Annuleren", "Index", "Admin", new { }, new { @class = "btn btn-default" })
 }
 @section scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
-    <script>
-        $(function () {
-            $("input[type='checkbox'][name$='.IsAdmin'").each(function () {
-                var $self = $(this);
-                $self.change(function () {
-                    var name = $self.attr("name");
-                    var index = name.substring(1, name.indexOf("]"));
-                    var hasChangedInput = $("input[type='hidden'][name='[" + index + "].HasChanged']");
-                    if (hasChangedInput.val() =="true" ) {
-                        hasChangedInput.val(false);
-                    } else {
-                        hasChangedInput.val(true);
-                    }
-                });
-            });
-
-            $("input[type='hidden'][name$='.HasChanged']").each(function () {
-                $(this).val(false);
-            });
-
-            $("#addButton").click(function () {
-                var index = $("#AdminTable tbody tr").length - 2;
-                $('#AdminTable tr:last').before(
-                    '<tr><td class="col-md-1">' +
-                    '<input type="email" name="[' + index + '].Email" class="text-box single-line" ' +
-                    'data-val="true" data-val-email="Het veld E-mail is geen geldig e-mailadres."/></td>' +
-                    '<td class="col-md-3"><input type="checkbox" value="true" checked name="[' + index + '].IsAdmin"/></td>' +
-                    '<td> <input name="['+index+'].HasChanged" type="hidden" value="True" /></td></tr>');
-                return false;
-            });
-        });
-    </script>
+    <script src="~/Scripts/AddAdmin.js"></script>
 }

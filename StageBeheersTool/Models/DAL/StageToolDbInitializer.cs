@@ -20,8 +20,8 @@ using System.Data.Entity.Migrations;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-       // DropCreateDatabaseAlways<StageToolDbContext>
-   DropCreateDatabaseIfModelChanges<StageToolDbContext>
+        //DropCreateDatabaseAlways<StageToolDbContext>
+    DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
         public void RunSeed(StageToolDbContext ctx)
@@ -40,6 +40,7 @@ namespace StageBeheersTool.Models.DAL
                 roleManager.Create(new IdentityRole("admin"));
                 roleManager.Create(new IdentityRole("begeleider"));
                 roleManager.Create(new IdentityRole("bedrijf"));
+                roleManager.Create(new IdentityRole("adminDisabled"));
 
                 var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
 
@@ -77,6 +78,16 @@ namespace StageBeheersTool.Models.DAL
                 };
                 userManager.Create(user5, "wachtwoord");
                 userManager.AddToRole(user5.Id, "admin");
+
+                ApplicationUser user6 = new ApplicationUser()
+                {
+                    Email = "adminBegeleider@test.be",
+                    UserName = "adminBegeleider@test.be",
+                    EmailConfirmed = true
+                };
+                userManager.Create(user6, "wachtwoord");
+                userManager.AddToRole(user6.Id, "admin");
+                userManager.AddToRole(user6.Id, "begeleider");
 
                 #endregion
 
@@ -238,6 +249,7 @@ namespace StageBeheersTool.Models.DAL
                 }
                 begeleider.Stages = stages;
                 context.Begeleiders.Add(begeleider);
+                context.Begeleiders.Add(new Begeleider() { HogentEmail = "adminBegeleider@test.be" });
                 #endregion
 
                 #region goedgekeurde/toegewezen test stages
@@ -323,20 +335,20 @@ namespace StageBeheersTool.Models.DAL
                         context.Bedrijven.AddOrUpdate(bedrijf);
 
                         var stageopdrachten = new List<Stageopdracht>();
-                        foreach (var stage in stagebedrijf.stage.ToList()) //relatie: mentor, relatie: constractond
+                        foreach (var stage in stagebedrijf.stage.ToList()) //relatie: mentor, relatie1: constractond
                         {
                             var stageopdracht = Converter.ToStageopdracht(stage);
                             if (stage.relatie != null)
                             {
                                 var stagementor = bedrijf.Contactpersonen.FirstOrDefault(c => c.Familienaam == stage.relatie.naam
                                                                                 && c.Voornaam == stage.relatie.voornaam);
-                                if(stagementor!=null)
+                                if (stagementor != null)
                                     stagementor.IsStagementor = true;
                                 stageopdracht.Stagementor = stagementor;
                             }
                             if (stage.relatie1 != null)
                             {
-                                var contrOnd =  bedrijf.Contactpersonen.FirstOrDefault(c => c.Familienaam == stage.relatie1.naam
+                                var contrOnd = bedrijf.Contactpersonen.FirstOrDefault(c => c.Familienaam == stage.relatie1.naam
                                                                                 && c.Voornaam == stage.relatie1.voornaam);
                                 stageopdracht.Contractondertekenaar = contrOnd;
                                 if (contrOnd != null)
@@ -358,6 +370,40 @@ namespace StageBeheersTool.Models.DAL
                     }
                 }
                 context.SaveChanges();
+
+                #region begeleider & student logins
+                var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
+
+                //logins begeleiders
+                var begeleiderLogins = new List<ApplicationUser>();
+                foreach (var begeleider in context.Begeleiders)
+                {
+                    var user = new ApplicationUser()
+                    {
+                        Email = begeleider.HogentEmail,
+                        UserName = begeleider.HogentEmail,
+                        EmailConfirmed = true
+                    };
+                    begeleiderLogins.Add(user);
+                }
+                foreach (var begeleiderLogin in begeleiderLogins)
+                {
+                    userManager.Create(begeleiderLogin);
+                    userManager.AddToRole(begeleiderLogin.Id, Role.Begeleider);
+                }
+
+                //login studenten
+                var olivierStudent =
+                    context.Studenten.FirstOrDefault(st => st.HogentEmail == "olivier.neirynck.q1177@student.hogent.be");
+                var olivierLogin = new ApplicationUser
+                {
+                    Email = olivierStudent.HogentEmail,
+                    UserName = olivierStudent.HogentEmail,
+                    EmailConfirmed = true
+                };
+                userManager.Create(olivierLogin);
+                userManager.AddToRole(olivierLogin.Id, Role.Student);
+                #endregion
 
             }
             catch (DbEntityValidationException e)

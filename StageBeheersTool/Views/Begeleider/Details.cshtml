@@ -1,17 +1,10 @@
 ﻿@model BegeleiderDetailsVM
-
 @{
-    ViewBag.Title = "Details";
-    var message = TempData["message"];
+    ViewBag.Title = "Details begeleider";
     var imageUrl = string.IsNullOrWhiteSpace(Model.FotoUrl) ? "~/Images/profiel.jpg" : Model.FotoUrl;
 }
-
-<h2>Details</h2>
-<div class="text-success">
-    @message
-</div>
+<h2>@ViewBag.Title</h2>
 <div>
-    <h4>Begeleider</h4>
     <hr />
     <div class="row">
         <img class="col-sm-push-1 col-xs-2 img-responsive" src="@Url.Content(imageUrl)" />
@@ -56,8 +49,17 @@
     </dl>
 </div>
 <p>
+    @if (Model.ToonTerugNaarLijst)
+    {
+        @Html.ActionLink("Terug naar lijst begeleiders", "Index")
+    }
     @if (Model.ToonEdit)
     {
-        @Html.ActionLink("Gegevens wijzigen", "Edit")
+        if (Model.ToonTerugNaarLijst)
+        {
+            @Html.Raw("|")
+        }
+        @Html.ActionLink("Gegevens wijzigen", "Edit", new { Model.Id })
     }
+
 </p>

@@ -1,15 +1,63 @@
-﻿@using StageBeheersTool.Helpers
-<li class="dropdown">
+﻿<li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="">
         Stageopdrachten  @AcademiejaarHelper.HuidigAcademiejaar()
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" role="menu">
-        <li>@Html.ActionLink("Nieuwe stageopdracht", "Create", "Stageopdracht")</li>
+        <li>@Html.ActionLink(Resources.TitelNieuweStageopdracht, "Create", "Stageopdracht")</li>
         <li>@Html.ActionLink("Aanvragen stages", "Voorstellen", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
         <li>@Html.ActionLink("Alle stages", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
         <li>@Html.ActionLink("Aanvragen begeleiders", "aanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
 
+    </ul>
+</li>
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="">
+        Bedrijven
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+        <li>
+            @Html.ActionLink(Resources.TitelNieuweStageopdracht, "Create", "Bedrijf")
+        </li>
+        <li>
+            @Html.ActionLink(Resources.TitelStageopdrachtIndex, "Index", "Bedrijf")
+        </li>
+        <li role="presentation" class="divider"></li>
+        <li>
+            @Html.ActionLink(Resources.TitelNieuwContactpersoon, "Create", "Contactpersoon")
+        </li>
+        <li>
+            @Html.ActionLink(Resources.TitelContactpersoonIndex, "Index", "Contactpersoon")
+        </li>
+    </ul>
+</li>
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="">
+        Studenten
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+        <li>
+            @Html.ActionLink("Nieuwe student", "Create", "Student")
+        </li>
+        <li>
+            @Html.ActionLink("Studenten", "Index", "Student")
+        </li>
+    </ul>
+</li>
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="">
+        Begeleiders
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+        <li>
+            @Html.ActionLink("Nieuwe begeleider", "Create", "Begeleider")
+        </li>
+        <li>
+            @Html.ActionLink("Begeleiders", "Index", "Begeleider")
+        </li>
     </ul>
 </li>
 <li class="dropdown">
@@ -19,32 +67,11 @@
     </a>
     <ul class="dropdown-menu" role="menu">
         <li>
-            @Html.ActionLink("Parameters academiejaar", "Index", "Academiejaar")
+            @Html.ActionLink(Resources.TitelParametersAcademiejaar, "Index", "Academiejaar")
         </li>
         <li>
-            @Html.ActionLink("Administratie rechten", "Index", "Admin")
+            @Html.ActionLink(Resources.TitelAdminIndex, "Index", "Admin")
         </li>
     </ul>
 </li>
 <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-<li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="">
-        Bedrijven
-        <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu" role="menu">
-        <li>
-            @Html.ActionLink("Nieuw bedrijf", "Create", "Bedrijf")
-        </li>
-        <li>
-            @Html.ActionLink("Overzicht bedrijven", "Index", "Bedrijf")
-        </li>
-        <li role="presentation" class="divider"></li>
-        <li>
-            @Html.ActionLink("Nieuw contactpersoon", "Create", "Contactpersoon")
-        </li>
-        <li>
-            @Html.ActionLink("Overzicht contactpersonen", "Index", "Contactpersoon")
-        </li>
-    </ul>
-</li>

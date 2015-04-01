@@ -5,7 +5,8 @@
     {
         columns.Add(b => b.Naam).Sanitized(false).Encoded(false)
             .RenderValueAs(bedrijf => Html.ActionLink(string.IsNullOrWhiteSpace(bedrijf.Naam) ? "/" : bedrijf.Naam, "Details", new { id = bedrijf.Id }));
-        columns.Add(b => b.Email).Titled("E-mail");
+        columns.Add(b => b.Email).Titled("E-mail").Sanitized(false).Encoded(false)
+                    .RenderValueAs(b => "<a href=\"mailto:" + b.Email + "\">" + b.Email + "</a>"); ;
         columns.Add(b => b.Telefoonnummer).Titled("Tel/gsm");
         columns.Add(b => b.Bedrijfsactiviteiten);
         columns.Add(b => b.Gemeente);

@@ -1,4 +1,5 @@
-﻿using StageBeheersTool.Models.Domain;
+﻿using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.Domain;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace StageBeheersTool.Models.DAL
 
         public Bedrijf FindByEmail(string email)
         {
-            if (_userService.IsBedrijf())
+            if (CurrentUser.IsBedrijf())
             {
                 return _userService.FindBedrijf();
             }
@@ -37,7 +38,7 @@ namespace StageBeheersTool.Models.DAL
 
         public Bedrijf FindById(int? id)
         {
-            if (_userService.IsBedrijf())
+            if (CurrentUser.IsBedrijf())
             {
                 return _userService.FindBedrijf();
             }

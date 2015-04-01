@@ -1,16 +1,14 @@
 ﻿@model AcademiejaarInstellingenVM
 
 @{
-    ViewBag.Title = "Instellingen Academiejaar " + Model.Academiejaar;
+    ViewBag.Title = Resources.TitelParametersAcademiejaar + " " + Model.Academiejaar;
+    TempData["error"] = Html.ValidationSummary(true, "Opslaan mislukt:", new { });
 }
+
 <h2>@ViewBag.Title</h2>
 <hr />
-<div class="text-success">
-    @ViewBag.message
-</div>
 @using (Html.BeginForm("Index", "Academiejaar", FormMethod.Post, new { @class = "form-horizontal" }))
 {
-    @Html.ValidationSummary(true, "Opslaan mislukt:", new { @class = "text-danger" })
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.Academiejaar)
     <div class="form-group">
@@ -44,6 +42,7 @@
     <div class="form-group">
         <div class="col-md-offset-3 col-md-10">
             <input type="submit" value="Opslaan" class="btn btn-default" />
+            @Html.ActionLink("Annuleren", "Index", "Academiejaar", new { }, new { @class = "btn btn-default" })
         </div>
     </div>
 }

@@ -1,8 +1,5 @@
 ﻿using StageBeheersTool.Models.DAL;
 using StageBeheersTool.Models.Domain;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -30,26 +27,6 @@ namespace StageBeheersTool.Models.Services
         public Begeleider FindBegeleider()
         {
             return ctx.Begeleiders.FirstOrDefault(begeleider => begeleider.HogentEmail == HttpContext.Current.User.Identity.Name);
-        }
-
-        public bool IsAdmin()
-        {
-            return HttpContext.Current.User.IsInRole("admin");
-        }
-
-        public bool IsBedrijf()
-        {
-            return HttpContext.Current.User.IsInRole("bedrijf");
-        }
-
-        public bool IsStudent()
-        {
-            return HttpContext.Current.User.IsInRole("student");
-        }
-
-        public bool IsBegeleider()
-        {
-            return HttpContext.Current.User.IsInRole("begeleider");
         }
 
         public void SaveChanges()

@@ -1,5 +1,4 @@
-﻿@using StageBeheersTool.Helpers
-@if (Request.IsAuthenticated)
+﻿@if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
@@ -7,15 +6,15 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @if (User.IsInRole("student"))
+                @if (CurrentUser.IsStudent())
                 {
                     @Html.ActionLink(IdentityHelpers.GetDisplayName(), "Details", "Student")
                 }
-                else if (User.IsInRole("bedrijf"))
+                else if (CurrentUser.IsBedrijf())
                 {
                     @Html.ActionLink(IdentityHelpers.GetDisplayName(), "Details", "Bedrijf")
                 }
-                else if (CurrentUser.IsAdmin() && CurrentUser.IsBegeleider())
+                else if (CurrentUser.IsBegeleiderEnAdmin())
                 {
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
@@ -24,7 +23,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            @Html.ActionLink("Persoonlijke gegevens", "Details", "Begeleider")
+                            @Html.ActionLink("Persoonlijke gegevens", "Details", "Begeleider", new { id = 0 }, new { })
                         </li>
                         <li>
                             @Html.ActionLink("Admin mode", "SwitchLoginMode", "Account", new { mode = Role.Admin }, new { })
@@ -35,11 +34,11 @@
                     </ul>
                 </li>
                 }
-                else if (User.IsInRole("begeleider"))
+                else if (CurrentUser.IsBegeleider())
                 {
-                    @Html.ActionLink(IdentityHelpers.GetDisplayName(), "Details", "Begeleider")
+                    @Html.ActionLink(IdentityHelpers.GetDisplayName(), "Details", "Begeleider", new { id = 0 }, new { })
                 }
-                else if (User.IsInRole("admin"))
+                else if (CurrentUser.IsAdmin())
                 {
                     @Html.ActionLink(IdentityHelpers.GetDisplayName(), "", "")
                 }

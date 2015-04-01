@@ -1,43 +1,41 @@
 ﻿using StageBeheersTool.Models.Domain;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Web;
 
 namespace StageBeheersTool.Models.DAL
 {
     public class StudentRepository : IStudentRepository
     {
-        private StageToolDbContext ctx;
-        private DbSet<Student> studenten;
+        private readonly StageToolDbContext _dbContext;
+        private readonly DbSet<Student> _studenten;
 
         public StudentRepository(StageToolDbContext ctx)
         {
-            this.ctx = ctx;
-            studenten = ctx.Studenten;
+            this._dbContext = ctx;
+            this._studenten = ctx.Studenten;
         }
 
         public void Add(Student student)
         {
-            studenten.Add(student);
+            _studenten.Add(student);
             SaveChanges();
         }
 
         public Student FindByEmail(string hogentEmail)
         {
-            return studenten.SingleOrDefault(student => student.HogentEmail == hogentEmail);
+            return _studenten.SingleOrDefault(student => student.HogentEmail == hogentEmail);
         }
 
         public Student FindById(int id)
         {
-            return studenten.SingleOrDefault(s => s.Id == id);
+            return _studenten.SingleOrDefault(s => s.Id == id);
         }
 
         public IQueryable<Student> FindAll()
         {
-            return studenten.OrderBy(student => student.Familienaam).OrderBy(student => student.Voornaam);
+            return _studenten.OrderBy(student => student.Familienaam);
         }
 
         public IQueryable<Student> FindStudentenMetStageopdrachtEnBegeleider()
@@ -70,7 +68,7 @@ namespace StageBeheersTool.Models.DAL
         {
             try
             {
-                ctx.SaveChanges();
+                _dbContext.SaveChanges();
             }
             catch (DbEntityValidationException e)
             {

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
