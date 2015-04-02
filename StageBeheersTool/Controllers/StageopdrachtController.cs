@@ -218,7 +218,7 @@ namespace StageBeheersTool.Controllers
         {
             if (CurrentUser.IsAdmin() && model.BedrijfId == null)
             {
-                ModelState.AddModelError("BedrijfId", "Het veld bedrijf is verplicht.");
+                ModelState.AddModelError("BedrijfId", Resources.ErrorBedrijfVerplicht);
             }
             var bedrijf = _bedrijfRepository.FindById(model.BedrijfId);
             if (ModelState.IsValid)
@@ -454,9 +454,8 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Student)]
         public ActionResult MijnVoorkeurStages()
         {
-            IEnumerable<Stageopdracht> stageopdrachten = null;
             var student = _userService.FindStudent();
-            stageopdrachten = student.VoorkeurStages;
+            var stageopdrachten = student.VoorkeurStages;
             var model = new StageopdrachtIndexVM() { Stageopdrachten = stageopdrachten };
             if (Request.IsAjaxRequest())
             {
@@ -474,12 +473,12 @@ namespace StageBeheersTool.Controllers
             var stageopdracht = _stageopdrachtRepository.FindById(id);
             Admin.KeurStageopdrachtGoed(stageopdracht);
             var emailService = Request.GetOwinContext().GetUserManager<ApplicationUserManager>().EmailService;
-            /* await emailService.SendAsync(new IdentityMessage()
+             await emailService.SendAsync(new IdentityMessage()
              {
                  Destination = stageopdracht.Bedrijf.Email,
                  Subject = "Stageopdracht goedgekeurd.",
                  Body = "Stageopdracht " + stageopdracht.Titel + " goedgekeurd."
-             });*/
+             });
             _stageopdrachtRepository.SaveChanges();
             return RedirectToAction("Voorstellen");
         }

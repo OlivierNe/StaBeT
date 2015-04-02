@@ -22,7 +22,7 @@ namespace StageBeheersTool.Models.Domain
                 var naam = Familienaam + " " + Voornaam;
                 if (string.IsNullOrWhiteSpace(naam))
                 {
-                    return "/";
+                    return Email;
                 }
                 return naam;
             }

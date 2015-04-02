@@ -285,6 +285,11 @@ namespace StageBeheersTool.Controllers
             UserManager.AddClaim(user.Id, new Claim("Mode", mode));
             AuthenticationManager.SignOut();
             SignInManager.SignInAsync(user, false, false);
+
+            if (Request.UrlReferrer != null)
+            {
+                return Redirect(Request.UrlReferrer.AbsoluteUri);
+            }
             return RedirectToAction("Index", "Home");
         }
 

@@ -35,8 +35,8 @@ namespace StageBeheersTool.Helpers
                          (string.IsNullOrEmpty(bedrijf) || so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower())) &&
                          (string.IsNullOrEmpty(locatie) || so.Gemeente.ToLower().Contains(locatie.ToLower())) &&
                          (string.IsNullOrEmpty(student) || so.Studenten.Any(s =>
-                             (s.Familienaam != null && s.Familienaam.ToLower().Contains(student.ToLower())) ||
-                                   (s.Voornaam != null && s.Voornaam.ToLower().Contains(student.ToLower())))));
+                             (s.Student.Familienaam != null && s.Student.Familienaam.ToLower().Contains(student.ToLower())) ||
+                                   (s.Student.Voornaam != null && s.Student.Voornaam.ToLower().Contains(student.ToLower())))));
         }
 
         public static IQueryable<Stageopdracht> WithFilter(this IQueryable<Stageopdracht> stageopdrachten,
@@ -48,8 +48,8 @@ namespace StageBeheersTool.Helpers
             }
             return stageopdrachten.Where(so => (string.IsNullOrEmpty(bedrijf) || so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower())) &&
                        (string.IsNullOrEmpty(student) || so.Studenten.Any(s =>
-                           (s.Familienaam != null && s.Familienaam.ToLower().Contains(student.ToLower())) ||
-                           (s.Voornaam != null && s.Voornaam.ToLower().Contains(student.ToLower())))));
+                           (s.Student.Familienaam != null && s.Student.Familienaam.ToLower().Contains(student.ToLower())) ||
+                           (s.Student.Voornaam != null && s.Student.Voornaam.ToLower().Contains(student.ToLower())))));
         }
 
 

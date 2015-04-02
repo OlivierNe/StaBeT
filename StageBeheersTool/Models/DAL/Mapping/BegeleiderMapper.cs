@@ -14,6 +14,7 @@ namespace StageBeheersTool.Models.DAL.Mapping
             this.Property(begeleider => begeleider.HogentEmail).IsRequired().HasMaxLength(200)
                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("HogentEmailIndex") { IsUnique = true }));
             this.HasMany(b => b.Stages).WithOptional(so => so.Stagebegeleider);
+            this.HasMany(b => b.StageAanvragen).WithRequired(x => x.Begeleider).WillCascadeOnDelete(true);
         }
     }
 }

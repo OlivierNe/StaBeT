@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System.Linq;
 using StageBeheersTool.App_Start;
-using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.DAL;
 using System.Data.Entity;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool
 {
@@ -19,6 +17,7 @@ namespace StageBeheersTool
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutomapperConfig.Configure();
+            ViewEngines.Engines.Remove(ViewEngines.Engines.OfType<WebFormViewEngine>().SingleOrDefault());
 
             DbConfiguration.SetConfiguration(new MySql.Data.Entity.MySqlEFConfiguration());
             var init = new StageToolDbInitializer();

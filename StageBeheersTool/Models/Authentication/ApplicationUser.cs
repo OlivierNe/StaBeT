@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Linq;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -8,7 +6,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using StageBeheersTool.Models.DAL;
 using Microsoft.AspNet.Identity.Owin;
-
 
 namespace StageBeheersTool.Models.Authentication
 {
@@ -41,7 +38,7 @@ namespace StageBeheersTool.Models.Authentication
                 if (begeleider != null && string.IsNullOrEmpty(begeleider.Naam) == false)
                     display = begeleider.Naam;
             }
-            if (manager.IsInRole(Id, Role.Begeleider) && manager.IsInRole(Id, Role.Admin)) 
+            if (manager.IsInRole(Id, Role.Begeleider) && manager.IsInRole(Id, Role.Admin))
             {
                 userIdentity.AddClaim(new Claim("Mode", Role.Begeleider)); //om te switchen tussen admin en begeleider
             }

@@ -34,6 +34,7 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new BegeleiderMapper());
             modelBuilder.Configurations.Add(new StageBegeleidAanvraagMapper());
             modelBuilder.Configurations.Add(new AcademiejaarInstellingenMapper());
+            modelBuilder.Configurations.Add(new StudentStageRelatieMapper());
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();

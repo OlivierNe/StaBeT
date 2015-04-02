@@ -13,6 +13,23 @@ namespace StageBeheersTool.Models.Domain
         #endregion
 
 
+        protected bool Equals(Contactpersoon other)
+        {
+            return string.Equals(other.Id, Id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Contactpersoon)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
 
 
     }

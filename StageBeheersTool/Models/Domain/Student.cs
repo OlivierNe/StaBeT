@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace StageBeheersTool.Models.Domain
 {
@@ -10,9 +8,10 @@ namespace StageBeheersTool.Models.Domain
 
         #region Properties
         public virtual Keuzepakket Keuzepakket { get; set; }
-        //public virtual Begeleider Begeleider { get; set; }
         public virtual ICollection<Stageopdracht> VoorkeurStages { get; set; }
-        public virtual ICollection<Stageopdracht> Stageopdrachten { get; set; }
+        
+        //collection in geval student niet geslaagd is voor stage en volgend jaar nog eens moet doen
+        public virtual ICollection<StageStudentRelatie> Stages { get; set; } 
 
         #endregion
 
@@ -20,7 +19,7 @@ namespace StageBeheersTool.Models.Domain
         public Student()
         {
             VoorkeurStages = new List<Stageopdracht>();
-            Stageopdrachten = new List<Stageopdracht>();
+            Stages = new List<StageStudentRelatie>();
         }
         #endregion
 

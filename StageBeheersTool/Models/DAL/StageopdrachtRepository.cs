@@ -79,8 +79,9 @@ namespace StageBeheersTool.Models.DAL
         public void Update(Stageopdracht stageopdracht)
         {
             var teUpdatenStageopdracht = FindById(stageopdracht.Id);
-            if (teUpdatenStageopdracht == null || !teUpdatenStageopdracht.IsInHuidigAcademiejaar())
+            if (teUpdatenStageopdracht == null)
                 return;
+            //if(!teUpdatenStageopdracht.IsInHuidigAcademiejaar())
             teUpdatenStageopdracht.Omschrijving = stageopdracht.Omschrijving;
             teUpdatenStageopdracht.Titel = stageopdracht.Titel;
             teUpdatenStageopdracht.Semester1 = stageopdracht.Semester1;
@@ -89,7 +90,27 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenStageopdracht.Academiejaar = stageopdracht.Academiejaar;
             teUpdatenStageopdracht.AantalStudenten = stageopdracht.AantalStudenten;
             teUpdatenStageopdracht.Stagementor = stageopdracht.Stagementor;
+            if (stageopdracht.Stagementor != null)
+            {
+                teUpdatenStageopdracht.StagementorEmail = stageopdracht.Stagementor.Email;
+                teUpdatenStageopdracht.StagementorNaam = stageopdracht.Stagementor.Naam;
+            }
+            else
+            {
+                teUpdatenStageopdracht.StagementorEmail = null;
+                teUpdatenStageopdracht.StagementorNaam = null;
+            }
             teUpdatenStageopdracht.Contractondertekenaar = stageopdracht.Contractondertekenaar;
+            if (stageopdracht.Contractondertekenaar != null)
+            {
+                teUpdatenStageopdracht.ContractondertekenaarEmail = stageopdracht.Contractondertekenaar.Email;
+                teUpdatenStageopdracht.ContractondertekenaarNaam = stageopdracht.Contractondertekenaar.Naam;
+            }
+            else
+            {
+                teUpdatenStageopdracht.ContractondertekenaarEmail = null;
+                teUpdatenStageopdracht.ContractondertekenaarNaam = null;
+            }
             teUpdatenStageopdracht.Gemeente = stageopdracht.Gemeente;
             teUpdatenStageopdracht.Postcode = stageopdracht.Postcode;
             teUpdatenStageopdracht.Straat = stageopdracht.Straat;

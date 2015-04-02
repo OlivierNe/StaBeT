@@ -32,6 +32,33 @@ namespace StageBeheersTool.Controllers
             return View(begeleiders);
         }
 
+        [Authorize(Role.Admin)]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [Authorize(Role.Admin)]
+        [HttpPost]
+        public ActionResult Create(BegeleiderCreateVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var begeleider = Mapper.Map<Begeleider>(model);
+                var result = _begeleiderRepository.Add(begeleider);
+                if (result == true)
+                {
+                    TempData["message"] = string.Format(Resources.SuccesBegeleiderCreate, begeleider.HogentEmail);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = string.Format(Resources.ErrorBegeleiderCreateHogentEmailBestaatAl, begeleider.HogentEmail);
+                }
+            }
+            return View(model);
+        }
+
         [Authorize(Role.Begeleider, Role.Admin)]
         public ActionResult Details(int id)
         {
@@ -41,7 +68,7 @@ namespace StageBeheersTool.Controllers
                 return HttpNotFound();
             }
             var model = Mapper.Map<BegeleiderDetailsVM>(begeleider);
-            model.ToonEdit = begeleider.Equals(_userService.FindBegeleider());
+            model.ToonEdit = CurrentUser.IsAdmin() || begeleider.Equals(_userService.FindBegeleider());
             model.ToonTerugNaarLijst = id != 0;
             return View(model);
         }
@@ -103,6 +130,40 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("Details", new { id = model.Id });
         }
 
+        [Authorize(Role.Admin)]
+        public ActionResult Delete(int id)
+        {
+            var begeleider = FindBegeleider(id);
+            if (begeleider == null)
+            {
+                return HttpNotFound();
+            }
+            return View(begeleider);
+        }
+
+        [Authorize(Role.Admin)]
+        [ActionName("Delete")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var begeleider = FindBegeleider(id);
+            if (begeleider == null)
+            {
+                return HttpNotFound();
+            }
+            _begeleiderRepository.Delete(begeleider);
+            TempData["message"] = "Begeleider " + begeleider.HogentEmail + " succesvol verwijderd.";
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Role.Admin)]
+        public ActionResult BegeleiderJson(string hoGentEmail)
+        {
+            var begeleider = _begeleiderRepository.FindByEmail(hoGentEmail);
+            var model = Mapper.Map<BegeleiderJsonVM>(begeleider);
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
         #region helpers
 
@@ -112,10 +173,7 @@ namespace StageBeheersTool.Controllers
             {
                 return _userService.FindBegeleider();
             }
-            else
-            {
-                return _begeleiderRepository.FindById(id);
-            }
+            return _begeleiderRepository.FindById(id);
         }
         #endregion
     }

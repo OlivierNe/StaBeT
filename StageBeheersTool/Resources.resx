@@ -242,4 +242,29 @@
   <data name="TitelWachtwoordResetten" xml:space="preserve">
     <value>Reset wachtwoord</value>
   </data>
+  <data name="ErrorBedrijfVerplicht" xml:space="preserve">
+    <value>Het veld bedrijf is verplicht.</value>
+  </data>
+  <data name="ErrorBegeleiderCreateHogentEmailBestaatAl" xml:space="preserve">
+    <value>Begeleider {0} bestaat reeds.</value>
+    <comment>0=hogent email</comment>
+  </data>
+  <data name="ErrorStudentCreateHogentEmailBestaatAl" xml:space="preserve">
+    <value>Student {0} bestaat reeds.</value>
+    <comment>0=hogent email</comment>
+  </data>
+  <data name="SuccesBegeleiderCreate" xml:space="preserve">
+    <value>Begeleider {0} toegevoegd.</value>
+    <comment>0=hogent email</comment>
+  </data>
+  <data name="SuccesStudentCreate" xml:space="preserve">
+    <value>Student {0} toegevoegd.</value>
+    <comment>0=hogent email</comment>
+  </data>
+  <data name="TitelNieuweBegeleider" xml:space="preserve">
+    <value>Nieuwe begeleider</value>
+  </data>
+  <data name="TitelNieuweStudent" xml:space="preserve">
+    <value>Nieuwe student</value>
+  </data>
 </root>

@@ -1,10 +1,10 @@
-﻿using StageBeheersTool.Models.Domain;
+﻿using System.Data.Entity.Infrastructure;
+using MySql.Data.MySqlClient;
+using StageBeheersTool.Models.Domain;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Web;
 
 namespace StageBeheersTool.Models.DAL
 {
@@ -19,10 +19,30 @@ namespace StageBeheersTool.Models.DAL
             this._begeleiders = ctx.Begeleiders;
         }
 
-        public void Add(Begeleider begeleider)
+        public bool Add(Begeleider begeleider)
         {
-            _begeleiders.Add(begeleider);
-            SaveChanges();
+            try
+            {
+                if (FindByEmail(begeleider.HogentEmail) != null) //anders (soms) [InvalidOperationException: Nested transactions are not supported.]
+                {
+                    return false;
+                }
+                _begeleiders.Add(begeleider);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var sqlException = ex.InnerException.InnerException as MySqlException;
+                if (sqlException != null && sqlException.Number == 1062)
+                {
+                    return false;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return true;
         }
 
         public IQueryable<Begeleider> FindAll()
@@ -56,6 +76,13 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenBegeleider.Straatnummer = begeleider.Straatnummer;
             teUpdatenBegeleider.FotoUrl = begeleider.FotoUrl;
             SaveChanges();
+        }
+
+        public void Delete(Begeleider begeleider)
+        {
+            _begeleiders.Remove(begeleider);
+            SaveChanges();
+            //1451 
         }
 
         public void SaveChanges()

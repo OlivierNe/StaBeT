@@ -51,7 +51,7 @@
 <p>
     @if (Model.ToonTerugNaarLijst)
     {
-        @Html.ActionLink("Terug naar lijst begeleiders", "Index")
+        @Html.ActionLink("Terug naar lijst", "Index")
     }
     @if (Model.ToonEdit)
     {
@@ -60,6 +60,11 @@
             @Html.Raw("|")
         }
         @Html.ActionLink("Gegevens wijzigen", "Edit", new { Model.Id })
+    }
+    @if (CurrentUser.IsAdmin())
+    {
+        @Html.Raw("|")
+        @Html.ActionLink("Verwijderen", "Delete", new { Model.Id })
     }
 
 </p>

@@ -1,31 +1,30 @@
-﻿@model BegeleiderEditVM
-
+﻿@model BegeleiderCreateVM
 @{
-    ViewBag.Title = "Begeleider - gegevens wijzigen";
-    var imageUrl = string.IsNullOrWhiteSpace(Model.FotoUrl) ? "~/Images/profiel.jpg" : Model.FotoUrl;
+    ViewBag.Title = "Nieuwe stagebegeleider";
 }
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("Edit", "Begeleider", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
         <div class="form-group">
-            <div class="row">
-                <img class="col-md-push-2 col-xs-2 img-responsive" src="@Url.Content(imageUrl)" id="foto" />
-            </div>
-            <div class="row">
-                <input class="col-md-push-2 col-xs-4" type="file" name="fotoFile" id="fotoFile" accept="image/*" onchange="showpreview(this);" />
+            @Html.LabelFor(model => model.HogentEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.HogentEmail, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HogentEmail, "", new { @class = "text-danger" })
+                <div id="hogentEmailDiv" class="text-danger" data-url-edit="/Begeleider/edit/"
+                     data-url-json="/Begeleider/BegeleiderJson?hoGentEmail=" data-class="Begeleider"></div>
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Familienaam, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-6">
                 @Html.EditorFor(model => model.Familienaam, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Familienaam, "", new { @class = "text-danger" })
             </div>
@@ -86,13 +85,10 @@
                 @Html.ValidationMessageFor(model => model.Straatnummer, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @Html.HiddenFor(model => model.Id)
-        @Html.HiddenFor(model => model.FotoUrl)
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Opslaan" class="btn btn-default" />
-                @Html.ActionLink("Annuleren", "Details", "Begeleider", new { Model.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Annuleren", "Index", "Begeleider", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
     </div>
@@ -101,4 +97,5 @@
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/stagetool-form.js"></script>
+    <script src="~/Scripts/createHogentPersoon.js"></script>
 }

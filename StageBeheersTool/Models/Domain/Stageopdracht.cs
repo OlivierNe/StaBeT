@@ -39,10 +39,10 @@ namespace StageBeheersTool.Models.Domain
                 int i = 0;
                 while (i < (studenten.Count - 1))
                 {
-                    retVal += studenten[i].Naam + ", ";
+                    retVal += studenten[i].Student.Naam + ", ";
                     i++;
                 }
-                retVal += studenten[i].Naam;
+                retVal += studenten[i].Student.Naam;
                 return retVal;
             }
         }
@@ -55,6 +55,12 @@ namespace StageBeheersTool.Models.Domain
             }
         }
 
+        //extra properties in geval een contactpersoon verwijderd wordt (voor archief) 
+        public string StagementorNaam { get; set; }
+        public string ContractondertekenaarNaam { get; set; }
+        public string StagementorEmail { get; set; }
+        public string ContractondertekenaarEmail { get; set; }
+
         public bool Semester1 { get; set; }
         public bool Semester2 { get; set; }
         public int AantalStudenten { get; set; }
@@ -64,7 +70,7 @@ namespace StageBeheersTool.Models.Domain
         public virtual Contactpersoon Stagementor { get; set; }
         public virtual Begeleider Stagebegeleider { get; set; }
         public virtual Bedrijf Bedrijf { get; set; }
-        public virtual ICollection<Student> Studenten { get; set; }
+        public virtual ICollection<StageStudentRelatie> Studenten { get; set; }
         public StageopdrachtStatus Status { get; set; }
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
@@ -76,7 +82,7 @@ namespace StageBeheersTool.Models.Domain
         public Stageopdracht()
         {
             Status = StageopdrachtStatus.NietBeoordeeld;
-            Studenten = new List<Student>();
+            Studenten = new List<StageStudentRelatie>();
         }
         #endregion
 
@@ -105,7 +111,7 @@ namespace StageBeheersTool.Models.Domain
 
         public bool IsVolledigIngenomen()
         {
-            return AantalToegewezenStudenten == AantalStudenten;
+            return AantalToegewezenStudenten >= AantalStudenten;
         }
 
         public bool HeeftStageBegeleider()

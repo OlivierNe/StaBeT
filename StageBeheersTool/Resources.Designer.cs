@@ -178,6 +178,24 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Het veld bedrijf is verplicht..
+        /// </summary>
+        public static string ErrorBedrijfVerplicht {
+            get {
+                return ResourceManager.GetString("ErrorBedrijfVerplicht", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Begeleider {0} bestaat reeds..
+        /// </summary>
+        public static string ErrorBegeleiderCreateHogentEmailBestaatAl {
+            get {
+                return ResourceManager.GetString("ErrorBegeleiderCreateHogentEmailBestaatAl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Het nieuwe wachtwoord en het bevestigde antwoord komen niet overeen..
         /// </summary>
         public static string ErrorNieuwEnBevestigdWachtwoord {
@@ -241,6 +259,15 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Student {0} bestaat reeds..
+        /// </summary>
+        public static string ErrorStudentCreateHogentEmailBestaatAl {
+            get {
+                return ResourceManager.GetString("ErrorStudentCreateHogentEmailBestaatAl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Link om wachtwoord te resetten is naar uw e-mail verzonden..
         /// </summary>
         public static string InfoResetWachtwoordVerzonden {
@@ -268,6 +295,15 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Begeleider {0} toegevoegd..
+        /// </summary>
+        public static string SuccesBegeleiderCreate {
+            get {
+                return ResourceManager.GetString("SuccesBegeleiderCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registratie e-mail verzonden..
         /// </summary>
         public static string SuccesEmailRegistratieBedrijfVerzonden {
@@ -282,6 +318,15 @@ namespace StageBeheersTool {
         public static string SuccesParametersAcademiejaar {
             get {
                 return ResourceManager.GetString("SuccesParametersAcademiejaar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Student {0} toegevoegd..
+        /// </summary>
+        public static string SuccesStudentCreate {
+            get {
+                return ResourceManager.GetString("SuccesStudentCreate", resourceCulture);
             }
         }
         
@@ -358,11 +403,29 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nieuwe begeleider.
+        /// </summary>
+        public static string TitelNieuweBegeleider {
+            get {
+                return ResourceManager.GetString("TitelNieuweBegeleider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nieuwe stageopdracht.
         /// </summary>
         public static string TitelNieuweStageopdracht {
             get {
                 return ResourceManager.GetString("TitelNieuweStageopdracht", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nieuwe student.
+        /// </summary>
+        public static string TitelNieuweStudent {
+            get {
+                return ResourceManager.GetString("TitelNieuweStudent", resourceCulture);
             }
         }
         

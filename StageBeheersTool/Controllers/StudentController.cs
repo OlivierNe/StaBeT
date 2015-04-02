@@ -42,6 +42,37 @@ namespace StageBeheersTool.Controllers
             return View(studenten);
         }
 
+        [Authorize(Role.Admin)]
+        public ActionResult Create()
+        {
+            var model = new StudentCreateVM();
+            model.SetKeuzevakSelectList(_keuzepakketRepository.FindAll());
+            return View(model);
+        }
+
+        [Authorize(Role.Admin)]
+        [HttpPost]
+        public ActionResult Create(StudentCreateVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var student = Mapper.Map<Student>(model);
+                student.Keuzepakket = model.KeuzepakketId == null ? null : _keuzepakketRepository.FindBy((int)model.KeuzepakketId);
+                var result = _studentRepository.Add(student);
+                if (result == true)
+                {
+                    TempData["message"] = string.Format(Resources.SuccesStudentCreate, student.HogentEmail);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = string.Format(Resources.ErrorStudentCreateHogentEmailBestaatAl, student.HogentEmail);
+                }
+            }
+            model.SetKeuzevakSelectList(_keuzepakketRepository.FindAll());
+            return View(model);
+        }
+
         [Authorize(Role.Admin, Role.Begeleider, Role.Student)]
         public ActionResult Details(int? id)
         {
@@ -66,7 +97,7 @@ namespace StageBeheersTool.Controllers
                 return HttpNotFound();
             }
             var model = Mapper.Map<Student, StudentEditVM>(student);
-            model.InitSelectList(_keuzepakketRepository.FindAll());
+            model.SetKeuzevakSelectList(_keuzepakketRepository.FindAll());
             model.KeuzepakketId = student.Keuzepakket == null ? null : (int?)student.Keuzepakket.Id;
             return View("Edit", model);
         }
@@ -99,6 +130,41 @@ namespace StageBeheersTool.Controllers
             _studentRepository.Update(studentModel);
             TempData["message"] = "Gegevens gewijzigd.";
             return RedirectToAction("Details", new { studentModel.Id });
+        }
+
+        [Authorize(Role.Admin)]
+        public ActionResult Delete(int id)
+        {
+            var student = FindStudent(id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            return View(student);
+        }
+
+        [Authorize(Role.Admin)]
+        [ActionName("Delete")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var student = FindStudent(id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            _studentRepository.Delete(student);
+            TempData["message"] = "Student " + student.HogentEmail + " succesvol verwijderd.";
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Role.Admin)]
+        public ActionResult StudentJson(string hoGentEmail)
+        {
+            var student = _studentRepository.FindByEmail(hoGentEmail);
+            var model = Mapper.Map<StudentJsonVM>(student);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         #region helpers

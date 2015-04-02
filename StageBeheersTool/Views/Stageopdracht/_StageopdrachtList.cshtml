@@ -26,7 +26,7 @@
                     string retVal = "<ul>";
                     foreach (var student in so.Studenten)
                     {
-                        retVal += "<li>" + Html.ActionLink(student.Naam, "Details", "Student", new { id = student.Id }, new { }) + "</li>";
+                        retVal += "<li>" + Html.ActionLink(student.Student.Naam, "Details", "Student", new { id = student.Student.Id }, new { }) + "</li>";
                     }
                     retVal += "</ul>";
                     return retVal;

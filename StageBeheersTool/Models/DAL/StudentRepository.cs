@@ -1,4 +1,6 @@
-﻿using StageBeheersTool.Models.Domain;
+﻿using System.Data.Entity.Infrastructure;
+using MySql.Data.MySqlClient;
+using StageBeheersTool.Models.Domain;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
@@ -17,10 +19,26 @@ namespace StageBeheersTool.Models.DAL
             this._studenten = ctx.Studenten;
         }
 
-        public void Add(Student student)
+        public bool Add(Student student)
         {
-            _studenten.Add(student);
-            SaveChanges();
+            try
+            {
+                _studenten.Add(student);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var sqlException = ex.InnerException.InnerException as MySqlException;
+                if (sqlException != null && sqlException.Number == 1062)
+                {
+                    return false;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return true;
         }
 
         public Student FindByEmail(string hogentEmail)
@@ -64,6 +82,13 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenStudent.FotoUrl = student.FotoUrl;
             SaveChanges();
         }
+
+        public void Delete(Student student)
+        {
+            _studenten.Remove(student);
+            SaveChanges();
+        }
+
         public void SaveChanges()
         {
             try
@@ -89,6 +114,6 @@ namespace StageBeheersTool.Models.DAL
                 throw new ApplicationException("" + message);
             }
         }
-
+        
     }
 }

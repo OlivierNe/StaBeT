@@ -221,19 +221,21 @@
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
     <Compile Include="Models\DAL\Mapping\AcademiejaarInstellingenMapper.cs" />
     <Compile Include="Models\DAL\Mapping\StageBegeleidAanvraagMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\StudentStageRelatieMapper.cs" />
     <Compile Include="Models\DAL\oudeGegevens\Converter.cs" />
     <Compile Include="Models\DAL\oudeGegevens\OudeGegevensDbContext.cs" />
     <Compile Include="Models\Domain\AcademiejaarInstellingen.cs" />
     <Compile Include="Models\Domain\Admin.cs" />
     <Compile Include="Models\Domain\BegeleidAanvraagStatus.cs" />
     <Compile Include="Models\Domain\HoGentPersoon.cs" />
-    <Compile Include="Models\Domain\IAcademiejaarRepository.cs" />
-    <Compile Include="Models\Domain\IContactpersoonRepository.cs" />
-    <Compile Include="Models\Domain\IImageService.cs" />
+    <Compile Include="Models\Domain\Interfaces\IAcademiejaarRepository.cs" />
+    <Compile Include="Models\Domain\Interfaces\IContactpersoonRepository.cs" />
+    <Compile Include="Models\Domain\Interfaces\IImageService.cs" />
     <Compile Include="Models\Domain\StageBegeleidAanvraag.cs" />
+    <Compile Include="Models\Domain\StageStudentRelatie.cs" />
     <Compile Include="Models\Services\ImageService.cs" />
     <Compile Include="Models\Services\UserService.cs" />
-    <Compile Include="Models\Domain\IUserService.cs" />
+    <Compile Include="Models\Domain\Interfaces\IUserService.cs" />
     <Compile Include="Models\Services\EmailService.cs" />
     <Compile Include="Models\DAL\BedrijfRepository.cs" />
     <Compile Include="Models\DAL\BegeleiderRepository.cs" />
@@ -248,10 +250,10 @@
     <Compile Include="Models\DAL\SpecialisatieRepository.cs" />
     <Compile Include="Models\DAL\StudentRepository.cs" />
     <Compile Include="Models\Domain\Begeleider.cs" />
-    <Compile Include="Models\Domain\IBegeleiderRepository.cs" />
-    <Compile Include="Models\Domain\IKeuzepakketRepository.cs" />
-    <Compile Include="Models\Domain\ISpecialisatieRepository.cs" />
-    <Compile Include="Models\Domain\IStudentRepository.cs" />
+    <Compile Include="Models\Domain\Interfaces\IBegeleiderRepository.cs" />
+    <Compile Include="Models\Domain\Interfaces\IKeuzepakketRepository.cs" />
+    <Compile Include="Models\Domain\Interfaces\ISpecialisatieRepository.cs" />
+    <Compile Include="Models\Domain\Interfaces\IStudentRepository.cs" />
     <Compile Include="Models\Domain\Keuzepakket.cs" />
     <Compile Include="Models\Domain\Specialisatie.cs" />
     <Compile Include="Models\DAL\StageopdrachtRepository.cs" />
@@ -259,8 +261,8 @@
     <Compile Include="Models\DAL\StageToolDbInitializer.cs" />
     <Compile Include="Models\Domain\Bedrijf.cs" />
     <Compile Include="Models\Domain\Contactpersoon.cs" />
-    <Compile Include="Models\Domain\IBedrijfRepository.cs" />
-    <Compile Include="Models\Domain\IStageopdrachtRepository.cs" />
+    <Compile Include="Models\Domain\Interfaces\IBedrijfRepository.cs" />
+    <Compile Include="Models\Domain\Interfaces\IStageopdrachtRepository.cs" />
     <Compile Include="Models\Domain\Persoon.cs" />
     <Compile Include="Models\Domain\Stageopdracht.cs" />
     <Compile Include="Models\Domain\StageopdrachtStatus.cs" />
@@ -346,6 +348,7 @@
     <Content Include="Images\profiel.jpg" />
     <Content Include="Scripts\academiejaarInstellingen.js" />
     <Content Include="Scripts\AddAdmin.js" />
+    <Content Include="Scripts\createHogentPersoon.js" />
     <Content Include="Scripts\lib\bootstrap.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Scripts\createStageForm.js" />
@@ -463,6 +466,10 @@
     <Content Include="Views\Student\_studentList.cshtml" />
     <Content Include="Views\Begeleider\_begeleidersList.cshtml" />
     <Content Include="Views\Begeleider\Index.cshtml" />
+    <Content Include="Views\Student\Create.cshtml" />
+    <Content Include="Views\Begeleider\Create.cshtml" />
+    <Content Include="Views\Begeleider\Delete.cshtml" />
+    <Content Include="Views\Student\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

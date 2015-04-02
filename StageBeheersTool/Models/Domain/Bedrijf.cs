@@ -147,6 +147,42 @@ namespace StageBeheersTool.Models.Domain
             return false;
         }
 
+        public void KoppelContactpersoonLosVanOpdrachten(Contactpersoon contactpersoon)
+        {
+            var huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
+            foreach (var so in Stageopdrachten)
+            {
+                if (so.Stagementor != null && so.Stagementor.Equals(contactpersoon))
+                {
+                    if (so.Academiejaar == huidigAcademiejaar)
+                    {
+                        so.StagementorNaam = null;
+                        so.StagementorEmail = null;
+                    }
+                    else
+                    {
+                        so.StagementorNaam = contactpersoon.Naam;
+                        so.StagementorEmail = contactpersoon.Email;
+                    }
+                    so.Stagementor = null;
+                }
+                if (so.Contractondertekenaar != null && so.Contractondertekenaar.Equals(contactpersoon))
+                {
+                    if (so.Academiejaar == huidigAcademiejaar)
+                    {
+                        so.ContractondertekenaarNaam = null;
+                        so.ContractondertekenaarEmail = null;
+                    }
+                    else
+                    {
+                        so.ContractondertekenaarNaam = contactpersoon.Naam;
+                        so.ContractondertekenaarEmail = contactpersoon.Email;
+                    }
+                    so.Contractondertekenaar = null;
+                }
+            }
+        }
+
         protected bool Equals(Bedrijf other)
         {
             return string.Equals(other.Email, Email) && string.Equals(other.Naam, Naam);
@@ -157,7 +193,7 @@ namespace StageBeheersTool.Models.Domain
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-                return Equals((Bedrijf)obj);
+            return Equals((Bedrijf)obj);
         }
 
         public override int GetHashCode()
@@ -165,6 +201,5 @@ namespace StageBeheersTool.Models.Domain
             return (Email != null ? Email.GetHashCode() : 0);
         }
         #endregion
-
     }
 }

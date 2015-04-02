@@ -1,18 +1,13 @@
-﻿using AutoMapper;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using OudeGegevens;
-using StageBeheersTool.Controllers;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Web;
-using StageBeheersTool;
 using StageBeheersTool.Models.Authentication;
-using StageBeheersTool.Models.Services;
 using StageBeheersTool.OudeGegevens;
 using System.Data.Entity.Migrations;
 
@@ -20,7 +15,7 @@ using System.Data.Entity.Migrations;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        //DropCreateDatabaseAlways<StageToolDbContext>
+        // DropCreateDatabaseAlways<StageToolDbContext>
     DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
@@ -232,7 +227,7 @@ namespace StageBeheersTool.Models.DAL
                         acadJaar++;
                     }
                     var academiejaar = acadJaar + "-" + (acadJaar + 1);
-                    stages.Add(new Stageopdracht()
+                    var stage = new Stageopdracht()
                     {
                         Omschrijving = "omschrijving",
                         Titel = "stage " + academiejaar,
@@ -243,9 +238,10 @@ namespace StageBeheersTool.Models.DAL
                         Semester2 = true,
                         Specialisatie = "TEST",
                         Stagebegeleider = begeleider,
-                        Studenten = studenten,
                         Status = StageopdrachtStatus.Goedgekeurd
-                    });
+                    };
+                    stage.Studenten = new List<StageStudentRelatie>() { { new StageStudentRelatie() { Stage = stage, Student = student1 } } };
+                    stages.Add(stage);
                 }
                 begeleider.Stages = stages;
                 context.Begeleiders.Add(begeleider);
@@ -256,7 +252,8 @@ namespace StageBeheersTool.Models.DAL
                 var teststages = new List<Stageopdracht>();
                 for (int i = 15; i < 51; i++)
                 {
-                    teststages.Add(new Stageopdracht()
+
+                    var stage = new Stageopdracht()
                     {
                         Omschrijving = "TEST" + i,
                         Titel = "TEST " + i,
@@ -266,9 +263,10 @@ namespace StageBeheersTool.Models.DAL
                         Gemeente = "Gemeente123",
                         Semester2 = true,
                         Specialisatie = "TEST",
-                        Studenten = studenten,
                         Status = StageopdrachtStatus.Goedgekeurd
-                    });
+                    };
+                    stage.Studenten = new List<StageStudentRelatie>() { { new StageStudentRelatie() { Stage = stage, Student = student1 } } };
+                    teststages.Add(stage);
                 }
                 context.Stageopdrachten.AddRange(teststages);
                 #endregion
@@ -362,7 +360,14 @@ namespace StageBeheersTool.Models.DAL
                             var stageopdrachtstudenten = stage.studenten
                                 .Select(oudeStudent => context.Studenten.FirstOrDefault(s => s.HogentEmail == oudeStudent.email))
                                 .Where(student => student != null).ToList();
-                            stageopdracht.Studenten = stageopdrachtstudenten;
+
+                            var stagestudentrelaties = new List<StageStudentRelatie>();
+                            foreach (var student in stageopdrachtstudenten)
+                            {
+                                stagestudentrelaties.Add(new StageStudentRelatie { Stage = stageopdracht, Student = student });
+                            }
+                            stageopdracht.Studenten = stagestudentrelaties;
+                            //stageopdrachtstudenten
                             stageopdracht.Bedrijf = bedrijf;
                             stageopdrachten.Add(stageopdracht);
                         }

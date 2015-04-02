@@ -74,7 +74,7 @@ namespace StageBeheersTool.Controllers
         {
             if (CurrentUser.IsAdmin() && model.BedrijfId == 0)
             {
-                ModelState.AddModelError("", "Het veld bedrijf is verplicht.");
+                ModelState.AddModelError("", Resources.ErrorBedrijfVerplicht);
             }
             if (ModelState.IsValid)
             {
@@ -121,8 +121,10 @@ namespace StageBeheersTool.Controllers
                 if (CurrentUser.IsBedrijf())
                 {
                     var bedrijf = _userService.FindBedrijf();
-                    bedrijf.UpdateContactpersoon(contactpersoon);
-                    _bedrijfRepository.SaveChanges();
+                    if (bedrijf.FindContactpersoonById(contactpersoon.Id) != null)
+                    {
+                        _contactpersoonRepository.Update(contactpersoon);
+                    }
                 }
                 else //admin
                 {
@@ -155,15 +157,9 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            //TODO:wat moet er gebeuren als een contactpersoon verwijderd wordt?
-            /*if (bedrijf.ContactpersoonHeeftStageopdrachten(contactpersoon))
-            {
-                //TODO: contactpersoon loskoppelen mag maar er moet kunnen gezien worden wie aan welke stageopdracht gekoppeld was(voor archief)
-                TempData["message"] = "Verwijderen mislukt: Contactpersoon is aan 1 of meerdere stageopdrachten gekoppeld.";
-                return View(contactpersoon);
-            }*/
+            var bedrijf = contactpersoon.Bedrijf;
+            bedrijf.KoppelContactpersoonLosVanOpdrachten(contactpersoon);
             _contactpersoonRepository.Delete(contactpersoon);
-            _contactpersoonRepository.SaveChanges();
             TempData["message"] = "Contactpersoon " + contactpersoon.Naam + " verwijderd.";
             return RedirectToAction("Index");
         }

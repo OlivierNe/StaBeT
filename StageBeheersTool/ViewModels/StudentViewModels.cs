@@ -5,6 +5,34 @@ using System.Web.Mvc;
 
 namespace StageBeheersTool.ViewModels
 {
+    public class StudentCreateVM
+    {
+        [EmailAddress]
+        [Required]
+        [Display(Name = "HoGent E-mail")]
+        public string HogentEmail { get; set; }
+        [Display(Name = "Naam")]
+        public string Familienaam { get; set; }
+        public string Voornaam { get; set; }
+        [Display(Name = "Keuzepakket")]
+        public int? KeuzepakketId { get; set; }
+        [Display(Name = "E-mail")]
+        [EmailAddress]
+        public string Email { get; set; }
+        [Display(Name = "gsm")]
+        public string Gsmnummer { get; set; }
+        public string Gemeente { get; set; }
+        public string Postcode { get; set; }
+        public string Straat { get; set; }
+        public string Straatnummer { get; set; }
+        public SelectList KeuzevakSelectList { get; set; }
+
+        public void SetKeuzevakSelectList(IEnumerable<Keuzepakket> keuzepakketten)
+        {
+            KeuzevakSelectList = new SelectList(keuzepakketten, "Id", "Naam", KeuzepakketId != 0 ? KeuzepakketId.ToString() : "");
+        }
+    }
+
     public class StudentEditVM
     {
         public int Id { get; set; }
@@ -26,7 +54,7 @@ namespace StageBeheersTool.ViewModels
         public string FotoUrl { get; set; }
         public SelectList KeuzevakSelectList { get; set; }
 
-        public void InitSelectList(IEnumerable<Keuzepakket> keuzepakketten)
+        public void SetKeuzevakSelectList(IEnumerable<Keuzepakket> keuzepakketten)
         {
             KeuzevakSelectList = new SelectList(keuzepakketten, "Id", "Naam", KeuzepakketId != 0 ? KeuzepakketId.ToString() : "");
         }
@@ -50,6 +78,13 @@ namespace StageBeheersTool.ViewModels
 
         public bool ToonEdit { get; set; }
         public bool ToonTerugNaarLijst { get; set; }
+    }
+
+    public class StudentJsonVM
+    {
+        public int  Id { get; set; }
+        public string Naam { get; set; }
+        public string HogentEmail { get; set; }
     }
 
 }

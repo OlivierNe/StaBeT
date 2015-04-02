@@ -17,17 +17,17 @@
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" role="menu">
-        <li>
-            @Html.ActionLink(Resources.TitelNieuweStageopdracht, "Create", "Bedrijf")
+        <li role="presentation">
+            @Html.ActionLink(Resources.TitelNieuwBedrijf, "Create", "Bedrijf")
         </li>
-        <li>
-            @Html.ActionLink(Resources.TitelStageopdrachtIndex, "Index", "Bedrijf")
+        <li role="presentation">
+            @Html.ActionLink(Resources.TitelBedrijvenIndex, "Index", "Bedrijf")
         </li>
         <li role="presentation" class="divider"></li>
-        <li>
+        <li role="presentation">
             @Html.ActionLink(Resources.TitelNieuwContactpersoon, "Create", "Contactpersoon")
         </li>
-        <li>
+        <li role="presentation">
             @Html.ActionLink(Resources.TitelContactpersoonIndex, "Index", "Contactpersoon")
         </li>
     </ul>
@@ -60,7 +60,7 @@
         </li>
     </ul>
 </li>
-<li class="dropdown">
+<li class="dropdown" role="presentation">
     <a class="dropdown-toggle" data-toggle="dropdown" href="">
         Instellingen
         <span class="caret"></span>
@@ -74,4 +74,4 @@
         </li>
     </ul>
 </li>
-<li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+<li role="presentation">@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
