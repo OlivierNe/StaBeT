@@ -47,55 +47,53 @@
         </dd>
         <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Bedrijf) </dt>
         <dd style="white-space: pre-line">@Html.DisplayFor(model => model.Stageopdracht.Bedrijf.Naam)
-            @if (Model.BedrijfHeeftGeldigEmail())
-            {
-                <a href="mailto:@Model.Stageopdracht.Bedrijf.Email">@Model.Stageopdracht.Bedrijf.Email</a>
-            }
-            @if (!string.IsNullOrWhiteSpace(@Model.Stageopdracht.Stageplaats))
-            {
-                <a href="https://maps.google.com/?q=@Model.Stageopdracht.Stageplaats" target="_blank">@Model.Stageopdracht.Stageplaats</a>
-            }
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Stageopdracht.Contractondertekenaar)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.ContractondertekenaarNaam)
-            <a href="mailto:@Model.Stageopdracht.ContractondertekenaarEmail"> @Html.DisplayFor(model => model.Stageopdracht.ContractondertekenaarEmail)</a>
-        </dd>
-        <dt>
-            @Html.NameFor(model => model.Stagementor)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.StagementorNaam)
-            <a href="mailto:@Model.Stageopdracht.StagementorEmail"> @Html.DisplayFor(model => model.Stageopdracht.StagementorEmail)</a>
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
-        </dd>
-        @if (CurrentUser.IsAdmin() || CurrentUser.IsBegeleider())
+        @if (Model.BedrijfHeeftGeldigEmail())
         {
-            <dt>
-                @Html.DisplayNameFor(model => model.Stageopdracht.Studenten)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Stageopdracht.ToonStudenten)
-            </dd>
-            <dt>
-                Status
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Stageopdracht.Status)
-            </dd>
+            <a href="mailto:@Model.Stageopdracht.Bedrijf.Email">@Model.Stageopdracht.Bedrijf.Email</a>
         }
-    </dl>
-
-
-
+        @if (!string.IsNullOrWhiteSpace(@Model.Stageopdracht.Stageplaats))
+        {
+            <a href="https://maps.google.com/?q=@Model.Stageopdracht.Stageplaats" target="_blank">@Model.Stageopdracht.Stageplaats</a>
+        }
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Stageopdracht.Contractondertekenaar)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Stageopdracht.ContractondertekenaarNaam)
+        <a href="mailto:@Model.Stageopdracht.ContractondertekenaarEmail"> @Html.DisplayFor(model => model.Stageopdracht.ContractondertekenaarEmail)</a>
+    </dd>
+    <dt>
+        @Html.NameFor(model => model.Stagementor)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Stageopdracht.StagementorNaam)
+        <a href="mailto:@Model.Stageopdracht.StagementorEmail"> @Html.DisplayFor(model => model.Stageopdracht.StagementorEmail)</a>
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
+    </dd>
+    @if (CurrentUser.IsAdmin() || CurrentUser.IsBegeleider())
+    {
+        <dt>
+            @Html.DisplayNameFor(model => model.Stageopdracht.Studenten)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stageopdracht.ToonStudenten)
+        </dd>
+        <dt>
+            Status
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stageopdracht.Status)
+        </dd>
+    }
+</dl>
 </div>
+
 @if (Model.ToonEdit && CurrentUser.IsBedrijf())
 {
     <div class="text-warning">
@@ -114,12 +112,12 @@
         @Html.Raw("|")
         @Html.ActionLink("Verwijderen", "Delete", new { id = Model.Stageopdracht.Id })
     }
-    @if (Model.ToonToevoegen)
+    @if (Model.ToonVoorkeurToevoegen)
     {
         @Html.ActionLink("Toevoegen aan mijn voorkeurstages", "ToevoegenAanVoorkeur", "Stageopdracht",
             new { id = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Toevoegen aan mijn voorkeurstages." })
     }
-    @if (Model.ToonVerwijderenBtn)
+    @if (Model.ToonVoorkeurVerwijderen)
     {
         @Html.ActionLink("Verwijderen uit mijn voorkeurstages", "VerwijderenUitVoorkeur", "Stageopdracht",
             new { ids = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Verwijderen uit mijn voorkeurstages." })

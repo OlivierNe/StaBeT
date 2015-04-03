@@ -13,7 +13,7 @@ namespace StageBeheersTool.Models.DAL
     {
         private readonly StageToolDbContext _dbContext;
         private readonly DbSet<Stageopdracht> _stageopdrachten;
-        private readonly DbSet<StageBegeleidAanvraag> _aanvragen;
+        private readonly DbSet<StagebegeleidingAanvraag> _aanvragen;
         private readonly IUserService _userService;
 
         public StageopdrachtRepository(StageToolDbContext ctx, IUserService userService)
@@ -124,31 +124,31 @@ namespace StageBeheersTool.Models.DAL
             SaveChanges();
         }
 
-        public StageBegeleidAanvraag FindAanvraagById(int id)
+        public StagebegeleidingAanvraag FindAanvraagById(int id)
         {
             return _aanvragen
                 .Include(sba => sba.Begeleider)
-                .Include(sba => sba.Stageopdracht)
+                .Include(sba => sba.Stage)
                 .SingleOrDefault(a => a.Id == id);
         }
 
-        public IQueryable<StageBegeleidAanvraag> FindAllAanvragen()
+        public IQueryable<StagebegeleidingAanvraag> FindAllAanvragen()
         {
             return _aanvragen
                 .Where(IsAanvraagInHuidigAcademiejaar())
-                .OrderBy(sba => sba.Begeleider.Familienaam)
+                .OrderBy(sba => sba.Stage.Titel)
                 .Include(sba => sba.Begeleider)
-                .Include(sba => sba.Stageopdracht);
+                .Include(sba => sba.Stage);
         }
 
-        public IQueryable<StageBegeleidAanvraag> FindAllAanvragenFrom(Begeleider begeleider)
+        public IQueryable<StagebegeleidingAanvraag> FindAllAanvragenFrom(Begeleider begeleider)
         {
             return _aanvragen
                  .Where(sba => sba.Begeleider.Id == begeleider.Id)
                  .Where(IsAanvraagInHuidigAcademiejaar())
-                 .OrderBy(sba => sba.Begeleider.Familienaam)
+                 .OrderBy(sba => sba.Stage.Titel)
                  .Include(sba => sba.Begeleider)
-                 .Include(sba => sba.Stageopdracht);
+                 .Include(sba => sba.Stage);
         }
 
         public IQueryable<Stageopdracht> FindStageopdrachtenVanBegeleider()
@@ -167,13 +167,13 @@ namespace StageBeheersTool.Models.DAL
                 .IncludeAndOrder();
         }
 
-        public void AddAanvraag(StageBegeleidAanvraag aanvraag)
+        public void AddAanvraag(StagebegeleidingAanvraag aanvraag)
         {
             _aanvragen.Add(aanvraag);
             SaveChanges();
         }
 
-        public void DeleteAanvraag(StageBegeleidAanvraag aanvraag)
+        public void DeleteAanvraag(StagebegeleidingAanvraag aanvraag)
         {
             _aanvragen.Remove(aanvraag);
             SaveChanges();
@@ -276,10 +276,10 @@ namespace StageBeheersTool.Models.DAL
                           so.Status == StageopdrachtStatus.NietBeoordeeld);
         }
 
-        private Expression<Func<StageBegeleidAanvraag, bool>> IsAanvraagInHuidigAcademiejaar()
+        private Expression<Func<StagebegeleidingAanvraag, bool>> IsAanvraagInHuidigAcademiejaar()
         {
             var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
-            return (aanvraag => aanvraag.Stageopdracht.Academiejaar == academiejaar);
+            return (aanvraag => aanvraag.Stage.Academiejaar == academiejaar);
         }
         #endregion
     }

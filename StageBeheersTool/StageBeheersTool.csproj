@@ -209,6 +209,9 @@
     </Compile>
     <Compile Include="Helpers\AuthorizeAttribute.cs" />
     <Compile Include="Helpers\AcademiejaarHelper.cs" />
+    <Compile Include="Helpers\QueryableBedrijfExtensions.cs" />
+    <Compile Include="Helpers\QueryableBegeleiderExtensions.cs" />
+    <Compile Include="Helpers\QueryableStudentExtensions.cs" />
     <Compile Include="Helpers\IdentityHelpers.cs" />
     <Compile Include="Helpers\QueryableContactpersoonExtensions.cs" />
     <Compile Include="Helpers\QueryableStageopdrachtExtensions.cs" />
@@ -434,7 +437,7 @@
     <Content Include="Views\Begeleider\Edit.cshtml" />
     <Content Include="Views\Stageopdracht\Afkeuren.cshtml" />
     <Content Include="Views\Student\Index.cshtml" />
-    <Content Include="Views\Stageopdracht\Aanvragen.cshtml" />
+    <Content Include="Views\Stageopdracht\StagebegeleidingAanvragen.cshtml" />
     <Content Include="Views\Academiejaar\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\NullableDateTime.cshtml" />
     <Content Include="Views\Academiejaar\Lijst.cshtml" />
@@ -444,7 +447,7 @@
     <Content Include="Views\Shared\DisplayTemplates\StageopdrachtStatus.cshtml" />
     <Content Include="Views\Stageopdracht\Voorstellen.cshtml" />
     <Content Include="Views\Stageopdracht\_ZoekFormulier.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\BegeleidAanvraagStatus.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\StagebegeleidAanvraagStatus.cshtml" />
     <Content Include="Views\Stageopdracht\GoedgekeurdeStages.cshtml" />
     <Content Include="Views\Stageopdracht\Archief.cshtml" />
     <Content Include="Views\Stageopdracht\VanAcademiejaar.cshtml" />
@@ -470,6 +473,7 @@
     <Content Include="Views\Begeleider\Create.cshtml" />
     <Content Include="Views\Begeleider\Delete.cshtml" />
     <Content Include="Views\Student\Delete.cshtml" />
+    <Content Include="Views\Stageopdracht\_StagebegeleidingAanvragen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

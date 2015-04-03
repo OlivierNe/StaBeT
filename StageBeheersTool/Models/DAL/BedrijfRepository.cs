@@ -58,10 +58,10 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenBedrijf.Gemeente = bedrijf.Gemeente;
             teUpdatenBedrijf.Postcode = bedrijf.Postcode;
             teUpdatenBedrijf.Straat = bedrijf.Straat;
-            teUpdatenBedrijf.Straatnummer = bedrijf.Straatnummer;
             teUpdatenBedrijf.Bereikbaarheid = bedrijf.Bereikbaarheid;
             teUpdatenBedrijf.Bedrijfsactiviteiten = bedrijf.Bedrijfsactiviteiten;
-            teUpdatenBedrijf.Telefoonnummer = bedrijf.Telefoonnummer;
+            teUpdatenBedrijf.Website = bedrijf.Website;
+            teUpdatenBedrijf.Telefoon = bedrijf.Telefoon;
             SaveChanges();
         }
 

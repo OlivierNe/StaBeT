@@ -19,7 +19,6 @@ namespace StageBeheersTool.ViewModels
         public bool ToonStatus { get; set; }
         public bool ToonBedrijf { get; set; }
         public bool ToonAantalStudenten { get; set; }
-
         public string Title { get; set; }
         public string OverzichtAction { get; set; }
 
@@ -98,8 +97,8 @@ namespace StageBeheersTool.ViewModels
         public string StageperiodeSem2 { get; set; }
         public string EditDeadline { get; set; }
 
-        public bool ToonToevoegen { get; set; }
-        public bool ToonVerwijderenBtn { get; set; }
+        public bool ToonVoorkeurToevoegen { get; set; }
+        public bool ToonVoorkeurVerwijderen { get; set; }
         public bool ToonEdit { get; set; }
         public bool ToonAanvraagIndienen { get; set; }
         public bool ToonAanvraagAnnuleren { get; set; }
@@ -118,7 +117,7 @@ namespace StageBeheersTool.ViewModels
                 return string.Join(" / ",
                     new[] { Stageopdracht.Stagementor.Naam,
                         Stageopdracht.Stagementor.Email,
-                        Stageopdracht.Stagementor.Gsmnummer }
+                        Stageopdracht.Stagementor.Gsm }
                         .Where(s => !string.IsNullOrEmpty(s)));
             }
         }
@@ -133,7 +132,7 @@ namespace StageBeheersTool.ViewModels
                 return string.Join(" / ",
                     new[] { Stageopdracht.Contractondertekenaar.Naam,
                         Stageopdracht.Contractondertekenaar.Email,
-                        Stageopdracht.Contractondertekenaar.Gsmnummer }
+                        Stageopdracht.Contractondertekenaar.Gsm }
                         .Where(s => !string.IsNullOrEmpty(s)));
             }
         }
@@ -163,8 +162,6 @@ namespace StageBeheersTool.ViewModels
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        [Display(Name = "nummer")]
-        public string Straatnummer { get; set; }
         [Required]
         [DataType(DataType.MultilineText)]
         public string Omschrijving { get; set; }
@@ -259,12 +256,11 @@ namespace StageBeheersTool.ViewModels
             return errors;
         }
 
-        public void SetAdres(string gemeente, string postcode, string straat, string nummer)
+        public void SetAdres(string gemeente, string postcode, string straat)
         {
             this.Gemeente = gemeente;
             this.Postcode = postcode;
             this.Straat = straat;
-            this.Straatnummer = nummer;
         }
 
         #endregion

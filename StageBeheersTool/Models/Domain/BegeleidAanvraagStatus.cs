@@ -1,7 +1,7 @@
 ﻿
 namespace StageBeheersTool.Models.Domain
 {
-    public enum BegeleidAanvraagStatus
+    public enum StagebegeleidAanvraagStatus
     {
         Goedgekeurd, Afgekeurd, NietBeoordeeld
     }

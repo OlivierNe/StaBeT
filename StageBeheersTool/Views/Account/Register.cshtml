@@ -24,7 +24,13 @@
             @Html.ValidationMessageFor(model => model.Naam, "", new { @class = "text-danger" })
         </div>
     </div>
-
+    <div class="form-group">
+        @Html.LabelFor(m => m.Website, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Website, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
+        </div>
+    </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Gemeente, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
@@ -46,18 +52,12 @@
             @Html.ValidationMessageFor(model => model.Straat, "", new { @class = "text-danger" })
         </div>
     </div>
+
     <div class="form-group">
-        @Html.LabelFor(m => m.Straatnummer, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.Telefoon, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Straatnummer, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Straatnummer, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Telefoonnummer, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Telefoonnummer, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Telefoonnummer, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.Telefoon, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Telefoon, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">

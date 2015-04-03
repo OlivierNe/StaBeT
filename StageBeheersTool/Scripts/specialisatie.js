@@ -7,13 +7,13 @@
     $("#SpecialisatieId option").each(function () {
         var $item = $(this);
         if ($item.val() != "") {
-            opties.push({ index: $item.val(), text: $item.text() });
+            opties.push({ index: $item.val(), text: $item.text().toLowerCase() });
         }
     });
 
     var indexOf = function (text) {
         for (var i = 0; i < opties.length; i++) {
-            if (text === opties[i].text) {
+            if (text.toLowerCase() === opties[i].text) {
                 return opties[i].index;
             }
         }

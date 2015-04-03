@@ -7,11 +7,11 @@ using System.Web;
 
 namespace StageBeheersTool.Models.DAL.Mapping
 {
-    public class StageBegeleidAanvraagMapper : EntityTypeConfiguration<StageBegeleidAanvraag>
+    public class StageBegeleidAanvraagMapper : EntityTypeConfiguration<StagebegeleidingAanvraag>
     {
         public StageBegeleidAanvraagMapper()
         {
-            this.HasRequired(sba => sba.Stageopdracht);
+            this.HasRequired(sba => sba.Stage);
             this.HasRequired(sba => sba.Begeleider);
         }
     }

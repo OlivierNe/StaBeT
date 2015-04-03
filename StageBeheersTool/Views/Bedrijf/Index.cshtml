@@ -2,8 +2,26 @@
 @{
     ViewBag.Title = "Bedrijven";
 }
-
 <h2>@ViewBag.Title</h2>
+@if (CurrentUser.IsAdmin())
+{
+    <p>
+        @Html.ActionLink("Nieuw bedrijf", "Create")
+    </p>
+}
+<a id="searchA" class="btn btn-default" style="display:inline">Zoeken</a>
+@using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-horizontal" }))
+{
+    <div class="form-group">
+        <div class="col-md-11">
+            <input type="text" class="form-control" id="bedrijfsnaam" name="bedrijfsnaam" />
+        </div>
+    </div>
+    <div class="col-md-offset-1">
+        <button type="submit" class="btn btn-default" id="zoekenSubmit">Zoeken</button>
+        <a id="CancelBtn" class="btn btn-default">Annuleren</a>
+    </div>
+}
 
 @Html.Partial("_BedrijfList", Model)
 

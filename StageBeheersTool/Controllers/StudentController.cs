@@ -1,4 +1,5 @@
-﻿using StageBeheersTool.Models.Domain;
+﻿using StageBeheersTool.Helpers;
+using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
 using System.Web;
 using System.Web.Mvc;
@@ -25,9 +26,9 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult Index()
+        public ActionResult Index(string naam = null, string voornaam = null)
         {
-            var studenten = _studentRepository.FindAll();
+            var studenten = _studentRepository.FindAll().WithFilter(naam, voornaam);
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_studentList", studenten);
@@ -52,6 +53,7 @@ namespace StageBeheersTool.Controllers
 
         [Authorize(Role.Admin)]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(StudentCreateVM model)
         {
             if (ModelState.IsValid)

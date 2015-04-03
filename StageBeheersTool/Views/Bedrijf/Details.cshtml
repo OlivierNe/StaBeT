@@ -41,6 +41,13 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Website)
+        </dt>
+        <dd>
+            <a href="@Model.Website" target="_blank">@Model.Adres</a>
+        </dd>
+            
+        <dt>
             Adres
         </dt>
         <dd>
@@ -48,11 +55,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Telefoonnummer)
+            @Html.DisplayNameFor(model => model.Telefoon)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Telefoonnummer)
+            @Html.DisplayFor(model => model.Telefoon)
         </dd>
 
         <dt>

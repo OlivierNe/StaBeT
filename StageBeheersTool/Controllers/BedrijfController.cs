@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
@@ -16,9 +17,9 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult Index()
+        public ActionResult Index(string bedrijfsnaam = null)
         {
-            var bedrijven = _bedrijfRepository.FindAll();
+            var bedrijven = _bedrijfRepository.FindAll().WithFilter(bedrijfsnaam);
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_BedrijfList", bedrijven);
@@ -41,7 +42,7 @@ namespace StageBeheersTool.Controllers
             {
                 var bedrijf = Mapper.Map<Bedrijf>(model);
                 _bedrijfRepository.Add(bedrijf);
-                return RedirectToAction("Details", new{id=bedrijf.Id});
+                return RedirectToAction("Details", new { id = bedrijf.Id });
             }
             return View(model);
         }

@@ -196,6 +196,15 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verwijderen mislukt. Stagebegeleider is aan 1 of meerdere stages koppeld..
+        /// </summary>
+        public static string ErrorBegeleiderDeleteFailed {
+            get {
+                return ResourceManager.GetString("ErrorBegeleiderDeleteFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Het nieuwe wachtwoord en het bevestigde antwoord komen niet overeen..
         /// </summary>
         public static string ErrorNieuwEnBevestigdWachtwoord {
@@ -237,6 +246,15 @@ namespace StageBeheersTool {
         public static string ErrorOudWachtwoordVerplicht {
             get {
                 return ResourceManager.GetString("ErrorOudWachtwoordVerplicht", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Begeleiding aanvraag goedkeuren mislukt: Stage &apos;{0}&apos; heeft al een stagebegeleider({1}).
+        /// </summary>
+        public static string ErrorStagebegeleidingAanvraagGoedgekeurd {
+            get {
+                return ResourceManager.GetString("ErrorStagebegeleidingAanvraagGoedgekeurd", resourceCulture);
             }
         }
         
@@ -322,11 +340,47 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Begeleider {0} succesvol gekoppeld aan stage {1}..
+        /// </summary>
+        public static string SuccesStagebegeleidingAanvraagGoedgekeurd {
+            get {
+                return ResourceManager.GetString("SuccesStagebegeleidingAanvraagGoedgekeurd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aanvraag stagebegeleiding afgekeurd..
+        /// </summary>
+        public static string SuccesStagebegeleidingAfgekeurd {
+            get {
+                return ResourceManager.GetString("SuccesStagebegeleidingAfgekeurd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aanvraag stagebegeleiding afgekeurd. Begeleider {0} losgekoppeld van stage &apos;{1}&apos;..
+        /// </summary>
+        public static string SuccesStagebegeleidingAfgekeurdBegeleiderLosgekoppeld {
+            get {
+                return ResourceManager.GetString("SuccesStagebegeleidingAfgekeurdBegeleiderLosgekoppeld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Student {0} toegevoegd..
         /// </summary>
         public static string SuccesStudentCreate {
             get {
                 return ResourceManager.GetString("SuccesStudentCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aanvragen stagebegeleiding.
+        /// </summary>
+        public static string TitelAanvragenStagebegeleidingIndex {
+            get {
+                return ResourceManager.GetString("TitelAanvragenStagebegeleidingIndex", resourceCulture);
             }
         }
         

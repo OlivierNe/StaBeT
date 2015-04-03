@@ -1,0 +1,13 @@
+﻿@model IEnumerable<StagebegeleidingAanvraag>
+
+@{
+    ViewBag.Title = Resources.TitelAanvragenStagebegeleidingIndex;
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_StagebegeleidingAanvragen")
+
+@section scripts{
+    <script src="~/Scripts/stagetool-list.js"></script>
+}

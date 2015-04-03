@@ -28,8 +28,8 @@ namespace StageBeheersTool.OudeGegevens
                 Straat = stagebedrijf.straat,
                 Gemeente = stagebedrijf.gemeente,
                 Postcode = stagebedrijf.pc,
-                Telefoonnummer = stagebedrijf.tel,
-                //website, fax toevoegen?
+                Telefoon = stagebedrijf.tel,
+                Website = stagebedrijf.website,
                 Bereikbaarheid = stagebedrijf.bereikbaarheid,
                 Bedrijfsactiviteiten = stagebedrijf.sector,
                 Contactpersonen = contactpersonen,
@@ -46,8 +46,8 @@ namespace StageBeheersTool.OudeGegevens
                 Bedrijfsfunctie = relatie.functie,
                 Email = relatie.email,
                 Aanspreektitel = relatie.aanspreektitel,
-                Telefoonnummer = relatie.tel,
-                Gsmnummer = relatie.GSMnummer
+                Telefoon = relatie.tel,
+                Gsm = relatie.GSMnummer
             };
         }
 
@@ -62,8 +62,8 @@ namespace StageBeheersTool.OudeGegevens
                 Gemeente = student.gemeente,
                 Straat = student.straat,
                 Postcode = student.pc,
-                Gsmnummer = student.GSM,
-                Telefoonnummer = student.telefoon
+                Gsm = student.GSM,
+                Telefoon = student.telefoon
             };
         }
 
@@ -77,7 +77,7 @@ namespace StageBeheersTool.OudeGegevens
                 Straat = docent.straat,
                 Gemeente = docent.gemeente,
                 Postcode = docent.pc,
-                Telefoonnummer = docent.telefoon,
+                Telefoon = docent.telefoon,
                 Aanspreking = docent.aanspreking
             };
         }

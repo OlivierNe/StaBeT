@@ -68,21 +68,35 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenBegeleider.Voornaam = begeleider.Voornaam;
             teUpdatenBegeleider.Familienaam = begeleider.Familienaam;
             teUpdatenBegeleider.Email = begeleider.Email;
-            teUpdatenBegeleider.Gsmnummer = begeleider.Gsmnummer;
-            teUpdatenBegeleider.Telefoonnummer = begeleider.Telefoonnummer;
+            teUpdatenBegeleider.Gsm = begeleider.Gsm;
+            teUpdatenBegeleider.Telefoon = begeleider.Telefoon;
             teUpdatenBegeleider.Postcode = begeleider.Postcode;
             teUpdatenBegeleider.Gemeente = begeleider.Gemeente;
             teUpdatenBegeleider.Straat = begeleider.Straat;
-            teUpdatenBegeleider.Straatnummer = begeleider.Straatnummer;
             teUpdatenBegeleider.FotoUrl = begeleider.FotoUrl;
             SaveChanges();
         }
 
-        public void Delete(Begeleider begeleider)
+        public bool Delete(Begeleider begeleider)
         {
-            _begeleiders.Remove(begeleider);
-            SaveChanges();
-            //1451 
+            try
+            {
+                _begeleiders.Remove(begeleider);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var sqlException = ex.InnerException.InnerException as MySqlException;
+                if (sqlException != null && sqlException.Number == 1451)
+                {
+                    return false; //aan minstens 1 stage gekoppeld
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return true;
         }
 
         public void SaveChanges()

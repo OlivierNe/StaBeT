@@ -55,10 +55,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Gsmnummer, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Gsm, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Gsmnummer, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Gsmnummer, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Gsm, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Gsm, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -89,14 +89,15 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-md-offset-4">
+            <div class="col-md-offset-3">
                 <input type="submit" value="Opslaan" class="btn btn-default" />
+                @Html.ActionLink("Annuleren", "Index", "Contactpersoon", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
     </div>
 }
 <div>
-    @Html.ActionLink("Terug naar overzicht", "Index")
+
 </div>
 
 @section Scripts {

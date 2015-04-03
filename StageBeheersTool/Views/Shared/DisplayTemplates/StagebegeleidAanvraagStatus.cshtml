@@ -1,15 +1,15 @@
-﻿@model BegeleidAanvraagStatus
+﻿@model StagebegeleidAanvraagStatus
     @{
         var status = "";
         switch (Model)
         {
-            case BegeleidAanvraagStatus.Goedgekeurd:
+            case StagebegeleidAanvraagStatus.Goedgekeurd:
                 status = "Goedgekeurd";
                 break;
-            case BegeleidAanvraagStatus.Afgekeurd:
+            case StagebegeleidAanvraagStatus.Afgekeurd:
                 status = "Afgekeurd";
                 break;
-            case BegeleidAanvraagStatus.NietBeoordeeld:
+            case StagebegeleidAanvraagStatus.NietBeoordeeld:
                 status = "Niet beoordeeld";
                 break;
         }

@@ -267,4 +267,25 @@
   <data name="TitelNieuweStudent" xml:space="preserve">
     <value>Nieuwe student</value>
   </data>
+  <data name="ErrorBegeleiderDeleteFailed" xml:space="preserve">
+    <value>Verwijderen mislukt. Stagebegeleider is aan 1 of meerdere stages koppeld.</value>
+  </data>
+  <data name="ErrorStagebegeleidingAanvraagGoedgekeurd" xml:space="preserve">
+    <value>Begeleiding aanvraag goedkeuren mislukt: Stage '{0}' heeft al een stagebegeleider({1})</value>
+    <comment>0=titel stage, 1=naam begeleider</comment>
+  </data>
+  <data name="SuccesStagebegeleidingAanvraagGoedgekeurd" xml:space="preserve">
+    <value>Begeleider {0} succesvol gekoppeld aan stage {1}.</value>
+    <comment>0=naam begeleider, 1=titel stage</comment>
+  </data>
+  <data name="SuccesStagebegeleidingAfgekeurd" xml:space="preserve">
+    <value>Aanvraag stagebegeleiding afgekeurd.</value>
+  </data>
+  <data name="SuccesStagebegeleidingAfgekeurdBegeleiderLosgekoppeld" xml:space="preserve">
+    <value>Aanvraag stagebegeleiding afgekeurd. Begeleider {0} losgekoppeld van stage '{1}'.</value>
+    <comment>0=naam begeleider, 1= titel stage</comment>
+  </data>
+  <data name="TitelAanvragenStagebegeleidingIndex" xml:space="preserve">
+    <value>Aanvragen stagebegeleiding</value>
+  </data>
 </root>

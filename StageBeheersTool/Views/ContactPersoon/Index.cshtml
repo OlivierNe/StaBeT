@@ -5,35 +5,35 @@
 }
 <h2>Contactpersonen</h2>
 <p>
-    <a href="/Contactpersoon/Create" class="">Nieuw contactpersoon aanmaken</a>
+    @Html.ActionLink("Nieuw contactpersoon", "Create", "Contactpersoon")
 </p>
-    @if (Model.ToonBedrijf)
+@if (Model.ToonBedrijf)
+{
+    <a id="searchA" class="btn btn-default" style="display:inline">Zoeken</a>
+    using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-horizontal" }))
     {
-        <a id="searchA" class="btn btn-default" style="display:inline">Zoeken</a>
-        using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-horizontal" }))
-        {
-            <div class="form-group">
-                @Html.LabelFor(model => model.Bedrijf, new { @class = "control-label col-md-1" })
-                <div class="col-md-11">
-                    @Html.EditorFor(model => model.Bedrijf, new { @class = "form-control" })
-                </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Bedrijf, new { @class = "control-label col-md-1" })
+            <div class="col-md-11">
+                @Html.EditorFor(model => model.Bedrijf, new { @class = "form-control" })
             </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Naam, new { @class = "control-label col-md-1" })
-                <div class="col-md-11">
-                    @Html.EditorFor(model => model.Naam, new { @class = "form-control" })
-                </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Naam, new { @class = "control-label col-md-1" })
+            <div class="col-md-11">
+                @Html.EditorFor(model => model.Naam, new { @class = "form-control" })
             </div>
+        </div>
 
-            <div class="col-md-offset-1">
-                <button type="submit" class="btn btn-default">Zoeken</button>
-                <a id="CancelBtn" class="btn btn-default">Cancel</a>
-            </div>
-        }
+        <div class="col-md-offset-1">
+            <button type="submit" class="btn btn-default">Zoeken</button>
+            <a id="CancelBtn" class="btn btn-default">Annuleren</a>
+        </div>
     }
+}
 
 @Html.Partial("_ContactpersoonList")
 
 @section scripts{
-   <script src="~/Scripts/stagetool-list.js"></script>
+    <script src="~/Scripts/stagetool-list.js"></script>
 }

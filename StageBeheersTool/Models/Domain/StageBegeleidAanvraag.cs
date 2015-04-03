@@ -1,30 +1,35 @@
 ﻿
 namespace StageBeheersTool.Models.Domain
 {
-    public class StageBegeleidAanvraag
+    public class StagebegeleidingAanvraag
     {
         public int Id { get; set; }
         public virtual Begeleider Begeleider { get; set; }
-        public virtual Stageopdracht Stageopdracht { get; set; }
-        public BegeleidAanvraagStatus Status { get; set; }
+        public virtual Stageopdracht Stage { get; set; }
+        public StagebegeleidAanvraagStatus Status { get; set; }
         public bool IsGoedgekeurd
         {
             get
             {
-                return Status == BegeleidAanvraagStatus.Goedgekeurd;
+                return Status == StagebegeleidAanvraagStatus.Goedgekeurd;
             }
         }
         public bool IsAfgekeurd
         {
             get
             {
-                return Status == BegeleidAanvraagStatus.Afgekeurd;
+                return Status == StagebegeleidAanvraagStatus.Afgekeurd;
             }
         }
 
-        public StageBegeleidAanvraag()
+        public StagebegeleidingAanvraag()
         {
-            Status = BegeleidAanvraagStatus.NietBeoordeeld;
+            Status = StagebegeleidAanvraagStatus.NietBeoordeeld;
+        }
+
+        public bool StageHeeftAlBegeleider()
+        {
+            return Stage.Stagebegeleider != null;
         }
     }
 }

@@ -10,6 +10,6 @@ namespace StageBeheersTool.Models.Domain
         Begeleider FindById(int id);
         void SaveChanges();
         void Update(Begeleider begeleider);
-        void Delete(Begeleider begeleider);
+        bool Delete(Begeleider begeleider);
     }
 }

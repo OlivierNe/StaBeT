@@ -1,0 +1,28 @@
+﻿@model IEnumerable<StagebegeleidingAanvraag>
+
+<div id="grid-tableDiv">
+    @Html.Grid(Model).Columns(columns =>
+    {
+        columns.Add(so => so.Stage.Titel).Titled("Stage").Sanitized(false).Encoded(false)
+            .RenderValueAs(so => Html.ActionLink(so.Stage.Titel, "details", "Stageopdracht",
+                new { id = so.Stage.Id }, new { })).SetWidth(150);
+        columns.Add(so => so.Begeleider.Familienaam).Titled("Begeleider").Sanitized(false).Encoded(false)
+            .RenderValueAs(so => Html.ActionLink(so.Begeleider.Naam, "details", "Begeleider",
+                new { id = so.Begeleider.Id }, new { })).SetWidth(150);
+        columns.Add(so => so.Status).Sanitized(false).Encoded(false).RenderValueAs(so => Html.DisplayFor(model => so.Status)).SetWidth(130);
+        if (User.IsInRole("admin"))
+        {
+            columns.Add().Sanitized(false).Encoded(false)
+                .RenderValueAs(so =>
+                {
+                    if (so.StageHeeftAlBegeleider())
+                    {
+                        return Html.ActionLink("goedkeuren", "AanvraagGoedkeuren", new { id = so.Id }, new { @class = "btn btn-default disabled" });
+                    }
+                    return Html.ActionLink("goedkeuren", "AanvraagGoedkeuren", new { id = so.Id }, new { @class = "btn btn-default" });
+                }).SetWidth(130);
+            columns.Add().Sanitized(false).Encoded(false)
+                .RenderValueAs(so => Html.ActionLink("afkeuren", "AanvraagAfkeuren", new { id = so.Id }, new { @class = "btn btn-default" })).SetWidth(130);
+        }
+    }).Sortable(true).WithPaging(10).EmptyText("Geen aanvragen gevonden")
+</div>

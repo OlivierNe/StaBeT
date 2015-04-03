@@ -48,8 +48,8 @@ namespace StageBeheersTool.Models.DAL
                 return false;
             teUpdatenPersoon.Voornaam = contactpersoon.Voornaam;
             teUpdatenPersoon.Familienaam = contactpersoon.Familienaam;
-            teUpdatenPersoon.Gsmnummer = contactpersoon.Gsmnummer;
-            teUpdatenPersoon.Telefoonnummer = contactpersoon.Telefoonnummer;
+            teUpdatenPersoon.Gsm = contactpersoon.Gsm;
+            teUpdatenPersoon.Telefoon = contactpersoon.Telefoon;
             teUpdatenPersoon.IsStagementor = contactpersoon.IsStagementor;
             teUpdatenPersoon.IsContractondertekenaar = contactpersoon.IsContractondertekenaar;
             teUpdatenPersoon.Aanspreektitel = contactpersoon.Aanspreektitel;

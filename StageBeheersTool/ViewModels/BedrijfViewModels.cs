@@ -19,10 +19,11 @@ namespace StageBeheersTool.ViewModels
         [Required]
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        public string Straatnummer { get; set; }
         [Required]
         [Display(Name = "Telefoon/gsm")]
-        public string Telefoonnummer { get; set; }
+        public string Telefoon { get; set; }
+        [Url]
+        public string Website { get; set; }
         public string Bereikbaarheid { get; set; }
         public string Bedrijfsactiviteiten { get; set; }
     }
@@ -39,10 +40,11 @@ namespace StageBeheersTool.ViewModels
         [Required]
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        public string Straatnummer { get; set; }
         [Required]
         [Display(Name = "Telefoon/gsm")]
-        public string Telefoonnummer { get; set; }
+        public string Telefoon { get; set; }
+        [Url]
+        public string Website { get; set; }
         public string Bereikbaarheid { get; set; }
         public string Bedrijfsactiviteiten { get; set; }
     }
@@ -53,7 +55,6 @@ namespace StageBeheersTool.ViewModels
         public IEnumerable<Contactpersoon> Contractondertekenaars { get; set; }
         public string Gemeente { get; set; }
         public string Straat { get; set; }
-        public string Straatnummer { get; set; }
         public string Postcode { get; set; }
     }
 

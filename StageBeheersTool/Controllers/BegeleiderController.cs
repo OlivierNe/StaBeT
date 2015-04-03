@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
 using System.Web;
@@ -22,9 +23,9 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult Index()
+        public ActionResult Index(string naam = null, string voornaam = null)
         {
-            var begeleiders = _begeleiderRepository.FindAll();
+            var begeleiders = _begeleiderRepository.FindAll().WithFilter(naam, voornaam);
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_begeleidersList", begeleiders);
@@ -40,6 +41,7 @@ namespace StageBeheersTool.Controllers
 
         [Authorize(Role.Admin)]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(BegeleiderCreateVM model)
         {
             if (ModelState.IsValid)
@@ -80,14 +82,14 @@ namespace StageBeheersTool.Controllers
             if (CurrentUser.IsAdmin())
             {
                 begeleider = FindBegeleider(id);
-                if (begeleider == null)
-                {
-                    return HttpNotFound();
-                }
             }
             else
             {
                 begeleider = _userService.FindBegeleider();
+            }
+            if (begeleider == null)
+            {
+                return HttpNotFound();
             }
             var model = Mapper.Map<BegeleiderEditVM>(begeleider);
             return View(model);
@@ -102,16 +104,15 @@ namespace StageBeheersTool.Controllers
             if (CurrentUser.IsAdmin())
             {
                 begeleider = FindBegeleider(model.Id);
-                if (begeleider == null)
-                {
-                    return HttpNotFound();
-                }
             }
             else
             {
                 begeleider = _userService.FindBegeleider();
             }
-
+            if (begeleider == null)
+            {
+                return HttpNotFound();
+            }
             if (_imageService.IsValidImage(fotoFile))
             {
                 if (_imageService.HasValidSize(fotoFile))
@@ -152,9 +153,14 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            _begeleiderRepository.Delete(begeleider);
-            TempData["message"] = "Begeleider " + begeleider.HogentEmail + " succesvol verwijderd.";
-            return RedirectToAction("Index");
+            var result = _begeleiderRepository.Delete(begeleider);
+            if (result == true)
+            {
+                TempData["message"] = "Begeleider " + begeleider.HogentEmail + " succesvol verwijderd.";
+                return RedirectToAction("Index");
+            }
+            TempData["error"] = Resources.ErrorBegeleiderDeleteFailed;
+            return View(begeleider);
         }
 
         [Authorize(Role.Admin)]

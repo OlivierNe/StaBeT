@@ -1,8 +1,5 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
-using OudeGegevens.Models;
 using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.Helpers

@@ -1,20 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
+﻿
 namespace StageBeheersTool.Models.Domain
 {
     public class Admin
     {
-        public static void KeurStageBegeleidAanvraagGoed(StageBegeleidAanvraag aanvraag)
+        public static bool KeurStageBegeleidingAanvraagGoed(StagebegeleidingAanvraag aanvraag)
         {
-            aanvraag.Status = BegeleidAanvraagStatus.Goedgekeurd;
-            aanvraag.Stageopdracht.Stagebegeleider = aanvraag.Begeleider;
+            if (aanvraag.Stage.Stagebegeleider != null)
+            {
+                return false;
+            }
+            aanvraag.Status = StagebegeleidAanvraagStatus.Goedgekeurd;
+            aanvraag.Stage.Stagebegeleider = aanvraag.Begeleider;
+            return true;
         }
-        public static void KeurStageBegeleidAanvraagAf(StageBegeleidAanvraag aanvraag)
+
+        public static bool KeurStageBegeleidAanvraagAf(StagebegeleidingAanvraag aanvraag)
         {
-            aanvraag.Status = BegeleidAanvraagStatus.Afgekeurd;
+            aanvraag.Status = StagebegeleidAanvraagStatus.Afgekeurd;
+            if (aanvraag.Begeleider.Equals(aanvraag.Stage.Stagebegeleider))
+            {
+                aanvraag.Stage.Stagebegeleider = null;
+                return false;
+            }
+            return true;
         }
 
         public static void KeurStageopdrachtGoed(Stageopdracht stageopdracht)

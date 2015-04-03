@@ -74,11 +74,10 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenStudent.Familienaam = student.Familienaam;
             teUpdatenStudent.Keuzepakket = student.Keuzepakket;
             teUpdatenStudent.Email = student.Email;
-            teUpdatenStudent.Gsmnummer = student.Gsmnummer;
+            teUpdatenStudent.Gsm = student.Gsm;
             teUpdatenStudent.Postcode = student.Postcode;
             teUpdatenStudent.Gemeente = student.Gemeente;
             teUpdatenStudent.Straat = student.Straat;
-            teUpdatenStudent.Straatnummer = student.Straatnummer;
             teUpdatenStudent.FotoUrl = student.FotoUrl;
             SaveChanges();
         }

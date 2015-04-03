@@ -19,12 +19,10 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "E-mail")]
         [EmailAddress]
         public string Email { get; set; }
-        [Display(Name = "gsm")]
-        public string Gsmnummer { get; set; }
+        public string Gsm { get; set; }
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        public string Straatnummer { get; set; }
         public SelectList KeuzevakSelectList { get; set; }
 
         public void SetKeuzevakSelectList(IEnumerable<Keuzepakket> keuzepakketten)
@@ -44,13 +42,10 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "E-mail")]
         [EmailAddress]
         public string Email { get; set; }
-        [Display(Name = "gsm")]
-        public string Gsmnummer { get; set; }
+        public string Gsm { get; set; }
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        [Display(Name = "Nummer")]
-        public string Straatnummer { get; set; }
         public string FotoUrl { get; set; }
         public SelectList KeuzevakSelectList { get; set; }
 
@@ -71,9 +66,8 @@ namespace StageBeheersTool.ViewModels
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        public string Straatnummer { get; set; }
         public Keuzepakket Keuzepakket { get; set; }
-        public string Gsmnummer { get; set; }
+        public string Gsm { get; set; }
         public string FotoUrl { get; set; }
 
         public bool ToonEdit { get; set; }
@@ -82,7 +76,7 @@ namespace StageBeheersTool.ViewModels
 
     public class StudentJsonVM
     {
-        public int  Id { get; set; }
+        public int Id { get; set; }
         public string Naam { get; set; }
         public string HogentEmail { get; set; }
     }

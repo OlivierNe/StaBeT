@@ -15,8 +15,8 @@ namespace StageBeheersTool.Models.Domain
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        public string Straatnummer { get; set; }
-        public string Telefoonnummer { get; set; }
+        public string Telefoon { get; set; }
+        public string Website { get; set; }
         public string Bereikbaarheid { get; set; } //(wagen – openbaar vervoer – georganiseerd vervoer door bedrijf) 
         public string Bedrijfsactiviteiten { get; set; } //(bank – software ontwikkelaar – openbare diensten ….)
         public virtual ICollection<Stageopdracht> Stageopdrachten { get; set; }
@@ -26,14 +26,13 @@ namespace StageBeheersTool.Models.Domain
         {
             get
             {
-                return string.Format("{0} {1}\n {2} {3}", Postcode, Gemeente, Straat, Straatnummer);
+                return string.Format("{0} {1}\n {2}", Postcode, Gemeente, Straat);
             }
         }
 
         #endregion
 
         #region Constructors
-
         public Bedrijf()
         {
             Stageopdrachten = new List<Stageopdracht>();
@@ -93,8 +92,8 @@ namespace StageBeheersTool.Models.Domain
                 return false;
             teUpdatenPersoon.Voornaam = contactpersoon.Voornaam;
             teUpdatenPersoon.Familienaam = contactpersoon.Familienaam;
-            teUpdatenPersoon.Gsmnummer = contactpersoon.Gsmnummer;
-            teUpdatenPersoon.Telefoonnummer = contactpersoon.Telefoonnummer;
+            teUpdatenPersoon.Gsm = contactpersoon.Gsm;
+            teUpdatenPersoon.Telefoon = contactpersoon.Telefoon;
             teUpdatenPersoon.IsStagementor = contactpersoon.IsStagementor;
             teUpdatenPersoon.IsContractondertekenaar = contactpersoon.IsContractondertekenaar;
             teUpdatenPersoon.Aanspreektitel = contactpersoon.Aanspreektitel;
@@ -126,7 +125,7 @@ namespace StageBeheersTool.Models.Domain
             return false;
         }
 
-        public bool MagWijzigen(Stageopdracht opdracht, DateTime? deadline)
+        public bool MagStageopdracgtWijzigen(Stageopdracht opdracht, DateTime? deadline)
         {
             if (opdracht == null)
             {

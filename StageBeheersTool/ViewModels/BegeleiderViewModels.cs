@@ -14,12 +14,10 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "E-mail")]
         [EmailAddress]
         public string Email { get; set; }
-        [Display(Name = "gsm")]
-        public string Gsmnummer { get; set; }
+        public string Gsm { get; set; }
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        public string Straatnummer { get; set; }
     }
 
     public class BegeleiderEditVM
@@ -33,12 +31,10 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "E-mail")]
         [EmailAddress]
         public string Email { get; set; }
-        [Display(Name = "gsm")]
-        public string Gsmnummer { get; set; }
+        public string Gsm { get; set; }
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        public string Straatnummer { get; set; }
         public string FotoUrl { get; set; }
     }
 
@@ -53,8 +49,7 @@ namespace StageBeheersTool.ViewModels
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }
-        public string Straatnummer { get; set; }
-        public string Gsmnummer { get; set; }
+        public string Gsm { get; set; }
         public string FotoUrl { get; set; }
 
         public bool ToonEdit { get; set; }

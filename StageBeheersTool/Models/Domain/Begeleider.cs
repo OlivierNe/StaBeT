@@ -9,14 +9,14 @@ namespace StageBeheersTool.Models.Domain
         #region Properties
         public string Aanspreking { get; set; }
         public virtual ICollection<Stageopdracht> Stages { get; set; }
-        public virtual ICollection<StageBegeleidAanvraag> StageAanvragen { get; set; }
+        public virtual ICollection<StagebegeleidingAanvraag> StageAanvragen { get; set; }
         #endregion
 
         #region Public Constructors
         public Begeleider()
         {
             Stages = new List<Stageopdracht>();
-            StageAanvragen = new List<StageBegeleidAanvraag>();
+            StageAanvragen = new List<StagebegeleidingAanvraag>();
         }
 
         #endregion
@@ -26,40 +26,57 @@ namespace StageBeheersTool.Models.Domain
         {
             return Stages.SingleOrDefault(so => so.Id == id);
         }
-        #endregion
 
 
         public void AddAanvraag(Stageopdracht stageopdracht)
         {
-            if (!HeeftStageBegeleidingAangevraagd(stageopdracht.Id))
+            if (!HeeftStageBegeleidingAangevraagd(stageopdracht))
             {
-                var aanvraag = new StageBegeleidAanvraag
+                var aanvraag = new StagebegeleidingAanvraag
                 {
-                    Stageopdracht = stageopdracht,
+                    Stage = stageopdracht,
                     Begeleider = this
                 };
                 StageAanvragen.Add(aanvraag);
             }
         }
-        /// <param name="id">Id Stageopdracht</param>
-        public bool HeeftStageBegeleidingAangevraagd(int id)
+
+        public bool HeeftStageBegeleidingAangevraagd(Stageopdracht stageopdracht)
         {
-            return StageAanvragen.Any(sa => sa.Stageopdracht.Id == id);
+            return StageAanvragen.Any(sa => sa.Stage.Id == stageopdracht.Id);
         }
 
         public void AanvraagAnnuleren(Stageopdracht stageopdracht)
         {
-            StageAanvragen.Remove(StageAanvragen.SingleOrDefault(sa => sa.Stageopdracht.Id == stageopdracht.Id));
+            StageAanvragen.Remove(StageAanvragen.SingleOrDefault(sa => sa.Stage.Id == stageopdracht.Id));
         }
 
-        public StageBegeleidAanvraag FindAanvraag(Stageopdracht stageopdracht)
+        public StagebegeleidingAanvraag FindAanvraag(Stageopdracht stageopdracht)
         {
-            return StageAanvragen.SingleOrDefault(sa => sa.Stageopdracht == stageopdracht);
+            return StageAanvragen.SingleOrDefault(sa => sa.Stage == stageopdracht);
         }
 
         public bool BegeleidStage(Stageopdracht stageopdracht)
         {
             return Stages.Any(so => so.Id == stageopdracht.Id);
+        }
+
+
+        public bool MagAanvraagAnnuleren(Stageopdracht stageopdracht)
+        {
+            return HeeftStageBegeleidingAangevraagd(stageopdracht) &&
+                   stageopdracht.IsGoedgekeurd() && stageopdracht.HeeftStageBegeleider() == false;
+        }
+
+        public bool MagAanvraagIndienen(Stageopdracht stageopdracht)
+        {
+            return !HeeftStageBegeleidingAangevraagd(stageopdracht) && stageopdracht.IsGoedgekeurd()
+                    && stageopdracht.HeeftStageBegeleider() == false;
+        }
+        
+        public bool MagStageWijzigen(Stageopdracht stageopdracht)
+        {
+            return stageopdracht.Stagebegeleider != null && this.Equals(stageopdracht.Stagebegeleider);
         }
 
         protected bool Equals(Begeleider other)
@@ -79,6 +96,9 @@ namespace StageBeheersTool.Models.Domain
         {
             return (HogentEmail != null ? HogentEmail.GetHashCode() : 0);
         }
+
+        #endregion
+      
     }
 }
 

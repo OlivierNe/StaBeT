@@ -132,7 +132,6 @@ namespace StageBeheersTool.Models.DAL
                       Bedrijfsactiviteiten = "TEST",
                       Bereikbaarheid = "TEST",
                       Postcode = "1243",
-                      Straatnummer = "1",
                       Gemeente = "TESTgemeente",
                       Straat = "TESTstraat"
                   };
@@ -146,8 +145,8 @@ namespace StageBeheersTool.Models.DAL
                         Voornaam = "voornaam" + i,
                         Familienaam = "Naam" + i,
                         Email = "stagementor" + i + "@bedrijf.be",
-                        Gsmnummer = "123456",
-                        Telefoonnummer = "1234567",
+                        Gsm = "123456",
+                        Telefoon = "1234567",
                         IsStagementor = true,
                         IsContractondertekenaar = false,
                         Bedrijfsfunctie = "bedrijfsfunctie"
@@ -161,8 +160,8 @@ namespace StageBeheersTool.Models.DAL
                     Voornaam = "voornaam0",
                     Familienaam = "Naam0",
                     Email = "contractondertekenaar1@bedrijf.be",
-                    Gsmnummer = "123456",
-                    Telefoonnummer = "1234567",
+                    Gsm = "123456",
+                    Telefoon = "1234567",
                     IsStagementor = false,
                     IsContractondertekenaar = true,
                     Bedrijfsfunctie = "bedrijfsfunctie",

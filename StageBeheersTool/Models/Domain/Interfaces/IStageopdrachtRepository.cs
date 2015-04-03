@@ -49,22 +49,22 @@ namespace StageBeheersTool.Models.Domain
         void Update(Stageopdracht stageopdracht);
         void Delete(Stageopdracht stageopdracht);
 
-        StageBegeleidAanvraag FindAanvraagById(int id);
+        StagebegeleidingAanvraag FindAanvraagById(int id);
 
         /// <summary>
         /// alle begeleider aanvragen van het huidige academiejaar
         /// </summary>
         /// <returns></returns>
-        IQueryable<StageBegeleidAanvraag> FindAllAanvragen();
+        IQueryable<StagebegeleidingAanvraag> FindAllAanvragen();
 
         /// <summary>
         /// alle begeleider aanvragen van het huidige academiejaar van een begeleider
         /// </summary>
         /// <returns></returns>
-        IQueryable<StageBegeleidAanvraag> FindAllAanvragenFrom(Begeleider begeleider);
+        IQueryable<StagebegeleidingAanvraag> FindAllAanvragenFrom(Begeleider begeleider);
 
-        void AddAanvraag(StageBegeleidAanvraag aanvraag);
-        void DeleteAanvraag(StageBegeleidAanvraag aanvraag);
+        void AddAanvraag(StagebegeleidingAanvraag aanvraag);
+        void DeleteAanvraag(StagebegeleidingAanvraag aanvraag);
 
         /// <summary>
         /// </summary>

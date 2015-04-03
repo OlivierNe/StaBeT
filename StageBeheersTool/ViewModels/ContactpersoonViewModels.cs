@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using StageBeheersTool.Models.Domain;
@@ -25,8 +24,7 @@ namespace StageBeheersTool.ViewModels
         [EmailAddress]
         public string Email { get; set; }
         public string Aanspreektitel { get; set; }
-        [Display(Name = "gsm")]
-        public string Gsmnummer { get; set; }
+        public string Gsm { get; set; }
         [Display(Name = "Functie binnen het bedrijf")]
         public string Bedrijfsfunctie { get; set; }
         [Required]

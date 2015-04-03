@@ -17,11 +17,15 @@ $(function () {
     $searchA.on("click", function () {
         $searchForm.css("display", "block");
         $searchA.css("display", "none");
+        $("#searchForm input:text").first().focus();
     });
 
-    $cancelBtn.on("click", function() {
+    $cancelBtn.on("click", function () {
+        $searchForm.trigger("reset");
+        $searchForm.submit();
         $searchA.css("display", "inline");
         $searchForm.css("display", "none");
+
     });
 
     var ajaxDone = function (data) {
