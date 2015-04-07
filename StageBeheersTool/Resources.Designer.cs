@@ -421,6 +421,15 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lijsten exporteren.
+        /// </summary>
+        public static string TitelLijstenExporterenExcel {
+            get {
+                return ResourceManager.GetString("TitelLijstenExporterenExcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aanmelden.
         /// </summary>
         public static string TitelLogin {

@@ -208,6 +208,7 @@
     </Compile>
     <Compile Include="Helpers\AuthorizeAttribute.cs" />
     <Compile Include="Helpers\AcademiejaarHelper.cs" />
+    <Compile Include="Helpers\ExcelFileResult.cs" />
     <Compile Include="Helpers\QueryableBedrijfExtensions.cs" />
     <Compile Include="Helpers\QueryableBegeleiderExtensions.cs" />
     <Compile Include="Helpers\QueryableStudentExtensions.cs" />
@@ -475,6 +476,7 @@
     <Content Include="Views\Begeleider\Delete.cshtml" />
     <Content Include="Views\Student\Delete.cshtml" />
     <Content Include="Views\Stageopdracht\_StagebegeleidingAanvragen.cshtml" />
+    <Content Include="Views\Stageopdracht\LijstExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

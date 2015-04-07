@@ -288,4 +288,7 @@
   <data name="TitelAanvragenStagebegeleidingIndex" xml:space="preserve">
     <value>Aanvragen stagebegeleiding</value>
   </data>
+  <data name="TitelLijstenExporterenExcel" xml:space="preserve">
+    <value>Lijsten exporteren</value>
+  </data>
 </root>

@@ -305,4 +305,39 @@ namespace StageBeheersTool.ViewModels
         [Required]
         public string Reden { get; set; }
     }
+
+    public class StageopdrachtLijstExcelVM
+    {
+        public int SelectedStagebegeleider { get; set; }
+        public string SelectedAcademiejaar { get; set; }
+        public int SelectedStatus { get; set; }
+
+        public SelectList StagebegeleiderSelectList { get; set; }
+        public SelectList AcademiejaarSelectList { get; set; }
+        public SelectList StatusSelectList { get; set; }
+        //...
+
+        public bool Bedrijfsnaam { get; set; }
+        public bool Bedrijfsadres { get; set; }
+        //andere bedrijfsgegevens
+
+        public bool Stageplaats { get; set; }
+        public bool Titel { get; set; }
+        public bool Omschrijving { get; set; }
+        public bool Studenten { get; set; }
+        public bool Begeleider { get; set; }
+        public bool Status { get; set; }
+        //...
+
+        public void InitSelectLists(IEnumerable<Begeleider> stagebegeleiders, string[] academiejaren)
+        {
+            StagebegeleiderSelectList = new SelectList(stagebegeleiders, "Id", "Naam", SelectedStagebegeleider != 0 ? SelectedStagebegeleider.ToString() : "");
+            AcademiejaarSelectList = new SelectList(academiejaren);
+            var statusOpties = new SelectListItem[] { new SelectListItem() { Value = StageopdrachtStatus.NietBeoordeeld.ToString(), Text = "Niet beoordeeld"},
+                     new SelectListItem() { Value = StageopdrachtStatus.Goedgekeurd.ToString(), Text = "Goedgekeurd"}, new SelectListItem()
+                     {Value = StageopdrachtStatus.Afgekeurd.ToString(), Text = "Afgekeurd"}};
+            StatusSelectList = new SelectList(statusOpties, "Value", "Text");
+        }
+
+    }
 }

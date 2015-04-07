@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.IO;
+using System.Web.Helpers;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
@@ -19,19 +21,22 @@ namespace StageBeheersTool.Controllers
         private readonly ISpecialisatieRepository _specialisatieRepository;
         private readonly IAcademiejaarRepository _academiejaarRepository;
         private readonly IUserService _userService;
+        private readonly IBegeleiderRepository _begeleiderRepository;
 
         public StageopdrachtController(IStageopdrachtRepository stageopdrachtRepository,
             IBedrijfRepository bedrijfRepository, ISpecialisatieRepository specialisatieRepository,
-            IUserService userService, IAcademiejaarRepository academiejaarRepository)
+            IUserService userService, IAcademiejaarRepository academiejaarRepository,
+            IBegeleiderRepository begeleiderRepository)
         {
             _stageopdrachtRepository = stageopdrachtRepository;
             _bedrijfRepository = bedrijfRepository;
             _specialisatieRepository = specialisatieRepository;
             _academiejaarRepository = academiejaarRepository;
             _userService = userService;
+            _begeleiderRepository = begeleiderRepository;
         }
 
-        #region lijst stageopdrachten
+        #region lijsten
 
         [Authorize(Role.Student, Role.Bedrijf, Role.Begeleider, Role.Admin)]
         public ActionResult Index(StageopdrachtIndexVM model)
@@ -171,6 +176,26 @@ namespace StageBeheersTool.Controllers
             }
             return View("MijnStages", model);
         }
+
+        [Authorize(Role.Admin)]
+        public ActionResult LijstExcel()
+        {
+            var begeleiders = _begeleiderRepository.FindAll();
+            var academiejaren = _stageopdrachtRepository.FindAllAcademiejaren();
+            var model = new StageopdrachtLijstExcelVM();
+            model.InitSelectLists(begeleiders, academiejaren);
+            return View(model);
+        }
+
+        [Authorize(Role.Admin)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LijstExcel(StageopdrachtLijstExcelVM model)
+        {
+            MemoryStream reportStream = null;// GenerateExcelList();// any parameters here);
+            return new ExcelFileResult(reportStream, "MyName.xlsx");
+        }
+
         #endregion
 
         #region create
