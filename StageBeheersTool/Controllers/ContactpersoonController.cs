@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using StageBeheersTool.Helpers;
+using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
 using System.Web.Mvc;

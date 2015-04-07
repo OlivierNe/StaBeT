@@ -24,6 +24,7 @@
                 <div class="col-md-2">
                     @Html.EditorFor(model => model.Semester1Begin)
                 </div>
+                <div class="col-md-1"></div>
                 <div class="col-md-2">
                     @Html.EditorFor(model => model.Semester1Einde)
                 </div>
@@ -35,6 +36,7 @@
                 <div class="col-md-2">
                     @Html.EditorFor(model => model.Semester2Begin)
                 </div>
+                <div class="col-md-1"></div>
                 <div class="col-md-2">
                     @Html.EditorFor(model => model.Semester2Einde)
                 </div>
@@ -56,13 +58,11 @@
 }
 
 @section scripts{
-    @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/lib/jquery-ui-1.11.4.min.js"></script>
     <script src="~/Scripts/lib/datepicker-nl-BE.js"></script>
     <script src="~/Scripts/academiejaarInstellingen.js"></script>
 }
 @section styles{
-    @*@Styles.Render("~/Content/themes/base/css/datepicker")*@
     <link href="~/Content/themes/base/core.css" rel="stylesheet" />
     <link href="~/Content/themes/base/datepicker.css" rel="stylesheet" />
     <link href="~/Content/themes/base/theme.css" rel="stylesheet" />

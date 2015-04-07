@@ -48,4 +48,11 @@ namespace StageBeheersTool.ViewModels
         public int Id { get; set; }
         public string Telefoonnummer { get; set; }
     }
+
+    public class ContactpersoonJsonVM
+    {
+        public string Naam { get; set; }
+        public int Id { get; set; }
+    }
+
 }

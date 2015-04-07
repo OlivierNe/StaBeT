@@ -19,6 +19,7 @@ namespace StageBeheersTool.App_Start
             Mapper.CreateMap<ContactpersoonEditVM, Contactpersoon>();
             Mapper.CreateMap<Contactpersoon, ContactpersoonCreateVM>();
             Mapper.CreateMap<Contactpersoon, ContactpersoonEditVM>();
+            Mapper.CreateMap<Contactpersoon, ContactpersoonJsonVM>();
 
             Mapper.CreateMap<Student, StudentCreateVM>();
             Mapper.CreateMap<StudentCreateVM, Student>();
@@ -30,7 +31,7 @@ namespace StageBeheersTool.App_Start
             Mapper.CreateMap<RegisterBedrijfViewModel, Bedrijf>();
             Mapper.CreateMap<EditBedrijfVM, Bedrijf>();
             Mapper.CreateMap<Bedrijf, EditBedrijfVM>();
-            Mapper.CreateMap<Bedrijf, BedrijfInfoVM>();
+            Mapper.CreateMap<Bedrijf, BedrijfJsonVM>();
 
             Mapper.CreateMap<BegeleiderCreateVM, Begeleider>();
             Mapper.CreateMap<Begeleider, BegeleiderCreateVM>();

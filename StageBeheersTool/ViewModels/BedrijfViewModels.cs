@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
-using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.ViewModels
 {
@@ -49,13 +48,14 @@ namespace StageBeheersTool.ViewModels
         public string Bedrijfsactiviteiten { get; set; }
     }
 
-    public class BedrijfInfoVM
+    public class BedrijfJsonVM
     {
-        public IEnumerable<Contactpersoon> Stagementors { get; set; }
-        public IEnumerable<Contactpersoon> Contractondertekenaars { get; set; }
+        public IEnumerable<ContactpersoonJsonVM> Stagementors { get; set; }
+        public IEnumerable<ContactpersoonJsonVM> Contractondertekenaars { get; set; }
         public string Gemeente { get; set; }
         public string Straat { get; set; }
         public string Postcode { get; set; }
+
     }
 
 }

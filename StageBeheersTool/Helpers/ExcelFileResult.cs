@@ -11,7 +11,7 @@ namespace StageBeheersTool.Helpers
         public ExcelFileResult(MemoryStream spreadsheetStream, string fileName)
         {
             _excelFileStream = spreadsheetStream;
-            _fileName = fileName;
+            _fileName = fileName + ".xlsx";
         }
 
         public override void ExecuteResult(ControllerContext context)

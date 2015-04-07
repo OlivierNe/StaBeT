@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 
 namespace StageBeheersTool.Helpers
 {
@@ -6,7 +7,9 @@ namespace StageBeheersTool.Helpers
     {
         public static string HuidigAcademiejaar()
         {
-            if (DateTime.Now.Month >= 9)
+            int maand = int.Parse(ConfigurationManager.AppSettings["MaandBeginNieuwSemester"]);
+
+            if (DateTime.Now.Month >= maand)
             {
                 return DateTime.Now.Year + "-" + (DateTime.Now.Year + 1);
             }

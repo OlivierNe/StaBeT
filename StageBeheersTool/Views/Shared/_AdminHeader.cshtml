@@ -3,12 +3,18 @@
         Stageopdrachten  @AcademiejaarHelper.HuidigAcademiejaar()
         <span class="caret"></span>
     </a>
-    <ul class="dropdown-menu" role="menu">
+    <ul class="dropdown-menu">
         <li>@Html.ActionLink(Resources.TitelNieuweStageopdracht, "Create", "Stageopdracht")</li>
-        <li>@Html.ActionLink("Aanvragen stages", "Voorstellen", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
-        <li>@Html.ActionLink("Alle stages", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-        <li>@Html.ActionLink("Aanvragen begeleiders", "AanvragenStagebegeleiding", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
-        <li>@Html.ActionLink(Resources.TitelLijstenExporterenExcel, "LijstExcel", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
+        <li class="divider"></li>
+        <li>@Html.ActionLink(Resources.TitelBedrijfStageVoorstellen, "BedrijfStageVoorstellen", "Stageopdracht") </li>
+        <li>@Html.ActionLink(Resources.TitelGoedgekeurdeStageopdrachten, "GoedgekeurdeStages", "Stageopdracht") </li>
+        <li>@Html.ActionLink(Resources.TitelAfgekeurdeStageopdrachten, "AfgekeurdeStages", "Stageopdracht") </li>
+        <li>@Html.ActionLink(Resources.TitelBeschikbareStages + " voor studenten", "BeschikbareStages", "Stageopdracht") </li>
+        <li>@Html.ActionLink(Resources.TitelToegewezenStagesZonderBegeleider, "ToegewezenStagesZonderBegeleider", "Stageopdracht") </li>
+        <li>@Html.ActionLink(Resources.TitelToegewezenStages, "ToegewezenStages", "Stageopdracht") </li>
+        <li class="divider"></li>
+        <li>@Html.ActionLink(Resources.TitelAanvragenStagebegeleiding, "AanvragenStagebegeleiding", "Stageopdracht")  </li>
+        <li>@Html.ActionLink(Resources.TitelLijstenExporterenExcel, "LijstExcel", "Stageopdracht")  </li>
     </ul>
 </li>
 <li class="dropdown nav">
@@ -43,6 +49,9 @@
         </li>
         <li>
             @Html.ActionLink("Studenten", "Index", "Student")
+        </li>
+        <li>
+            @Html.ActionLink("Studenten met stage", "MetToegewezenStage", "Student")
         </li>
     </ul>
 </li>

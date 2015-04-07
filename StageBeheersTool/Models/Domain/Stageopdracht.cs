@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StageBeheersTool.Helpers;
 
 namespace StageBeheersTool.Models.Domain
 {
@@ -51,20 +52,18 @@ namespace StageBeheersTool.Models.Domain
         {
             get
             {
-                return string.Format("{0} {1}\n {2} {3}", Postcode, Gemeente, Straat, Straatnummer);
+                string stageplaats = string.Format("{0} {1}\n {2} {3}", Postcode, Gemeente, Straat, Straatnummer);
+                if (string.IsNullOrWhiteSpace(stageplaats))
+                {
+                    return Bedrijf.Adres;
+                }
+                return stageplaats;
             }
         }
-
-        //extra properties in geval een contactpersoon verwijderd wordt (voor archief) 
-        public string StagementorNaam { get; set; }
-        public string ContractondertekenaarNaam { get; set; }
-        public string StagementorEmail { get; set; }
-        public string ContractondertekenaarEmail { get; set; }
 
         public bool Semester1 { get; set; }
         public bool Semester2 { get; set; }
         public int AantalStudenten { get; set; }
-        public int AantalToegewezenStudenten { get { return Studenten.Count; } }
         public string Academiejaar { get; set; }
         public virtual Contactpersoon Contractondertekenaar { get; set; }
         public virtual Contactpersoon Stagementor { get; set; }
@@ -76,6 +75,12 @@ namespace StageBeheersTool.Models.Domain
         public string Postcode { get; set; }
         public string Straat { get; set; }
         public string Straatnummer { get; set; }
+
+        //extra properties in geval een contactpersoon verwijderd wordt (voor archief) 
+        public string StagementorNaam { get; set; }
+        public string ContractondertekenaarNaam { get; set; }
+        public string StagementorEmail { get; set; }
+        public string ContractondertekenaarEmail { get; set; }
         #endregion
 
         #region Constructors
@@ -96,27 +101,34 @@ namespace StageBeheersTool.Models.Domain
         {
             return Status == StageopdrachtStatus.Afgekeurd;
         }
+
+        /// <summary>
+        /// Is minstens aan 1 student toegewezen
+        /// </summary>
+        /// <returns></returns>
+        public bool IsToegewezen()
+        {
+            return Status == StageopdrachtStatus.Toegewezen;
+        }
+
         public bool IsInHuidigAcademiejaar()
         {
-            var beginJaar = int.Parse(Academiejaar.Substring(0, 4));
-            var eindJaar = int.Parse(Academiejaar.Substring(5, 4));
-            if ((beginJaar == DateTime.Now.Year && DateTime.Now.Month >= 9)
-                || (eindJaar == (beginJaar + 1)
-                && DateTime.Now.Month < 9))
-            {
-                return true;
-            }
-            return false;
+            return AcademiejaarHelper.HuidigAcademiejaar() == Academiejaar;
         }
 
         public bool IsVolledigIngenomen()
         {
-            return AantalToegewezenStudenten >= AantalStudenten;
+            return Studenten.Count >= AantalStudenten;
         }
 
         public bool HeeftStageBegeleider()
         {
             return Stagebegeleider != null;
+        }
+
+        public int AantalToegewezenStudenten()
+        {
+            return Studenten.Count;
         }
         #endregion
 

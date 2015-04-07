@@ -1,17 +1,15 @@
-﻿@*@model StageopdrachtIndexVM
+﻿@model StageopdrachtIndexVM
 @{
-    var message = TempData["message"];
+    ViewBag.Title = Model.Title;
 }
-<p class="text-success">
-    @message
-</p>
+
 <h2>@Model.Title</h2>
 
-@if (Model.ToonSearchForm)
+@if (Model.ToonZoeken)
 {
     @Html.Partial("_ZoekFormulier")
 }
-@if (User.IsInRole("bedrijf"))
+@if (Model.ToonCreateNew)
 {
     <p>
         @Html.ActionLink("Nieuwe stageopdracht aanmaken", "Create")
@@ -21,4 +19,4 @@
 
 @section scripts{
     <script src="~/Scripts/stagetool-list.js"></script>
-}*@
+}

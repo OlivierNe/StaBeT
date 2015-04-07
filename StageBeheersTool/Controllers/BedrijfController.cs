@@ -1,6 +1,8 @@
-﻿using AutoMapper;
-using StageBeheersTool.Helpers;
+﻿using System.Collections;
+using System.Collections.Generic;
+using AutoMapper;
 using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
 using System.Web.Mvc;
@@ -84,9 +86,10 @@ namespace StageBeheersTool.Controllers
         public ActionResult BedrijfJson(int id)
         {
             var bedrijf = _bedrijfRepository.FindById(id);
-            var model = Mapper.Map<BedrijfInfoVM>(bedrijf);
-            model.Stagementors = bedrijf.FindAllStagementors();
-            model.Contractondertekenaars = bedrijf.FindAllContractOndertekenaars();
+            var model = Mapper.Map<BedrijfJsonVM>(bedrijf);
+            model.Stagementors = Mapper.Map<IEnumerable<Contactpersoon>, IEnumerable<ContactpersoonJsonVM>>(bedrijf.FindAllStagementors());
+            model.Contractondertekenaars = 
+                Mapper.Map<IEnumerable<Contactpersoon>, IEnumerable<ContactpersoonJsonVM>>(bedrijf.FindAllContractOndertekenaars());
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Data.Entity;
@@ -26,49 +27,92 @@ namespace StageBeheersTool.Models.DAL
 
         public Stageopdracht FindById(int id)
         {
-            Stageopdracht stageopdracht;
-            if (CurrentUser.IsBedrijf())
-            {
-                var bedrijf = _userService.FindBedrijf();
-                stageopdracht = bedrijf.FindStageopdrachtById(id);
-            }
-            else if (CurrentUser.IsStudent())
-            {
-                stageopdracht = _stageopdrachten.Where(IsGeldig())
-                    .IncludeAndOrder()
-                    .SingleOrDefault(so => so.Id == id);
-            }
-            else // admin/begeleider
-            {
-                stageopdracht = _stageopdrachten.IncludeAndOrder()
-                    .SingleOrDefault(so => so.Id == id);
-            }
-            return stageopdracht;
+            return _stageopdrachten.Find(id);
         }
 
         public IQueryable<Stageopdracht> FindAll()
         {
-            IQueryable<Stageopdracht> stageopdrachten;
-            if (CurrentUser.IsBedrijf())
-            {
-                var bedrijf = _userService.FindBedrijf();
-                stageopdrachten = bedrijf.Stageopdrachten.OrderByDescending(so => so.Academiejaar).AsQueryable();
-            }
-            else if (CurrentUser.IsStudent())
-            {
-                stageopdrachten = _stageopdrachten.Where(IsGeldig()).IncludeAndOrder();
-            }
-            else // admin/begeleider
-            {
-                stageopdrachten = _stageopdrachten
-                    .Where(IsGoedgekeurdEnVanHuidigAcademiejaar()).IncludeAndOrder();
-            }
-            return stageopdrachten;
+            return _stageopdrachten.IncludeAndOrder();
         }
 
+        /// <summary>
+        /// </summary>
+        /// <returns>Alle niet beoordeelde stageopdrachten van het huidige academiejaar</returns>
         public IQueryable<Stageopdracht> FindStageopdrachtVoorstellen()
         {
-            return _stageopdrachten.Where(IsNietBeoordeeldEnVanHuidigAcademiejaar()).IncludeAndOrder();
+            //TODO:toekomstige academiejaren
+            return _stageopdrachten
+                .Where(IsinHuidigAcademiejaar())
+                .Where(so => so.Status == StageopdrachtStatus.NietBeoordeeld)
+                .IncludeAndOrder();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>Alle goedgekeurde stageopdrachten van het huidige academiejaar</returns>
+        public IQueryable<Stageopdracht> FindGoedgekeurdeStageopdrachten()
+        {
+            //TODO:Toegewezen stageopdrachten ook meegeven?
+            return _stageopdrachten
+                .Where(IsinHuidigAcademiejaar())
+                .Where(so => so.Status == StageopdrachtStatus.Goedgekeurd)
+                .IncludeAndOrder();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>Alle afgekeurde stageopdrachten van het huidige academiejaar</returns>
+        public IQueryable<Stageopdracht> FindAfgekeurdeStageopdrachten()
+        {
+            return _stageopdrachten
+               .Where(IsinHuidigAcademiejaar())
+               .Where(so => so.Status == StageopdrachtStatus.Afgekeurd)
+               .IncludeAndOrder();
+        }
+
+        /// <summary>
+        /// lijst waar studenten uit kunnen kiezen om te solliciteren
+        /// </summary>
+        /// <returns>Alle goedgekeurde stageopdrachten met minstens 1 plaats vrij</returns>
+        public IQueryable<Stageopdracht> FindBeschikbareStages()
+        {
+            return _stageopdrachten.
+                Where(IsinHuidigAcademiejaar())
+                .Where(so => (so.Status == StageopdrachtStatus.Goedgekeurd
+                    || so.Status == StageopdrachtStatus.Toegewezen) && so.Studenten.Count < so.AantalStudenten)
+                    .IncludeAndOrder();
+        }
+
+        /// <summary>
+        /// uit deze lijst kunnen docenten kiezen om een stage te begeleiden
+        /// </summary>
+        /// <returns>Alle toegewezen stageopdrachten van het huidig academiejaar zonder stagebegeleider</returns>
+        public IQueryable<Stageopdracht> FindToegewezenStageopdrachtenZonderBegeleider()
+        {
+            return _stageopdrachten
+                .Where(IsinHuidigAcademiejaar())
+                .Where(so => so.Status == StageopdrachtStatus.Toegewezen && so.Studenten.Count > 0
+                    && so.Stagebegeleider == null)
+                .IncludeAndOrder();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>Alle toegewezen stages van het huidige academiejaar</returns>
+        public IQueryable<Stageopdracht> FindToegewezenStages()
+        {
+            return _stageopdrachten
+                .Where(IsinHuidigAcademiejaar())
+                .Where(so => so.Status == StageopdrachtStatus.Toegewezen && so.Studenten.Count > 0)
+                .IncludeAndOrder();
+        }
+
+        public IQueryable<Stageopdracht> FindStageopdrachtenVanBegeleider()
+        {
+            var begeleider = _userService.FindBegeleider();
+            var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
+            return _stageopdrachten.Where(so => so.Stagebegeleider.HogentEmail == begeleider.HogentEmail &&
+                            so.Academiejaar == academiejaar).IncludeAndOrder();
         }
 
         public IQueryable<Stageopdracht> FindAllFromAcademiejaar(string academiejaar)
@@ -141,7 +185,7 @@ namespace StageBeheersTool.Models.DAL
                 .Include(sba => sba.Stage);
         }
 
-        public IQueryable<StagebegeleidingAanvraag> FindAllAanvragenFrom(Begeleider begeleider)
+        public IQueryable<StagebegeleidingAanvraag> FindAllAanvragenVan(Begeleider begeleider)
         {
             return _aanvragen
                  .Where(sba => sba.Begeleider.Id == begeleider.Id)
@@ -151,21 +195,6 @@ namespace StageBeheersTool.Models.DAL
                  .Include(sba => sba.Stage);
         }
 
-        public IQueryable<Stageopdracht> FindStageopdrachtenVanBegeleider()
-        {
-            var begeleider = _userService.FindBegeleider();
-            var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
-            return _stageopdrachten.Where(so => so.Stagebegeleider.HogentEmail == begeleider.HogentEmail &&
-                            so.Academiejaar == academiejaar).IncludeAndOrder();
-        }
-
-        public IQueryable<Stageopdracht> FindGeldigeBegeleiderStageopdrachten()
-        {
-            return _stageopdrachten
-                .Where(KanBegleidWorden())
-                .Where(so => so.Stagebegeleider == null)
-                .IncludeAndOrder();
-        }
 
         public void AddAanvraag(StagebegeleidingAanvraag aanvraag)
         {
@@ -247,33 +276,13 @@ namespace StageBeheersTool.Models.DAL
             }
         }
 
-        #region private helpers
-        private Expression<Func<Stageopdracht, bool>> IsGeldig()
-        {
-            var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
-            return (so => so.Academiejaar == academiejaar &&
-                         so.Status == StageopdrachtStatus.Goedgekeurd && so.Studenten.Count < so.AantalStudenten);
-        }
+        #region helpers
 
-        private Expression<Func<Stageopdracht, bool>> KanBegleidWorden()
-        {
-            var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
-            return (so => so.Academiejaar == academiejaar &&
-                         so.Status == StageopdrachtStatus.Goedgekeurd && so.Studenten.Count >= so.AantalStudenten);
-        }
 
-        private Expression<Func<Stageopdracht, bool>> IsGoedgekeurdEnVanHuidigAcademiejaar()
+        private Expression<Func<Stageopdracht, bool>> IsinHuidigAcademiejaar()
         {
             var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
-            return (so => so.Academiejaar == academiejaar &&
-                          so.Status == StageopdrachtStatus.Goedgekeurd);
-        }
-
-        private Expression<Func<Stageopdracht, bool>> IsNietBeoordeeldEnVanHuidigAcademiejaar()
-        {
-            var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
-            return (so => so.Academiejaar == academiejaar &&
-                          so.Status == StageopdrachtStatus.NietBeoordeeld);
+            return (so => so.Academiejaar == academiejaar);
         }
 
         private Expression<Func<StagebegeleidingAanvraag, bool>> IsAanvraagInHuidigAcademiejaar()
@@ -282,5 +291,6 @@ namespace StageBeheersTool.Models.DAL
             return (aanvraag => aanvraag.Stage.Academiejaar == academiejaar);
         }
         #endregion
+
     }
 }

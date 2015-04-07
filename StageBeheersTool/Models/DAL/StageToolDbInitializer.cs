@@ -15,7 +15,7 @@ using System.Data.Entity.Migrations;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        // DropCreateDatabaseAlways<StageToolDbContext>
+      // DropCreateDatabaseAlways<StageToolDbContext>
     DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
@@ -366,7 +366,6 @@ namespace StageBeheersTool.Models.DAL
                                 stagestudentrelaties.Add(new StageStudentRelatie { Stage = stageopdracht, Student = student });
                             }
                             stageopdracht.Studenten = stagestudentrelaties;
-                            //stageopdrachtstudenten
                             stageopdracht.Bedrijf = bedrijf;
                             stageopdrachten.Add(stageopdracht);
                         }

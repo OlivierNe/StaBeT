@@ -5,17 +5,32 @@
     {
         columns.Add(so => so.Titel).Titled("Titel")
             .Encoded(false).Sanitized(false)
-            .RenderValueAs(so => Html.ActionLink(so.Titel, "Details", new { id = so.Id, overzicht = Model.OverzichtAction })).SetWidth(300);
-
-        columns.Add(so => so.Specialisatie);
-        columns.Add(so => so.Semester1).Titled("Semester")
-            .RenderValueAs(so => so.Semester).Sortable(true).ThenSortBy(so => so.Semester2);
-        columns.Add(so => so.AantalStudenten).Titled("Aantal studenten").RenderValueAs(so => so.AantalToegewezenStudenten + "/" + so.AantalStudenten);
-
+            .RenderValueAs(so => Html.ActionLink(so.Titel,
+                "Details", new { id = so.Id, overzicht = Model.OverzichtAction })).SetWidth(300);
         if (Model.ToonBedrijf)
         {
             columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf")
-                .RenderValueAs(so => so.Bedrijf.Naam + (string.IsNullOrWhiteSpace(so.Gemeente) ? "" : (" - " + so.Gemeente)));
+                .Encoded(false).Sanitized(false)
+                .RenderValueAs(so =>
+                {
+                    var locatie = !string.IsNullOrWhiteSpace(so.Gemeente) ? " - " + so.Gemeente :
+                        !string.IsNullOrWhiteSpace(so.Bedrijf.Gemeente) ? " - " + so.Bedrijf.Gemeente : "";
+                    return Html.ActionLink(so.Bedrijf.Naam + locatie,
+                        "Details", "Bedrijf", new { so.Bedrijf.Id }, new { });
+                });
+        }
+        if (Model.ToonBegeleider)
+        {
+            columns.Add(so => so.Stagebegeleider.Familienaam).Titled("Begeleider")
+                .Encoded(false).Sanitized(false)
+                .RenderValueAs(so =>
+                {
+                    if (so.Stagebegeleider != null)
+                    {
+                        return Html.ActionLink(so.Stagebegeleider.Naam, "Details", "Begeleider", new { so.Stagebegeleider.Id }, new { });
+                    }
+                    return new MvcHtmlString("");
+                }).Sortable(true).ThenSortBy(so => so.Stagebegeleider.Voornaam) ;
         }
         if (Model.ToonStudenten)
         {
@@ -26,26 +41,40 @@
                     string retVal = "<ul>";
                     foreach (var student in so.Studenten)
                     {
-                        retVal += "<li>" + Html.ActionLink(student.Student.Naam, "Details", "Student", new { id = student.Student.Id }, new { }) + "</li>";
+                        retVal += "<li>" + Html.ActionLink(student.Student.Naam,
+                            "Details", "Student", new { id = student.Student.Id }, new { }) + "</li>";
                     }
                     retVal += "</ul>";
                     return retVal;
                 }
                 ).SetWidth(200);
         }
+        columns.Add(so => so.Specialisatie);
+
+        if (Model.ToonSemester)
+        {
+            columns.Add(so => so.Semester1).Titled("Semester")
+                .RenderValueAs(so => so.Semester).Sortable(true).ThenSortBy(so => so.Semester2);
+        }
+        if (Model.ToonAantalStudenten)
+        {
+            columns.Add(so => so.AantalStudenten).Titled("Aantal studenten")
+                .RenderValueAs(so => so.AantalToegewezenStudenten() + "/" + so.AantalStudenten).ThenSortBy(so => so.Studenten.Count);
+        }
+
         if (Model.ToonStatus)
         {
             columns.Add(so => so.Status).Titled("Status").Sanitized(false).Encoded(false)
                 .RenderValueAs(so => Html.DisplayFor(model => so.Status)).SetWidth(130);
-            if (Model.ToonOordelen)
-            {
-                columns.Add().Sanitized(false).Encoded(false)
-                    .RenderValueAs(so => so.Status != StageopdrachtStatus.Goedgekeurd
-                        ? Html.ActionLink("Goedkeuren", "Goedkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
-                columns.Add().Sanitized(false).Encoded(false)
-                    .RenderValueAs(so => so.Status != StageopdrachtStatus.Afgekeurd
-                        ? Html.ActionLink("Afkeuren", "Afkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
-            }
+        }
+        if (Model.ToonOordelen)
+        {
+            columns.Add().Sanitized(false).Encoded(false)
+                .RenderValueAs(so => so.Status != StageopdrachtStatus.Goedgekeurd
+                    ? Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
+            columns.Add().Sanitized(false).Encoded(false)
+                .RenderValueAs(so => so.Status != StageopdrachtStatus.Afgekeurd
+                    ? Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
         }
     }).WithPaging(10).Sortable().EmptyText("Geen stageopdrachten gevonden")
 </div>

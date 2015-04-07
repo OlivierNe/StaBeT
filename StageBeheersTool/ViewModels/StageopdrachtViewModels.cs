@@ -8,24 +8,22 @@ using System.Web.Mvc;
 
 namespace StageBeheersTool.ViewModels
 {
-
     public class StageopdrachtIndexVM
     {
         public IEnumerable<Stageopdracht> Stageopdrachten { get; set; }
-        public bool ToonSearchForm { get; set; }
+        public bool ToonZoeken { get; set; }
         public bool ToonZoekenOpStudent { get; set; }
         public bool ToonOordelen { get; set; }
         public bool ToonStudenten { get; set; }
         public bool ToonStatus { get; set; }
         public bool ToonBedrijf { get; set; }
         public bool ToonAantalStudenten { get; set; }
+        public bool ToonCreateNew { get; set; }
+        public bool ToonSemester { get; set; }
+        public bool ToonBegeleider { get; set; }
+
         public string Title { get; set; }
         public string OverzichtAction { get; set; }
-
-        public void InitializeItems(IEnumerable<Stageopdracht> stageopdrachten)
-        {
-            Stageopdrachten = stageopdrachten;
-        }
 
         private SelectList _aantalStudentenList;
         private SelectList _semesterList;
@@ -298,6 +296,7 @@ namespace StageBeheersTool.ViewModels
     {
         public int Id { get; set; }
         public string Titel { get; set; }
+        [Required]
         public string Aan { get; set; }
         [Required]
         public string Onderwerp { get; set; }
@@ -308,14 +307,23 @@ namespace StageBeheersTool.ViewModels
 
     public class StageopdrachtLijstExcelVM
     {
-        public int SelectedStagebegeleider { get; set; }
+        [Display(Name = "Stagebegeleider")]
+        public int? SelectedStagebegeleiderId { get; set; }
+        [Display(Name = "Academiejaar")]
         public string SelectedAcademiejaar { get; set; }
-        public int SelectedStatus { get; set; }
+        [Display(Name = "Status stage")]
+        public int? SelectedStatus { get; set; }
 
         public SelectList StagebegeleiderSelectList { get; set; }
         public SelectList AcademiejaarSelectList { get; set; }
         public SelectList StatusSelectList { get; set; }
         //...
+
+        [Display(Name = "Tabblad naam")]
+        [Required]
+        public string TabbladNaam { get; set; }
+        [Required]
+        public string Bestandsnaam { get; set; }
 
         public bool Bedrijfsnaam { get; set; }
         public bool Bedrijfsadres { get; set; }
@@ -329,15 +337,58 @@ namespace StageBeheersTool.ViewModels
         public bool Status { get; set; }
         //...
 
-        public void InitSelectLists(IEnumerable<Begeleider> stagebegeleiders, string[] academiejaren)
+        public StageopdrachtLijstExcelVM()
         {
-            StagebegeleiderSelectList = new SelectList(stagebegeleiders, "Id", "Naam", SelectedStagebegeleider != 0 ? SelectedStagebegeleider.ToString() : "");
-            AcademiejaarSelectList = new SelectList(academiejaren);
-            var statusOpties = new SelectListItem[] { new SelectListItem() { Value = StageopdrachtStatus.NietBeoordeeld.ToString(), Text = "Niet beoordeeld"},
-                     new SelectListItem() { Value = StageopdrachtStatus.Goedgekeurd.ToString(), Text = "Goedgekeurd"}, new SelectListItem()
-                     {Value = StageopdrachtStatus.Afgekeurd.ToString(), Text = "Afgekeurd"}};
-            StatusSelectList = new SelectList(statusOpties, "Value", "Text");
+            TabbladNaam = "Stages";
+            Bestandsnaam = "Stages";
         }
 
+        public void InitSelectLists(IEnumerable<Begeleider> stagebegeleiders, string[] academiejaren)
+        {
+            StagebegeleiderSelectList = new SelectList(stagebegeleiders, "Id", "Naam", SelectedStagebegeleiderId != null ? SelectedStagebegeleiderId.ToString() : "");
+            AcademiejaarSelectList = new SelectList(academiejaren);
+            var statusOpties = new SelectListItem[] { new SelectListItem { Value = ((int)StageopdrachtStatus.NietBeoordeeld).ToString(), Text = "Niet beoordeeld"},
+                     new SelectListItem { Value = ((int)StageopdrachtStatus.Goedgekeurd).ToString(), Text = "Goedgekeurd"}, 
+                     new SelectListItem {Value = ((int)StageopdrachtStatus.Afgekeurd).ToString(), Text = "Afgekeurd"}};
+            StatusSelectList = new SelectList(statusOpties, "Value", "Text", SelectedStatus != null ? ((StageopdrachtStatus)SelectedStatus).ToString() : "");
+        }
+
+        public List<String> GetHeaders()
+        {
+            var headers = new List<String>();
+            if (Titel)
+            {
+                headers.Add("Titel");
+            }
+            if (Omschrijving)
+            {
+                headers.Add("Omschrijving");
+            }
+            if (Stageplaats)
+            {
+                headers.Add("Stageplaats");
+            }
+            if (Bedrijfsnaam)
+            {
+                headers.Add("Bedrijfsnaam");
+            }
+            if (Bedrijfsadres)
+            {
+                headers.Add("Bedrijfsadres");
+            }
+            if (Begeleider)
+            {
+                headers.Add("Stagebegeleider");
+            }
+            if (Studenten)
+            {
+                headers.Add("Studenten");
+            }
+            if (Status)
+            {
+                headers.Add("Status");
+            }
+            return headers;
+        }
     }
 }

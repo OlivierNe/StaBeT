@@ -104,12 +104,15 @@ namespace StageBeheersTool.OudeGegevens
             switch (status)
             {
                 case "A": //Approved
+                     return StageopdrachtStatus.Goedgekeurd;
                 case "C": // C = Created
-                case "BETAALD":
+                    return StageopdrachtStatus.NietBeoordeeld;
+                case "NA": //Not Approved (?)
                     return StageopdrachtStatus.Afgekeurd;
                 case "G": //Granted
-                    return StageopdrachtStatus.Goedgekeurd;
-                default: //C, betaald, NA, null
+                case null:
+                    return StageopdrachtStatus.Toegewezen;
+                default: //betaald, ...
                     return StageopdrachtStatus.NietBeoordeeld;
             }
         }

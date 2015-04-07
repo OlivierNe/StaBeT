@@ -291,4 +291,33 @@
   <data name="TitelLijstenExporterenExcel" xml:space="preserve">
     <value>Lijsten exporteren</value>
   </data>
+  <data name="TitelBedrijfStageVoorstellen" xml:space="preserve">
+    <value>Nieuwe stage voorstellen</value>
+  </data>
+  <data name="TitelBeschikbareStages" xml:space="preserve">
+    <value>Beschikbare stages</value>
+  </data>
+  <data name="TitelGoedgekeurdeStageopdrachten" xml:space="preserve">
+    <value>Goedgekeurde stageopdrachten</value>
+  </data>
+  <data name="TitelToegewezenStagesZonderBegeleider" xml:space="preserve">
+    <value>Toegewezen stages zonder begeleider</value>
+  </data>
+  <data name="TitelAanvragenStagebegeleiding" xml:space="preserve">
+    <value>Aanvragen begeleiders</value>
+  </data>
+  <data name="TitelAfgekeurdeStageopdrachten" xml:space="preserve">
+    <value>Afgekeurde stageopdrachten</value>
+  </data>
+  <data name="TitelToegewezenStages" xml:space="preserve">
+    <value>Toegewezen stages</value>
+  </data>
+  <data name="SuccesStageGoedgekeurd" xml:space="preserve">
+    <value>Stageopdracht '{0}' goedgekeurd.  Standaard E-mail verstuurd.</value>
+    <comment>0=titel stageopdracht</comment>
+  </data>
+  <data name="SuccesStageAfgekeurd" xml:space="preserve">
+    <value>Stageopdracht '{0}' afgekeurd.  E-mail verstuurd.</value>
+    <comment>0=titel stageopdracht</comment>
+  </data>
 </root>

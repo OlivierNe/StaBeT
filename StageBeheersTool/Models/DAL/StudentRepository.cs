@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity.Infrastructure;
 using MySql.Data.MySqlClient;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Data.Entity;
@@ -15,8 +16,8 @@ namespace StageBeheersTool.Models.DAL
 
         public StudentRepository(StageToolDbContext ctx)
         {
-            this._dbContext = ctx;
-            this._studenten = ctx.Studenten;
+            _dbContext = ctx;
+            _studenten = ctx.Studenten;
         }
 
         public bool Add(Student student)
@@ -56,13 +57,12 @@ namespace StageBeheersTool.Models.DAL
             return _studenten.OrderBy(student => student.Familienaam);
         }
 
-        public IQueryable<Student> FindStudentenMetStageopdrachtEnBegeleider()
+        public IQueryable<Student> FindStudentenMetToegewezenStage()
         {
-            throw new NotSupportedException();
-            //return FindAll().Include(student => student.Stageopdrachten)
-            //    .Where(student => student.Stageopdrachten != null &&
-            //        student.Stageopdracht.Status == StageopdrachtStatus.Goedgekeurd &&
-            //        student.Stageopdracht.Stagebegeleider != null);
+            var huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
+            return _studenten.Include(student => student.Stages)
+                .Where(student => student.Stages.Any(str => str.Stage.Academiejaar == huidigAcademiejaar))
+                .OrderBy(student => student.Familienaam);
         }
 
         public void Update(Student student)

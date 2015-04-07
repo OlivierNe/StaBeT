@@ -3,11 +3,14 @@
     var status = "";
     switch (Model)
     {
+        case StageopdrachtStatus.Toegewezen:
+            status = "Toegewezen";
+            break;
         case StageopdrachtStatus.Goedgekeurd:
             status = "Goedgekeurd";
             break;
         case StageopdrachtStatus.Afgekeurd:
-            status = "Afgekeurd;";
+            status = "Afgekeurd";
             break;
         case StageopdrachtStatus.NietBeoordeeld:
             status = "Niet beoordeeld";

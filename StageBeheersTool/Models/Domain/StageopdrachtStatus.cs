@@ -3,6 +3,6 @@ namespace StageBeheersTool.Models.Domain
 {
     public enum StageopdrachtStatus
     {
-        Goedgekeurd, Afgekeurd, NietBeoordeeld
+        Goedgekeurd, Afgekeurd, NietBeoordeeld, Toegewezen
     }
 }

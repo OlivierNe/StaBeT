@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using StageBeheersTool.Models.Domain;
 
-namespace StageBeheersTool.Helpers
+namespace StageBeheersTool.Models.DAL.Extensions
 {
     public static class QueryableContactpersoonExtensions
     {

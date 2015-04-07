@@ -1,4 +1,4 @@
-﻿using StageBeheersTool.Helpers;
+﻿using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
 using System.Web;
@@ -26,7 +26,7 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult Index(string naam = null, string voornaam = null)
+        public ActionResult Index(string naam, string voornaam)
         {
             var studenten = _studentRepository.FindAll().WithFilter(naam, voornaam);
             if (Request.IsAjaxRequest())
@@ -37,10 +37,14 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult LijstStudentenMetGoedgekeurdeStageopdrachtEnBegeleider()
+        public ActionResult MetToegewezenStage(string naam, string voornaam )
         {
-            var studenten = _studentRepository.FindStudentenMetStageopdrachtEnBegeleider();
-            return View(studenten);
+            var studenten = _studentRepository.FindStudentenMetToegewezenStage().WithFilter(naam, voornaam);;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_studentList", studenten);
+            }
+            return View("Index", studenten);
         }
 
         [Authorize(Role.Admin)]
