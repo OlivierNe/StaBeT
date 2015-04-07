@@ -103,6 +103,7 @@
                 @Html.ValidationMessageFor(model => model.StagementorId, "", new { @class = "text-danger" })
             </div>
         </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.ContractondertekenaarId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -111,11 +112,14 @@
             </div>
         </div>
 
-
         @Html.HiddenFor(model => model.Id)
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Opslaan" class="btn btn-default" />
+                @{
+    var url = Request.UrlReferrer == null ? ("Details/" + Model.Id) : Request.UrlReferrer.AbsolutePath;
+                }
+                <a href="@url" class="btn btn-default">Annuleren</a>
             </div>
         </div>
     </div>

@@ -51,10 +51,6 @@ textarea {
     content: " \2191";
 }
 
-
-
-
-
 sidebar-nav {
     padding: 9px 0;
 }
@@ -96,3 +92,9 @@ sidebar-nav {
     top: 11px;
     left: -6px;
 }
+
+li.nav:hover {
+    background: #000000;
+}
+
+

@@ -93,6 +93,7 @@ namespace StageBeheersTool.ViewModels
                 return semester;
             }
         }
+
         public string StageperiodeSem1 { get; set; }
         public string StageperiodeSem2 { get; set; }
         public string EditDeadline { get; set; }

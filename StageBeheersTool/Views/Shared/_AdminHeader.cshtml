@@ -1,4 +1,4 @@
-﻿<li class="dropdown">
+﻿<li class="dropdown nav">
     <a class="dropdown-toggle" data-toggle="dropdown" href="">
         Stageopdrachten  @AcademiejaarHelper.HuidigAcademiejaar()
         <span class="caret"></span>
@@ -7,11 +7,10 @@
         <li>@Html.ActionLink(Resources.TitelNieuweStageopdracht, "Create", "Stageopdracht")</li>
         <li>@Html.ActionLink("Aanvragen stages", "Voorstellen", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
         <li>@Html.ActionLink("Alle stages", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-        <li>@Html.ActionLink("Aanvragen begeleiders", "StagebegeleidingAanvragen", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
-
+        <li>@Html.ActionLink("Aanvragen begeleiders", "AanvragenStagebegeleiding", "Stageopdracht", new { }, new { role = "menuItem" })  </li>
     </ul>
 </li>
-<li class="dropdown">
+<li class="dropdown nav">
     <a class="dropdown-toggle" data-toggle="dropdown" href="">
         Bedrijven
         <span class="caret"></span>
@@ -32,7 +31,7 @@
         </li>
     </ul>
 </li>
-<li class="dropdown">
+<li class="dropdown nav">
     <a class="dropdown-toggle" data-toggle="dropdown" href="">
         Studenten
         <span class="caret"></span>
@@ -46,7 +45,7 @@
         </li>
     </ul>
 </li>
-<li class="dropdown">
+<li class="dropdown nav">
     <a class="dropdown-toggle" data-toggle="dropdown" href="">
         Begeleiders
         <span class="caret"></span>
@@ -60,18 +59,18 @@
         </li>
     </ul>
 </li>
-<li class="dropdown" role="presentation">
+<li class="dropdown nav" role="presentation">
     <a class="dropdown-toggle" data-toggle="dropdown" href="">
         Instellingen
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" role="menu">
-        <li>
+        <li class="nav" role="presentation">
             @Html.ActionLink(Resources.TitelParametersAcademiejaar, "Index", "Academiejaar")
         </li>
-        <li>
+        <li class="nav" role="presentation">
             @Html.ActionLink(Resources.TitelAdminIndex, "Index", "Admin")
         </li>
     </ul>
 </li>
-<li role="presentation">@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+<li class="nav">@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>

@@ -311,12 +311,13 @@ namespace StageBeheersTool.Controllers
                 model.ToonAanvraagAnnuleren = begeleider.MagAanvraagAnnuleren(stageopdracht);
                 model.ToonEdit = begeleider.MagStageWijzigen(stageopdracht);
             }
-            if (AcademiejaarHelper.KleinderDanHuidig(stageopdracht.Academiejaar))
+            if (AcademiejaarHelper.VroegerDanHuidig(stageopdracht.Academiejaar))
             {
                 model.ToonEdit = false;
             }
             model.OverzichtAction = overzicht;
             model.Stageopdracht = stageopdracht;
+
             return View(model);
         }
         #endregion
@@ -379,6 +380,7 @@ namespace StageBeheersTool.Controllers
                 stageopdracht.Bedrijf.FindAllStagementors());
             return View(model);
         }
+
         #endregion
 
         #region stageopdracht verwijderen
@@ -514,7 +516,7 @@ namespace StageBeheersTool.Controllers
 
         #region stagebegeleiding aanvragen
         [Authorize(Role.Begeleider)]
-        public ActionResult AanvraagIndienen(int id)
+        public ActionResult AanvraagIndienen(int id, string overzicht)
         {
             var stageopdracht = _stageopdrachtRepository.FindById(id);
             if (stageopdracht == null)
@@ -524,11 +526,11 @@ namespace StageBeheersTool.Controllers
             var begeleider = _userService.FindBegeleider();
             begeleider.AddAanvraag(stageopdracht);
             _stageopdrachtRepository.SaveChanges();
-            return RedirectToAction("Details", new { id = id });
+            return RedirectToAction("Details", new { id, overzicht });
         }
 
         [Authorize(Role.Begeleider)]
-        public ActionResult AanvraagAnnuleren(int id)
+        public ActionResult AanvraagAnnuleren(int id, string overzicht)
         {
             var stageopdracht = _stageopdrachtRepository.FindById(id);
             if (stageopdracht == null)
@@ -542,11 +544,11 @@ namespace StageBeheersTool.Controllers
             }
             _stageopdrachtRepository.DeleteAanvraag(begeleider.FindAanvraag(stageopdracht));
             _stageopdrachtRepository.SaveChanges();
-            return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new { id, overzicht });
         }
 
         [Authorize(Role.Admin)]
-        public ActionResult StagebegeleidingAanvragen()
+        public ActionResult AanvragenStagebegeleiding()
         {
             var aanvragen = _stageopdrachtRepository.FindAllAanvragen();
             if (Request.IsAjaxRequest())
@@ -557,11 +559,15 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Begeleider)]
-        public ActionResult StagebegeleidingAanvragenBegeleider()
+        public ActionResult MijnAanvragenStagebegeleiding()
         {
             var begeleider = _userService.FindBegeleider();
-            var aanvragen = _stageopdrachtRepository.FindAllAanvragenFrom(begeleider);
-            return View("StagebegeleidingAanvragen", aanvragen);
+            var aanvragen = begeleider.StageAanvragen;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_StagebegeleidingAanvragen", aanvragen);
+            }
+            return View("AanvragenStagebegeleiding", aanvragen);
         }
 
         [Authorize(Role.Admin)]
@@ -584,7 +590,7 @@ namespace StageBeheersTool.Controllers
                 TempData["error"] = string.Format(Resources.ErrorStagebegeleidingAanvraagGoedgekeurd,
                     aanvraag.Stage.Titel, aanvraag.Stage.Stagebegeleider.Naam);
             }
-            return RedirectToAction("StagebegeleidingAanvragen");
+            return RedirectToAction("AanvragenStagebegeleiding");
         }
 
         [Authorize(Role.Admin)]
@@ -606,7 +612,7 @@ namespace StageBeheersTool.Controllers
                     aanvraag.Begeleider.Naam, aanvraag.Stage.Titel);
             }
             _stageopdrachtRepository.SaveChanges();
-            return RedirectToAction("StagebegeleidingAanvragen");
+            return RedirectToAction("AanvragenStagebegeleiding");
         }
         #endregion
 
