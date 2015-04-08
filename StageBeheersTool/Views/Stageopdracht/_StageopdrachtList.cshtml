@@ -5,7 +5,8 @@
     {
         columns.Add(so => so.Titel).Titled("Titel")
             .Encoded(false).Sanitized(false)
-            .RenderValueAs(so => Html.ActionLink(so.Titel,
+            .RenderValueAs(so =>
+                Html.ActionLink(so.Titel,
                 "Details", new { id = so.Id, overzicht = Model.OverzichtAction })).SetWidth(300);
         if (Model.ToonBedrijf)
         {
@@ -30,7 +31,7 @@
                         return Html.ActionLink(so.Stagebegeleider.Naam, "Details", "Begeleider", new { so.Stagebegeleider.Id }, new { });
                     }
                     return new MvcHtmlString("");
-                }).Sortable(true).ThenSortBy(so => so.Stagebegeleider.Voornaam) ;
+                }).Sortable(true).ThenSortBy(so => so.Stagebegeleider.Voornaam);
         }
         if (Model.ToonStudenten)
         {
@@ -56,6 +57,11 @@
             columns.Add(so => so.Semester1).Titled("Semester")
                 .RenderValueAs(so => so.Semester).Sortable(true).ThenSortBy(so => so.Semester2);
         }
+        if (Model.ToonAcademiejaar)
+        {
+            columns.Add(so => so.Academiejaar).Titled("Academiejaar");
+        }
+
         if (Model.ToonAantalStudenten)
         {
             columns.Add(so => so.AantalStudenten).Titled("Aantal studenten")

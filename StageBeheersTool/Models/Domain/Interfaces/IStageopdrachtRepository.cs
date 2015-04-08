@@ -4,7 +4,6 @@ namespace StageBeheersTool.Models.Domain
 {
     public interface IStageopdrachtRepository
     {
-
         Stageopdracht FindById(int id);
 
         IQueryable<Stageopdracht> FindAll();
@@ -15,7 +14,8 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<Stageopdracht> FindToegewezenStageopdrachtenZonderBegeleider();
         IQueryable<Stageopdracht> FindToegewezenStages();
         IQueryable<Stageopdracht> FindAllFromAcademiejaar(string academiejaar);
-        IQueryable<Stageopdracht> FindStageopdrachtenVanBegeleider();
+        IQueryable<Stageopdracht> FindStageopdrachtenVanHuidigeBegeleider();
+        IQueryable<Stageopdracht> FindStageopdrachtenVanHuidigBedrijf();
 
         void Update(Stageopdracht stageopdracht);
         void Delete(Stageopdracht stageopdracht);

@@ -4,10 +4,14 @@
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" role="menu">
-        <li>@Html.ActionLink("Alle stages ", "Index", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-        <li>@Html.ActionLink("Stages zonder begeleider", "GoedgekeurdeStages", "Stageopdracht", new { }, new { role = "menuitem" }) </li>
-        <li>@Html.ActionLink("Aanvragen begeleiding", "MijnAanvragenStagebegeleiding", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-
+        <li>@Html.ActionLink(Resources.TitelBedrijfStageVoorstellen, "BedrijfStageVoorstellen", "Stageopdracht") </li>
+        <li>@Html.ActionLink(Resources.TitelGoedgekeurdeStageopdrachten, "GoedgekeurdeStages", "Stageopdracht") </li>
+        <li>@Html.ActionLink(Resources.TitelAfgekeurdeStageopdrachten, "AfgekeurdeStages", "Stageopdracht") </li>
+        <li>@Html.ActionLink(Resources.TitelBeschikbareStages + " voor studenten", "BeschikbareStages", "Stageopdracht") </li>
+        <li>@Html.ActionLink(Resources.TitelToegewezenStagesZonderBegeleider, "ToegewezenStagesZonderBegeleider", "Stageopdracht") </li>
+        <li>@Html.ActionLink(Resources.TitelToegewezenStages, "ToegewezenStages", "Stageopdracht") </li>
+        <li class="divider"></li>
+        <li>@Html.ActionLink(Resources.TitelMijnAanvragenStagebegeleiding, "MijnAanvragenStagebegeleiding", "Stageopdracht")  </li>
     </ul>
 </li>
 <li class="dropdown">

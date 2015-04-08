@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using StageBeheersTool.ViewModels;
@@ -44,10 +46,8 @@ namespace StageBeheersTool.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
-            ViewBag.ReturnUrl = returnUrl;
-
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace StageBeheersTool.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -77,7 +77,7 @@ namespace StageBeheersTool.Controllers
                 if (dataStudent["ACTIVE"] != 0) //inloggen gelukt
                 {
                     await SignInManager.SignInAsync(user, model.RememberMe, false);
-                    return RedirectToAction("Index", "Stageopdracht");
+                    return RedirectToStageopdrachtLijst(user);
                 }
                 else //inloggen mislukt
                 {
@@ -94,7 +94,7 @@ namespace StageBeheersTool.Controllers
                     user = await UserManager.FindByEmailAsync(model.Email);
                     if (user.EmailConfirmed)
                     {
-                        return RedirectToAction("Index", "Stageopdracht");
+                        return RedirectToStageopdrachtLijst(user);
                     }
                     else
                     {
@@ -198,7 +198,7 @@ namespace StageBeheersTool.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("Index", "Stageopdracht");
+                        return RedirectToAction("BedrijfMijnStages", "Stageopdracht");
                     }
                 }
             }
@@ -414,6 +414,26 @@ namespace StageBeheersTool.Controllers
             }
         }
 
+        private ActionResult RedirectToStageopdrachtLijst(ApplicationUser user)
+        {
+            if (UserManager.IsInRole(user.Id, Role.Student))
+            {
+                return RedirectToAction("BeschikbareStages", "Stageopdracht");
+            }
+            if (UserManager.IsInRole(user.Id, Role.Begeleider))
+            {
+                return RedirectToAction("MijnStages", "Stageopdracht");
+            }
+            if (UserManager.IsInRole(user.Id, Role.Bedrijf))
+            {
+                return RedirectToAction("BedrijfMijnStages", "Stageopdracht");
+            }
+            if (UserManager.IsInRole(user.Id, Role.Admin))
+            {
+                return RedirectToAction("BedrijfStageVoorstellen", "Stageopdracht");
+            }
+            return RedirectToAction("Index", "Home");
+        }
         #endregion
     }
 }

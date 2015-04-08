@@ -87,7 +87,7 @@
             </div>
         }
         <p style="background: lightgrey;border-radius: 45px;padding-left:10px;">
-            @Html.ActionLink("Terug naar overzicht", Model.OverzichtAction, new { }, new { })
+            @Html.ActionLink("Terug naar overzicht", Url.Encode(Model.OverzichtAction), new { }, new { })
             @if (CurrentUser.IsAdmin() || Model.ToonEdit)
             {
                 @Html.Raw("|")

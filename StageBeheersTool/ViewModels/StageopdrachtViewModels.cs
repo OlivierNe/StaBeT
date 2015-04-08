@@ -21,6 +21,7 @@ namespace StageBeheersTool.ViewModels
         public bool ToonCreateNew { get; set; }
         public bool ToonSemester { get; set; }
         public bool ToonBegeleider { get; set; }
+        public bool ToonAcademiejaar { get; set; }
 
         public string Title { get; set; }
         public string OverzichtAction { get; set; }

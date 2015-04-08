@@ -197,24 +197,42 @@ namespace StageBeheersTool.Controllers
             return View("StageOverzicht", model);
         }
 
-
         [Authorize(Role.Begeleider)]
         public ActionResult MijnStages()
         {
-            var stageopdrachten = _stageopdrachtRepository.FindStageopdrachtenVanBegeleider();
+            var stageopdrachten = _stageopdrachtRepository.FindStageopdrachtenVanHuidigeBegeleider();
             var model = new StageopdrachtIndexVM
             {
                 Stageopdrachten = stageopdrachten,
-                Title = "Mijn stages",
+                Title = Resources.TitelMijnStages,
                 ToonStudenten = true,
-                OverzichtAction = "MijnStages"
+                OverzichtAction = ControllerContext.RouteData.Values["action"].ToString()
             };
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View(model);
+            return View("StageOverzicht", model);
         }
+
+        [Authorize(Role.Bedrijf)]
+        public ActionResult BedrijfMijnStages()
+        {
+            var stageopdrachten = _stageopdrachtRepository.FindStageopdrachtenVanHuidigBedrijf();
+            var model = new StageopdrachtIndexVM
+            {
+                Stageopdrachten = stageopdrachten,
+                Title = Resources.TitelMijnStages,
+                ToonStudenten = true,
+                OverzichtAction = ControllerContext.RouteData.Values["action"].ToString()
+            };
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_StageopdrachtList", model);
+            }
+            return View("StageOverzicht", model);
+        }
+
 
         [Authorize(Role.Admin, Role.Begeleider, Role.Bedrijf)]
         public ActionResult Archief()
@@ -239,11 +257,12 @@ namespace StageBeheersTool.Controllers
             var model = new StageopdrachtIndexVM
             {
                 Stageopdrachten = stageopdrachten,
-                OverzichtAction = "Archief",
-                Title = "Stageopdrachten - " + academiejaar,
+                OverzichtAction = Request.RawUrl.Substring(15, (Request.RawUrl.Length - 16)), //ControllerContext.RouteData.Values["action"].ToString(), //archief
+                Title = academiejaar == null ? "Alle stageopdrachten" : "Overzicht stageopdrachten " + academiejaar,
                 Academiejaar = academiejaar,
                 ToonStudenten = true,
                 ToonBedrijf = true,
+                ToonAcademiejaar = (academiejaar == null),
                 Academiejaren = academiejaren
             };
             if (Request.IsAjaxRequest())
@@ -262,11 +281,12 @@ namespace StageBeheersTool.Controllers
             var model = new StageopdrachtIndexVM
             {
                 Stageopdrachten = stageopdrachten,
-                OverzichtAction = "MijnStagesVanAcademiejaar",
+                OverzichtAction = ControllerContext.RouteData.Values["action"].ToString(),
                 Title = academiejaar == null ? "Al mijn stages" : "Mijn Stages " + academiejaar,
                 Academiejaar = academiejaar,
                 ToonStudenten = true,
                 ToonBedrijf = true,
+                ToonAcademiejaar = (academiejaar == null),
                 Academiejaren = academiejaren
             };
             if (Request.IsAjaxRequest())
@@ -595,11 +615,11 @@ namespace StageBeheersTool.Controllers
             {
                 TempData["message"] = "Goegekeurde stages kunnen niet meer verwijderd worden.";
                 //TODO:return overzicht
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id });
             }
             _stageopdrachtRepository.Delete(stageopdracht);
             TempData["message"] = "Stageopdracht '" + stageopdracht.Titel + "' succesvol verwijderd.";
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id });
         }
         #endregion
 
