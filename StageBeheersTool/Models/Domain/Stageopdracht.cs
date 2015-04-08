@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using StageBeheersTool.Helpers;
 
@@ -94,7 +93,7 @@ namespace StageBeheersTool.Models.Domain
         #region Public methods
         public bool IsGoedgekeurd()
         {
-            return Status == StageopdrachtStatus.Goedgekeurd;
+            return Status == StageopdrachtStatus.Goedgekeurd || StageopdrachtStatus.Toegewezen == Status;
         }
 
         public bool IsAfgekeurd()

@@ -33,6 +33,7 @@ $(function () {
         var ajaxUrl = this.url + "&a=1";
         history.pushState({ url: ajaxUrl }, "", ajaxUrl);
         registerListener();
+        $("#grid-tableDiv").trigger("tableReloaded");
     };
 
     $searchForm.submit(function () {

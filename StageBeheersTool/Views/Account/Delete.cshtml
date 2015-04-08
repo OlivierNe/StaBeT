@@ -1,0 +1,27 @@
+﻿@model ApplicationUser
+
+@{
+    ViewBag.Title = "Gebruiker verwijderen";
+}
+
+<h3>Het login account van deze gebruiker verwijderen?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            E-mail
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+    </dl>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-offset-1 ">
+            <input type="submit" value="Verwijderen" class="btn btn-danger" />
+            @Html.ActionLink("Annuleren", "Index", new { }, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>
+<br />
+@Html.ActionLink("Terug naar overzicht", "Index")

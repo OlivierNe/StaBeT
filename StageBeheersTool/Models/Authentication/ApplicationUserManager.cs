@@ -127,6 +127,33 @@ namespace StageBeheersTool.Models.Authentication
             IList<string> roles = this.GetRoles(userId);
             return roles.Contains("bedrijf") || roles.Count == 0;
         }
+
+        public async Task RemoveFromAllRolesAsync(string userId)
+        {
+            var rolesForUser = await GetRolesAsync(userId);
+
+            if (rolesForUser.Count() > 0)
+            {
+                foreach (var role in rolesForUser.ToList())
+                {
+                    await RemoveFromRoleAsync(userId, role);
+                }
+            }
+        }
+
+        public async Task RemoveAllClaims(string userId)
+        {
+            var claims = await GetClaimsAsync(userId);
+            foreach (var claim in claims)
+            {
+                await RemoveClaimAsync(userId, claim);
+            }
+
+        }
+
     }
+
+
+
 
 }

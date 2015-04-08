@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -11,6 +12,7 @@ namespace StageBeheersTool.Models.Authentication
 {
     public class ApplicationUser : IdentityUser
     {
+     
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
@@ -46,5 +48,6 @@ namespace StageBeheersTool.Models.Authentication
             userIdentity.AddClaim(new Claim("Display", display));
             return userIdentity;
         }
+
     }
 }

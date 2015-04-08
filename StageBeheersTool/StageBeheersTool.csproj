@@ -209,6 +209,8 @@
     <Compile Include="Helpers\AuthorizeAttribute.cs" />
     <Compile Include="Helpers\AcademiejaarHelper.cs" />
     <Compile Include="Helpers\ExcelFileResult.cs" />
+    <Compile Include="Models\Authentication\UserWithRoles.cs" />
+    <Compile Include="Models\DAL\Extensions\LinqExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBedrijfExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBegeleiderExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableStudentExtensions.cs" />
@@ -352,6 +354,7 @@
     <Content Include="Images\foto-6.jpg" />
     <Content Include="Images\profiel.jpg" />
     <Content Include="Scripts\academiejaarInstellingen.js" />
+    <Content Include="Scripts\account-list.js" />
     <Content Include="Scripts\AddAdmin.js" />
     <Content Include="Scripts\createHogentPersoon.js" />
     <Content Include="Scripts\lib\bootstrap.js" />
@@ -453,7 +456,6 @@
     <Content Include="Views\Shared\DisplayTemplates\StagebegeleidAanvraagStatus.cshtml" />
     <Content Include="Views\Stageopdracht\Archief.cshtml" />
     <Content Include="Views\Stageopdracht\VanAcademiejaar.cshtml" />
-    <Content Include="Views\Stageopdracht\MijnStages.cshtml" />
     <Content Include="Views\Stageopdracht\MijnArchief.cshtml" />
     <Content Include="Views\Stageopdracht\_ZoekFormulierArchief.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
@@ -478,6 +480,10 @@
     <Content Include="Views\Stageopdracht\_StagebegeleidingAanvragen.cshtml" />
     <Content Include="Views\Stageopdracht\LijstExcel.cshtml" />
     <Content Include="Views\Stageopdracht\StageOverzicht.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\_UserList.cshtml" />
+    <Content Include="Views\Account\Delete.cshtml" />
+    <Content Include="Views\Account\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

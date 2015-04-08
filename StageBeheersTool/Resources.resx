@@ -326,4 +326,7 @@
   <data name="TitelMijnAanvragenStagebegeleiding" xml:space="preserve">
     <value>Mijn stagebegeleiding aanvragen</value>
   </data>
+  <data name="TitelOverzichtAppUsers" xml:space="preserve">
+    <value>Overzicht gebruikers</value>
+  </data>
 </root>

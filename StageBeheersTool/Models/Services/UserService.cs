@@ -1,4 +1,7 @@
-﻿using StageBeheersTool.Models.DAL;
+﻿using System.Collections.Generic;
+using Microsoft.AspNet.Identity.Owin;
+using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.DAL;
 using StageBeheersTool.Models.Domain;
 using System.Linq;
 using System.Web;
@@ -7,38 +10,38 @@ namespace StageBeheersTool.Models.Services
 {
     public class UserService : IUserService
     {
-        private StageToolDbContext ctx;
+        private readonly StageToolDbContext _dbContext;
 
         public UserService(StageToolDbContext ctx)
         {
-            this.ctx = ctx;
+            _dbContext = ctx;
         }
 
         public Bedrijf FindBedrijf()
         {
-            return ctx.Bedrijven.FirstOrDefault(bedrijf => bedrijf.Email == HttpContext.Current.User.Identity.Name);
+            return _dbContext.Bedrijven.FirstOrDefault(bedrijf => bedrijf.Email == HttpContext.Current.User.Identity.Name);
         }
 
         public Student FindStudent()
         {
-            return ctx.Studenten.FirstOrDefault(student => student.HogentEmail == HttpContext.Current.User.Identity.Name);
+            return _dbContext.Studenten.FirstOrDefault(student => student.HogentEmail == HttpContext.Current.User.Identity.Name);
         }
 
         public Begeleider FindBegeleider()
         {
-            return ctx.Begeleiders.FirstOrDefault(begeleider => begeleider.HogentEmail == HttpContext.Current.User.Identity.Name);
+            return _dbContext.Begeleiders.FirstOrDefault(begeleider => begeleider.HogentEmail == HttpContext.Current.User.Identity.Name);
         }
 
         public void SaveChanges()
         {
-            ctx.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
         public bool CreateUser(Bedrijf bedrijf)
         {
             if (UserExists(bedrijf))
                 return false;
-            ctx.Bedrijven.Add(bedrijf);
+            _dbContext.Bedrijven.Add(bedrijf);
             SaveChanges();
             return true;
         }
@@ -47,7 +50,7 @@ namespace StageBeheersTool.Models.Services
         {
             if (UserExists(begeleider))
                 return false;
-            ctx.Begeleiders.Add(begeleider);
+            _dbContext.Begeleiders.Add(begeleider);
             SaveChanges();
             return true;
         }
@@ -56,26 +59,49 @@ namespace StageBeheersTool.Models.Services
         {
             if (UserExists(student))
                 return false;
-            ctx.Studenten.Add(student);
+            _dbContext.Studenten.Add(student);
             SaveChanges();
             return true;
+        }
+
+        public IEnumerable<UserMetRoles> GetUsersWithRoles()
+        {
+            var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
+            var users = (from u in userManager.Users
+                           from ur in u.Roles
+                           join r in _dbContext.Roles on ur.RoleId equals r.Id
+                           group r.Name by new { u.UserName, u.Id } into user
+                           select new UserMetRoles() { Id = user.Key.Id, Login = user.Key.UserName, Roles = user.ToList() }).OrderBy(s => s.Login);
+
+            //group by u.Id);//DistinctBy(u => u.Id);
+            //foreach (var user in users)
+            //{
+            //    users.
+
+            //}
+
+            return users;
         }
 
         #region helpers
         private bool UserExists(Student student)
         {
-            return ctx.Studenten.Any(s => s.HogentEmail == student.HogentEmail);
+            return _dbContext.Studenten.Any(s => s.HogentEmail == student.HogentEmail);
         }
 
         private bool UserExists(Begeleider begeleider)
         {
-            return ctx.Begeleiders.Any(s => s.HogentEmail == begeleider.HogentEmail);
+            return _dbContext.Begeleiders.Any(s => s.HogentEmail == begeleider.HogentEmail);
         }
 
         private bool UserExists(Bedrijf bedrijf)
         {
-            return ctx.Bedrijven.Any(s => s.Email == bedrijf.Email);
+            return _dbContext.Bedrijven.Any(s => s.Email == bedrijf.Email);
         }
         #endregion
     }
+
+
+
 }

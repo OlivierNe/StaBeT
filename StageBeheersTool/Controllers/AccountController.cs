@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using StageBeheersTool.ViewModels;
@@ -42,6 +40,254 @@ namespace StageBeheersTool.Controllers
         {
             _userService = userService;
         }
+
+        #region Accounts beheren
+        [Authorize(Role.Admin, Role.Begeleider)]
+        public ActionResult Index(AccountListVM model)
+        {
+            var users = _userService.GetUsersWithRoles().Where(user => (string.IsNullOrWhiteSpace(model.LoginZoeken) ||
+                user.Login.ToLower().Contains(model.LoginZoeken.ToLower())) && ((model.IsAdmin && user.IsAdmin())
+                || (model.IsBegeleider && user.IsBegeleider()) || (model.IsStudent && user.IsStudent())
+                || (model.IsBedrijf && user.IsBedrijf())));
+            model.SetUsers(users);
+            model.ToonActies = CurrentUser.IsAdmin();
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_UserList", model);
+            }
+            return View(model);
+        }
+
+        //TODO:Import studenten stage uit bamaflex.
+        [Authorize(Role.Admin)]
+        public ActionResult Create()
+        {
+            return View(new AccountCreateVM());
+        }
+
+        [Authorize(Role.Admin)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(AccountCreateVM model)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return View(model);
+            }
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
+
+            IdentityResult result;
+            if (string.IsNullOrWhiteSpace(model.Wachtwoord))
+            {
+                result = await UserManager.CreateAsync(user
+                 , "wachtwoord"); //TODO:tijdelijk "wachtwoord" om te testen
+                //);
+            }
+            else
+            {
+                result = await UserManager.CreateAsync(user, model.Wachtwoord);
+            }
+            model.Title = "Nieuw account";
+            if (result.Succeeded)
+            {
+                if (model.Admin)
+                {
+                    await UserManager.AddToRoleAsync(user.Id, Role.Admin);
+                }
+                if (model.Begeleider)
+                {
+                    await UserManager.AddToRoleAsync(user.Id, Role.Begeleider);
+                    _userService.CreateUser(new Begeleider { HogentEmail = model.Email });
+                }
+                if (model.Student)
+                {
+                    await UserManager.AddToRoleAsync(user.Id, Role.Student);
+                    _userService.CreateUser(new Student { HogentEmail = model.Email });
+                }
+                if (model.Bedrijf)
+                {
+                    await UserManager.AddToRoleAsync(user.Id, Role.Bedrijf);
+                    _userService.CreateUser(new Bedrijf { Email = model.Email, Naam = model.Email });
+                }
+                TempData["message"] = "Account '" + user.UserName + "' succesvol aangemaakt.";
+            }
+            else
+            {
+                TempData["error"] = "Het aanmaken van een account voor '" + model.Email + "' is mislukt. Het account bestaat mogelijk al.";
+                return View(model);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Role.Admin)]
+        public ActionResult Edit(string id)
+        {
+            var user = UserManager.FindById(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            var model = new AccountCreateVM
+            {
+                Admin = UserManager.IsInRole(user.Id, Role.Admin),
+                Begeleider = UserManager.IsInRole(user.Id, Role.Begeleider),
+                Student = UserManager.IsInRole(user.Id, Role.Student),
+                Bedrijf = UserManager.IsInRole(user.Id, Role.Bedrijf),
+                Email = user.UserName,
+                Id = user.Id,
+                Title = "Account wijzigen"
+            };
+            return View("Create", model);
+        }
+
+        [Authorize(Role.Admin)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(AccountCreateVM model)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return View("Create", model);
+            }
+            var user = await UserManager.FindByIdAsync(model.Id);
+
+            var result = await EditAccount(model, user);
+
+            if (result.Succeeded)
+            {
+                TempData["message"] = "Account '" + user.UserName + "' succesvol gewijzigd.";
+            }
+            else
+            {
+                TempData["error"] = "Het aanmaken van een account voor '" + model.Email + "' is mislukt. Het account bestaat mogelijk al.";
+
+            }
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Role.Admin)]
+        [HttpPost]
+        public async Task<ActionResult> AjaxEdit(AccountCreateVM model)
+        {
+            if (ModelState.IsValid == false)
+            {
+                var errorMessage = "";
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        errorMessage += error.ErrorMessage;
+                    }
+                }
+                return Json(new { type = "error", message = errorMessage });
+            }
+            var user = await UserManager.FindByIdAsync(model.Id);
+
+            var result = await EditAccount(model, user);
+
+            var message = new { type = "", message = "" };
+            if (result.Succeeded)
+            {
+                return Json(new
+                {
+                    type = "success",
+                    message = "Account '" + user.UserName + "' succesvol gewijzigd.",
+                    model.Admin,
+                    model.Begeleider,
+                    model.Student,
+                    model.Bedrijf,
+                    model.Email
+                });
+            }
+            else
+            {
+                message = new { type = "error", message = "Het aanmaken van een account voor '" + model.Email + "' is mislukt. Het account bestaat mogelijk al." };
+            }
+            return Json(message);
+        }
+
+        private async Task<IdentityResult> EditAccount(AccountCreateVM model, ApplicationUser user)
+        {
+            if (model.Admin)
+            {
+                await UserManager.AddToRoleAsync(user.Id, Role.Admin);
+            }
+            else
+            {
+                await UserManager.RemoveFromRoleAsync(user.Id, Role.Admin);
+            }
+            if (model.Begeleider)
+            {
+                await UserManager.AddToRoleAsync(user.Id, Role.Begeleider);
+                _userService.CreateUser(new Begeleider { HogentEmail = model.Email });
+            }
+            else
+            {
+                await UserManager.RemoveFromRoleAsync(user.Id, Role.Begeleider);
+            }
+            if (model.Student)
+            {
+                await UserManager.AddToRoleAsync(user.Id, Role.Student);
+                _userService.CreateUser(new Student { HogentEmail = model.Email });
+            }
+            else
+            {
+                await UserManager.RemoveFromRoleAsync(user.Id, Role.Student);
+            }
+            if (model.Bedrijf)
+            {
+                await UserManager.AddToRoleAsync(user.Id, Role.Bedrijf);
+                await UserManager.ChangePasswordWithoutOldAsync(user, model.Wachtwoord);
+                _userService.CreateUser(new Bedrijf { Email = model.Email, Naam = model.Email });
+            }
+            else
+            {
+                await UserManager.RemoveFromRoleAsync(user.Id, Role.Bedrijf);
+            }
+            user.Email = model.Email;
+            user.UserName = model.Email;
+            return await UserManager.UpdateAsync(user);
+        }
+
+
+        [Authorize(Role.Admin)]
+        public ActionResult Delete(string id)
+        {
+            var user = UserManager.FindById(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        [Authorize(Role.Admin)]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(string id)
+        {
+            var user = UserManager.FindById(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            await UserManager.RemoveAllClaims(user.Id);
+            var result = await UserManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                TempData["message"] = "Account van '" + user.UserName + "' verwijderd.";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["error"] = "Account verwijderen mislukt.";
+            }
+            return View(user);
+        }
+        #endregion
 
         //
         // GET: /Account/Login

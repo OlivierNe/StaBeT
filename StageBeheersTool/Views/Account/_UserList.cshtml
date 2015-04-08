@@ -1,0 +1,32 @@
+﻿@model AccountListVM
+
+<div id="grid-tableDiv">
+    @Html.Grid(Model.Users).Columns(column =>
+    {
+        column.Add(u => u.Login).Titled("Login").Sortable(true);
+
+        column.Add(u => u.Admin).Titled("Admin").Sanitized(false).Encoded(false).
+            RenderValueAs(u => Html.CheckBox("Admin", u.Admin, new { disabled = "disabled" }));
+
+        column.Add(u => u.Begeleider).Titled("Begeleider").Sanitized(false).Encoded(false).
+            RenderValueAs(u => Html.CheckBox("Begeleider", u.Begeleider, new { disabled = "disabled" }));
+
+        column.Add(u => u.Student).Titled("Student").Sanitized(false).Encoded(false).
+          RenderValueAs(u => Html.CheckBox("Student", u.Student, new { disabled = "disabled" }));
+
+        column.Add(u => u.Bedrijf).Titled("Bedrijf").Sanitized(false).Encoded(false).
+            RenderValueAs(u => Html.CheckBox("Bedrijf", u.Bedrijf, new { disabled = "disabled" }));
+
+
+        if (Model.ToonActies)
+        {
+            column.Add().Sanitized(false).Encoded(false).
+                RenderValueAs(u => Html.ActionLink("Wijzigen", "Edit", new { u.Id }, new { @class = "btn btn-default editBtn" })).SetWidth(50);
+            column.Add().Sanitized(false).Encoded(false).
+                RenderValueAs(u => Html.ActionLink("Verwijderen", "Delete", new { u.Id }, new { @class = "btn btn-default delBtn" })).SetWidth(50);
+            column.Add().Sanitized(false).Encoded(false)
+                .RenderValueAs(u => Html.Hidden("Id", u.Id));
+        }
+
+    }).WithPaging(10).Sortable().EmptyText("Geen accounts gevonden.")
+</div>

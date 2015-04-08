@@ -42,26 +42,26 @@ namespace StageBeheersTool.Controllers
 
         #region lijsten
 
-        //[Authorize(Role.Student, Role.Bedrijf, Role.Begeleider, Role.Admin)]
-        //public ActionResult Index(StageopdrachtIndexVM model)
-        //{
-        //    var stageopdrachten = _stageopdrachtRepository.FindAll().WithFilter(model.Semester,
-        //        model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, model.Student);
-        //    model.Title = CurrentUser.IsBedrijf() ? "Overzicht stageopdrachten"
-        //        : "Overzicht stageopdrachten " + AcademiejaarHelper.HuidigAcademiejaar();
-        //    model.InitializeItems(stageopdrachten);
-        //    model.ToonZoeken = CurrentUser.IsBedrijf() == false;
-        //    model.ToonAantalStudenten = true;
-        //    model.ToonStudenten = CurrentUser.IsBegeleider() || CurrentUser.IsAdmin();
-        //    model.ToonStatus = CurrentUser.IsAdmin();
-        //    model.ToonBedrijf = CurrentUser.IsBedrijf();
-
-        //    if (Request.IsAjaxRequest())
-        //    {
-        //        return PartialView("_StageopdrachtList", model);
-        //    }
-        //    return View(model);
-        //}
+        [Authorize(Role.Student, Role.Bedrijf, Role.Begeleider, Role.Admin)]
+        public ActionResult Index(StageopdrachtIndexVM model)
+        {
+            if (CurrentUser.IsBegeleider())
+            {
+                return RedirectToAction("MijnStages", "Stageopdracht");
+            }
+            if (CurrentUser.IsBedrijf())
+            {
+                return RedirectToAction("BedrijfMijnStages", "Stageopdracht");
+            }
+            if (CurrentUser.IsAdmin())
+            {
+                return RedirectToAction("BedrijfStageVoorstellen", "Stageopdracht");
+            }
+            else //student
+            {
+                return RedirectToAction("BeschikbareStages", "Stageopdracht");
+            }
+        }
 
         /// <summary>
         /// Nog niet beoordeelde stageopdracht voorstellen van bedrijven
@@ -197,6 +197,9 @@ namespace StageBeheersTool.Controllers
             return View("StageOverzicht", model);
         }
 
+        /// <summary>
+        /// Alle stages van de ingelogde begeleider
+        /// </summary>
         [Authorize(Role.Begeleider)]
         public ActionResult MijnStages()
         {
@@ -215,6 +218,9 @@ namespace StageBeheersTool.Controllers
             return View("StageOverzicht", model);
         }
 
+        /// <summary>
+        /// alle stages van het ingelogde bedrijf
+        /// </summary>
         [Authorize(Role.Bedrijf)]
         public ActionResult BedrijfMijnStages()
         {
@@ -233,7 +239,6 @@ namespace StageBeheersTool.Controllers
             return View("StageOverzicht", model);
         }
 
-
         [Authorize(Role.Admin, Role.Begeleider, Role.Bedrijf)]
         public ActionResult Archief()
         {
@@ -241,12 +246,6 @@ namespace StageBeheersTool.Controllers
             return View(academiejaren);
         }
 
-        [Authorize(Role.Begeleider)]
-        public ActionResult MijnArchief()
-        {
-            var academiejaren = _stageopdrachtRepository.FindAllAcademiejarenVanBegeleider();
-            return View(academiejaren);
-        }
 
         [Authorize(Role.Admin, Role.Begeleider, Role.Bedrijf)]
         public ActionResult VanAcademiejaar(string academiejaar, string student, string bedrijf)
@@ -257,7 +256,7 @@ namespace StageBeheersTool.Controllers
             var model = new StageopdrachtIndexVM
             {
                 Stageopdrachten = stageopdrachten,
-                OverzichtAction = Request.RawUrl.Substring(15, (Request.RawUrl.Length - 16)), //ControllerContext.RouteData.Values["action"].ToString(), //archief
+                OverzichtAction = ControllerContext.RouteData.Values["action"].ToString(),
                 Title = academiejaar == null ? "Alle stageopdrachten" : "Overzicht stageopdrachten " + academiejaar,
                 Academiejaar = academiejaar,
                 ToonStudenten = true,
@@ -270,6 +269,13 @@ namespace StageBeheersTool.Controllers
                 return PartialView("_StageopdrachtList", model);
             }
             return View(model);
+        }
+
+        [Authorize(Role.Begeleider)]
+        public ActionResult MijnArchief()
+        {
+            var academiejaren = _stageopdrachtRepository.FindAllAcademiejarenVanBegeleider();
+            return View(academiejaren);
         }
 
         [Authorize(Role.Begeleider)]
@@ -293,7 +299,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("MijnStages", model);
+            return View("StageOverzicht", model);
         }
 
         [Authorize(Role.Admin)]
