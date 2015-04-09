@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using StageBeheersTool.Helpers;
 
@@ -16,6 +17,15 @@ namespace StageBeheersTool.Models.Domain
         public string Postcode { get; set; }
         public string Straat { get; set; }
         public string Telefoon { get; set; }
+
+        public Uri WebsiteUri
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(Website) ? null : new UriBuilder(Website).Uri;
+            }
+        }
+
         public string Website { get; set; }
         public string Bereikbaarheid { get; set; } //(wagen – openbaar vervoer – georganiseerd vervoer door bedrijf) 
         public string Bedrijfsactiviteiten { get; set; } //(bank – software ontwikkelaar – openbare diensten ….)
@@ -125,7 +135,7 @@ namespace StageBeheersTool.Models.Domain
             return false;
         }
 
-        public bool MagStageopdracgtWijzigen(Stageopdracht opdracht, DateTime? deadline)
+        public bool MagStageopdrachtWijzigen(Stageopdracht opdracht, DateTime? deadline)
         {
             if (opdracht == null)
             {
@@ -135,7 +145,7 @@ namespace StageBeheersTool.Models.Domain
             {
                 return true;
             }
-            if (!opdracht.Academiejaar.Equals(AcademiejaarHelper.HuidigAcademiejaar()))
+            if (opdracht.Academiejaar.Equals(AcademiejaarHelper.HuidigAcademiejaar()) == false)
             {
                 return false;
             }
@@ -180,6 +190,11 @@ namespace StageBeheersTool.Models.Domain
                     so.Contractondertekenaar = null;
                 }
             }
+        }
+
+        public bool HeeftGeldigEmail()
+        {
+            return new EmailAddressAttribute().IsValid(Email);
         }
 
         protected bool Equals(Bedrijf other)

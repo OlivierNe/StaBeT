@@ -6,17 +6,18 @@
     <h4>Details</h4>
     <dl class="dl-horizontal" style="margin-top:25px;">
         <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Bedrijf) </dt>
-        <dd style="white-space: pre-line">
-            @Html.DisplayFor(model => model.Stageopdracht.Bedrijf.Naam)
+        <dd>
+            @Html.ActionLink(Model.Stageopdracht.Bedrijf.Naam, "Details", "Bedrijf", new { Model.Stageopdracht.Bedrijf.Id }, new { })
+            |
             @if (Model.BedrijfHeeftGeldigEmail())
             {
                 <a href="mailto:@Model.Stageopdracht.Bedrijf.Email">@Model.Stageopdracht.Bedrijf.Email</a>
             }
-            @if (!string.IsNullOrWhiteSpace(@Model.Stageopdracht.Stageplaats))
-            {
-                <a href="https://maps.google.com/?q=@Model.Stageopdracht.Stageplaats" target="_blank">@Model.Stageopdracht.Stageplaats</a>
-            }
         </dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Stageplaats)</dt>
+        <dd><a href="https://maps.google.com/?q=@Model.Stageopdracht.Stageplaats" target="_blank">@Model.Stageopdracht.Stageplaats</a></dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.Stageopdracht.Semester)
         </dt>
@@ -62,7 +63,7 @@
         <dd>
             @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
         </dd>
-        @if (CurrentUser.IsAdmin() || CurrentUser.IsBegeleider())
+        @if (Model.ToonStudenten)
         {
             <dt>
                 @Html.DisplayNameFor(model => model.Stageopdracht.Studenten)
@@ -70,6 +71,9 @@
             <dd>
                 @Html.DisplayFor(model => model.Stageopdracht.ToonStudenten)
             </dd>
+        }
+        @if (Model.ToonStatus)
+        {
             <dt>
                 Status
             </dt>
@@ -80,53 +84,51 @@
     </dl>
 
     <div>
-        @if (Model.ToonEdit && CurrentUser.IsBedrijf())
+        @if (Model.ToonBedrijfeditDeadline)
         {
             <div class="text-warning">
                 @Model.EditDeadline
             </div>
         }
-        <p class="myBorder">
-            @Html.ActionLink("Terug naar overzicht", Model.OverzichtAction, new { }, new { })
-            @if (CurrentUser.IsAdmin() || Model.ToonEdit)
+        <p>
+            @if (Model.ToonEdit)
             {
-                @Html.Raw("|")
-                @Html.ActionLink("Aanpassen", "Edit", new { id = Model.Stageopdracht.Id }, new { })
+                @Html.ActionLink("Aanpassen", "Edit", new { Model.Stageopdracht.Id }, new { })
             }
-            @if (CurrentUser.IsAdmin() || CurrentUser.IsBedrijf() && (Model.Stageopdracht.IsGoedgekeurd() == false))
+            @if (Model.ToonVerwijderen)
             {
                 @Html.Raw("|")
-                @Html.ActionLink("Verwijderen", "Delete", new { id = Model.Stageopdracht.Id })
+                @Html.ActionLink("Verwijderen", "Delete", new { Model.Stageopdracht.Id }, new { @class = "btn btn-danger" })
             }
             @if (Model.ToonVoorkeurToevoegen)
             {
                 @Html.ActionLink("Toevoegen aan mijn voorkeurstages", "ToevoegenAanVoorkeur", "Stageopdracht",
-                    new { id = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Toevoegen aan mijn voorkeurstages." })
+                    new {  Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Toevoegen aan mijn voorkeurstages" })
             }
             @if (Model.ToonVoorkeurVerwijderen)
             {
                 @Html.ActionLink("Verwijderen uit mijn voorkeurstages", "VerwijderenUitVoorkeur", "Stageopdracht",
-                    new { ids = Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Verwijderen uit mijn voorkeurstages." })
+                    new { Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Verwijderen uit mijn voorkeurstages" })
             }
             @if (Model.ToonAanvraagIndienen)
             {
                 @Html.ActionLink("Deze stage begeleiden", "AanvraagIndienen", "Stageopdracht",
-                    new { id = Model.Stageopdracht.Id, overzicht = Model.OverzichtAction }
-                        , new { @class = "btn btn-default", @title = "Aanvraag om deze stage te begeleiden indienen" })
+                    new { Model.Stageopdracht.Id, overzicht = Model.OverzichtAction }
+                    , new { @class = "btn btn-default", @title = "Aanvraag om deze stage te begeleiden indienen" })
             }
             @if (Model.ToonAanvraagAnnuleren)
             {
                 @Html.ActionLink("Aanvraag annuleren", "AanvraagAnnuleren", "Stageopdracht",
-                         new { id = Model.Stageopdracht.Id, overzicht = Model.OverzichtAction }, new { @class = "btn btn-default", @title = "Aanvraag om deze stage te begeleiden annuleren" })
+                    new { Model.Stageopdracht.Id, overzicht = Model.OverzichtAction },
+                    new { @class = "btn btn-default", @title = "Aanvraag om deze stage te begeleiden annuleren" })
             }
 
-            @if (CurrentUser.IsAdmin())
+            @if (Model.ToonOordelen)
             {
-                @Html.Raw("|")
-                @Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { id = Model.Stageopdracht.Id })
-                @Html.Raw("|")
-                @Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { id = Model.Stageopdracht.Id })
+                @Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { Model.Stageopdracht.Id }, new { @class = "btn btn-success" })
+                @Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { Model.Stageopdracht.Id }, new { @class = "btn btn-danger" })
             }
         </p>
     </div>
+    @Html.ActionLink("Terug naar overzicht", Model.OverzichtAction, new { }, new { })
 </div>

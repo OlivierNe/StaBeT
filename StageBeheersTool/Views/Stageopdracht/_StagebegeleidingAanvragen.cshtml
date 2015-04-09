@@ -5,7 +5,7 @@
     {
         columns.Add(so => so.Stage.Titel).Titled("Stage").Sanitized(false).Encoded(false)
             .RenderValueAs(so => Html.ActionLink(so.Stage.Titel, "details", "Stageopdracht",
-                new { id = so.Stage.Id }, new { })).SetWidth(150);
+                new {so.Stage.Id }, new { })).SetWidth(150);
         columns.Add(so => so.Begeleider.Familienaam).Titled("Begeleider").Sanitized(false).Encoded(false)
             .RenderValueAs(so => Html.ActionLink(so.Begeleider.Naam, "details", "Begeleider",
                 new { id = so.Begeleider.Id }, new { })).SetWidth(150);

@@ -26,25 +26,35 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult Index(string naam, string voornaam)
+        public ActionResult Index(StudentListVM model)
         {
-            var studenten = _studentRepository.FindAll().WithFilter(naam, voornaam);
+            var studenten = _studentRepository.FindAll().WithFilter(model.Naam, model.Voornaam);
+            model.Studenten = studenten;
+
+            model.ToonCreateNew = CurrentUser.IsAdmin();
+
             if (Request.IsAjaxRequest())
             {
-                return PartialView("_studentList", studenten);
+                return PartialView("_studentList", model);
             }
-            return View(studenten);
+            return View(model);
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult MetToegewezenStage(string naam, string voornaam )
+        public ActionResult MetToegewezenStage(StudentListVM model)
         {
-            var studenten = _studentRepository.FindStudentenMetToegewezenStage().WithFilter(naam, voornaam);;
+            var studenten = _studentRepository.FindStudentenMetToegewezenStage()
+                .WithFilter(model.Naam, model.Voornaam);
+            model.Studenten = studenten;
+
+            model.ToonStage = true;
+            model.Overzicht = ControllerContext.RouteData.Values["action"].ToString();
+
             if (Request.IsAjaxRequest())
             {
-                return PartialView("_studentList", studenten);
+                return PartialView("_studentList", model);
             }
-            return View("Index", studenten);
+            return View("Index", model);
         }
 
         [Authorize(Role.Admin)]
@@ -80,7 +90,7 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider, Role.Student)]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, string overzicht = "Index")
         {
             var student = FindStudent(id);
             if (student == null)
@@ -90,6 +100,7 @@ namespace StageBeheersTool.Controllers
             var model = Mapper.Map<StudentDetailsVM>(student);
             model.ToonEdit = CurrentUser.IsStudent() || CurrentUser.IsAdmin();
             model.ToonTerugNaarLijst = CurrentUser.IsAdmin() || CurrentUser.IsBegeleider();
+            model.Overzicht = overzicht;
             return View(model);
         }
 

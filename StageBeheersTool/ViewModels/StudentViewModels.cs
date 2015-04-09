@@ -5,6 +5,19 @@ using System.Web.Mvc;
 
 namespace StageBeheersTool.ViewModels
 {
+    public class StudentListVM
+    {
+        public IEnumerable<Student> Studenten { get; set; }
+        
+        public bool ToonStage { get; set; }
+        public bool ToonCreateNew { get; set; }
+
+        public string Overzicht { get; set; }
+
+        public string Naam { get; set; }
+        public string Voornaam { get; set; }
+    }
+
     public class StudentCreateVM
     {
         [EmailAddress]
@@ -70,6 +83,7 @@ namespace StageBeheersTool.ViewModels
         public string Gsm { get; set; }
         public string FotoUrl { get; set; }
 
+        public string Overzicht { get; set; }
         public bool ToonEdit { get; set; }
         public bool ToonTerugNaarLijst { get; set; }
     }

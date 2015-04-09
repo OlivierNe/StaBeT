@@ -329,4 +329,25 @@
   <data name="TitelOverzichtAppUsers" xml:space="preserve">
     <value>Overzicht gebruikers</value>
   </data>
+  <data name="ErrorStageNietMeerBeschikbaar" xml:space="preserve">
+    <value>De stageopdracht is niet meer beschikbaar.</value>
+  </data>
+  <data name="SuccesStagedossierAangeduidAlsIngediend" xml:space="preserve">
+    <value>Stagedossier voor stageopdracht  '{0}' aangeduid als ingediend.</value>
+    <comment>0=titel stageopdracht</comment>
+  </data>
+  <data name="TitelMijnVoorkeurStages" xml:space="preserve">
+    <value>Mijn voorkeurstages</value>
+  </data>
+  <data name="TitelStagedossierenGoedkeuren" xml:space="preserve">
+    <value>Stagedossieren goedkeuren</value>
+  </data>
+  <data name="SuccesStagedossierAfgekeurd" xml:space="preserve">
+    <value>Stagedossier van {0} afgekeurd.</value>
+    <comment>0=naamstudent</comment>
+  </data>
+  <data name="SuccesStagedossierGoedgekeurd" xml:space="preserve">
+    <value>Stagedossier van {0} goedgekeurd.</value>
+    <comment>0=naamstudent</comment>
+  </data>
 </root>

@@ -105,6 +105,10 @@ li.nav:hover {
     padding: 5px 10px;
 }
 
+.omschrijving {
+    white-space: pre-line;
+}
+
 /*.container {
     background-color: #fafafa;
     border-radius: 10px;

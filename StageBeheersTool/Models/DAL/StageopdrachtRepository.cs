@@ -15,6 +15,7 @@ namespace StageBeheersTool.Models.DAL
         private readonly StageToolDbContext _dbContext;
         private readonly DbSet<Stageopdracht> _stageopdrachten;
         private readonly DbSet<StagebegeleidingAanvraag> _aanvragen;
+        private readonly DbSet<StudentVoorkeurStage> _studentVoorkeurStages;
         private readonly IUserService _userService;
 
         public StageopdrachtRepository(StageToolDbContext ctx, IUserService userService)
@@ -22,6 +23,7 @@ namespace StageBeheersTool.Models.DAL
             _dbContext = ctx;
             _userService = userService;
             _aanvragen = ctx.StageBegeleidAanvragen;
+            _studentVoorkeurStages = ctx.StudentVoorkeurStages;
             _stageopdrachten = ctx.Stageopdrachten;
         }
 
@@ -129,6 +131,24 @@ namespace StageBeheersTool.Models.DAL
                 .Where(IsinHuidigAcademiejaar())
                 .Where(so => so.Bedrijf.Id == ingelogdBedrijf.Id)
                 .IncludeAndOrder();
+        }
+
+        /// <summary>
+        /// lijst stageopdrachten/studenten met ingediend stagedossier. studenten nog niet gekoppeld aan stage
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<StudentVoorkeurStage> FindAllStudentVoorkeurenMetIngediendStagedossier()
+        {
+            var huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
+            return _studentVoorkeurStages
+                .Include(voorkeur => voorkeur.Student).Include(voorkeur => voorkeur.Stageopdracht)
+                .Where(voorkeur => voorkeur.StagedossierIngediend && voorkeur.Stageopdracht.Academiejaar == huidigAcademiejaar)// && voorkeur.Student.Stages.Any(ssr => ssr.Stage.Id == voorkeur.Stageopdracht.Id) == false)
+                .OrderBy(voorkeur => voorkeur.Student.Familienaam);
+        }
+
+        public StudentVoorkeurStage FindStudentVoorkeurStageByIds(int studentId, int stageId)
+        {
+            return _studentVoorkeurStages.SingleOrDefault(s => s.Student.Id == studentId && s.Stageopdracht.Id == stageId);
         }
 
         public IQueryable<Stageopdracht> FindAllFromAcademiejaar(string academiejaar)

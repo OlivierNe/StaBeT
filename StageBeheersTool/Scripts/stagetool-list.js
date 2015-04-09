@@ -1,6 +1,7 @@
-﻿"use strict";
-
+﻿/*van zoek/pagina/sorteer requests ajax requests maken. 
+ triggers tableReloaded event.*/
 $(function () {
+    "use strict";
     var $inputs = $("#searchForm input, #searchForm select");
     var $searchA = $("#searchA");
     var $cancelBtn = $("#CancelBtn");
@@ -25,7 +26,6 @@ $(function () {
         $searchForm.submit();
         $searchA.css("display", "inline");
         $searchForm.css("display", "none");
-
     });
 
     var ajaxDone = function (data) {

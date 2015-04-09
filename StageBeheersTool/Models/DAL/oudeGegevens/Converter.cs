@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OudeGegevens;
-using StageBeheersTool.Models.DAL;
 using StageBeheersTool.Models.Domain;
 using OudeGegevens.Models;
 
@@ -22,6 +16,9 @@ namespace StageBeheersTool.OudeGegevens
                 if (contact.Email != String.Empty) email = contact.Email;
                 break;
             }
+
+            //var website = new UriBuilder(stagebedrijf.website).Uri;
+
             return new Bedrijf()
             {
                 Naam = stagebedrijf.naam,

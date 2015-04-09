@@ -1,12 +1,17 @@
-﻿@model IEnumerable<Student>
+﻿@model StudentListVM
 
 <div id="grid-tableDiv">
-    @Html.Grid(Model).Columns(column =>
-{
-    column.Add(s => s.Familienaam).Encoded(false).Sanitized(false)
-        .RenderValueAs(s => Html.ActionLink(s.Naam, "Details", "Student", new { id = s.Id }, new { })).Titled("Naam");
-    column.Add(s => s.HogentEmail).Titled("HoGent E-mail").Encoded(false).Sanitized(false)
-        .RenderValueAs(s => "<a href=\"mailto:" + s.HogentEmail + "\">" + s.HogentEmail + "</a>");
-
-}).Sortable(true).WithPaging(10).EmptyText("Geen studenten gevonden")
+    @Html.Grid(Model.Studenten).Columns(columns =>
+    {
+        columns.Add(s => s.Familienaam).Encoded(false).Sanitized(false)
+            .RenderValueAs(s => Html.ActionLink(s.Naam, "Details", "Student", new { s.Id, Model.Overzicht }, new { })).Titled("Naam");
+        columns.Add(s => s.HogentEmail).Titled("HoGent E-mail").Encoded(false).Sanitized(false)
+            .RenderValueAs(s => "<a href=\"mailto:" + s.HogentEmail + "\">" + s.HogentEmail + "</a>");
+        if (Model.ToonStage)
+        {
+            columns.Add(s => s.MijnStageopdracht.Titel).Titled("Stage").Sanitized(false).Encoded(false)
+                .RenderValueAs(so => Html.ActionLink(so.MijnStageopdracht.Titel, "details", "Stageopdracht",
+                    new {so.MijnStageopdracht.Id}, new {})).SetWidth(350);
+        }
+    }).Sortable(true).WithPaging(10).EmptyText("Geen studenten gevonden")
 </div>

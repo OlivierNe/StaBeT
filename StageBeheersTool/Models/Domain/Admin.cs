@@ -34,5 +34,17 @@ namespace StageBeheersTool.Models.Domain
         {
             stageopdracht.Status = StageopdrachtStatus.Afgekeurd;
         }
+
+        public static bool KeurStagedossierGoed(StudentVoorkeurStage voorkeurStage)
+        {
+            voorkeurStage.Status = StagedossierStatus.Goedgekeurd;
+            return true;
+        }
+
+        public static bool KeurStagedossierAf(StudentVoorkeurStage voorkeurStage)
+        {
+            voorkeurStage.Status = StagedossierStatus.Afgekeurd;
+            return true;
+        }
     }
 }

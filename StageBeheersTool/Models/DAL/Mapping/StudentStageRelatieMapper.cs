@@ -3,11 +3,11 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace StageBeheersTool.Models.DAL.Mapping
 {
-    public class StudentStageRelatieMapper : EntityTypeConfiguration<StageStudentRelatie>
+    public class StageStudentRelatieMapper : EntityTypeConfiguration<StageStudentRelatie>
     {
-        public StudentStageRelatieMapper()
+        public StageStudentRelatieMapper()
         {
-            this.ToTable("StageStudentRelaties");
+            this.ToTable("Student_Stage_Relaties");
             this.HasRequired(ssr => ssr.Student);
             this.HasRequired(ssr => ssr.Stage);
             this.HasKey(ssr => new { ssr.StudentId, ssr.StageId});

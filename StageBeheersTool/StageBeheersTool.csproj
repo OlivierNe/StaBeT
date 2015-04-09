@@ -225,8 +225,9 @@
     <Compile Include="Models\DAL\AcademiejaarRepository.cs" />
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
     <Compile Include="Models\DAL\Mapping\AcademiejaarInstellingenMapper.cs" />
-    <Compile Include="Models\DAL\Mapping\StageBegeleidAanvraagMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\StageBegeleidingAanvraagMapper.cs" />
     <Compile Include="Models\DAL\Mapping\StudentStageRelatieMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\StudentVoorkeurStageMapper.cs" />
     <Compile Include="Models\DAL\oudeGegevens\Converter.cs" />
     <Compile Include="Models\DAL\oudeGegevens\OudeGegevensDbContext.cs" />
     <Compile Include="Models\Domain\AcademiejaarInstellingen.cs" />
@@ -237,8 +238,10 @@
     <Compile Include="Models\Domain\Interfaces\IContactpersoonRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\IImageService.cs" />
     <Compile Include="Models\Domain\Interfaces\ISpreadsheetService.cs" />
-    <Compile Include="Models\Domain\StageBegeleidAanvraag.cs" />
+    <Compile Include="Models\Domain\StageBegeleidingAanvraag.cs" />
+    <Compile Include="Models\Domain\StagedossierStatus.cs" />
     <Compile Include="Models\Domain\StageStudentRelatie.cs" />
+    <Compile Include="Models\Domain\StudentVoorkeurStage.cs" />
     <Compile Include="Models\Services\ImageService.cs" />
     <Compile Include="Models\Services\SpreadsheetService.cs" />
     <Compile Include="Models\Services\UserService.cs" />
@@ -396,6 +399,9 @@
     <Content Include="Scripts\stagetool-list.js" />
     <Content Include="Scripts\stagetool.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Begeleider\Delete.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -414,7 +420,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
@@ -475,15 +480,16 @@
     <Content Include="Views\Begeleider\Index.cshtml" />
     <Content Include="Views\Student\Create.cshtml" />
     <Content Include="Views\Begeleider\Create.cshtml" />
-    <Content Include="Views\Begeleider\Delete.cshtml" />
     <Content Include="Views\Student\Delete.cshtml" />
     <Content Include="Views\Stageopdracht\_StagebegeleidingAanvragen.cshtml" />
     <Content Include="Views\Stageopdracht\LijstExcel.cshtml" />
     <Content Include="Views\Stageopdracht\StageOverzicht.cshtml" />
-    <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\_UserList.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
     <Content Include="Views\Account\Create.cshtml" />
+    <Content Include="Views\Stageopdracht\AanduidenDossierIngediend.cshtml" />
+    <Content Include="Views\Stageopdracht\StagesMetStagedossier.cshtml" />
+    <Content Include="Views\Stageopdracht\_StagesMetStagedossier.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

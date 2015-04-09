@@ -1,11 +1,10 @@
-﻿@model IEnumerable<Student>
-
+﻿@model StudentListVM
 @{
     ViewBag.Title = "Studenten";
 }
 
 <h2>@ViewBag.Title</h2>
-@if (CurrentUser.IsAdmin())
+@if (Model.ToonCreateNew)
 {
     <p>
         @Html.ActionLink("Nieuwe student", "Create")

@@ -49,7 +49,7 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
-        [Authorize(Role.Bedrijf, Role.Admin, Role.Begeleider)]
+        [Authorize(Role.Bedrijf, Role.Admin, Role.Begeleider, Role.Student)]
         public ActionResult Details(int? id)
         {
             var bedrijf = _bedrijfRepository.FindById(id);

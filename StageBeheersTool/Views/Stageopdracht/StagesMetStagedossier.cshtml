@@ -1,0 +1,15 @@
+﻿@model IEnumerable<StudentVoorkeurStage>
+
+@{
+    ViewBag.Title = Resources.TitelStagedossierenGoedkeuren;
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_StagesMetStagedossier")
+
+@section scripts{
+    <script src="~/Scripts/stagetool-list.js"></script>
+}
+
+

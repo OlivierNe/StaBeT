@@ -259,6 +259,15 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to De stageopdracht is niet meer beschikbaar..
+        /// </summary>
+        public static string ErrorStageNietMeerBeschikbaar {
+            get {
+                return ResourceManager.GetString("ErrorStageNietMeerBeschikbaar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Foute stageperiode voor semester 1: begindatum moet na de einddatum liggen.
         /// </summary>
         public static string ErrorStageperiodeSem1 {
@@ -372,6 +381,33 @@ namespace StageBeheersTool {
         public static string SuccesStagebegeleidingAfgekeurdBegeleiderLosgekoppeld {
             get {
                 return ResourceManager.GetString("SuccesStagebegeleidingAfgekeurdBegeleiderLosgekoppeld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stagedossier voor stageopdracht  &apos;{0}&apos; aangeduid als ingediend..
+        /// </summary>
+        public static string SuccesStagedossierAangeduidAlsIngediend {
+            get {
+                return ResourceManager.GetString("SuccesStagedossierAangeduidAlsIngediend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stagedossier van {0} afgekeurd..
+        /// </summary>
+        public static string SuccesStagedossierAfgekeurd {
+            get {
+                return ResourceManager.GetString("SuccesStagedossierAfgekeurd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stagedossier van {0} goedgekeurd..
+        /// </summary>
+        public static string SuccesStagedossierGoedgekeurd {
+            get {
+                return ResourceManager.GetString("SuccesStagedossierGoedgekeurd", resourceCulture);
             }
         }
         
@@ -520,6 +556,15 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mijn voorkeurstages.
+        /// </summary>
+        public static string TitelMijnVoorkeurStages {
+            get {
+                return ResourceManager.GetString("TitelMijnVoorkeurStages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nieuw bedrijf.
         /// </summary>
         public static string TitelNieuwBedrijf {
@@ -597,6 +642,15 @@ namespace StageBeheersTool {
         public static string TitelParametersAcademiejaar {
             get {
                 return ResourceManager.GetString("TitelParametersAcademiejaar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stagedossieren goedkeuren.
+        /// </summary>
+        public static string TitelStagedossierenGoedkeuren {
+            get {
+                return ResourceManager.GetString("TitelStagedossierenGoedkeuren", resourceCulture);
             }
         }
         

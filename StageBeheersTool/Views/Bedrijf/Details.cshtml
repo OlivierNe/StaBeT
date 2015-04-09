@@ -2,30 +2,27 @@
 
 @{
     ViewBag.Title = "Bedrijfsgegevens";
-    var message = TempData["message"];
 }
 
 <h2>@ViewBag.Title</h2>
 
 <div>
-    <div class="text-success">
-        @message
-    </div>
-    @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id })
     @if (User.IsInRole(Role.Bedrijf))
     {
+        @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id })
         @Html.Raw("|")
         @Html.ActionLink("Wachtwoord wijzigen", "ChangePassword", "Account")
     }
     else if (User.IsInRole(Role.Admin) || User.IsInRole(Role.Begeleider))
     {
+        @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id })
         @Html.Raw("|")
         @Html.ActionLink("Terug naar lijst", "Index", "Bedrijf")
     }
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            E-mail
         </dt>
 
         <dd>
@@ -44,7 +41,7 @@
             @Html.DisplayNameFor(model => model.Website)
         </dt>
         <dd>
-            <a href="@Model.Website" target="_blank">@Model.Website</a>
+            <a href="@Model.WebsiteUri" target="_blank">@Model.WebsiteUri</a>
         </dd>
             
         <dt>

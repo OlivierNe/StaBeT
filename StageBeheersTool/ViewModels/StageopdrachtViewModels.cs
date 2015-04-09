@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace StageBeheersTool.ViewModels
 {
-    public class StageopdrachtIndexVM
+    public class StageopdrachtListVM
     {
         public IEnumerable<Stageopdracht> Stageopdrachten { get; set; }
         public bool ToonZoeken { get; set; }
@@ -22,6 +22,10 @@ namespace StageBeheersTool.ViewModels
         public bool ToonSemester { get; set; }
         public bool ToonBegeleider { get; set; }
         public bool ToonAcademiejaar { get; set; }
+        public bool ToonDossierIndienen { get; set; }
+
+        public int? StageIdDossierIngediend { get; set; }
+        public StagedossierStatus? CurrentStudentStagedossierStatus { get; set; }
 
         public string Title { get; set; }
         public string OverzichtAction { get; set; }
@@ -100,10 +104,15 @@ namespace StageBeheersTool.ViewModels
         public bool ToonVoorkeurToevoegen { get; set; }
         public bool ToonVoorkeurVerwijderen { get; set; }
         public bool ToonEdit { get; set; }
+        public bool ToonVerwijderen { get; set; }
+        public bool ToonBedrijfeditDeadline { get; set; }
         public bool ToonAanvraagIndienen { get; set; }
         public bool ToonAanvraagAnnuleren { get; set; }
+        public bool ToonOordelen { get; set; }
+        public bool ToonStudenten { get; set; }
+        public bool ToonStatus { get; set; }
 
-        private string _overzichtAction = null;
+        private string _overzichtAction;
         public string OverzichtAction { get { return _overzichtAction ?? "Index"; } set { _overzichtAction = value; } }
 
         public string Stagementor
@@ -140,16 +149,6 @@ namespace StageBeheersTool.ViewModels
         public bool BedrijfHeeftGeldigEmail()
         {
             return new EmailAddressAttribute().IsValid(Stageopdracht.Bedrijf.Email);
-        }
-
-        public string Bedrijf
-        {
-            get
-            {
-                var retVal = Stageopdracht.Bedrijf.Naam;
-                retVal += "\n" + Stageopdracht.Bedrijf.Adres;
-                return retVal;
-            }
         }
     }
 
@@ -391,5 +390,12 @@ namespace StageBeheersTool.ViewModels
             }
             return headers;
         }
+    }
+
+    public class AanduidenDossierIngediend
+    {
+        public Stageopdracht Stageopdracht { get; set; }
+        public Student Student { get; set; }
+
     }
 }

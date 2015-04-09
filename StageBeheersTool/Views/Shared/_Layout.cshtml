@@ -23,6 +23,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                @*<ul class="nav navbar-nav col-xs-6">*@
                     @if (CurrentUser.IsBedrijf())
                     {
                         @Html.Partial("_BedrijfHeader")
@@ -50,7 +51,7 @@
                     {
                         @Html.Partial("_BegeleiderHeader")
                     }
-                  
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

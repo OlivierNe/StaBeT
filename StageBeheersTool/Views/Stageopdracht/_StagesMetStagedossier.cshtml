@@ -1,0 +1,19 @@
+﻿@model IEnumerable<StudentVoorkeurStage>
+
+@Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(so => so.Stageopdracht.Titel).Titled("Titel")
+           .Encoded(false).Sanitized(false)
+           .RenderValueAs(so =>
+               Html.ActionLink(so.Stageopdracht.Titel,
+               "Details", new { so.Stageopdracht.Id, overzicht = "StagesMetStagedossier" })).SetWidth(300);
+    columns.Add(so => so.Student.Familienaam).Titled("Student").Sanitized(false).Encoded(false)
+            .RenderValueAs(so => Html.ActionLink(so.Student.Naam, "details", "Student",
+                new { id = so.Student.Id }, new { })).SetWidth(150);
+    columns.Add(so => so.Status).Titled("Stagedossier status");
+    columns.Add().Sanitized(false).Encoded(false).RenderValueAs(s => Html.ActionLink("Goedkeuren", "StagedossierGoedkeuren",
+        new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id }, new { @class = "btn btn-default" }));
+    columns.Add().Sanitized(false).Encoded(false).RenderValueAs(s => Html.ActionLink("Afkeuren", "StagedossierAfkeuren",
+      new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id }, new { @class = "btn btn-default" }));
+
+}).Sortable(true).WithPaging(10).EmptyText("Geen stageopdrachten gevonden")

@@ -1,0 +1,63 @@
+﻿@model Begeleider
+
+@{
+    ViewBag.Title = "Stagebegeleider verwijderen";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Deze stagebegeleider definitief verwijderen?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Naam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Naam)
+        </dd>
+
+        <dt>
+            HoGent E-mail
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HogentEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefoon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefoon)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gsm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gsm)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Verwijderen" class="btn btn-default" /> 
+            @Html.ActionLink("Annuleren", "Index", "Begeleider", new { }, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

@@ -1,4 +1,4 @@
-﻿@model StageopdrachtIndexVM
+﻿@model StageopdrachtListVM
 
 <div id="grid-tableDiv">
     @Html.Grid(Model.Stageopdrachten).Columns(columns =>
@@ -76,11 +76,28 @@
         if (Model.ToonOordelen)
         {
             columns.Add().Sanitized(false).Encoded(false)
-                .RenderValueAs(so => so.Status != StageopdrachtStatus.Goedgekeurd
+                .RenderValueAs(so => so.IsGoedgekeurd() == false
                     ? Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
             columns.Add().Sanitized(false).Encoded(false)
-                .RenderValueAs(so => so.Status != StageopdrachtStatus.Afgekeurd
+                .RenderValueAs(so => so.IsAfgekeurd() == false
                     ? Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
+        }
+        if (Model.ToonDossierIndienen)
+        {
+            columns.Add().Sanitized(false).Encoded(false)
+                .RenderValueAs(so =>
+                {
+                    if (Model.StageIdDossierIngediend == null)
+                    {
+                        return Html.ActionLink("Stagedossier ingediend", "AanduidenDossierIngediend",
+                            new { so.Id }, new { @class = "btn btn-default", title = "Aanduiden dat mijn stagedossier voor deze stageopdracht is ingediend" });
+                    }
+                    if (so.Id == Model.StageIdDossierIngediend)
+                    {
+                        return new MvcHtmlString("<div class='text text-info'>Stagedossier " + Model.CurrentStudentStagedossierStatus + "</div>");
+                    }
+                    return MvcHtmlString.Empty;
+                });
         }
     }).WithPaging(10).Sortable().EmptyText("Geen stageopdrachten gevonden")
 </div>

@@ -69,6 +69,8 @@ namespace StageBeheersTool.Models.Domain
         public virtual Begeleider Stagebegeleider { get; set; }
         public virtual Bedrijf Bedrijf { get; set; }
         public virtual ICollection<StageStudentRelatie> Studenten { get; set; }
+        public virtual ICollection<StudentVoorkeurStage> StudentVoorkeurStages { get; set; }
+
         public StageopdrachtStatus Status { get; set; }
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
@@ -128,6 +130,23 @@ namespace StageBeheersTool.Models.Domain
         public int AantalToegewezenStudenten()
         {
             return Studenten.Count;
+        }
+
+        public bool IsBeschikbaar()
+        {
+            if (IsInHuidigAcademiejaar() == false)
+            {
+                return false;
+            }
+            if (IsVolledigIngenomen())
+            {
+                return false;
+            }
+            if (IsAfgekeurd())
+            {
+                return false;
+            }
+            return true;
         }
         #endregion
 

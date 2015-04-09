@@ -5,6 +5,9 @@
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right">
+            @*<ul class="nav navbar-nav navbar-right col-xs-6 text-right pull-right">*@
+            @*<li class="pull-right">
+            *@
             <li>
                 @if (CurrentUser.IsStudent())
                 {
@@ -40,17 +43,18 @@
                 }
                 else if (CurrentUser.IsAdmin())
                 {
-                    @Html.ActionLink(IdentityHelpers.GetDisplayName(), "", "")
+                    @Html.ActionLink(IdentityHelpers.GetDisplayName(), "Index", "Home")
                 }
                 </li>
                 <li><a href="javascript:document.getElementById('logoutForm').submit()">Afmelden</a></li>
+                @*</li>*@
             </ul>
     }
 }
 else
 {
-<ul class="nav navbar-nav navbar-right">
-    <li>@Html.ActionLink("Nieuwe stagebedrijven", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-    <li>@Html.ActionLink("Aanmelden", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-</ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Nieuwe stagebedrijven", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Aanmelden", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
 }
