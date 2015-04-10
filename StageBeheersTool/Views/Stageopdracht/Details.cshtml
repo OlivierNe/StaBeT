@@ -93,17 +93,16 @@
         <p>
             @if (Model.ToonEdit)
             {
-                @Html.ActionLink("Aanpassen", "Edit", new { Model.Stageopdracht.Id }, new { })
+                @Html.ActionLink("Aanpassen", "Edit", new { Model.Stageopdracht.Id }, new { @class = "btn btn-default" })
             }
             @if (Model.ToonVerwijderen)
             {
-                @Html.Raw("|")
-                @Html.ActionLink("Verwijderen", "Delete", new { Model.Stageopdracht.Id }, new { @class = "btn btn-danger" })
+                @Html.ActionLink("Verwijderen", "Delete", new { Model.Stageopdracht.Id }, new { @class = "btn btn-default" })
             }
             @if (Model.ToonVoorkeurToevoegen)
             {
                 @Html.ActionLink("Toevoegen aan mijn voorkeurstages", "ToevoegenAanVoorkeur", "Stageopdracht",
-                    new {  Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Toevoegen aan mijn voorkeurstages" })
+                    new { Model.Stageopdracht.Id }, new { @class = "btn btn-default", @title = "Toevoegen aan mijn voorkeurstages" })
             }
             @if (Model.ToonVoorkeurVerwijderen)
             {
@@ -113,8 +112,8 @@
             @if (Model.ToonAanvraagIndienen)
             {
                 @Html.ActionLink("Deze stage begeleiden", "AanvraagIndienen", "Stageopdracht",
-                    new { Model.Stageopdracht.Id, overzicht = Model.OverzichtAction }
-                    , new { @class = "btn btn-default", @title = "Aanvraag om deze stage te begeleiden indienen" })
+                    new { Model.Stageopdracht.Id, overzicht = Model.OverzichtAction },
+                    new { @class = "btn btn-default", @title = "Aanvraag om deze stage te begeleiden indienen" })
             }
             @if (Model.ToonAanvraagAnnuleren)
             {
@@ -125,8 +124,8 @@
 
             @if (Model.ToonOordelen)
             {
-                @Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { Model.Stageopdracht.Id }, new { @class = "btn btn-success" })
-                @Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { Model.Stageopdracht.Id }, new { @class = "btn btn-danger" })
+                @Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { Model.Stageopdracht.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { Model.Stageopdracht.Id }, new { @class = "btn btn-default" })
             }
         </p>
     </div>

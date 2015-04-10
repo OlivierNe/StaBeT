@@ -225,9 +225,9 @@
     <Compile Include="Models\DAL\AcademiejaarRepository.cs" />
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
     <Compile Include="Models\DAL\Mapping\AcademiejaarInstellingenMapper.cs" />
-    <Compile Include="Models\DAL\Mapping\StageBegeleidingAanvraagMapper.cs" />
-    <Compile Include="Models\DAL\Mapping\StudentStageRelatieMapper.cs" />
-    <Compile Include="Models\DAL\Mapping\StudentVoorkeurStageMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\StagebegeleidingAanvraagMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\StageMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\VoorkeurStageMapper.cs" />
     <Compile Include="Models\DAL\oudeGegevens\Converter.cs" />
     <Compile Include="Models\DAL\oudeGegevens\OudeGegevensDbContext.cs" />
     <Compile Include="Models\Domain\AcademiejaarInstellingen.cs" />
@@ -240,8 +240,8 @@
     <Compile Include="Models\Domain\Interfaces\ISpreadsheetService.cs" />
     <Compile Include="Models\Domain\StageBegeleidingAanvraag.cs" />
     <Compile Include="Models\Domain\StagedossierStatus.cs" />
-    <Compile Include="Models\Domain\StageStudentRelatie.cs" />
-    <Compile Include="Models\Domain\StudentVoorkeurStage.cs" />
+    <Compile Include="Models\Domain\Stage.cs" />
+    <Compile Include="Models\Domain\VoorkeurStage.cs" />
     <Compile Include="Models\Services\ImageService.cs" />
     <Compile Include="Models\Services\SpreadsheetService.cs" />
     <Compile Include="Models\Services\UserService.cs" />
@@ -395,6 +395,7 @@
     <Content Include="Scripts\lib\respond.js" />
     <Content Include="Scripts\lib\respond.min.js" />
     <Content Include="Scripts\specialisatie.js" />
+    <Content Include="Scripts\stageToewijzen.js" />
     <Content Include="Scripts\stagetool-form.js" />
     <Content Include="Scripts\stagetool-list.js" />
     <Content Include="Scripts\stagetool.js" />
@@ -490,6 +491,7 @@
     <Content Include="Views\Stageopdracht\AanduidenDossierIngediend.cshtml" />
     <Content Include="Views\Stageopdracht\StagesMetStagedossier.cshtml" />
     <Content Include="Views\Stageopdracht\_StagesMetStagedossier.cshtml" />
+    <Content Include="Views\Stageopdracht\StageToewijzen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

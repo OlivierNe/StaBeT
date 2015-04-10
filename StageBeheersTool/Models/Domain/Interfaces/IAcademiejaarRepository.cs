@@ -5,7 +5,7 @@ namespace StageBeheersTool.Models.Domain
     public interface IAcademiejaarRepository
     {
         void Add(AcademiejaarInstellingen academiejaar);
-        AcademiejaarInstellingen FindByHuidigAcademiejaar();
+        AcademiejaarInstellingen FindVanHuidigAcademiejaar();
         AcademiejaarInstellingen FindByAcademiejaar(string academiejaar);
         IQueryable<AcademiejaarInstellingen> FindAll();
         void Update(AcademiejaarInstellingen academiejaar);

@@ -27,7 +27,7 @@ namespace StageBeheersTool.Models.DAL
             SaveChanges();
         }
 
-        public AcademiejaarInstellingen FindByHuidigAcademiejaar()
+        public AcademiejaarInstellingen FindVanHuidigAcademiejaar()
         {
             string huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
             return academiejaren.SingleOrDefault(aj => aj.Academiejaar.Equals(huidigAcademiejaar));

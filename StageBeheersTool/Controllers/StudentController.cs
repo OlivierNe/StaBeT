@@ -75,15 +75,12 @@ namespace StageBeheersTool.Controllers
                 var student = Mapper.Map<Student>(model);
                 student.Keuzepakket = model.KeuzepakketId == null ? null : _keuzepakketRepository.FindBy((int)model.KeuzepakketId);
                 var result = _studentRepository.Add(student);
-                if (result == true)
+                if (result)
                 {
                     TempData["message"] = string.Format(Resources.SuccesStudentCreate, student.HogentEmail);
                     return RedirectToAction("Index");
                 }
-                else
-                {
-                    TempData["error"] = string.Format(Resources.ErrorStudentCreateHogentEmailBestaatAl, student.HogentEmail);
-                }
+                TempData["error"] = string.Format(Resources.ErrorStudentCreateHogentEmailBestaatAl, student.HogentEmail);
             }
             model.SetKeuzevakSelectList(_keuzepakketRepository.FindAll());
             return View(model);

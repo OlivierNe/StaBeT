@@ -31,10 +31,10 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new ContactpersoonMapper());
             modelBuilder.Configurations.Add(new StudentMapper());
             modelBuilder.Configurations.Add(new BegeleiderMapper());
-            modelBuilder.Configurations.Add(new StageBegeleidingAanvraagMapper());
+            modelBuilder.Configurations.Add(new StagebegeleidingAanvraagMapper());
             modelBuilder.Configurations.Add(new AcademiejaarInstellingenMapper());
-            modelBuilder.Configurations.Add(new StageStudentRelatieMapper());
-            modelBuilder.Configurations.Add(new StudentVoorkeurStageMapper());
+            modelBuilder.Configurations.Add(new StageMapper());
+            modelBuilder.Configurations.Add(new VoorkeurStageMapper());
 
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -58,7 +58,7 @@ namespace StageBeheersTool.Models.DAL
         public DbSet<Begeleider> Begeleiders { get; set; }
         public DbSet<Student> Studenten { get; set; }
         public DbSet<StagebegeleidingAanvraag> StageBegeleidAanvragen { get; set; }
-        public DbSet<StudentVoorkeurStage> StudentVoorkeurStages { get; set; }
+        public DbSet<VoorkeurStage> StudentVoorkeurStages { get; set; }
         public DbSet<AcademiejaarInstellingen> AcademiejarenInstellingen { get; set; }
 
         public static StageToolDbContext Create()

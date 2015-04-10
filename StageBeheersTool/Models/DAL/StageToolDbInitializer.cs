@@ -239,7 +239,7 @@ namespace StageBeheersTool.Models.DAL
                         Stagebegeleider = begeleider,
                         Status = StageopdrachtStatus.Goedgekeurd
                     };
-                    stage.Studenten = new List<StageStudentRelatie>() { { new StageStudentRelatie() { Stage = stage, Student = student1 } } };
+                    stage.Stages = new List<Stage>() { { new Stage() { Stageopdracht = stage, Student = student1 } } };
                     stages.Add(stage);
                 }
                 begeleider.Stages = stages;
@@ -264,7 +264,7 @@ namespace StageBeheersTool.Models.DAL
                         Specialisatie = "TEST",
                         Status = StageopdrachtStatus.Goedgekeurd
                     };
-                    stage.Studenten = new List<StageStudentRelatie>() { { new StageStudentRelatie() { Stage = stage, Student = student1 } } };
+                    //stage.Studenten = new List<StageStudentRelatie>() { { new StageStudentRelatie() { Stage = stage, Student = student1 } } };
                     teststages.Add(stage);
                 }
                 context.Stageopdrachten.AddRange(teststages);
@@ -290,7 +290,7 @@ namespace StageBeheersTool.Models.DAL
                 }
                 throw new ApplicationException("Fout bij aanmaken database " + message);
             }
-          //  AddOudeGegevens(context);
+            AddOudeGegevens(context);
         }
 
         public async void AddOudeGegevens(StageToolDbContext context)
@@ -360,12 +360,12 @@ namespace StageBeheersTool.Models.DAL
                                 .Select(oudeStudent => context.Studenten.FirstOrDefault(s => s.HogentEmail == oudeStudent.email))
                                 .Where(student => student != null).ToList();
 
-                            var stagestudentrelaties = new List<StageStudentRelatie>();
+                            var stagestudentrelaties = new List<Stage>();
                             foreach (var student in stageopdrachtstudenten)
                             {
-                                stagestudentrelaties.Add(new StageStudentRelatie { Stage = stageopdracht, Student = student });
+                                stagestudentrelaties.Add(new Stage { Stageopdracht = stageopdracht, Student = student });
                             }
-                            stageopdracht.Studenten = stagestudentrelaties;
+                            stageopdracht.Stages = stagestudentrelaties;
                             stageopdracht.Bedrijf = bedrijf;
                             stageopdrachten.Add(stageopdracht);
                         }

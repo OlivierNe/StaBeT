@@ -13,7 +13,7 @@ namespace StageBeheersTool.Models.DAL.Extensions
                  .Include(so => so.Stagementor)
                  .Include(so => so.Contractondertekenaar)
                  .Include(so => so.Stagebegeleider)
-                 .Include(so => so.Studenten)
+                 .Include(so => so.Stages)
                  .OrderBy(so => so.Titel);
         }
 
@@ -44,7 +44,7 @@ namespace StageBeheersTool.Models.DAL.Extensions
             }
             if (string.IsNullOrWhiteSpace(student) == false)
             {
-                stageopdrachten = stageopdrachten.Where(so => so.Studenten.Any(s =>
+                stageopdrachten = stageopdrachten.Where(so => so.Stages.Any(s =>
                     (s.Student.Familienaam != null && s.Student.Familienaam.ToLower().Contains(student.ToLower())) ||
                     (s.Student.Voornaam != null && s.Student.Voornaam.ToLower().Contains(student.ToLower()))));
             }
@@ -59,7 +59,7 @@ namespace StageBeheersTool.Models.DAL.Extensions
                 return stageopdrachten;
             }
             return stageopdrachten.Where(so => (string.IsNullOrEmpty(bedrijf) || so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower())) &&
-                       (string.IsNullOrEmpty(student) || so.Studenten.Any(s =>
+                       (string.IsNullOrEmpty(student) || so.Stages.Any(s =>
                            (s.Student.Familienaam != null && s.Student.Familienaam.ToLower().Contains(student.ToLower())) ||
                            (s.Student.Voornaam != null && s.Student.Voornaam.ToLower().Contains(student.ToLower())))));
         }

@@ -22,7 +22,7 @@
             @Html.DisplayNameFor(model => model.HogentEmail)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.HogentEmail)
+            <a href="mailto:@Model.HogentEmail">@Model.HogentEmail</a>
         </dd>
 
         <dt>
@@ -30,7 +30,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Email)
+            <a href="mailto:@Model.Email">@Model.Email</a>
         </dd>
         <dt>
             Adres

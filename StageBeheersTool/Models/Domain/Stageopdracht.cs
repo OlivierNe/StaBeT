@@ -31,11 +31,11 @@ namespace StageBeheersTool.Models.Domain
             get
             {
                 var retVal = "";
-                if (Studenten.Count == 0)
+                if (Stages.Count == 0)
                 {
                     return "";
                 }
-                var studenten = Studenten.ToList();
+                var studenten = Stages.ToList();
                 int i = 0;
                 while (i < (studenten.Count - 1))
                 {
@@ -68,8 +68,8 @@ namespace StageBeheersTool.Models.Domain
         public virtual Contactpersoon Stagementor { get; set; }
         public virtual Begeleider Stagebegeleider { get; set; }
         public virtual Bedrijf Bedrijf { get; set; }
-        public virtual ICollection<StageStudentRelatie> Studenten { get; set; }
-        public virtual ICollection<StudentVoorkeurStage> StudentVoorkeurStages { get; set; }
+        public virtual ICollection<Stage> Stages { get; set; }
+        public virtual ICollection<VoorkeurStage> StudentVoorkeurStages { get; set; }
 
         public StageopdrachtStatus Status { get; set; }
         public string Gemeente { get; set; }
@@ -88,7 +88,7 @@ namespace StageBeheersTool.Models.Domain
         public Stageopdracht()
         {
             Status = StageopdrachtStatus.NietBeoordeeld;
-            Studenten = new List<StageStudentRelatie>();
+            Stages = new List<Stage>();
         }
         #endregion
 
@@ -119,7 +119,7 @@ namespace StageBeheersTool.Models.Domain
 
         public bool IsVolledigIngenomen()
         {
-            return Studenten.Count >= AantalStudenten;
+            return Stages.Count >= AantalStudenten;
         }
 
         public bool HeeftStageBegeleider()
@@ -129,7 +129,7 @@ namespace StageBeheersTool.Models.Domain
 
         public int AantalToegewezenStudenten()
         {
-            return Studenten.Count;
+            return Stages.Count;
         }
 
         public bool IsBeschikbaar()

@@ -2,8 +2,14 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="StageBeheersTool.Models.Domain.Bedrijf">
     <Position X="0.5" Y="0.5" Width="4.5" />
+    <AssociationLine Name="Contactpersonen" Type="StageBeheersTool.Models.Domain.Contactpersoon" FixedToPoint="true">
+      <Path>
+        <Point X="5" Y="0.875" />
+        <Point X="11" Y="0.875" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>gIQCQEAAACEAAACghAAAlABAQCiAAIgAAAAACABAGAA=</HashCode>
+      <HashCode>gIQCAFAAACEAgACghABAlIBAQCiAAIgAAAAACAAACAA=</HashCode>
       <FileName>Models\Domain\Bedrijf.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -11,30 +17,23 @@
       <Property Name="Contactpersonen" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="StageBeheersTool.Models.Domain.Persoon">
-    <Position X="13.5" Y="3.25" Width="2.75" />
-    <TypeIdentifier>
-      <HashCode>AAACQAAgACgAAAAAAgAAhAAAAACAAAAAAAAAAAAAGAA=</HashCode>
-      <FileName>Models\Domain\Persoon.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="StageBeheersTool.Models.Domain.Contactpersoon">
-    <Position X="9.5" Y="2" Width="3" />
-    <InheritanceLine Type="StageBeheersTool.Models.Domain.Persoon" ManuallyRouted="true">
-      <Path>
-        <Point X="13.5" Y="3.53" />
-        <Point X="12.5" Y="3.53" />
-      </Path>
-    </InheritanceLine>
+    <Position X="11" Y="0.5" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAAAAkAACAAAAACgAAAAAAAAAAAAIACAAAAAAAAAAA=</HashCode>
       <FileName>Models\Domain\Contactpersoon.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Stageopdracht">
-    <Position X="6" Y="6.25" Width="3.25" />
+    <Position X="11.75" Y="4.25" Width="3.25" />
+    <AssociationLine Name="Stagementor" Type="StageBeheersTool.Models.Domain.Contactpersoon" FixedFromPoint="true">
+      <Path>
+        <Point X="12.125" Y="4.25" />
+        <Point X="12.125" Y="3.338" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>LAgSQAEMQAEAAAAAqAAAgIIAIACCAAAAgAIAIQAQGAA=</HashCode>
+      <HashCode>DAgSQAEMQAEAAAAAqAAAgIIAIACCAAAQgEoAIQIQGAA=</HashCode>
       <FileName>Models\Domain\Stageopdracht.cs</FileName>
       <NewMemberFileName>Models\Domain\StageOpdracht.cs</NewMemberFileName>
     </TypeIdentifier>
@@ -42,62 +41,55 @@
       <Property Name="Stagementor" />
       <Property Name="Stagebegeleider" />
       <Property Name="Status" />
+      <Property Name="Contractondertekenaar" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="StageBeheersTool.Models.Domain.Specialisatie">
-    <Position X="0.5" Y="7" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\Domain\Specialisatie.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="StageBeheersTool.Models.Domain.Student">
-    <Position X="15.5" Y="11.75" Width="3" />
-    <AssociationLine Name="VoorkeurStages" Type="StageBeheersTool.Models.Domain.Stageopdracht" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+    <Position X="23" Y="4.5" Width="4" />
+    <AssociationLine Name="Stages" Type="StageBeheersTool.Models.Domain.Stage" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="15.5" Y="11.905" />
-        <Point X="14.532" Y="11.905" Type="JumpStart" />
-        <Point X="14.365" Y="11.905" Type="JumpEnd" />
-        <Point X="13.594" Y="11.905" />
-        <Point X="13.594" Y="10.438" />
-        <Point X="9.25" Y="10.438" />
+        <Point X="23" Y="5.438" />
+        <Point X="18.531" Y="5.438" />
+        <Point X="18.531" Y="5.18" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="VoorkeurStages" Type="StageBeheersTool.Models.Domain.VoorkeurStage" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="23" Y="7.643" />
+        <Point X="20.062" Y="7.643" />
+        <Point X="20.062" Y="8.75" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="ToegewezenStageopdracht" Type="StageBeheersTool.Models.Domain.Stageopdracht" FixedFromPoint="true">
+      <Path>
+        <Point X="23" Y="6.375" />
+        <Point X="15" Y="6.375" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AEAAAAAAAAAAAAIAgAAEAAAABCAAIIAAAAgAAAAAQAA=</HashCode>
+      <HashCode>KEAAQQAAAAAAAAIAgACEEAAAICAAIIAAAAwgAAAAQAA=</HashCode>
       <FileName>Models\Domain\Student.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Keuzepakket" />
+      <Property Name="ToegewezenStageopdracht" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
+      <Property Name="Stages" />
       <Property Name="VoorkeurStages" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Begeleider">
-    <Position X="10.75" Y="12.25" Width="4" />
-    <InheritanceLine Type="StageBeheersTool.Models.Domain.HoGentPersoon" ManuallyRouted="true">
+    <Position X="5" Y="9.25" Width="4" />
+    <AssociationLine Name="StageAanvragen" Type="StageBeheersTool.Models.Domain.StagebegeleidingAanvraag" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="16.375" Y="8.925" />
-        <Point X="16.375" Y="11.359" />
-        <Point X="14.532" Y="11.359" Type="JumpStart" />
-        <Point X="14.365" Y="11.359" Type="JumpEnd" />
-        <Point X="13.677" Y="11.359" Type="JumpStart" />
-        <Point X="13.511" Y="11.359" Type="JumpEnd" />
-        <Point X="12.75" Y="11.359" />
-        <Point X="12.75" Y="12.25" />
-      </Path>
-    </InheritanceLine>
-    <AssociationLine Name="StageAanvragen" Type="StageBeheersTool.Models.Domain.StageBegeleidAanvraag" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="10.75" Y="13.875" />
-        <Point X="10.375" Y="13.875" />
-        <Point X="10.375" Y="14.689" />
-        <Point X="5.75" Y="14.689" />
+        <Point X="5.688" Y="13.242" />
+        <Point X="5.688" Y="14.25" />
+        <Point X="4" Y="14.25" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAQQAAAAAgAQAAAAAAAAEAIACAAkAAAAAEAg=</HashCode>
+      <HashCode>AAAAAAAAAQQAAAAggAQAAAAAAAAEAIACAAlAAAAAEEg=</HashCode>
       <FileName>Models\Domain\Begeleider.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -105,72 +97,72 @@
       <Property Name="StageAanvragen" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="StageBeheersTool.Models.Domain.HoGentPersoon">
-    <Position X="14.25" Y="7.5" Width="4.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
-      <FileName>Models\Domain\HoGentPersoon.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="StageBeheersTool.Models.Domain.StageBegeleidAanvraag">
-    <Position X="2.25" Y="13.5" Width="3.5" />
+  <Class Name="StageBeheersTool.Models.Domain.StagebegeleidingAanvraag">
+    <Position X="0.5" Y="13.5" Width="3.5" />
     <AssociationLine Name="Begeleider" Type="StageBeheersTool.Models.Domain.Begeleider" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="5.75" Y="14.063" />
-        <Point X="6.125" Y="14.063" />
-        <Point X="6.125" Y="13.25" />
-        <Point X="10.75" Y="13.25" />
+        <Point X="4" Y="15.068" />
+        <Point X="8.5" Y="15.068" />
+        <Point X="8.5" Y="13.242" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>CAASAAAECAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
-      <FileName>Models\Domain\StageBegeleidAanvraag.cs</FileName>
+      <HashCode>CAASAAAEAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAAAIA=</HashCode>
+      <FileName>Models\Domain\StageBegeleidingAanvraag.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Begeleider" />
-      <Property Name="Stageopdracht" />
       <Property Name="Status" />
     </ShowAsAssociation>
   </Class>
   <Class Name="StageBeheersTool.Models.Domain.Keuzepakket">
-    <Position X="19.5" Y="11.75" Width="2.25" />
+    <Position X="26.25" Y="2" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Domain\Keuzepakket.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="StageBeheersTool.Models.Domain.StageStudentRelatie">
-    <Position X="10" Y="7.5" Width="3.25" />
-    <AssociationLine Name="Student" Type="StageBeheersTool.Models.Domain.Student" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="13.25" Y="8.796" />
-        <Point X="13.25" Y="9.879" />
-        <Point X="14.449" Y="9.879" />
-        <Point X="14.449" Y="12.078" />
-        <Point X="15.5" Y="12.078" />
-      </Path>
-    </AssociationLine>
+  <Class Name="StageBeheersTool.Models.Domain.Stage">
+    <Position X="17" Y="1.25" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAgAQAAAAAAAAAAAAAAAAAAAAAAAAAhAAAAAAAA=</HashCode>
-      <FileName>Models\Domain\StageStudentRelatie.cs</FileName>
+      <HashCode>AAAAAAIASBAAAAAAIARAAAAAAAAAAEAAAAAAgAACJAA=</HashCode>
+      <FileName>Models\Domain\Stage.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Stage" />
       <Property Name="Student" />
     </ShowAsAssociation>
   </Class>
-  <Enum Name="StageBeheersTool.Models.Domain.StageopdrachtStatus">
-    <Position X="3.25" Y="6" Width="1.75" />
+  <Class Name="StageBeheersTool.Models.Domain.VoorkeurStage">
+    <Position X="17.25" Y="8.75" Width="4.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAIAEAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAIESAAAAAAAMAQAAAAAAAAAAAAAAAAAAAACBAA=</HashCode>
+      <FileName>Models\Domain\VoorkeurStage.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Student" />
+      <Property Name="Stageopdracht" />
+      <Property Name="Status" />
+    </ShowAsAssociation>
+  </Class>
+  <Enum Name="StageBeheersTool.Models.Domain.StageopdrachtStatus">
+    <Position X="1.5" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAAIAEAAAAAAAA=</HashCode>
       <FileName>Models\Domain\StageopdrachtStatus.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="StageBeheersTool.Models.Domain.BegeleidAanvraagStatus">
-    <Position X="0.75" Y="11.5" Width="2" />
+  <Enum Name="StageBeheersTool.Models.Domain.StagebegeleidAanvraagStatus">
+    <Position X="0.5" Y="10.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAIAEAAAAAAAA=</HashCode>
       <FileName>Models\Domain\BegeleidAanvraagStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="StageBeheersTool.Models.Domain.StagedossierStatus">
+    <Position X="23" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAgA=</HashCode>
+      <FileName>Models\Domain\StagedossierStatus.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

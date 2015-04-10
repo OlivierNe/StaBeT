@@ -205,6 +205,33 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to De begindatum moet na de einddatum liggen.
+        /// </summary>
+        public static string ErrorBegindatumNaEinddatum {
+            get {
+                return ResourceManager.GetString("ErrorBegindatumNaEinddatum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geen kolom geselecteerd..
+        /// </summary>
+        public static string ErrorExcelGeenKolommen {
+            get {
+                return ResourceManager.GetString("ErrorExcelGeenKolommen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geen standaardstageperiodes gevonden voor dit academiejaar. Gelieve deze eerst in te stellen alvorens stageopdrachten aan studenten toe te wijzen..
+        /// </summary>
+        public static string ErrorGeenStageperiodesIngesteld {
+            get {
+                return ResourceManager.GetString("ErrorGeenStageperiodesIngesteld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Het nieuwe wachtwoord en het bevestigde antwoord komen niet overeen..
         /// </summary>
         public static string ErrorNieuwEnBevestigdWachtwoord {
@@ -241,6 +268,15 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ongeldig semester: Semester mag enkel de waarde 1 of 2 hebben..
+        /// </summary>
+        public static string ErrorOngeldigSemester {
+            get {
+                return ResourceManager.GetString("ErrorOngeldigSemester", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verplicht oud wachtwoord in te vullen..
         /// </summary>
         public static string ErrorOudWachtwoordVerplicht {
@@ -250,11 +286,38 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stage toewijzen aan student mislukt. Stagedossier moet eerst goedgekeurd worden..
+        /// </summary>
+        public static string ErrorStageAanStudentKoppelenZonderGoedgekeurdStagedossier {
+            get {
+                return ResourceManager.GetString("ErrorStageAanStudentKoppelenZonderGoedgekeurdStagedossier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Begeleiding aanvraag goedkeuren mislukt: Stage &apos;{0}&apos; heeft al een stagebegeleider({1}).
         /// </summary>
-        public static string ErrorStagebegeleidingAanvraagGoedgekeurd {
+        public static string ErrorStagebegeleidingAanvraagGoedkeuren {
             get {
-                return ResourceManager.GetString("ErrorStagebegeleidingAanvraagGoedgekeurd", resourceCulture);
+                return ResourceManager.GetString("ErrorStagebegeleidingAanvraagGoedkeuren", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Er is al een stagedossier aangeduid als ingediend.
+        /// </summary>
+        public static string ErrorStagedossierReedsIngediend {
+            get {
+                return ResourceManager.GetString("ErrorStagedossierReedsIngediend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Student moet stageopdracht als voorkeur aangeduid hebben alvorens een stagedossier als ingediend aan te kunnen duiden..
+        /// </summary>
+        public static string ErrorStagedossierStageopdrachtNietAlsVoorkeur {
+            get {
+                return ResourceManager.GetString("ErrorStagedossierStageopdrachtNietAlsVoorkeur", resourceCulture);
             }
         }
         
@@ -291,6 +354,15 @@ namespace StageBeheersTool {
         public static string ErrorStudentCreateHogentEmailBestaatAl {
             get {
                 return ResourceManager.GetString("ErrorStudentCreateHogentEmailBestaatAl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Student heeft al een toegewezen stage.
+        /// </summary>
+        public static string ErrorStudentHeeftAlToegewezenStage {
+            get {
+                return ResourceManager.GetString("ErrorStudentHeeftAlToegewezenStage", resourceCulture);
             }
         }
         
@@ -345,6 +417,15 @@ namespace StageBeheersTool {
         public static string SuccesParametersAcademiejaar {
             get {
                 return ResourceManager.GetString("SuccesParametersAcademiejaar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stageopdracht &apos;{0}&apos; succesvol aan {1} toegewezen..
+        /// </summary>
+        public static string SuccesStageAanStudentToegewezen {
+            get {
+                return ResourceManager.GetString("SuccesStageAanStudentToegewezen", resourceCulture);
             }
         }
         

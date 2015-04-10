@@ -1,11 +1,12 @@
 ﻿
 namespace StageBeheersTool.Models.Domain
 {
-    public class StudentVoorkeurStage
+    public class VoorkeurStage
     {
+        #region properties
         public int StudentId { get; set; }
         private Student _student;
-        public virtual Student Student
+        public Student Student
         {
             get { return _student; }
             set
@@ -19,13 +20,13 @@ namespace StageBeheersTool.Models.Domain
         }
 
         public int StageopdrachtId { get; set; }
-        private Stageopdracht _stage;
-        public virtual Stageopdracht Stageopdracht
+        private Stageopdracht _stageopdracht;
+        public Stageopdracht Stageopdracht
         {
-            get { return _stage; }
+            get { return _stageopdracht; }
             set
             {
-                _stage = value;
+                _stageopdracht = value;
                 if (value != null)
                 {
                     StageopdrachtId = value.Id;
@@ -37,16 +38,26 @@ namespace StageBeheersTool.Models.Domain
 
         public StagedossierStatus Status { get; set; }
 
-        public StudentVoorkeurStage(Student student, Stageopdracht stageopdracht)
+        #endregion
+
+        #region constructors
+        public VoorkeurStage(Student student, Stageopdracht stageopdracht)
             : this()
         {
-            this.Student = student;
-            this.Stageopdracht = stageopdracht;
+            Student = student;
+            Stageopdracht = stageopdracht;
         }
 
-        public StudentVoorkeurStage()
+        public VoorkeurStage()
         {
             Status = StagedossierStatus.Ingediend;
+        }
+
+        #endregion
+
+        public bool HeeftGoedgekeurdStagedossier()
+        {
+            return StagedossierIngediend && Status == StagedossierStatus.Goedgekeurd;
         }
     }
 }

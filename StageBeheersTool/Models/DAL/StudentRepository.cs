@@ -61,7 +61,7 @@ namespace StageBeheersTool.Models.DAL
         {
             var huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
             return _studenten.Include(student => student.Stages)
-                .Where(student => student.Stages.Any(str => str.Stage.Academiejaar == huidigAcademiejaar))
+                .Where(student => student.Stages.Any(str => str.Stageopdracht.Academiejaar == huidigAcademiejaar))
                 .OrderBy(student => student.Familienaam);
         }
 

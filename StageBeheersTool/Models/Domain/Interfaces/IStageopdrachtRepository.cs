@@ -24,8 +24,8 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<StagebegeleidingAanvraag> FindAllAanvragen();
         IQueryable<StagebegeleidingAanvraag> FindAllAanvragenVan(Begeleider begeleider);
 
-        IQueryable<StudentVoorkeurStage> FindAllStudentVoorkeurenMetIngediendStagedossier();
-        StudentVoorkeurStage FindStudentVoorkeurStageByIds(int studentId, int stageId);
+        IQueryable<VoorkeurStage> FindAllStudentVoorkeurenMetIngediendStagedossier();
+        VoorkeurStage FindStudentVoorkeurStageByIds(int studentId, int stageId);
 
         void AddAanvraag(StagebegeleidingAanvraag aanvraag);
         void DeleteAanvraag(StagebegeleidingAanvraag aanvraag);

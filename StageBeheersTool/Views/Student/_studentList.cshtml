@@ -9,9 +9,9 @@
             .RenderValueAs(s => "<a href=\"mailto:" + s.HogentEmail + "\">" + s.HogentEmail + "</a>");
         if (Model.ToonStage)
         {
-            columns.Add(s => s.MijnStageopdracht.Titel).Titled("Stage").Sanitized(false).Encoded(false)
-                .RenderValueAs(so => Html.ActionLink(so.MijnStageopdracht.Titel, "details", "Stageopdracht",
-                    new {so.MijnStageopdracht.Id}, new {})).SetWidth(350);
+            columns.Add(s => s.ToegewezenStageopdracht.Titel).Titled("Stage").Sanitized(false).Encoded(false)
+                .RenderValueAs(so => Html.ActionLink(so.ToegewezenStageopdracht.Titel, "details", "Stageopdracht",
+                    new { so.ToegewezenStageopdracht.Id }, new { })).SetWidth(350);
         }
     }).Sortable(true).WithPaging(10).EmptyText("Geen studenten gevonden")
 </div>

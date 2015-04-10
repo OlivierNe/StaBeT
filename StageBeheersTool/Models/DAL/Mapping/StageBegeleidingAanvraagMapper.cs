@@ -3,12 +3,13 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace StageBeheersTool.Models.DAL.Mapping
 {
-    public class StageBegeleidingAanvraagMapper : EntityTypeConfiguration<StagebegeleidingAanvraag>
+    public class StagebegeleidingAanvraagMapper : EntityTypeConfiguration<StagebegeleidingAanvraag>
     {
-        public StageBegeleidingAanvraagMapper()
+        public StagebegeleidingAanvraagMapper()
         {
-            this.HasRequired(sba => sba.Stage);
-            this.HasRequired(sba => sba.Begeleider);
+            ToTable("Stagebegeleiding_aanvragen");
+            HasRequired(aanvraag => aanvraag.Stage);
+            HasRequired(aanvraag => aanvraag.Begeleider);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace StageBeheersTool.Models.DAL
         private readonly StageToolDbContext _dbContext;
         private readonly DbSet<Stageopdracht> _stageopdrachten;
         private readonly DbSet<StagebegeleidingAanvraag> _aanvragen;
-        private readonly DbSet<StudentVoorkeurStage> _studentVoorkeurStages;
+        private readonly DbSet<VoorkeurStage> _studentVoorkeurStages;
         private readonly IUserService _userService;
 
         public StageopdrachtRepository(StageToolDbContext ctx, IUserService userService)
@@ -81,7 +81,7 @@ namespace StageBeheersTool.Models.DAL
             return _stageopdrachten.
                 Where(IsinHuidigAcademiejaar())
                 .Where(so => (so.Status == StageopdrachtStatus.Goedgekeurd
-                    || so.Status == StageopdrachtStatus.Toegewezen) && so.Studenten.Count < so.AantalStudenten)
+                    || so.Status == StageopdrachtStatus.Toegewezen) && so.Stages.Count < so.AantalStudenten)
                     .IncludeAndOrder();
         }
 
@@ -93,7 +93,7 @@ namespace StageBeheersTool.Models.DAL
         {
             return _stageopdrachten
                 .Where(IsinHuidigAcademiejaar())
-                .Where(so => so.Status == StageopdrachtStatus.Toegewezen && so.Studenten.Count > 0
+                .Where(so => so.Status == StageopdrachtStatus.Toegewezen && so.Stages.Count > 0
                     && so.Stagebegeleider == null)
                 .IncludeAndOrder();
         }
@@ -105,7 +105,7 @@ namespace StageBeheersTool.Models.DAL
         {
             return _stageopdrachten
                 .Where(IsinHuidigAcademiejaar())
-                .Where(so => so.Status == StageopdrachtStatus.Toegewezen && so.Studenten.Count > 0)
+                .Where(so => so.Status == StageopdrachtStatus.Toegewezen && so.Stages.Count > 0)
                 .IncludeAndOrder();
         }
 
@@ -137,7 +137,7 @@ namespace StageBeheersTool.Models.DAL
         /// lijst stageopdrachten/studenten met ingediend stagedossier. studenten nog niet gekoppeld aan stage
         /// </summary>
         /// <returns></returns>
-        public IQueryable<StudentVoorkeurStage> FindAllStudentVoorkeurenMetIngediendStagedossier()
+        public IQueryable<VoorkeurStage> FindAllStudentVoorkeurenMetIngediendStagedossier()
         {
             var huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
             return _studentVoorkeurStages
@@ -146,9 +146,10 @@ namespace StageBeheersTool.Models.DAL
                 .OrderBy(voorkeur => voorkeur.Student.Familienaam);
         }
 
-        public StudentVoorkeurStage FindStudentVoorkeurStageByIds(int studentId, int stageId)
+        public VoorkeurStage FindStudentVoorkeurStageByIds(int studentId, int stageId)
         {
-            return _studentVoorkeurStages.SingleOrDefault(s => s.Student.Id == studentId && s.Stageopdracht.Id == stageId);
+            return _studentVoorkeurStages.Include(s => s.Student).Include(s => s.Stageopdracht)
+                .SingleOrDefault(s => s.Student.Id == studentId && s.Stageopdracht.Id == stageId);
         }
 
         public IQueryable<Stageopdracht> FindAllFromAcademiejaar(string academiejaar)

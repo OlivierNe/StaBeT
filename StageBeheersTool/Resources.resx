@@ -270,7 +270,7 @@
   <data name="ErrorBegeleiderDeleteFailed" xml:space="preserve">
     <value>Verwijderen mislukt. Stagebegeleider is aan 1 of meerdere stages koppeld.</value>
   </data>
-  <data name="ErrorStagebegeleidingAanvraagGoedgekeurd" xml:space="preserve">
+  <data name="ErrorStagebegeleidingAanvraagGoedkeuren" xml:space="preserve">
     <value>Begeleiding aanvraag goedkeuren mislukt: Stage '{0}' heeft al een stagebegeleider({1})</value>
     <comment>0=titel stage, 1=naam begeleider</comment>
   </data>
@@ -349,5 +349,34 @@
   <data name="SuccesStagedossierGoedgekeurd" xml:space="preserve">
     <value>Stagedossier van {0} goedgekeurd.</value>
     <comment>0=naamstudent</comment>
+  </data>
+  <data name="ErrorStageAanStudentKoppelenZonderGoedgekeurdStagedossier" xml:space="preserve">
+    <value>Stage toewijzen aan student mislukt. Stagedossier moet eerst goedgekeurd worden.</value>
+  </data>
+  <data name="SuccesStageAanStudentToegewezen" xml:space="preserve">
+    <value>Stageopdracht '{0}' succesvol aan {1} toegewezen.</value>
+    <comment>0=titel stageopdracht, 1= naam student</comment>
+  </data>
+  <data name="ErrorStudentHeeftAlToegewezenStage" xml:space="preserve">
+    <value>Student heeft al een toegewezen stage</value>
+  </data>
+  <data name="ErrorOngeldigSemester" xml:space="preserve">
+    <value>Ongeldig semester: Semester mag enkel de waarde 1 of 2 hebben.</value>
+  </data>
+  <data name="ErrorBegindatumNaEinddatum" xml:space="preserve">
+    <value>De begindatum moet na de einddatum liggen</value>
+  </data>
+  <data name="ErrorGeenStageperiodesIngesteld" xml:space="preserve">
+    <value>Geen standaardstageperiodes gevonden voor dit academiejaar. Gelieve deze eerst in te stellen alvorens stageopdrachten aan studenten toe te wijzen.</value>
+  </data>
+  <data name="ErrorExcelGeenKolommen" xml:space="preserve">
+    <value>Geen kolom geselecteerd.</value>
+  </data>
+  <data name="ErrorStagedossierReedsIngediend" xml:space="preserve">
+    <value>Er is al een stagedossier aangeduid als ingediend</value>
+    <comment>0=naam student</comment>
+  </data>
+  <data name="ErrorStagedossierStageopdrachtNietAlsVoorkeur" xml:space="preserve">
+    <value>Student moet stageopdracht als voorkeur aangeduid hebben alvorens een stagedossier als ingediend aan te kunnen duiden.</value>
   </data>
 </root>

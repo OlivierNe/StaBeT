@@ -1,4 +1,5 @@
-﻿using StageBeheersTool.Helpers;
+﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -392,10 +393,47 @@ namespace StageBeheersTool.ViewModels
         }
     }
 
-    public class AanduidenDossierIngediend
+    public class StageAanStudentToewijzenVM : IValidatableObject
     {
+        public int StageopdrachtId { get; set; }
+        public int StudentId { get; set; }
         public Stageopdracht Stageopdracht { get; set; }
         public Student Student { get; set; }
 
+        [UIHint("NullableDateTime")]
+        public DateTime? Begindatum { get; set; }
+        [UIHint("NullableDateTime")]
+        public DateTime? Einddatum { get; set; }
+        [Range(1, 2)]
+        public int Semester { get; set; }
+
+        public SelectList SemesterSelectList
+        {
+            get
+            {
+                return new SelectList(new[] { "1", "2" }, Semester == 0 ? 2 : Semester);
+            }
+        }
+
+        public bool AangepasteStageperiode { get; set; }
+
+        [UIHint("NullableDateTime")]
+        public DateTime? Semester1Begin { get; set; }
+        [UIHint("NullableDateTime")]
+        public DateTime? Semester1Einde { get; set; }
+        [UIHint("NullableDateTime")]
+        public DateTime? Semester2Begin { get; set; }
+        [UIHint("NullableDateTime")]
+        public DateTime? Semester2Einde { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var errors = new List<ValidationResult>();
+            if (AangepasteStageperiode && (Einddatum == null || Begindatum == null))
+            {
+                errors.Add(new ValidationResult("Verplicht begindatum en einddatum in te geven bij een aangepaste stageperiode."));
+            }
+            return errors;
+        }
     }
 }

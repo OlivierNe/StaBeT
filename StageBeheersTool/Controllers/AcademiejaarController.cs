@@ -21,7 +21,7 @@ namespace StageBeheersTool.Controllers
         // GET: Academiejaar
         public ActionResult Index()
         {
-            var academiejaarInstellingen = _academiejaarRepository.FindByHuidigAcademiejaar();
+            var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
             if (academiejaarInstellingen == null)
             {
                 academiejaarInstellingen = new AcademiejaarInstellingen

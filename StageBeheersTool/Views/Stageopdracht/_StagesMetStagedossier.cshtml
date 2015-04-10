@@ -1,8 +1,8 @@
-﻿@model IEnumerable<StudentVoorkeurStage>
+﻿@model IEnumerable<VoorkeurStage>
 
 @Html.Grid(Model).Columns(columns =>
 {
-    columns.Add(so => so.Stageopdracht.Titel).Titled("Titel")
+    columns.Add(so => so.Stageopdracht.Titel).Titled("Stage")
            .Encoded(false).Sanitized(false)
            .RenderValueAs(so =>
                Html.ActionLink(so.Stageopdracht.Titel,
@@ -12,8 +12,18 @@
                 new { id = so.Student.Id }, new { })).SetWidth(150);
     columns.Add(so => so.Status).Titled("Stagedossier status");
     columns.Add().Sanitized(false).Encoded(false).RenderValueAs(s => Html.ActionLink("Goedkeuren", "StagedossierGoedkeuren",
-        new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id }, new { @class = "btn btn-default" }));
+        new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id }, new { @class = "btn btn-default" })).SetWidth(50);
     columns.Add().Sanitized(false).Encoded(false).RenderValueAs(s => Html.ActionLink("Afkeuren", "StagedossierAfkeuren",
-      new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id }, new { @class = "btn btn-default" }));
+      new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id }, new { @class = "btn btn-default" })).SetWidth(50);
+    columns.Add().Sanitized(false).Encoded(false)
+        .RenderValueAs(s =>
+        {
+            if (s.Status == StagedossierStatus.Goedgekeurd)
+            {
+                return Html.ActionLink("Stage aan student toewijzen", "StageToewijzen", "Stageopdracht",
+                    new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id }, new { @class = "btn btn-default" });
+            }
+            return MvcHtmlString.Empty;
+        });
 
-}).Sortable(true).WithPaging(10).EmptyText("Geen stageopdrachten gevonden")
+}).Sortable(true).WithPaging(10).EmptyText("Geen resultaten gevonden")

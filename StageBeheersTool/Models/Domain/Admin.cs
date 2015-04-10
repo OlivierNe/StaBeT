@@ -1,28 +1,31 @@
 ﻿
+using System;
+
 namespace StageBeheersTool.Models.Domain
 {
     public class Admin
     {
-        public static bool KeurStageBegeleidingAanvraagGoed(StagebegeleidingAanvraag aanvraag)
+        public static void KeurStageBegeleidingAanvraagGoed(StagebegeleidingAanvraag aanvraag)
         {
             if (aanvraag.Stage.Stagebegeleider != null)
             {
-                return false;
+                throw new ApplicationException(string.Format(Resources.ErrorStagebegeleidingAanvraagGoedkeuren, 
+                    aanvraag.Stage.Titel, aanvraag.Stage.Stagebegeleider.Naam));
             }
             aanvraag.Status = StagebegeleidAanvraagStatus.Goedgekeurd;
             aanvraag.Stage.Stagebegeleider = aanvraag.Begeleider;
-            return true;
         }
 
-        public static bool KeurStageBegeleidAanvraagAf(StagebegeleidingAanvraag aanvraag)
+        public static string KeurStageBegeleidAanvraagAf(StagebegeleidingAanvraag aanvraag)
         {
             aanvraag.Status = StagebegeleidAanvraagStatus.Afgekeurd;
             if (aanvraag.Begeleider.Equals(aanvraag.Stage.Stagebegeleider))
             {
                 aanvraag.Stage.Stagebegeleider = null;
-                return false;
+                return string.Format(Resources.SuccesStagebegeleidingAfgekeurdBegeleiderLosgekoppeld,
+                    aanvraag.Begeleider.Naam, aanvraag.Stage.Titel);
             }
-            return true;
+            return Resources.SuccesStagebegeleidingAfgekeurd;
         }
 
         public static void KeurStageopdrachtGoed(Stageopdracht stageopdracht)
@@ -35,16 +38,34 @@ namespace StageBeheersTool.Models.Domain
             stageopdracht.Status = StageopdrachtStatus.Afgekeurd;
         }
 
-        public static bool KeurStagedossierGoed(StudentVoorkeurStage voorkeurStage)
+        public static bool KeurStagedossierGoed(VoorkeurStage voorkeurStage)
         {
             voorkeurStage.Status = StagedossierStatus.Goedgekeurd;
             return true;
         }
 
-        public static bool KeurStagedossierAf(StudentVoorkeurStage voorkeurStage)
+        public static bool KeurStagedossierAf(VoorkeurStage voorkeurStage)
         {
             voorkeurStage.Status = StagedossierStatus.Afgekeurd;
             return true;
         }
+
+        public static Stage KoppelStageopdrachtAanStudent(VoorkeurStage studentVoorkeurstage)
+        {
+            if (studentVoorkeurstage.HeeftGoedgekeurdStagedossier() == false)
+            {
+                throw new ApplicationException(Resources.ErrorStageAanStudentKoppelenZonderGoedgekeurdStagedossier);
+            }
+            if (studentVoorkeurstage.Student.HeeftToegewezenStage())
+            {
+                throw new ApplicationException(Resources.ErrorStudentHeeftAlToegewezenStage);
+            }
+            var student = studentVoorkeurstage.Student;
+            var stageopdracht = studentVoorkeurstage.Stageopdracht;
+            var stage = new Stage(stageopdracht, student);
+            student.Stages.Add(stage);
+            return stage;
+        }
+
     }
 }
