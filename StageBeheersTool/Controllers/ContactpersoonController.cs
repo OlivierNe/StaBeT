@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
@@ -165,7 +164,17 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("Index");
         }
 
-        #region private helpers
+        #region Helpers
+
+        private void SetViewError(string error)
+        {
+            TempData["error"] = error;
+        }
+
+        private void SetViewMessage(string message)
+        {
+            TempData["message"] = message;
+        }
 
         private Contactpersoon FindContactpersoon(int id)
         {
@@ -176,6 +185,7 @@ namespace StageBeheersTool.Controllers
             }
             return _contactpersoonRepository.FindById(id);//ingelogd als admin
         }
+
         #endregion
 
     }

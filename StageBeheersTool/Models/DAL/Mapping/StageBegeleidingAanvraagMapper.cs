@@ -8,6 +8,8 @@ namespace StageBeheersTool.Models.DAL.Mapping
         public StagebegeleidingAanvraagMapper()
         {
             ToTable("Stagebegeleiding_aanvragen");
+            Property(aanvraag => aanvraag.Id).HasColumnName("stagebegeleiding_aanvraag_id");
+
             HasRequired(aanvraag => aanvraag.Stage);
             HasRequired(aanvraag => aanvraag.Begeleider);
         }

@@ -10,11 +10,22 @@ namespace StageBeheersTool.Models.DAL.Mapping
     {
         public BegeleiderMapper()
         {
-            this.ToTable("Begeleiders");
-            this.Property(begeleider => begeleider.HogentEmail).IsRequired().HasMaxLength(200)
+            ToTable("Begeleiders");
+            Property(begeleider => begeleider.Id).HasColumnName("begeleider_id");
+            Property(begeleider => begeleider.HogentEmail).IsRequired().HasMaxLength(100)
                .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("HogentEmailIndex") { IsUnique = true }));
-            this.HasMany(b => b.Stages).WithOptional(so => so.Stagebegeleider);
-            this.HasMany(b => b.StageAanvragen).WithRequired(x => x.Begeleider).WillCascadeOnDelete(true);
+            Property(begeleider => begeleider.Email).HasMaxLength(50);
+            Property(begeleider => begeleider.Familienaam).HasMaxLength(30);
+            Property(begeleider => begeleider.Voornaam).HasMaxLength(20);
+            Property(begeleider => begeleider.Telefoon).HasMaxLength(20);
+            Property(begeleider => begeleider.Gsm).HasMaxLength(20);
+            Property(begeleider => begeleider.Gemeente).HasMaxLength(30);
+            Property(begeleider => begeleider.Straat).HasMaxLength(50);
+            Property(begeleider => begeleider.Postcode).HasMaxLength(15);
+            Property(begeleider => begeleider.FotoUrl).HasMaxLength(100);
+
+            HasMany(begeleider => begeleider.Stages).WithOptional(aanvraag => aanvraag.Stagebegeleider);
+            HasMany(begeleider => begeleider.StageAanvragen).WithRequired(aanvraag => aanvraag.Begeleider).WillCascadeOnDelete(true);
         }
     }
 }

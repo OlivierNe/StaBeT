@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.DAL.Extensions;
@@ -78,7 +77,7 @@ namespace StageBeheersTool.Controllers
         {
             var bedrijf = Mapper.Map<Bedrijf>(model);
             _bedrijfRepository.Update(bedrijf);
-            TempData["message"] = "Gegevens gewijzigd.";
+            SetViewMessage(Resources.SuccesEditBedrijf);
             return RedirectToAction("Details", new { id = bedrijf.Id });
         }
 
@@ -93,5 +92,18 @@ namespace StageBeheersTool.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
+        #region Helpers
+
+        private void SetViewError(string error)
+        {
+            TempData["error"] = error;
+        }
+
+        private void SetViewMessage(string message)
+        {
+            TempData["message"] = message;
+        }
+
+        #endregion
     }
 }

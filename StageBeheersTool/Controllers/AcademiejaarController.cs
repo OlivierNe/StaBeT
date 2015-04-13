@@ -41,7 +41,7 @@ namespace StageBeheersTool.Controllers
             {
                 var academiejaarInstellingen = Mapper.Map<AcademiejaarInstellingen>(model);
                 _academiejaarRepository.Update(academiejaarInstellingen);
-                TempData["message"] = string.Format(Resources.SuccesParametersAcademiejaar, model.Academiejaar);
+                SetViewMessage(string.Format(Resources.SuccesParametersAcademiejaar, model.Academiejaar));
                 return View("Index", model);
             }
             return View("Index", model);
@@ -73,11 +73,25 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 _academiejaarRepository.Add(Mapper.Map<AcademiejaarInstellingen>(model));
-                TempData["message"] = string.Format(Resources.SuccesParametersAcademiejaar, model.Academiejaar);
+                SetViewMessage(string.Format(Resources.SuccesParametersAcademiejaar, model.Academiejaar));
                 return View(model);
             }
             return View(model);
         }
+
+        #region Helpers
+
+        private void SetViewError(string error)
+        {
+            TempData["error"] = error;
+        }
+
+        private void SetViewMessage(string message)
+        {
+            TempData["message"] = message;
+        }
+
+        #endregion
 
     }
 }

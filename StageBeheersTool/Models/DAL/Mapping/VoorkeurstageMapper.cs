@@ -7,7 +7,7 @@ namespace StageBeheersTool.Models.DAL.Mapping
     {
         public VoorkeurStageMapper()
         {
-            ToTable("VoorkeurStages");
+            ToTable("Voorkeur_stages");
             HasRequired(s => s.Stageopdracht);
             HasRequired(s => s.Student);
             HasKey(s => new { s. StudentId, s.StageopdrachtId });

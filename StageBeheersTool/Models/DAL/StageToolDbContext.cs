@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using MySql.Data.Entity;
 using System.Data.Entity;
 using StageBeheersTool.Models.Domain;

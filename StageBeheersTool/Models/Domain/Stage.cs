@@ -6,30 +6,14 @@ namespace StageBeheersTool.Models.Domain
     public class Stage
     {
         #region Properties
-        public int StudentId { get; set; }
-        private Student _student;
-        public virtual Student Student
-        {
-            get { return _student; }
-            set
-            {
-                if (value != null)
-                    StudentId = value.Id;
-                _student = value;
-            }
-        }
+        public int Id { get; set; }
 
-        public int StageopdrachtId { get; set; }
-        private Stageopdracht _stageopdracht;
-        public virtual Stageopdracht Stageopdracht
+        public virtual Student Student { get; set; }
+        public virtual Stageopdracht Stageopdracht { get; set; }
+
+        public Bedrijf Bedrijf
         {
-            get { return _stageopdracht; }
-            set
-            {
-                if (value != null)
-                    StageopdrachtId = value.Id;
-                _stageopdracht = value;
-            }
+            get { return Stageopdracht.Bedrijf; }
         }
 
         public DateTime Begindatum { get; set; }
@@ -93,6 +77,24 @@ namespace StageBeheersTool.Models.Domain
             {
                 throw new ApplicationException(Resources.ErrorOngeldigSemester);
             }
+        }
+
+        protected bool Equals(Stageopdracht other)
+        {
+            return string.Equals(other.Id, this.Id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Stageopdracht)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
         }
 
         #endregion

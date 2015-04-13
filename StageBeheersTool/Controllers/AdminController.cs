@@ -115,5 +115,18 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("Index");
         }
 
+        #region Helpers
+
+        private void SetViewError(string error)
+        {
+            TempData["error"] = error;
+        }
+
+        private void SetViewMessage(string message)
+        {
+            TempData["message"] = message;
+        }
+
+        #endregion
     }
 }

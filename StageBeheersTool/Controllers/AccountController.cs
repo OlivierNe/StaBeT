@@ -109,11 +109,11 @@ namespace StageBeheersTool.Controllers
                     await UserManager.AddToRoleAsync(user.Id, Role.Bedrijf);
                     _userService.CreateUser(new Bedrijf { Email = model.Email, Naam = model.Email });
                 }
-                TempData["message"] = "Account '" + user.UserName + "' succesvol aangemaakt.";
+                SetViewMessage(string.Format(Resources.SuccesAanmakenAccount, user.UserName));
             }
             else
             {
-                TempData["error"] = "Het aanmaken van een account voor '" + model.Email + "' is mislukt. Het account bestaat mogelijk al.";
+                SetViewError(string.Format(Resources.ErrorAanmakenAccount, user.Email));
                 return View(model);
             }
             return RedirectToAction("Index");
@@ -155,12 +155,11 @@ namespace StageBeheersTool.Controllers
 
             if (result.Succeeded)
             {
-                TempData["message"] = "Account '" + user.UserName + "' succesvol gewijzigd.";
+                SetViewMessage(string.Format(Resources.SuccesEditAccount, user.UserName));
             }
             else
             {
-                TempData["error"] = "Het aanmaken van een account voor '" + model.Email + "' is mislukt. Het account bestaat mogelijk al.";
-
+                SetViewError(string.Format(Resources.ErrorCreateAccount, user.Email));
             }
             return RedirectToAction("Index");
         }
@@ -199,10 +198,7 @@ namespace StageBeheersTool.Controllers
                     model.Email
                 });
             }
-            else
-            {
-                message = new { type = "error", message = "Het aanmaken van een account voor '" + model.Email + "' is mislukt. Het account bestaat mogelijk al." };
-            }
+            message = new { type = "error", message = string.Format(Resources.ErrorCreateAccount, user.Email) };
             return Json(message);
         }
 
@@ -278,13 +274,10 @@ namespace StageBeheersTool.Controllers
 
             if (result.Succeeded)
             {
-                TempData["message"] = "Account van '" + user.UserName + "' verwijderd.";
+                SetViewMessage(string.Format(Resources.SuccesDeleteAccount, user.UserName));
                 return RedirectToAction("Index");
             }
-            else
-            {
-                TempData["error"] = "Account verwijderen mislukt.";
-            }
+            SetViewError(string.Format(Resources.ErrorDeleteAccount, user.UserName));
             return View(user);
         }
         #endregion
@@ -399,7 +392,7 @@ namespace StageBeheersTool.Controllers
                         Body = string.Format(Resources.EmailRegistratieBedrijf, bedrijf.Email, generatedPassword)
                     };
                     await UserManager.EmailService.SendAsync(message);
-                    TempData["message"] = Resources.SuccesEmailRegistratieBedrijfVerzonden;
+                    SetViewMessage(Resources.SuccesEmailRegistratieBedrijfVerzonden);
                     return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
@@ -452,7 +445,7 @@ namespace StageBeheersTool.Controllers
             if (result.Succeeded)
             {
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                TempData["message"] = "Wachtwoord gewijzigd.";
+                SetViewMessage(Resources.SuccesChangePassword);
                 return RedirectToAction("Details", "Bedrijf");
             }
             AddErrors(result);
@@ -680,6 +673,17 @@ namespace StageBeheersTool.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+
+        private void SetViewError(string error)
+        {
+            TempData["error"] = error;
+        }
+
+        private void SetViewMessage(string message)
+        {
+            TempData["message"] = message;
+        }
+
         #endregion
     }
 }

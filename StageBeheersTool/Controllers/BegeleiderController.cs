@@ -172,7 +172,7 @@ namespace StageBeheersTool.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        #region helpers
+        #region Helpers
 
         private Begeleider FindBegeleider(int id)
         {
@@ -182,6 +182,17 @@ namespace StageBeheersTool.Controllers
             }
             return _begeleiderRepository.FindById(id);
         }
+
+        private void SetViewError(string error)
+        {
+            TempData["error"] = error;
+        }
+
+        private void SetViewMessage(string message)
+        {
+            TempData["message"] = message;
+        }
+
         #endregion
     }
 }

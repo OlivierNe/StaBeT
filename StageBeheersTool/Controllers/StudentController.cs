@@ -181,7 +181,17 @@ namespace StageBeheersTool.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        #region helpers
+        #region Helpers
+
+        private void SetViewError(string error)
+        {
+            TempData["error"] = error;
+        }
+
+        private void SetViewMessage(string message)
+        {
+            TempData["message"] = message;
+        }
 
         private Student FindStudent(int? id)
         {

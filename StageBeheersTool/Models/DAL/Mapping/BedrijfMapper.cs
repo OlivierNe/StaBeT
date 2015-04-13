@@ -9,13 +9,22 @@ namespace StageBeheersTool.Models.DAL.Mapping
     {
         public BedrijfMapper()
         {
-            this.ToTable("Bedrijven");
-            this.Property(bedrijf => bedrijf.Email).IsRequired().HasMaxLength(200);
+            ToTable("Bedrijven");
+            Property(bedrijf => bedrijf.Id).HasColumnName("bedrijf_id");
+            Property(bedrijf => bedrijf.Email).IsRequired().HasMaxLength(50)
+             .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("HogentEmailIndex") { IsUnique = true }));
+            Property(bedrijf => bedrijf.Naam).IsRequired().HasMaxLength(100);
+            Property(bedrijf => bedrijf.Email).IsRequired().HasMaxLength(50);
+            Property(bedrijf => bedrijf.Telefoon).HasMaxLength(20);
+            Property(bedrijf => bedrijf.Website).HasMaxLength(100);
+            Property(bedrijf => bedrijf.Gemeente).HasMaxLength(30);
+            Property(bedrijf => bedrijf.Straat).HasMaxLength(100);
+            Property(bedrijf => bedrijf.Postcode).HasMaxLength(15);
+            Property(bedrijf => bedrijf.Bereikbaarheid).HasMaxLength(100);
+            Property(bedrijf => bedrijf.Bedrijfsactiviteiten).HasMaxLength(200);
 
-            this.Property(bedrijf => bedrijf.Naam).IsRequired().HasMaxLength(100);
-            this.Property(bedrijf => bedrijf.Email).IsRequired().HasMaxLength(100);
-            this.HasMany(bedrijf => bedrijf.Contactpersonen).WithRequired(cp => cp.Bedrijf);
-            this.HasMany(bedrijf => bedrijf.Stageopdrachten).WithRequired(so => so.Bedrijf);
+            HasMany(bedrijf => bedrijf.Contactpersonen).WithRequired(cp => cp.Bedrijf);
+            HasMany(bedrijf => bedrijf.Stageopdrachten).WithRequired(so => so.Bedrijf);
         }
     }
 }

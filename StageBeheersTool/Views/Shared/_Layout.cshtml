@@ -11,8 +11,8 @@
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -23,7 +23,6 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                @*<ul class="nav navbar-nav col-xs-6">*@
                     @if (CurrentUser.IsBedrijf())
                     {
                         @Html.Partial("_BedrijfHeader")
@@ -32,51 +31,43 @@
                     {
                         @Html.Partial("_StudentHeader")
                     }
-                    else if (CurrentUser.IsBegeleiderEnAdmin())
-                    {
-                        if (IdentityHelpers.GetMode() == Role.Admin)
-                        {
-                            @Html.Partial("_AdminHeader")
-                        }
-                        else if (IdentityHelpers.GetMode() == Role.Begeleider)
-                        {
-                            @Html.Partial("_BegeleiderHeader")
-                        }
-                    }
-                    else if (CurrentUser.IsAdmin())
-                    {
-                        @Html.Partial("_AdminHeader")
-                    }
                     else if (CurrentUser.IsBegeleider())
                     {
                         @Html.Partial("_BegeleiderHeader")
                     }
-
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @if (TempData["message"] != null)
-        {
-            <div class="alert alert-success alert-dismissible" role="alert" id="messageId">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                @TempData["message"]
-            </div>
-        }
-        @if (TempData["error"] != null)
-        {
-            <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                @TempData["error"]
-            </div>
-        }
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Hogeschool Gent - Faculteit Bedrijf en Organisatie - Toegepaste Informatica</p>
-        </footer>
+    </nav>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            @if (CurrentUser.IsAdmin())
+            {
+                @Html.Partial("_AdminSidebar")
+            }
+        </div>
+        <div class="container body-content" id="page-content-wrapper">
+            @if (TempData["message"] != null)
+            {
+                <div class="alert alert-success alert-dismissible" role="alert" id="messageId">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @TempData["message"]
+                </div>
+            }
+            @if (TempData["error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @TempData["error"]
+                </div>
+            }
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - Hogeschool Gent - Faculteit Bedrijf en Organisatie - Toegepaste Informatica</p>
+            </footer>
+        </div>
     </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

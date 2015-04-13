@@ -11,7 +11,7 @@ namespace StageBeheersTool.Models.Domain
         public virtual Keuzepakket Keuzepakket { get; set; }
         public virtual ICollection<VoorkeurStage> VoorkeurStages { get; set; }
 
-        //collection in geval student niet geslaagd is voor stage en volgend jaar nog eens moet doen
+        //collection in geval de student niet geslaagd is voor de stage en volgend jaar nog eens moet doen
         public virtual ICollection<Stage> Stages { get; set; }
 
         public Stageopdracht ToegewezenStageopdracht
@@ -36,12 +36,21 @@ namespace StageBeheersTool.Models.Domain
         #region Public Methods
         public void AddVoorkeurStage(Stageopdracht stageopdracht)
         {
+            if (HeeftStageopdrachtAlsVoorkeur(stageopdracht.Id))
+            {
+                throw new ApplicationException(string.Format(Resources.ErrorVoorkeurStageToevoegen, stageopdracht.Titel));
+            }
             VoorkeurStages.Add(new VoorkeurStage(this, stageopdracht));
         }
 
         public Stageopdracht FindVoorkeurStageopdracht(int id)
         {
             return VoorkeurStages.Select(s => s.Stageopdracht).SingleOrDefault(so => so.Id == id);
+        }
+
+        public VoorkeurStage FindVoorkeurStage(Stageopdracht stageopdracht)
+        {
+            return VoorkeurStages.SingleOrDefault(voorkeur => voorkeur.Stageopdracht.Equals(stageopdracht));
         }
 
         public IEnumerable<Stageopdracht> GetAllVoorkeurStages()
@@ -54,32 +63,40 @@ namespace StageBeheersTool.Models.Domain
             return FindVoorkeurStageopdracht(id) != null;
         }
 
-        public bool RemoveVoorkeurStage(Stageopdracht stageopdracht)
+        public bool KanVoorkeurstageVerwijderen(Stageopdracht stageopdracht)
         {
-            var voorkeur = VoorkeurStages.SingleOrDefault(s => s.Stageopdracht.Id == stageopdracht.Id);
-            return VoorkeurStages.Remove(voorkeur);
+            var voorkeurstage = FindVoorkeurStage(stageopdracht);
+            if (voorkeurstage == null)
+                return true;
+            return voorkeurstage.StagedossierIngediend == false;
+        }
+
+        public void RemoveVoorkeurStage(Stageopdracht stageopdracht)
+        {
+            var voorkeur = VoorkeurStages
+                .SingleOrDefault(voorkeurStage => voorkeurStage.Stageopdracht.Equals(stageopdracht));
+            if (voorkeur == null)
+            {
+                throw new ApplicationException(Resources.ErrorVoorkeurVerwijderenNietGevonden);
+            }
+            if (voorkeur.StagedossierIngediend)
+            {
+                throw new ApplicationException(Resources.ErrorVoorkeurStageVerwijderen);
+            }
+            VoorkeurStages.Remove(voorkeur);
         }
 
         public Stageopdracht FindGekozenVoorkeurStage()
         {
-            return VoorkeurStages.Where(s => s.StagedossierIngediend).Select(s => s.Stageopdracht).SingleOrDefault();
+            return VoorkeurStages
+                .Where(voorkeurStage => voorkeurStage.StagedossierIngediend)
+                .Select(voorkeurStage => voorkeurStage.Stageopdracht)
+                .SingleOrDefault();
         }
-
-        //public void RemoveVoorkeurStages(int[] ids)
-        //{
-        //    foreach (var id in ids)
-        //    {
-        //        var stageopdracht = FindVoorkeurStageopdracht(id);
-        //        if (stageopdracht != null)
-        //        {
-        //            RemoveVoorkeurStage(stageopdracht);
-        //        }
-        //    }
-        //}
 
         public bool MagStageopdrachtBekijken(Stageopdracht stageopdracht)
         {
-            if (Stages.Any(str => str.StageopdrachtId == stageopdracht.Id))
+            if (Stages.Any(stage => stage.Stageopdracht.Equals(stageopdracht)))
             {
                 return true;
             }
@@ -144,6 +161,8 @@ namespace StageBeheersTool.Models.Domain
         }
 
         #endregion
+
+
 
     }
 }

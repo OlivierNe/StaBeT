@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using StageBeheersTool.Models.Authentication;
-using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.ViewModels
 {
@@ -9,6 +8,7 @@ namespace StageBeheersTool.ViewModels
     public class AccountMetRolesVM
     {
         public string Id { get; set; }
+        [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Login { get; set; }
         public bool Admin { get; set; }
         public bool Bedrijf { get; set; }
@@ -58,6 +58,7 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "E-mail")]
         [Required]
         [EmailAddress]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Email { get; set; }
         public bool Admin { get; set; }
         public bool Student { get; set; }
@@ -93,7 +94,6 @@ namespace StageBeheersTool.ViewModels
 
     public class ChangePasswordViewModel : IValidatableObject
     {
-        //[Required]
         [DataType(DataType.Password)]
         [Display(ResourceType = typeof(Resources), Name = "DisplayOldPassword")]
         public string OldPassword { get; set; }
@@ -126,6 +126,7 @@ namespace StageBeheersTool.ViewModels
         [Required]
         [Display(Name = "E-mail")]
         [EmailAddress]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Email { get; set; }
     }
 
@@ -134,6 +135,7 @@ namespace StageBeheersTool.ViewModels
         [Required]
         [Display(Name = "E-mail")]
         [EmailAddress]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Email { get; set; }
 
         [Required]

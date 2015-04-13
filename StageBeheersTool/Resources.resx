@@ -379,4 +379,64 @@
   <data name="ErrorStagedossierStageopdrachtNietAlsVoorkeur" xml:space="preserve">
     <value>Student moet stageopdracht als voorkeur aangeduid hebben alvorens een stagedossier als ingediend aan te kunnen duiden.</value>
   </data>
+  <data name="ErrorVoorkeurStageVerwijderen" xml:space="preserve">
+    <value>Voorkeurstage verwijderen mislukt. Stagedossier voor deze stage is aangeduid als ingediend.</value>
+  </data>
+  <data name="ErrorVoorkeurStageToevoegen" xml:space="preserve">
+    <value>Stageopdracht '{0}' staat al bij mijn voorkeurstages.</value>
+  </data>
+  <data name="SuccesVoorkeurStageVerwijderen" xml:space="preserve">
+    <value>Stageopdracht '{0}' uit mijn voorkeurstages verwijderd.</value>
+  </data>
+  <data name="ErrorVoorkeurVerwijderenNietGevonden" xml:space="preserve">
+    <value>Voorkeurstage verwijderen mislukt. Opgegeven voorkeurstage niet bij mijn voorkeurstages gevonden.</value>
+  </data>
+  <data name="succesVoorkeurToevoegen" xml:space="preserve">
+    <value>Stageopdracht '{0}' is aan mijn voorkeurstages toegevoegd.</value>
+    <comment>0=titel stageopdracht</comment>
+  </data>
+  <data name="ErrorVerwijderGoedgekeurdeStage" xml:space="preserve">
+    <value>Goegekeurde stages kunnen niet meer verwijderd worden.</value>
+  </data>
+  <data name="SuccesVerwijderStageopdracht" xml:space="preserve">
+    <value>Stageopdracht '{0}' succesvol verwijderd.</value>
+    <comment>0=titel stageopdracht</comment>
+  </data>
+  <data name="ErrorAanmakenAccount" xml:space="preserve">
+    <value>Het aanmaken van een account voor '{0}' is mislukt. Het account bestaat mogelijk al.</value>
+    <comment>0=email</comment>
+  </data>
+  <data name="ErrorCreateAccount" xml:space="preserve">
+    <value>Het aanmaken van een account voor '{0}' is mislukt. Het account bestaat mogelijk al.</value>
+    <comment>0=email</comment>
+  </data>
+  <data name="ErrorDeleteAccount" xml:space="preserve">
+    <value>Account '{0}' verwijderen mislukt.</value>
+    <comment>0=username</comment>
+  </data>
+  <data name="SuccesAanmakenAccount" xml:space="preserve">
+    <value>Account '{0}' succesvol aangemaakt.</value>
+    <comment>0=username</comment>
+  </data>
+  <data name="SuccesChangePassword" xml:space="preserve">
+    <value>Wachtwoord gewijzigd.</value>
+  </data>
+  <data name="SuccesDeleteAccount" xml:space="preserve">
+    <value>Account van '{0}' succesvol verwijderd.</value>
+    <comment>0=username</comment>
+  </data>
+  <data name="SuccesEditAccount" xml:space="preserve">
+    <value>Account '{0}' succesvol gewijzigd.</value>
+    <comment>0=username</comment>
+  </data>
+  <data name="SuccesEditBedrijf" xml:space="preserve">
+    <value>Gegevens gewijzigd.</value>
+  </data>
+  <data name="ErrorVeldlengte" xml:space="preserve">
+    <value>{0} mag niet langer zijn dan {1} characters.</value>
+    <comment>0=titel veld, 1=max characters</comment>
+  </data>
+  <data name="ErrorVerplichtBeginEnEindDatum" xml:space="preserve">
+    <value>Verplicht begindatum en einddatum in te geven bij een aangepaste stageperiode.</value>
+  </data>
 </root>

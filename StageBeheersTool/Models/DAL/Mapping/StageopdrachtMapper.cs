@@ -7,21 +7,25 @@ namespace StageBeheersTool.Models.DAL.Mapping
     {
         public StageopdrachtMapper()
         {
-            this.ToTable("Stageopdrachten");
-            this.Property(so => so.Titel).IsRequired().HasMaxLength(200);
-            this.Property(so => so.Omschrijving).IsRequired();
-            this.Property(so => so.Academiejaar).IsRequired();
-            this.HasOptional(so => so.Stagementor).WithMany().WillCascadeOnDelete(false);
-            this.HasOptional(so => so.Contractondertekenaar).WithMany().WillCascadeOnDelete(false);
-            //this.HasMany(so => so.Studenten).WithMany();
-            //.Map(m =>
-            //{
-            //    m.MapLeftKey("Stageopdracht_id");
-            //    m.MapRightKey("Student_id");
-            //    m.ToTable("Student_Stageopdracht");
-            //});
+            ToTable("Stageopdrachten");
+            Property(so => so.Id).HasColumnName("stageopdracht_id");
+            Property(so => so.Titel).IsRequired().HasMaxLength(250);
+            Property(so => so.Omschrijving).IsRequired();
+            Property(so => so.Academiejaar).IsRequired().HasMaxLength(9);
+            Property(so => so.Gemeente).HasMaxLength(30);
+            Property(so => so.Straat).HasMaxLength(50);
+            Property(so => so.Specialisatie).HasMaxLength(50);
+            Property(so => so.ContractondertekenaarNaam).HasMaxLength(50);
+            Property(so => so.ContractondertekenaarEmail).HasMaxLength(50);
+            Property(so => so.StagementorNaam).HasMaxLength(50);
+            Property(so => so.StagementorEmail).HasMaxLength(50);
+            Property(so => so.Gemeente).HasMaxLength(30);
+            Property(so => so.Straat).HasMaxLength(50);
+            Property(so => so.Postcode).HasMaxLength(15);
 
-            //this.HasOptional(so => so.Stagebegeleider).WithMany().WillCascadeOnDelete(false);
+            HasOptional(so => so.Stagementor).WithMany().WillCascadeOnDelete(false);
+            HasOptional(so => so.Contractondertekenaar).WithMany().WillCascadeOnDelete(false);
+
         }
     }
 }

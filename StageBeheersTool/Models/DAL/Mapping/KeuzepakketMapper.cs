@@ -1,9 +1,5 @@
 ﻿using StageBeheersTool.Models.Domain;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Web;
 
 namespace StageBeheersTool.Models.DAL.Mapping
 {
@@ -11,8 +7,9 @@ namespace StageBeheersTool.Models.DAL.Mapping
     {
         public KeuzepakketMapper()
         {
-            this.ToTable("Keuzepakketten");
-            this.Property(k => k.Naam).IsRequired().HasMaxLength(50);
+            ToTable("Keuzepakketten");
+            Property(keuzepakket => keuzepakket.Id).HasColumnName("keuzepakket_id");
+            Property(keuzepakket => keuzepakket.Naam).IsRequired().HasMaxLength(50);
         }
     }
 }

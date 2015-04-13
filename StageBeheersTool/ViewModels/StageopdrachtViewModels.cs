@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
-using StageBeheersTool.Helpers;
+﻿using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -31,16 +30,13 @@ namespace StageBeheersTool.ViewModels
         public string Title { get; set; }
         public string OverzichtAction { get; set; }
 
-        private SelectList _aantalStudentenList;
-        private SelectList _semesterList;
         private SelectList _academiejaarList;
 
         public SelectList AantalStudentenList
         {
             get
             {
-                return _aantalStudentenList ?? (_aantalStudentenList = new SelectList(new[] { "1", "2", "3" },
-                           AantalStudenten == null ? "" : AantalStudenten.ToString()));
+                return new SelectList(new[] { "1", "2", "3" }, AantalStudenten == null ? "" : AantalStudenten.ToString());
             }
         }
 
@@ -48,8 +44,7 @@ namespace StageBeheersTool.ViewModels
         {
             get
             {
-                return _semesterList ??
-                    (_semesterList = new SelectList(new[] { "1", "2" }, Semester == null ? "" : Semester.ToString()));
+                return new SelectList(new[] { "1", "2" }, Semester == null ? "" : Semester.ToString());
             }
         }
 
@@ -157,17 +152,22 @@ namespace StageBeheersTool.ViewModels
     {
         #region Properties
         [Required]
-        [StringLength(200, ErrorMessage = "{0} mag niet langer zijn dan 200 characters.")]
+        [StringLength(250, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Titel { get; set; }
+        [StringLength(30, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Gemeente { get; set; }
+        [StringLength(15, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Postcode { get; set; }
+        [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Straat { get; set; }
         [Required]
         [DataType(DataType.MultilineText)]
         public string Omschrijving { get; set; }
         [Required]
-        [RegularExpression("[0-9]{4}-[0-9]{4}", ErrorMessage = "Ongeldig academiejaar")]
+        [RegularExpression("[0-9]{4}-[0-9]{4}", ErrorMessageResourceType = typeof(Resources),
+           ErrorMessageResourceName = "ErrorOngeldigAcademiejaarFormaat")]
         public string Academiejaar { get; set; }
+        [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Specialisatie { get; set; }
         [Display(Name = "Specialisatie")]
         public int? SpecialisatieId { get; set; }
@@ -266,8 +266,12 @@ namespace StageBeheersTool.ViewModels
         #endregion
     }
 
-    public class StageopdrachtEditVM : StageopdrachtCreateVM, IValidatableObject
+    public class StageopdrachtEditVM : StageopdrachtCreateVM
     {
+        [HiddenInput]
+        [Required]
+        public int Id { get; set; }
+
         public StageopdrachtEditVM()
         {
         }
@@ -276,21 +280,7 @@ namespace StageBeheersTool.ViewModels
             : base(specialisaties, contractondertekenaars, stagementors)
         {
         }
-        [HiddenInput]
-        public int Id { get; set; }
-        [Display(Name = "Aantal toegewezen studenten")]
-        [Range(0, 3)]
-        public int AantalToegewezenStudenten { get; set; }
 
-        public new IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var errors = base.Validate(validationContext).ToList();
-            if (AantalToegewezenStudenten > AantalStudenten)
-            {
-                errors.Add(new ValidationResult("Aantal toegewezen studenten moet lager zijn dan het aantal studenten."));
-            }
-            return errors;
-        }
     }
 
     public class StageopdrachtAfkeurenVM
@@ -431,7 +421,7 @@ namespace StageBeheersTool.ViewModels
             var errors = new List<ValidationResult>();
             if (AangepasteStageperiode && (Einddatum == null || Begindatum == null))
             {
-                errors.Add(new ValidationResult("Verplicht begindatum en einddatum in te geven bij een aangepaste stageperiode."));
+                errors.Add(new ValidationResult(Resources.ErrorVerplichtBeginEnEindDatum));
             }
             return errors;
         }

@@ -8,7 +8,7 @@ namespace StageBeheersTool.ViewModels
     public class StudentListVM
     {
         public IEnumerable<Student> Studenten { get; set; }
-        
+
         public bool ToonStage { get; set; }
         public bool ToonCreateNew { get; set; }
 
@@ -23,18 +23,26 @@ namespace StageBeheersTool.ViewModels
         [EmailAddress]
         [Required]
         [Display(Name = "HoGent E-mail")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string HogentEmail { get; set; }
         [Display(Name = "Naam")]
+        [StringLength(30, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Familienaam { get; set; }
+        [StringLength(20, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Voornaam { get; set; }
         [Display(Name = "Keuzepakket")]
         public int? KeuzepakketId { get; set; }
         [Display(Name = "E-mail")]
         [EmailAddress]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Email { get; set; }
+        [StringLength(20, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Gsm { get; set; }
+        [StringLength(30, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Gemeente { get; set; }
+        [StringLength(15, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Postcode { get; set; }
+        [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Straat { get; set; }
         public SelectList KeuzevakSelectList { get; set; }
 
@@ -48,17 +56,25 @@ namespace StageBeheersTool.ViewModels
     {
         public int Id { get; set; }
         [Display(Name = "Naam")]
+        [StringLength(30, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Familienaam { get; set; }
+        [StringLength(20, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Voornaam { get; set; }
         [Display(Name = "Keuzepakket")]
         public int? KeuzepakketId { get; set; }
         [Display(Name = "E-mail")]
         [EmailAddress]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Email { get; set; }
+        [StringLength(20, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Gsm { get; set; }
+        [StringLength(30, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Gemeente { get; set; }
+        [StringLength(15, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Postcode { get; set; }
+        [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Straat { get; set; }
+        [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string FotoUrl { get; set; }
         public SelectList KeuzevakSelectList { get; set; }
 

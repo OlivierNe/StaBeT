@@ -6,7 +6,7 @@ namespace StageBeheersTool.Models.Domain
         #region properties
         public int StudentId { get; set; }
         private Student _student;
-        public Student Student
+        public virtual Student Student
         {
             get { return _student; }
             set
@@ -21,7 +21,7 @@ namespace StageBeheersTool.Models.Domain
 
         public int StageopdrachtId { get; set; }
         private Stageopdracht _stageopdracht;
-        public Stageopdracht Stageopdracht
+        public virtual Stageopdracht Stageopdracht
         {
             get { return _stageopdracht; }
             set

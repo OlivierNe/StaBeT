@@ -368,6 +368,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -492,6 +493,10 @@
     <Content Include="Views\Stageopdracht\StagesMetStagedossier.cshtml" />
     <Content Include="Views\Stageopdracht\_StagesMetStagedossier.cshtml" />
     <Content Include="Views\Stageopdracht\StageToewijzen.cshtml" />
+    <Content Include="Views\Shared\_AdminSidebar.cshtml" />
+    <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
+    <Content Include="Web References\be.hogent.webservice\Map.datasource" />
+    <Content Include="Web References\be.hogent.webservice\Reference.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
