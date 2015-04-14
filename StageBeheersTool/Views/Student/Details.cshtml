@@ -57,7 +57,8 @@
 <p>
     @if (Model.ToonTerugNaarLijst)
     {
-        @Html.ActionLink("Terug naar lijst", Model.Overzicht)
+        @*@Html.ActionLink("Terug naar lijst", Model.Overzicht)*@
+        <a href="javascript:history.back();">Terug</a>
     }
     @if (Model.ToonEdit)
     {

@@ -1,4 +1,5 @@
-﻿using StageBeheersTool.Models.Authentication;
+﻿using System.Data.Entity.Infrastructure;
+using MySql.Data.MySqlClient;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Data.Entity;
@@ -9,43 +10,47 @@ namespace StageBeheersTool.Models.DAL
 {
     public class BedrijfRepository : IBedrijfRepository
     {
-        private readonly StageToolDbContext ctx;
+        private readonly StageToolDbContext _dbContext;
         private readonly DbSet<Bedrijf> _bedrijven;
-        private readonly IUserService _userService;
 
-        public BedrijfRepository(StageToolDbContext ctx, IUserService userService)
+        public BedrijfRepository(StageToolDbContext ctx)
         {
-            this.ctx = ctx;
-            this._bedrijven = ctx.Bedrijven;
-            this._userService = userService;
+            _dbContext = ctx;
+            _bedrijven = ctx.Bedrijven;
         }
 
         public void Add(Bedrijf bedrijf)
         {
-            _bedrijven.Add(bedrijf);
-            SaveChanges();
+            try
+            {
+                _bedrijven.Add(bedrijf);
+                SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var sqlException = ex.InnerException.InnerException as MySqlException;
+                if (sqlException != null && sqlException.Number == 1062)
+                {
+                    throw new ApplicationException(string.Format(Resources.ErrorCreateBedrijf, bedrijf.Email));
+                }
+                throw;
+            }
         }
+
+        public IQueryable<Bedrijf> FindAll()
+        {
+            return _bedrijven.OrderBy(b => b.Naam);
+        }
+
 
         public Bedrijf FindByEmail(string email)
         {
-            if (CurrentUser.IsBedrijf())
-            {
-                return _userService.FindBedrijf();
-            }
             return _bedrijven
                 .SingleOrDefault(bedrijf => bedrijf.Email == email);
         }
 
-        public Bedrijf FindById(int? id)
+        public Bedrijf FindById(int id)
         {
-            if (CurrentUser.IsBedrijf())
-            {
-                return _userService.FindBedrijf();
-            }
-            if (id == null)
-            {
-                return null;
-            }
             return _bedrijven.SingleOrDefault(bedrijf => bedrijf.Id == id);
         }
 
@@ -65,11 +70,29 @@ namespace StageBeheersTool.Models.DAL
             SaveChanges();
         }
 
+        public void Delete(Bedrijf bedrijf)
+        {
+            try
+            {
+                _bedrijven.Remove(bedrijf);
+                SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var sqlException = ex.InnerException.InnerException as MySqlException;
+                if (sqlException != null && sqlException.Number == 1451)
+                {
+                    throw new ApplicationException(Resources.ErrorDeleteBedrijf);
+                }
+                throw;
+            }
+        }
+
         public void SaveChanges()
         {
             try
             {
-                ctx.SaveChanges();
+                _dbContext.SaveChanges();
             }
             catch (DbEntityValidationException e)
             {
@@ -91,9 +114,5 @@ namespace StageBeheersTool.Models.DAL
             }
         }
 
-        public IQueryable<Bedrijf> FindAll()
-        {
-            return _bedrijven.OrderBy(b => b.Naam);
-        }
     }
 }

@@ -4,7 +4,7 @@ namespace StageBeheersTool.Models.Domain
 {
     public interface IStudentRepository
     {
-        bool Add(Student student);
+        void Add(Student student);
         Student FindByEmail(string hoGentEmail);
         Student FindById(int id);
         IQueryable<Student> FindAll();

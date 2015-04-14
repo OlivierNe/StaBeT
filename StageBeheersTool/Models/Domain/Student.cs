@@ -18,7 +18,7 @@ namespace StageBeheersTool.Models.Domain
         {
             get
             {
-                var mijnStageopdracht = Stages.SingleOrDefault(s => s.Stageopdracht.IsInHuidigAcademiejaar());
+                var mijnStageopdracht = Stages.FirstOrDefault(s => s.Stageopdracht.IsInHuidigAcademiejaar());
                 return mijnStageopdracht == null ? null : mijnStageopdracht.Stageopdracht;
             }
         }
@@ -67,7 +67,7 @@ namespace StageBeheersTool.Models.Domain
         {
             var voorkeurstage = FindVoorkeurStage(stageopdracht);
             if (voorkeurstage == null)
-                return true;
+                return false;
             return voorkeurstage.StagedossierIngediend == false;
         }
 

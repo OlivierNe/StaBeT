@@ -10,8 +10,7 @@ namespace StageBeheersTool.ViewModels
         public IEnumerable<Student> Studenten { get; set; }
 
         public bool ToonStage { get; set; }
-        public bool ToonCreateNew { get; set; }
-
+        public bool ToonActies { get; set; }
         public string Overzicht { get; set; }
 
         public string Naam { get; set; }
@@ -45,6 +44,8 @@ namespace StageBeheersTool.ViewModels
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Straat { get; set; }
         public SelectList KeuzevakSelectList { get; set; }
+        [Display(Name = "Ook een login account aanmaken?")]
+        public bool LoginAccountAanmaken { get; set; }
 
         public void SetKeuzevakSelectList(IEnumerable<Keuzepakket> keuzepakketten)
         {
@@ -108,7 +109,7 @@ namespace StageBeheersTool.ViewModels
     {
         public int Id { get; set; }
         public string Naam { get; set; }
-        public string HogentEmail { get; set; }
+        public string Email { get; set; }
     }
 
 }

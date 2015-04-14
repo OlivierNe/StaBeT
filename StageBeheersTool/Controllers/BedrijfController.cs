@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.DAL.Extensions;
@@ -11,14 +12,17 @@ namespace StageBeheersTool.Controllers
     public class BedrijfController : Controller
     {
         private readonly IBedrijfRepository _bedrijfRepository;
+        private readonly IUserService _userService;
 
-        public BedrijfController(IBedrijfRepository bedrijfRepository)
+        public BedrijfController(IBedrijfRepository bedrijfRepository,
+            IUserService userService)
         {
             _bedrijfRepository = bedrijfRepository;
+            _userService = userService;
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult Index(string bedrijfsnaam = null)
+        public ActionResult List(string bedrijfsnaam = null)
         {
             var bedrijven = _bedrijfRepository.FindAll().WithFilter(bedrijfsnaam);
             if (Request.IsAjaxRequest())
@@ -42,16 +46,25 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 var bedrijf = Mapper.Map<Bedrijf>(model);
-                _bedrijfRepository.Add(bedrijf);
-                return RedirectToAction("Details", new { id = bedrijf.Id });
+                try
+                {
+                    _bedrijfRepository.Add(bedrijf);
+                    SetViewMessage(string.Format(Resources.SuccesCreateBedrijf, bedrijf.Naam));
+                    _userService.CreateLogin(bedrijf.Email, "wachtwoord", Role.Bedrijf);//TODO: tijdelijk "wachtwoord"
+                    return RedirectToAction("Details", new { id = bedrijf.Id });
+                }
+                catch (ApplicationException ex)
+                {
+                    SetViewError(ex.Message);
+                }
             }
             return View(model);
         }
 
         [Authorize(Role.Bedrijf, Role.Admin, Role.Begeleider, Role.Student)]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            var bedrijf = _bedrijfRepository.FindById(id);
+            var bedrijf = FindBedrijf(id);
             if (bedrijf == null)
             {
                 return HttpNotFound();
@@ -60,9 +73,9 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Bedrijf, Role.Admin)]
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            var bedrijf = _bedrijfRepository.FindById(id);
+            var bedrijf = FindBedrijf(id);
             if (bedrijf == null)
             {
                 return HttpNotFound();
@@ -76,23 +89,91 @@ namespace StageBeheersTool.Controllers
         public ActionResult Edit(EditBedrijfVM model)
         {
             var bedrijf = Mapper.Map<Bedrijf>(model);
+            if (CurrentUser.IsBedrijf())
+            {
+                bedrijf.Id = _userService.FindBedrijf().Id;
+            }
             _bedrijfRepository.Update(bedrijf);
             SetViewMessage(Resources.SuccesEditBedrijf);
             return RedirectToAction("Details", new { id = bedrijf.Id });
         }
 
         [Authorize(Role.Admin)]
-        public ActionResult BedrijfJson(int id)
+        public ActionResult Delete(int id)
         {
             var bedrijf = _bedrijfRepository.FindById(id);
+            if (bedrijf == null)
+            {
+                return HttpNotFound();
+            }
+            return View(bedrijf);
+        }
+
+        [Authorize(Role.Admin)]
+        [ActionName("Delete")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var bedrijf = _bedrijfRepository.FindById(id);
+            if (bedrijf == null)
+            {
+                return HttpNotFound();
+            }
+            try
+            {
+                _bedrijfRepository.Delete(bedrijf);
+                SetViewMessage(string.Format(Resources.SuccesDeleteBedrijf, bedrijf.Naam));
+            }
+            catch (ApplicationException ex)
+            {
+                SetViewError(ex.Message);
+                return View(bedrijf);
+            }
+            finally
+            {
+                _userService.DeleteLogin(bedrijf.Email);
+            }
+            return RedirectToAction("List");
+        }
+
+        [Authorize(Role.Admin)]
+        public ActionResult BedrijfJson(int? id = null, string email = null)
+        {
+            Bedrijf bedrijf;
+            if (id != null)
+            {
+                bedrijf = _bedrijfRepository.FindById((int)id);
+            }
+            else
+            {
+                bedrijf = _bedrijfRepository.FindByEmail(email);
+            }
+            if (bedrijf == null)
+            {
+                return HttpNotFound();
+            }
             var model = Mapper.Map<BedrijfJsonVM>(bedrijf);
             model.Stagementors = Mapper.Map<IEnumerable<Contactpersoon>, IEnumerable<ContactpersoonJsonVM>>(bedrijf.FindAllStagementors());
-            model.Contractondertekenaars = 
+            model.Contractondertekenaars =
                 Mapper.Map<IEnumerable<Contactpersoon>, IEnumerable<ContactpersoonJsonVM>>(bedrijf.FindAllContractOndertekenaars());
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         #region Helpers
+
+        private Bedrijf FindBedrijf(int? id)
+        {
+            if (CurrentUser.IsBedrijf())
+            {
+                return _userService.FindBedrijf();
+            }
+            if (id == null)
+            {
+                return null;
+            }
+            return _bedrijfRepository.FindById((int)id);
+        }
 
         private void SetViewError(string error)
         {

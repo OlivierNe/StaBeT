@@ -111,7 +111,7 @@ namespace StageBeheersTool.Controllers
                 UserManager.RemoveClaim(claim.UserId, new Claim(claim.ClaimType, claim.ClaimValue));
             }
             UserManager.Delete(user);
-            TempData["message"] = string.Format(Resources.SuccesAdminVerwijderd, user.Email);
+            SetViewMessage(string.Format(Resources.SuccesAdminVerwijderd, user.Email));
             return RedirectToAction("Index");
         }
 

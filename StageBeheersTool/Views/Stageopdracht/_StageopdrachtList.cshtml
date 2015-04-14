@@ -77,10 +77,10 @@
         {
             columns.Add().Sanitized(false).Encoded(false)
                 .RenderValueAs(so => so.IsGoedgekeurd() == false
-                    ? Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
+                    ? Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { id = so.Id }, new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
             columns.Add().Sanitized(false).Encoded(false)
                 .RenderValueAs(so => so.IsAfgekeurd() == false
-                    ? Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { id = so.Id }) : MvcHtmlString.Empty);
+                    ? Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { id = so.Id }, new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
         }
         if (Model.ToonDossierIndienen)
         {

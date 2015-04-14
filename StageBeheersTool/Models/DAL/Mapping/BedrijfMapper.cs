@@ -12,7 +12,7 @@ namespace StageBeheersTool.Models.DAL.Mapping
             ToTable("Bedrijven");
             Property(bedrijf => bedrijf.Id).HasColumnName("bedrijf_id");
             Property(bedrijf => bedrijf.Email).IsRequired().HasMaxLength(50)
-             .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("HogentEmailIndex") { IsUnique = true }));
+             .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("BedrijfEmailIndex") { IsUnique = true }));
             Property(bedrijf => bedrijf.Naam).IsRequired().HasMaxLength(100);
             Property(bedrijf => bedrijf.Email).IsRequired().HasMaxLength(50);
             Property(bedrijf => bedrijf.Telefoon).HasMaxLength(20);
@@ -23,8 +23,8 @@ namespace StageBeheersTool.Models.DAL.Mapping
             Property(bedrijf => bedrijf.Bereikbaarheid).HasMaxLength(100);
             Property(bedrijf => bedrijf.Bedrijfsactiviteiten).HasMaxLength(200);
 
-            HasMany(bedrijf => bedrijf.Contactpersonen).WithRequired(cp => cp.Bedrijf);
-            HasMany(bedrijf => bedrijf.Stageopdrachten).WithRequired(so => so.Bedrijf);
+            HasMany(bedrijf => bedrijf.Contactpersonen).WithRequired(cp => cp.Bedrijf).WillCascadeOnDelete(true);
+            HasMany(bedrijf => bedrijf.Stageopdrachten).WithRequired(so => so.Bedrijf).WillCascadeOnDelete(false);
         }
     }
 }

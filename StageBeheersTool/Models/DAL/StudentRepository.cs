@@ -20,26 +20,22 @@ namespace StageBeheersTool.Models.DAL
             _studenten = ctx.Studenten;
         }
 
-        public bool Add(Student student)
+        public void Add(Student student)
         {
             try
             {
                 _studenten.Add(student);
-                _dbContext.SaveChanges();
+                SaveChanges();
             }
             catch (DbUpdateException ex)
             {
                 var sqlException = ex.InnerException.InnerException as MySqlException;
                 if (sqlException != null && sqlException.Number == 1062)
                 {
-                    return false;
+                    throw new ApplicationException(string.Format(Resources.ErrorStudentCreateHogentEmailBestaatAl, student.HogentEmail));
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-            return true;
         }
 
         public Student FindByEmail(string hogentEmail)
@@ -61,7 +57,7 @@ namespace StageBeheersTool.Models.DAL
         {
             var huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
             return _studenten.Include(student => student.Stages)
-                .Where(student => student.Stages.Any(str => str.Stageopdracht.Academiejaar == huidigAcademiejaar))
+                .Where(student => student.Stages.Any(stage => stage.Stageopdracht.Academiejaar == huidigAcademiejaar))
                 .OrderBy(student => student.Familienaam);
         }
 
@@ -84,8 +80,20 @@ namespace StageBeheersTool.Models.DAL
 
         public void Delete(Student student)
         {
-            _studenten.Remove(student);
-            SaveChanges();
+            try
+            {
+                _studenten.Remove(student);
+                SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var sqlException = ex.InnerException.InnerException as MySqlException;
+                if (sqlException != null && sqlException.Number == 1451)
+                {
+                    throw new ApplicationException(string.Format(Resources.ErrorDeleteStudent, student.Naam));
+                }
+                throw;
+            }
         }
 
         public void SaveChanges()
@@ -113,6 +121,6 @@ namespace StageBeheersTool.Models.DAL
                 throw new ApplicationException("" + message);
             }
         }
-        
+
     }
 }

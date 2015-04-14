@@ -7,8 +7,9 @@ namespace StageBeheersTool.Models.Domain
         void Add(Bedrijf bedrijf);
         IQueryable<Bedrijf> FindAll();
         Bedrijf FindByEmail(string email);
-        Bedrijf FindById(int? id);
-        void SaveChanges();
+        Bedrijf FindById(int id);
         void Update(Bedrijf bedrijf);
+        void Delete(Bedrijf bedrijf);
+        void SaveChanges();
     }
 }

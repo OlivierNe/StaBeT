@@ -1,13 +1,19 @@
 ﻿$(function () {
     "use strict";
+
     window.setTimeout(function () {
         $("#messageId").fadeOut("slow");
-    }, 60000);
-});
+    }, 20000);
 
-//sidebar
-$(function() {
 
+
+    //sidebar
     var url = location.href;
-
+    $("#sidebarItems").find("a").each(function (i, item) {
+        if (item.href !== "" && url.indexOf(item.href) > -1) {
+            $(this).parent().parent().addClass("in");
+            $(this).parent().addClass("selectedItem");
+            return false;
+        }
+    });
 });

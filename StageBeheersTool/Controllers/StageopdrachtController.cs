@@ -429,7 +429,16 @@ namespace StageBeheersTool.Controllers
             {
                 ModelState.AddModelError("BedrijfId", Resources.ErrorBedrijfVerplicht);
             }
-            var bedrijf = _bedrijfRepository.FindById(model.BedrijfId);
+            Bedrijf bedrijf = null;
+            if (CurrentUser.IsBedrijf())
+            {
+                _userService.FindBedrijf();
+            }
+            else
+            {
+                bedrijf = _bedrijfRepository.FindById((int)model.BedrijfId);
+            }
+
             if (ModelState.IsValid)
             {
                 var stageopdracht = Mapper.Map<Stageopdracht>(model);
@@ -490,7 +499,7 @@ namespace StageBeheersTool.Controllers
         public ActionResult Details(int id, string overzicht = "Index")
         {
             var model = new StageopdrachtDetailsVM();
-            var stageopdracht = _stageopdrachtRepository.FindById(id);
+            var stageopdracht = FindStageopdracht(id);
             if (stageopdracht == null)
             {
                 return HttpNotFound();
@@ -503,11 +512,11 @@ namespace StageBeheersTool.Controllers
             }
             if (CurrentUser.IsBedrijf())
             {
-                var bedrijf = _userService.FindBedrijf();
+                var bedrijf = stageopdracht.Bedrijf;
                 model.ToonEdit = academiejaarInstellingen == null
                     || bedrijf.MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen.DeadlineBedrijfStageEdit);
                 model.EditDeadline = academiejaarInstellingen == null ? null : academiejaarInstellingen.DeadlineBedrijfStageEditToString();
-                model.ToonBedrijfeditDeadline = model.ToonEdit && CurrentUser.IsBedrijf();
+                model.ToonBedrijfeditDeadline = model.ToonEdit;
             }
             else if (CurrentUser.IsStudent())
             {
@@ -550,7 +559,7 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Bedrijf, Role.Begeleider, Role.Admin)]
         public ActionResult Edit(int id)
         {
-            var stageopdracht = _stageopdrachtRepository.FindById(id);
+            var stageopdracht = FindStageopdracht(id);
             if (stageopdracht == null)
             {
                 return HttpNotFound();
@@ -580,7 +589,7 @@ namespace StageBeheersTool.Controllers
             Stageopdracht stageopdracht;
             if (ModelState.IsValid)
             {
-                var opdracht = _stageopdrachtRepository.FindById(model.Id);
+                var opdracht = FindStageopdracht(model.Id);
                 if (opdracht == null)
                 {
                     return HttpNotFound();
@@ -611,7 +620,7 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Bedrijf, Role.Admin)]
         public ActionResult Delete(int id)
         {
-            var stageopdracht = _stageopdrachtRepository.FindById(id);
+            var stageopdracht = FindStageopdracht(id);
             if (stageopdracht == null)
             {
                 return HttpNotFound();
@@ -625,18 +634,26 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Bedrijf, Role.Admin)]
         public ActionResult DeleteConfirmed(int id)
         {
-            var stageopdracht = _stageopdrachtRepository.FindById(id);
+            var stageopdracht = FindStageopdracht(id);
             if (stageopdracht == null)
             {
                 return HttpNotFound();
             }
-            if (CurrentUser.IsAdmin() == false && stageopdracht.IsGoedgekeurd())
+            if (CurrentUser.IsBedrijf() && stageopdracht.IsGoedgekeurd())
             {
                 SetViewError(Resources.ErrorVerwijderGoedgekeurdeStage);
                 //TODO:return overzicht
                 return RedirectToAction("Details", new { id });
             }
-            _stageopdrachtRepository.Delete(stageopdracht);
+            try
+            {
+                _stageopdrachtRepository.Delete(stageopdracht);
+            }
+            catch (ApplicationException ex)
+            {
+                SetViewError(ex.Message);
+                return RedirectToAction("Details", new { id });
+            }
             SetViewMessage(string.Format(Resources.SuccesVerwijderStageopdracht, stageopdracht.Titel));
             return RedirectToAction("Details", new { id });
         }
@@ -1012,8 +1029,8 @@ namespace StageBeheersTool.Controllers
             try
             {
                 Admin.KeurStageBegeleidingAanvraagGoed(aanvraag);
-               SetViewMessage(string.Format(Resources.SuccesStagebegeleidingAanvraagGoedgekeurd,
-                   aanvraag.Begeleider.Naam, aanvraag.Stage.Titel));
+                SetViewMessage(string.Format(Resources.SuccesStagebegeleidingAanvraagGoedgekeurd,
+                    aanvraag.Begeleider.Naam, aanvraag.Stage.Titel));
                 _stageopdrachtRepository.SaveChanges();
             }
             catch (ApplicationException ex)
@@ -1039,6 +1056,15 @@ namespace StageBeheersTool.Controllers
         #endregion
 
         #region Helpers
+
+        private Stageopdracht FindStageopdracht(int id)
+        {
+            if (CurrentUser.IsBedrijf())
+            {
+                return _userService.FindBedrijf().FindStageopdrachtById(id);
+            }
+            return _stageopdrachtRepository.FindById(id);
+        }
 
         private void SetViewError(string error)
         {

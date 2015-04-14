@@ -2,6 +2,9 @@
 
 namespace StageBeheersTool.Models.Domain
 {
+    /// <summary>
+    /// Instellingen voor 1 academiejaar
+    /// </summary>
     public class AcademiejaarInstellingen
     {
         public string Academiejaar { get; set; }

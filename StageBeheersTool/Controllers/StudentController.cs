@@ -1,4 +1,5 @@
-﻿using StageBeheersTool.Models.DAL.Extensions;
+﻿using System;
+using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
 using System.Web;
@@ -26,12 +27,11 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult Index(StudentListVM model)
+        public ActionResult List(StudentListVM model)
         {
             var studenten = _studentRepository.FindAll().WithFilter(model.Naam, model.Voornaam);
             model.Studenten = studenten;
-
-            model.ToonCreateNew = CurrentUser.IsAdmin();
+            model.ToonActies = CurrentUser.IsAdmin();
 
             if (Request.IsAjaxRequest())
             {
@@ -54,7 +54,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_studentList", model);
             }
-            return View("Index", model);
+            return View("List", model);
         }
 
         [Authorize(Role.Admin)]
@@ -62,6 +62,7 @@ namespace StageBeheersTool.Controllers
         {
             var model = new StudentCreateVM();
             model.SetKeuzevakSelectList(_keuzepakketRepository.FindAll());
+            model.LoginAccountAanmaken = true;
             return View(model);
         }
 
@@ -74,13 +75,20 @@ namespace StageBeheersTool.Controllers
             {
                 var student = Mapper.Map<Student>(model);
                 student.Keuzepakket = model.KeuzepakketId == null ? null : _keuzepakketRepository.FindBy((int)model.KeuzepakketId);
-                var result = _studentRepository.Add(student);
-                if (result)
+                try
                 {
-                    TempData["message"] = string.Format(Resources.SuccesStudentCreate, student.HogentEmail);
-                    return RedirectToAction("Index");
+                    _studentRepository.Add(student);
+                    SetViewMessage(string.Format(Resources.SuccesStudentCreate, student.Naam));
+                    if (model.LoginAccountAanmaken)
+                    {
+                        _userService.CreateLogin(student.HogentEmail, "wachtwoord", Role.Student);//TODO: tijdelijk "wachtwoord"
+                    }
+                    return RedirectToAction("Details", new { student.Id });
                 }
-                TempData["error"] = string.Format(Resources.ErrorStudentCreateHogentEmailBestaatAl, student.HogentEmail);
+                catch (ApplicationException ex)
+                {
+                    SetViewError(ex.Message);
+                }
             }
             model.SetKeuzevakSelectList(_keuzepakketRepository.FindAll());
             return View(model);
@@ -142,7 +150,7 @@ namespace StageBeheersTool.Controllers
             studentModel.Id = student.Id;
             studentModel.Keuzepakket = model.KeuzepakketId == null ? null : _keuzepakketRepository.FindBy((int)model.KeuzepakketId);
             _studentRepository.Update(studentModel);
-            TempData["message"] = "Gegevens gewijzigd.";
+            SetViewMessage("Gegevens gewijzigd.");
             return RedirectToAction("Details", new { studentModel.Id });
         }
 
@@ -168,31 +176,37 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            _studentRepository.Delete(student);
-            TempData["message"] = "Student " + student.HogentEmail + " succesvol verwijderd.";
-            return RedirectToAction("Index");
+            try
+            {
+                _studentRepository.Delete(student);
+                SetViewMessage(string.Format(Resources.SuccesDeleteStudent, student.Naam));
+            }
+            catch (ApplicationException ex)
+            {
+                SetViewError(ex.Message);
+                return View(student);
+            }
+            finally
+            {
+                _userService.DeleteLogin(student.HogentEmail);
+            }
+            return RedirectToAction("List");
         }
 
         [Authorize(Role.Admin)]
-        public ActionResult StudentJson(string hoGentEmail)
+        public ActionResult StudentJson(string email)
         {
-            var student = _studentRepository.FindByEmail(hoGentEmail);
+            var student = _studentRepository.FindByEmail(email);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
             var model = Mapper.Map<StudentJsonVM>(student);
+            model.Email = student.HogentEmail;
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         #region Helpers
-
-        private void SetViewError(string error)
-        {
-            TempData["error"] = error;
-        }
-
-        private void SetViewMessage(string message)
-        {
-            TempData["message"] = message;
-        }
-
         private Student FindStudent(int? id)
         {
             if (CurrentUser.IsStudent())
@@ -205,6 +219,19 @@ namespace StageBeheersTool.Controllers
             }
             return _studentRepository.FindById((int)id);//admin/begeleider
         }
+
+        private void SetViewError(string error)
+        {
+            TempData["error"] = error;
+        }
+
+        private void SetViewMessage(string message)
+        {
+            TempData["message"] = message;
+        }
+
         #endregion
     }
+
+
 }

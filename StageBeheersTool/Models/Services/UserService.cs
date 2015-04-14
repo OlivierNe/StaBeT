@@ -1,16 +1,26 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using Microsoft.AspNet.Identity.Owin;
 using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.DAL;
 using StageBeheersTool.Models.Domain;
 using System.Linq;
 using System.Web;
+using Microsoft.AspNet.Identity;
 
 namespace StageBeheersTool.Models.Services
 {
     public class UserService : IUserService
     {
         private readonly StageToolDbContext _dbContext;
+
+        private ApplicationUserManager _userManager
+        {
+            get
+            {
+                return HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+        }
 
         public UserService(StageToolDbContext ctx)
         {
@@ -37,7 +47,7 @@ namespace StageBeheersTool.Models.Services
             _dbContext.SaveChanges();
         }
 
-        public bool CreateUser(Bedrijf bedrijf)
+        public bool CreateUserObject(Bedrijf bedrijf)
         {
             if (UserExists(bedrijf))
                 return false;
@@ -46,7 +56,7 @@ namespace StageBeheersTool.Models.Services
             return true;
         }
 
-        public bool CreateUser(Begeleider begeleider)
+        public bool CreateUserObject(Begeleider begeleider)
         {
             if (UserExists(begeleider))
                 return false;
@@ -55,7 +65,7 @@ namespace StageBeheersTool.Models.Services
             return true;
         }
 
-        public bool CreateUser(Student student)
+        public bool CreateUserObject(Student student)
         {
             if (UserExists(student))
                 return false;
@@ -66,22 +76,54 @@ namespace StageBeheersTool.Models.Services
 
         public IEnumerable<UserMetRoles> GetUsersWithRoles()
         {
-            var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
-
-            var users = (from u in userManager.Users
-                           from ur in u.Roles
-                           join r in _dbContext.Roles on ur.RoleId equals r.Id
-                           group r.Name by new { u.UserName, u.Id } into user
-                           select new UserMetRoles() { Id = user.Key.Id, Login = user.Key.UserName, Roles = user.ToList() }).OrderBy(s => s.Login);
-
-            //group by u.Id);//DistinctBy(u => u.Id);
-            //foreach (var user in users)
-            //{
-            //    users.
-
-            //}
-
+            var users = (from u in _userManager.Users
+                         from ur in u.Roles
+                         join r in _dbContext.Roles on ur.RoleId equals r.Id
+                         group r.Name by new { u.UserName, u.Id } into user
+                         select new UserMetRoles() { Id = user.Key.Id, Login = user.Key.UserName, Roles = user.ToList() }).OrderBy(s => s.Login);
             return users;
+        }
+
+
+        public void AddRolesToUser(ApplicationUser user, params string[] roles)
+        {
+            foreach (var role in roles)
+            {
+                _userManager.AddToRole(user.Id, role);
+            }
+        }
+
+        public ApplicationUser CreateLogin(string email, string wachtwoord, params string[] roles)
+        {
+            var user = new ApplicationUser { UserName = email, Email = email, EmailConfirmed = true };
+            IdentityResult result;
+            if (string.IsNullOrWhiteSpace(wachtwoord))
+            {
+                result = _userManager.Create(user);
+            }
+            else
+            {
+                result = _userManager.Create(user, wachtwoord);
+            }
+            if (result.Succeeded)
+            {
+                AddRolesToUser(user, roles);
+            }
+            return user;
+        }
+
+        public void DeleteLogin(string email)
+        {
+            var user = _userManager.FindByEmail(email);
+            if (user != null)
+            {
+                var claims = user.Claims.ToArray();
+                foreach (var claim in claims)
+                {
+                    _userManager.RemoveClaim(claim.UserId, new Claim(claim.ClaimType, claim.ClaimValue));
+                }
+                _userManager.Delete(user);
+            }
         }
 
         #region helpers
@@ -100,8 +142,7 @@ namespace StageBeheersTool.Models.Services
             return _dbContext.Bedrijven.Any(s => s.Email == bedrijf.Email);
         }
         #endregion
+
     }
-
-
 
 }

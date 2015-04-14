@@ -7,6 +7,7 @@
     var $Semester1Einde = $("#Semester1Einde");
     var $Semester2Begin = $("#Semester2Begin");
     var $Semester2Einde = $("#Semester2Einde");
+    var $DeadlineBedrijfStageEdit = $("#DeadlineBedrijfStageEdit");
     var $Academiejaar = $("#Academiejaar");
 
     function setDefaultDates() {
@@ -18,6 +19,7 @@
             $Semester1Einde.datepicker("option", "defaultDate", "01/01/" + eindJaar);
             $Semester2Begin.datepicker("option", "defaultDate", "01/02/" + eindJaar);
             $Semester2Einde.datepicker("option", "defaultDate", "01/05/" + eindJaar);
+            $DeadlineBedrijfStageEdit.datepicker("option", "defaultDate", "01/10/" + beginJaar);
         }
     }
     setDefaultDates();

@@ -45,10 +45,11 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Admin, Role.Begeleider)]
         public ActionResult Index(AccountListVM model)
         {
-            var users = _userService.GetUsersWithRoles().Where(user => (string.IsNullOrWhiteSpace(model.LoginZoeken) ||
-                user.Login.ToLower().Contains(model.LoginZoeken.ToLower())) && ((model.IsAdmin && user.IsAdmin())
-                || (model.IsBegeleider && user.IsBegeleider()) || (model.IsStudent && user.IsStudent())
-                || (model.IsBedrijf && user.IsBedrijf())));
+            var users = _userService.GetUsersWithRoles()
+                .Where(user => (string.IsNullOrWhiteSpace(model.LoginZoeken) ||
+                    user.Login.ToLower().Contains(model.LoginZoeken.ToLower())) && ((model.IsAdmin && user.IsAdmin())
+                    || (model.IsBegeleider && user.IsBegeleider()) || (model.IsStudent && user.IsStudent())
+                    || (model.IsBedrijf && user.IsBedrijf())));
             model.SetUsers(users);
             model.ToonActies = CurrentUser.IsAdmin();
             if (Request.IsAjaxRequest())
@@ -74,21 +75,13 @@ namespace StageBeheersTool.Controllers
             {
                 return View(model);
             }
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
-
-            IdentityResult result;
-            if (string.IsNullOrWhiteSpace(model.Wachtwoord))
+            if (string.IsNullOrWhiteSpace(model.Wachtwoord))//TODO:tijdelijk "wachtwoord" om te testen
             {
-                result = await UserManager.CreateAsync(user
-                 , "wachtwoord"); //TODO:tijdelijk "wachtwoord" om te testen
-                //);
+                model.Wachtwoord = "wachtwoord";
             }
-            else
-            {
-                result = await UserManager.CreateAsync(user, model.Wachtwoord);
-            }
+            var user = _userService.CreateLogin(model.Email, model.Wachtwoord);
             model.Title = "Nieuw account";
-            if (result.Succeeded)
+            if (user != null)
             {
                 if (model.Admin)
                 {
@@ -97,17 +90,17 @@ namespace StageBeheersTool.Controllers
                 if (model.Begeleider)
                 {
                     await UserManager.AddToRoleAsync(user.Id, Role.Begeleider);
-                    _userService.CreateUser(new Begeleider { HogentEmail = model.Email });
+                    _userService.CreateUserObject(new Begeleider { HogentEmail = model.Email });
                 }
                 if (model.Student)
                 {
                     await UserManager.AddToRoleAsync(user.Id, Role.Student);
-                    _userService.CreateUser(new Student { HogentEmail = model.Email });
+                    _userService.CreateUserObject(new Student { HogentEmail = model.Email });
                 }
                 if (model.Bedrijf)
                 {
                     await UserManager.AddToRoleAsync(user.Id, Role.Bedrijf);
-                    _userService.CreateUser(new Bedrijf { Email = model.Email, Naam = model.Email });
+                    _userService.CreateUserObject(new Bedrijf { Email = model.Email, Naam = model.Email });
                 }
                 SetViewMessage(string.Format(Resources.SuccesAanmakenAccount, user.UserName));
             }
@@ -215,7 +208,7 @@ namespace StageBeheersTool.Controllers
             if (model.Begeleider)
             {
                 await UserManager.AddToRoleAsync(user.Id, Role.Begeleider);
-                _userService.CreateUser(new Begeleider { HogentEmail = model.Email });
+                _userService.CreateUserObject(new Begeleider { HogentEmail = model.Email });
             }
             else
             {
@@ -224,7 +217,7 @@ namespace StageBeheersTool.Controllers
             if (model.Student)
             {
                 await UserManager.AddToRoleAsync(user.Id, Role.Student);
-                _userService.CreateUser(new Student { HogentEmail = model.Email });
+                _userService.CreateUserObject(new Student { HogentEmail = model.Email });
             }
             else
             {
@@ -234,7 +227,7 @@ namespace StageBeheersTool.Controllers
             {
                 await UserManager.AddToRoleAsync(user.Id, Role.Bedrijf);
                 await UserManager.ChangePasswordWithoutOldAsync(user, model.Wachtwoord);
-                _userService.CreateUser(new Bedrijf { Email = model.Email, Naam = model.Email });
+                _userService.CreateUserObject(new Bedrijf { Email = model.Email, Naam = model.Email });
             }
             else
             {
@@ -384,7 +377,7 @@ namespace StageBeheersTool.Controllers
                 {
                     var bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
 
-                    _userService.CreateUser(bedrijf);
+                    _userService.CreateUserObject(bedrijf);
                     IdentityMessage message = new IdentityMessage()
                     {
                         Subject = "Registratie",

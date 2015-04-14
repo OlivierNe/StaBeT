@@ -54,4 +54,12 @@ namespace StageBeheersTool.ViewModels
             return errors;
         }
     }
+
+    public class InstellingenVM
+    {
+        [EmailAddress]
+        [Display(Name = "Mailbox stages")]
+        public string MailboxStages { get; set; }
+        //...
+    }
 }

@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using StageBeheersTool.Helpers;
+﻿using System;
+using AutoMapper;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
@@ -24,14 +24,16 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult Index(string naam = null, string voornaam = null)
+        public ActionResult List(BegeleiderListVM model)
         {
-            var begeleiders = _begeleiderRepository.FindAll().WithFilter(naam, voornaam);
+            var begeleiders = _begeleiderRepository.FindAll().WithFilter(model.Naam, model.Voornaam);
+            model.Begeleiders = begeleiders;
+            model.ToonActies = CurrentUser.IsAdmin();
             if (Request.IsAjaxRequest())
             {
-                return PartialView("_begeleidersList", begeleiders);
+                return PartialView("_begeleidersList", model);
             }
-            return View(begeleiders);
+            return View(model);
         }
 
         [Authorize(Role.Admin)]
@@ -48,15 +50,19 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 var begeleider = Mapper.Map<Begeleider>(model);
-                var result = _begeleiderRepository.Add(begeleider);
-                if (result == true)
+                try
                 {
-                    TempData["message"] = string.Format(Resources.SuccesBegeleiderCreate, begeleider.HogentEmail);
-                    return RedirectToAction("Index");
+                    _begeleiderRepository.Add(begeleider);
+                    SetViewMessage(string.Format(Resources.SuccesBegeleiderCreate, begeleider.Naam));
+                    if (model.LoginAccountAanmaken)
+                    {
+                        _userService.CreateLogin(begeleider.HogentEmail, "wachtwoord", Role.Begeleider);//TODO: tijdelijk "wachtwoord"
+                    }
+                    return RedirectToAction("Details", new { begeleider.Id });
                 }
-                else
+                catch (ApplicationException ex)
                 {
-                    TempData["error"] = string.Format(Resources.ErrorBegeleiderCreateHogentEmailBestaatAl, begeleider.HogentEmail);
+                    SetViewError(ex.Message);
                 }
             }
             return View(model);
@@ -154,21 +160,33 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            var result = _begeleiderRepository.Delete(begeleider);
-            if (result == true)
+            try
             {
-                TempData["message"] = "Begeleider " + begeleider.HogentEmail + " succesvol verwijderd.";
-                return RedirectToAction("Index");
+                _begeleiderRepository.Delete(begeleider);
+                SetViewMessage(string.Format(Resources.SuccesDeleteBegeleider, begeleider.Naam));
             }
-            TempData["error"] = Resources.ErrorBegeleiderDeleteFailed;
-            return View(begeleider);
+            catch (ApplicationException ex)
+            {
+                SetViewError(ex.Message);
+                return View(begeleider);
+            }
+            finally
+            {
+                _userService.DeleteLogin(begeleider.HogentEmail);
+            }
+            return RedirectToAction("List");
         }
 
         [Authorize(Role.Admin)]
-        public ActionResult BegeleiderJson(string hoGentEmail)
+        public ActionResult BegeleiderJson(string email)
         {
-            var begeleider = _begeleiderRepository.FindByEmail(hoGentEmail);
+            var begeleider = _begeleiderRepository.FindByEmail(email);
+            if (begeleider == null)
+            {
+                return HttpNotFound();
+            }
             var model = Mapper.Map<BegeleiderJsonVM>(begeleider);
+            model.Email = begeleider.HogentEmail;
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 

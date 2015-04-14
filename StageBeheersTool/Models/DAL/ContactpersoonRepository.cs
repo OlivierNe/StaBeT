@@ -1,10 +1,8 @@
 ﻿using StageBeheersTool.Models.Domain;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Web;
 
 namespace StageBeheersTool.Models.DAL
 {
@@ -15,8 +13,8 @@ namespace StageBeheersTool.Models.DAL
 
         public ContactpersoonRepository(StageToolDbContext dbContext)
         {
-            this._dbContext = dbContext;
-            this._contactpersonen = dbContext.Contactpersonen;
+            _dbContext = dbContext;
+            _contactpersonen = dbContext.Contactpersonen;
         }
 
         public IQueryable<Contactpersoon> FindAll()

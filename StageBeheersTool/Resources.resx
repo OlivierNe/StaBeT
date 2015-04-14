@@ -246,11 +246,11 @@
     <value>Het veld bedrijf is verplicht.</value>
   </data>
   <data name="ErrorBegeleiderCreateHogentEmailBestaatAl" xml:space="preserve">
-    <value>Begeleider {0} bestaat reeds.</value>
+    <value>Begeleider aanmaken mislukt: Er bestaat al een begeleider met hogent E-mail '{0}'.</value>
     <comment>0=hogent email</comment>
   </data>
   <data name="ErrorStudentCreateHogentEmailBestaatAl" xml:space="preserve">
-    <value>Student {0} bestaat reeds.</value>
+    <value>Student aanmaken mislukt: Er bestaat al een student met hogent E-mail '{0}'.</value>
     <comment>0=hogent email</comment>
   </data>
   <data name="SuccesBegeleiderCreate" xml:space="preserve">
@@ -258,8 +258,8 @@
     <comment>0=hogent email</comment>
   </data>
   <data name="SuccesStudentCreate" xml:space="preserve">
-    <value>Student {0} toegevoegd.</value>
-    <comment>0=hogent email</comment>
+    <value>Student '{0}' succesvol aangemaakt.</value>
+    <comment>0=naam</comment>
   </data>
   <data name="TitelNieuweBegeleider" xml:space="preserve">
     <value>Nieuwe begeleider</value>
@@ -267,7 +267,7 @@
   <data name="TitelNieuweStudent" xml:space="preserve">
     <value>Nieuwe student</value>
   </data>
-  <data name="ErrorBegeleiderDeleteFailed" xml:space="preserve">
+  <data name="ErrorDeleteBegeleider" xml:space="preserve">
     <value>Verwijderen mislukt. Stagebegeleider is aan 1 of meerdere stages koppeld.</value>
   </data>
   <data name="ErrorStagebegeleidingAanvraagGoedkeuren" xml:space="preserve">
@@ -438,5 +438,39 @@
   </data>
   <data name="ErrorVerplichtBeginEnEindDatum" xml:space="preserve">
     <value>Verplicht begindatum en einddatum in te geven bij een aangepaste stageperiode.</value>
+  </data>
+  <data name="ErrorDeleteStudent" xml:space="preserve">
+    <value>Student verwijderen mislukt. De student '{0}' is koppeld aan 1 of meerdere stages.</value>
+    <comment>0=naam student</comment>
+  </data>
+  <data name="SuccesDeleteStudent" xml:space="preserve">
+    <value>Student '{0}' werd succesvol verwijderd.</value>
+    <comment>0=naam student</comment>
+  </data>
+  <data name="ErrorDeleteStageopdracht" xml:space="preserve">
+    <value>Stageopdracht verwijderen mislukt: De stageopdracht '{0}' is gekoppeld aan 1 of meerdere studenten/stagebegeleider/...</value>
+    <comment>0=titel stageopdracht</comment>
+  </data>
+  <data name="SuccesEditSaved" xml:space="preserve">
+    <value>Wijzigingen succesvol opgeslagen.</value>
+  </data>
+  <data name="SuccesDeleteBegeleider" xml:space="preserve">
+    <value>Begeleider '{0}' werd succesvol verwijderd.</value>
+    <comment>0=naam begeleider</comment>
+  </data>
+  <data name="ErrorDeleteBedrijf" xml:space="preserve">
+    <value>Verwijderen mislukt. Bedrijf heeft 1 of meerdere ingediende stageopdrachten.</value>
+  </data>
+  <data name="SuccesDeleteBedrijf" xml:space="preserve">
+    <value>Stagebedrijf '{0}' werd succesvol verwijderd.</value>
+    <comment>0=bedrijfsnaam</comment>
+  </data>
+  <data name="ErrorCreateBedrijf" xml:space="preserve">
+    <value>Bedrijf aanmaken mislukt. Er bestaat al een bedrijf met de E-mail '{0}'.</value>
+    <comment>0 = E-mail bedrijf</comment>
+  </data>
+  <data name="SuccesCreateBedrijf" xml:space="preserve">
+    <value>Bedrijf '{0}' succesvol aangemaakt.</value>
+    <comment>0=naam bedrijf</comment>
   </data>
 </root>

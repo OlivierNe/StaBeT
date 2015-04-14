@@ -3,7 +3,8 @@
 <div id="grid-tableDiv">
     @Html.Grid(Model.Users).Columns(column =>
     {
-        column.Add(u => u.Login).Titled("Login").Sortable(true);
+        column.Add(u => u.Login).Titled("Login").Sanitized(false).Encoded(false)
+            .RenderValueAs(u => new MvcHtmlString("<a href='mailto:" + u.Login + "'>" + u.Login + "</a>")).Sortable(true);
 
         column.Add(u => u.Admin).Titled("Admin").Sanitized(false).Encoded(false).
             RenderValueAs(u => Html.CheckBox("Admin", u.Admin, new { disabled = "disabled" }));

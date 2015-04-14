@@ -1,0 +1,70 @@
+﻿@model Bedrijf
+
+@{
+    ViewBag.Title = "Bedrijf verwijderen";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Dit bedrijf definitief verwijderen?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Naam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Naam)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayEmail(Model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Website)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Website)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Bereikbaarheid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bereikbaarheid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Bedrijfsactiviteiten)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bedrijfsactiviteiten)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Adres)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Adres)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div>
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            @Html.ActionLink("Annuleren", "List", "Bedrijf", new { }, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

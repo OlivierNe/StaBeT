@@ -1,63 +1,59 @@
 ﻿using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Web;
 using System.Data.Entity.Migrations;
 
 namespace StageBeheersTool.Models.DAL
 {
     public class AcademiejaarRepository : IAcademiejaarRepository
     {
-        private StageToolDbContext ctx;
-        private DbSet<AcademiejaarInstellingen> academiejaren;
+        private readonly StageToolDbContext _dbContext;
+        private readonly DbSet<AcademiejaarInstellingen> _academiejarenInstellingen;
 
         public AcademiejaarRepository(StageToolDbContext ctx)
         {
-            this.ctx = ctx;
-            academiejaren = ctx.AcademiejarenInstellingen;
+            _dbContext = ctx;
+            _academiejarenInstellingen = ctx.AcademiejarenInstellingen;
         }
 
         public void Add(AcademiejaarInstellingen academiejaar)
         {
-            academiejaren.AddOrUpdate(academiejaar);
+            _academiejarenInstellingen.AddOrUpdate(academiejaar);
             SaveChanges();
         }
 
         public AcademiejaarInstellingen FindVanHuidigAcademiejaar()
         {
             string huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
-            return academiejaren.SingleOrDefault(aj => aj.Academiejaar.Equals(huidigAcademiejaar));
+            return _academiejarenInstellingen.SingleOrDefault(aj => aj.Academiejaar.Equals(huidigAcademiejaar));
         }
 
         public AcademiejaarInstellingen FindByAcademiejaar(string academiejaar)
         {
-            return academiejaren.Find(academiejaar);
+            return _academiejarenInstellingen.Find(academiejaar);
         }
 
         public IQueryable<AcademiejaarInstellingen> FindAll()
         {
-            return academiejaren;
+            return _academiejarenInstellingen;
         }
 
         public void Update(AcademiejaarInstellingen academiejaar)
         {
-            ctx.Entry(academiejaar).State = EntityState.Modified;
+            _dbContext.Entry(academiejaar).State = EntityState.Modified;
             SaveChanges();
         }
 
         public void Delete(AcademiejaarInstellingen academiejaar)
         {
-            academiejaren.Remove(academiejaar);
+            _academiejarenInstellingen.Remove(academiejaar);
             SaveChanges();
         }
 
         public void SaveChanges()
         {
-            ctx.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
     }

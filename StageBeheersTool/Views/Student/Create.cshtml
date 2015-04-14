@@ -16,8 +16,8 @@
             <div class="col-md-7">
                 @Html.EditorFor(model => model.HogentEmail, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.HogentEmail, "", new { @class = "text-danger" })
-                <div id="hogentEmailDiv" class="text-danger" data-url-edit="/Student/edit/"
-                     data-url-json="/Student/StudentJson?hoGentEmail=" data-class="Student"></div>
+                <div id="emailDiv" class="text-danger" data-url-edit="/Student/edit/"
+                     data-url-json="/Student/StudentJson?email=" data-class="Student" data-email-veld="#HogentEmail"></div>
             </div>
         </div>
 
@@ -86,9 +86,16 @@
         </div>
 
         <div class="form-group">
+            <div class="col-md-offset-2 checkbox">
+                @Html.CheckBoxFor(model => model.LoginAccountAanmaken, new { htmlAttributes = new { @class = "" } })
+                <label for="LoginAccountAanmaken">Ook een login account aanmaken?</label>
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Opslaan" class="btn btn-default" />
-                @Html.ActionLink("Annuleren", "Index", "Student", new { }, new { @class = "btn btn-default" })
+                <input type="submit" value="Aanmaken" class="btn btn-success" />
+                @Html.ActionLink("Annuleren", "List", "Student", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
     </div>
@@ -97,5 +104,5 @@
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/stagetool-form.js"></script>
-    <script src="~/Scripts/createHogentPersoon.js"></script>
+    <script src="~/Scripts/createUserObject.js"></script>
 }

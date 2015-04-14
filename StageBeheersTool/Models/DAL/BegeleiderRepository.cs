@@ -15,34 +15,26 @@ namespace StageBeheersTool.Models.DAL
 
         public BegeleiderRepository(StageToolDbContext ctx)
         {
-            this._dbContext = ctx;
-            this._begeleiders = ctx.Begeleiders;
+            _dbContext = ctx;
+            _begeleiders = ctx.Begeleiders;
         }
 
-        public bool Add(Begeleider begeleider)
+        public void Add(Begeleider begeleider)
         {
             try
             {
-                if (FindByEmail(begeleider.HogentEmail) != null) //anders (soms) [InvalidOperationException: Nested transactions are not supported.]
-                {
-                    return false;
-                }
                 _begeleiders.Add(begeleider);
-                _dbContext.SaveChanges();
+                SaveChanges();
             }
             catch (DbUpdateException ex)
             {
                 var sqlException = ex.InnerException.InnerException as MySqlException;
                 if (sqlException != null && sqlException.Number == 1062)
                 {
-                    return false;
+                    throw new ApplicationException(string.Format(Resources.ErrorBegeleiderCreateHogentEmailBestaatAl, begeleider.HogentEmail));
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-            return true;
         }
 
         public IQueryable<Begeleider> FindAll()
@@ -77,26 +69,22 @@ namespace StageBeheersTool.Models.DAL
             SaveChanges();
         }
 
-        public bool Delete(Begeleider begeleider)
+        public void Delete(Begeleider begeleider)
         {
             try
             {
                 _begeleiders.Remove(begeleider);
-                _dbContext.SaveChanges();
+                SaveChanges();
             }
             catch (DbUpdateException ex)
             {
                 var sqlException = ex.InnerException.InnerException as MySqlException;
                 if (sqlException != null && sqlException.Number == 1451)
                 {
-                    return false; //aan minstens 1 stage gekoppeld
+                    throw new ApplicationException(string.Format(Resources.ErrorDeleteBegeleider, begeleider.Naam));
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-            return true;
         }
 
         public void SaveChanges()

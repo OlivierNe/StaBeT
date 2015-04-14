@@ -18,7 +18,6 @@ namespace StageBeheersTool.Models.DAL
             : base("DefaultConnection", throwIfV1Schema: false)
         {
             Database.Log = message => Trace.WriteLine(message);
-
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -32,6 +31,7 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new BegeleiderMapper());
             modelBuilder.Configurations.Add(new StagebegeleidingAanvraagMapper());
             modelBuilder.Configurations.Add(new AcademiejaarInstellingenMapper());
+            modelBuilder.Configurations.Add(new InstellingenMapper());
             modelBuilder.Configurations.Add(new StageMapper());
             modelBuilder.Configurations.Add(new VoorkeurStageMapper());
 
@@ -44,8 +44,6 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Entity<ApplicationUser>().ToTable("aspNetUsers")
                 .Property(c => c.UserName).HasMaxLength(128).IsRequired();
             //modelBuilder.Entity<IdentityUserRole>().ToTable("aspNetUsers");
-
-
             //.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("UserNameIndex") { IsUnique = false }));
         }
 
@@ -59,6 +57,7 @@ namespace StageBeheersTool.Models.DAL
         public DbSet<StagebegeleidingAanvraag> StageBegeleidAanvragen { get; set; }
         public DbSet<VoorkeurStage> StudentVoorkeurStages { get; set; }
         public DbSet<AcademiejaarInstellingen> AcademiejarenInstellingen { get; set; }
+        public DbSet<Instelling> Instellingen { get; set; }
 
         public static StageToolDbContext Create()
         {

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using StageBeheersTool.Models.Authentication;
-using StageBeheersTool.ViewModels;
 
 namespace StageBeheersTool.Models.Domain
 {
@@ -9,10 +8,13 @@ namespace StageBeheersTool.Models.Domain
         Bedrijf FindBedrijf();
         Student FindStudent();
         Begeleider FindBegeleider();
+        void AddRolesToUser(ApplicationUser user, params string[] roles);
+        bool CreateUserObject(Bedrijf bedrijf);
+        bool CreateUserObject(Begeleider begeleider);
+        bool CreateUserObject(Student student);
         IEnumerable<UserMetRoles> GetUsersWithRoles();
-        bool CreateUser(Bedrijf bedrijf);
-        bool CreateUser(Begeleider begeleider);
-        bool CreateUser(Student student);
+        ApplicationUser CreateLogin(string email, string wachtwoord, params string[] roles);
+        void DeleteLogin(string email);
         void SaveChanges();
     }
 }

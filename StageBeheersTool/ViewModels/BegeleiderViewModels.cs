@@ -1,7 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.ViewModels
 {
+    public class BegeleiderListVM
+    {
+        public IEnumerable<Begeleider> Begeleiders { get; set; }
+
+        public bool ToonActies { get; set; }
+
+        public string Naam { get; set; }
+        public string Voornaam { get; set; }
+    }
+
+
     public class BegeleiderCreateVM
     {
         [EmailAddress]
@@ -26,6 +39,8 @@ namespace StageBeheersTool.ViewModels
         public string Postcode { get; set; }
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Straat { get; set; }
+        [Display(Name = "Ook een login account aanmaken?")]
+        public bool LoginAccountAanmaken { get; set; }
     }
 
     public class BegeleiderEditVM
@@ -76,6 +91,6 @@ namespace StageBeheersTool.ViewModels
     {
         public int Id { get; set; }
         public string Naam { get; set; }
-        public string HogentEmail { get; set; }
+        public string Email { get; set; }
     }
 }

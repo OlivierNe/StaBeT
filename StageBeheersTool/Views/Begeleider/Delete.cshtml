@@ -1,12 +1,11 @@
 ﻿@model Begeleider
 
 @{
-    ViewBag.Title = "Stagebegeleider verwijderen";
+    ViewBag.Title = "Begeleider verwijderen";
 }
 
 <h2>@ViewBag.Title</h2>
-
-<h3>Deze stagebegeleider definitief verwijderen?</h3>
+<h3>Deze begeleider definitief verwijderen?</h3>
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -23,7 +22,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.HogentEmail)
+            <a href="mailto:@Model.HogentEmail">@Model.HogentEmail</a>
         </dd>
 
         <dt>
@@ -39,7 +38,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Email)
+            <a href="mailto:@Model.Email">@Model.Email</a>
         </dd>
 
         <dt>
@@ -56,7 +55,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Verwijderen" class="btn btn-default" /> 
+            <input type="submit" value="Verwijderen" class="btn btn-danger" /> 
             @Html.ActionLink("Annuleren", "Index", "Begeleider", new { }, new { @class = "btn btn-default" })
         </div>
     }

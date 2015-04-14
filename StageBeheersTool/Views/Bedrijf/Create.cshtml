@@ -22,6 +22,8 @@
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            <div id="emailDiv" class="text-danger" data-url-edit="/Bedrijf/edit/"
+                 data-url-json="/Bedrijf/BedrijfJson?email=" data-class="Bedrijf" data-email-veld="#Email"></div>
         </div>
     </div>
     <div class="form-group">
@@ -75,7 +77,8 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Aanmaken" />
+            <input type="submit" value="Opslaan" class="btn btn-success" />
+            @Html.ActionLink("Annuleren", "List", "Bedrijf", new { }, new { @class = "btn btn-default" })
         </div>
     </div>
 }
@@ -83,4 +86,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/stagetool-form.js"></script>
+    <script src="~/Scripts/createUserObject.js"></script>
 }

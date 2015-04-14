@@ -1,12 +1,17 @@
-﻿@model IEnumerable<Begeleider>
+﻿@model BegeleiderListVM
 
 <div id="grid-tableDiv">
-    @Html.Grid(Model).Columns(column =>
+    @Html.Grid(Model.Begeleiders).Columns(columns =>
 {
-    column.Add(b => b.Familienaam).Encoded(false).Sanitized(false)
+    columns.Add(b => b.Familienaam).Encoded(false).Sanitized(false)
         .RenderValueAs(b => Html.ActionLink(b.Naam, "Details", "Begeleider", new { id = b.Id }, new { })).Titled("Naam");
-    column.Add(b => b.HogentEmail).Titled("HoGent E-mail").Encoded(false).Sanitized(false)
+    columns.Add(b => b.HogentEmail).Titled("HoGent E-mail").Encoded(false).Sanitized(false)
         .RenderValueAs(b => "<a href=\"mailto:" + b.HogentEmail + "\">" + b.HogentEmail + "</a>");
-
+    if (Model.ToonActies)
+    {
+        columns.Add().Sanitized(false).Encoded(false)
+           .RenderValueAs(s => Html.ActionLink("Wijzigen", "Edit", new { s.Id }, new { @class = "btn btn-default" }) + " "
+               + Html.ActionLink("Verwijderen", "Delete", new { s.Id }, new { @class = "btn btn-default" }));
+    }
 }).Sortable(true).WithPaging(10).EmptyText("Geen begeleiders gevonden")
 </div>

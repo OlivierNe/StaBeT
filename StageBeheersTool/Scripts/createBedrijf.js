@@ -1,12 +1,12 @@
 ﻿
 $(function () {
     "use strict";
-    var $hogentEmail = $("#HogentEmail");
+    var $email = $("#Email");
     var $hogentEmailDiv = $("#hogentEmailDiv");
 
-    $hogentEmail.blur(function () {
+    $email.blur(function () {
         $.ajax({
-            url: $hogentEmailDiv.attr("data-url-json") + $hogentEmail.val(),
+            url: $hogentEmailDiv.attr("data-url-json") + $email.val(),
             error: function () {
                 $hogentEmailDiv.html("");
             },

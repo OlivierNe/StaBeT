@@ -1,10 +1,10 @@
-﻿<ul class="nav nav-pills nav-stacked sidebar-ul" id="sidebarItems">
+﻿<ul class="nav nav-pills sidebar-ul" id="sidebarItems">
     <li class="sidebar-nav sidebar-menu">
         <a class="" data-toggle="collapse" data-target="#stageopdrachtOpties">
             Stageopdrachten <b class="glyphicon glyphicon-triangle-bottom"></b>
         </a>
-        <ul class="collapse in" role="menu" id="stageopdrachtOpties">
-            <li>@Html.ActionLink(Resources.TitelNieuweStageopdracht, "Create", "Stageopdracht")</li>
+        <ul class="collapse" role="menu" id="stageopdrachtOpties">
+            <li> @Html.ActionLink(Resources.TitelNieuweStageopdracht, "Create", "Stageopdracht")</li>
             <li>@Html.ActionLink(Resources.TitelBedrijfStageVoorstellen, "BedrijfStageVoorstellen", "Stageopdracht") </li>
             <li>@Html.ActionLink(Resources.TitelGoedgekeurdeStageopdrachten, "GoedgekeurdeStages", "Stageopdracht") </li>
             <li>@Html.ActionLink(Resources.TitelAfgekeurdeStageopdrachten, "AfgekeurdeStages", "Stageopdracht") </li>
@@ -43,7 +43,7 @@
                 @Html.ActionLink("Nieuwe student", "Create", "Student")
             </li>
             <li>
-                @Html.ActionLink("Studenten", "Index", "Student")
+                @Html.ActionLink("Studenten", "List", "Student")
             </li>
             <li>
                 @Html.ActionLink("Studenten met ingediend stagedossier", "MetIngediendStagedossier", "Stageopdracht")
@@ -63,7 +63,7 @@
                 @Html.ActionLink("Nieuwe begeleider", "Create", "Begeleider")
             </li>
             <li>
-                @Html.ActionLink("Begeleiders", "Index", "Begeleider")
+                @Html.ActionLink("Begeleiders", "List", "Begeleider")
             </li>
         </ul>
     </li>
@@ -78,7 +78,10 @@
         </a>
         <ul class="collapse" id="InstellingenOpties">
             <li class="">
-                @Html.ActionLink(Resources.TitelParametersAcademiejaar, "Index", "Academiejaar")
+                @Html.ActionLink("Algemene instellingen", "AlgemeneInstellingen", "Instellingen")
+            </li>
+            <li class="">
+                @Html.ActionLink(Resources.TitelParametersAcademiejaar, "HuidigAcademiejaar", "Instellingen")
             </li>
             <li class="">
                 @Html.ActionLink(Resources.TitelAdminIndex, "Index", "Admin")

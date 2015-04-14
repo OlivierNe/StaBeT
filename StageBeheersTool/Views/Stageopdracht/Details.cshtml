@@ -1,4 +1,7 @@
 ﻿@model StageopdrachtDetailsVM
+@{
+    ViewBag.Title = Model.Stageopdracht.Titel;
+}
 <div id="details">
     <h3>@Model.Stageopdracht.Titel</h3>
     <div style="white-space: pre-line">@Html.DisplayFor(model => model.Stageopdracht.Omschrijving)</div>
@@ -129,5 +132,7 @@
             }
         </p>
     </div>
-    @Html.ActionLink("Terug naar overzicht", Model.OverzichtAction, new { }, new { })
+    @*@Html.ActionLink("Terug naar overzicht", Model.OverzichtAction, new { }, new { })*@
+    <a href="javascript:history.back();">Terug</a>
+
 </div>

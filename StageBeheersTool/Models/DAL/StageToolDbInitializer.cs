@@ -9,14 +9,13 @@ using System.Data.Entity.Validation;
 using System.Linq;
 using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.OudeGegevens;
-using System.Data.Entity.Migrations;
 
 
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-      // DropCreateDatabaseAlways<StageToolDbContext>
-    DropCreateDatabaseIfModelChanges<StageToolDbContext>
+        //DropCreateDatabaseAlways<StageToolDbContext>
+   DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
         public void RunSeed(StageToolDbContext ctx)
@@ -106,6 +105,11 @@ namespace StageBeheersTool.Models.DAL
                 specialisaties.Add(specialisatie7);
                 specialisaties.Add(andere);
                 context.Specialisaties.AddRange(specialisaties);
+                #endregion
+
+                #region instellingen
+                var mailboxInstelling = new Instelling(Instelling.MailboxStages, "stagetoegepasteinformatica@hogent.be");
+                context.Instellingen.Add(mailboxInstelling);
                 #endregion
 
                 #region Keuzepakketten
@@ -198,15 +202,17 @@ namespace StageBeheersTool.Models.DAL
                 context.SaveChanges();
                 #endregion
 
-                #region student1
-                Student student1 = new Student()
+                #region studenten
+
+                Student student = new Student()
                 {
                     Voornaam = "TEST",
                     Familienaam = "TEST",
                     HogentEmail = "student@test.be"
                 };
 
-                context.Studenten.Add(student1);
+                var studenten = new List<Student>() { { student } };
+                context.Studenten.AddRange(studenten);
                 #endregion
 
                 #region begeleider
@@ -216,9 +222,8 @@ namespace StageBeheersTool.Models.DAL
                     Familienaam = "TEST",
                     HogentEmail = "begeleider@test.be"
                 };
-                var studenten = new List<Student>() { { student1 } };
 
-                var stages = new List<Stageopdracht>();
+                var stageopdrachten = new List<Stageopdracht>();
                 for (int i = 0, acadJaar = 2008; i < 36; i++)
                 {
                     if (i % 6 == 0)
@@ -226,7 +231,7 @@ namespace StageBeheersTool.Models.DAL
                         acadJaar++;
                     }
                     var academiejaar = acadJaar + "-" + (acadJaar + 1);
-                    var stage = new Stageopdracht()
+                    var stageopdracht = new Stageopdracht()
                     {
                         Omschrijving = "omschrijving",
                         Titel = "stage " + academiejaar,
@@ -239,10 +244,14 @@ namespace StageBeheersTool.Models.DAL
                         Stagebegeleider = begeleider,
                         Status = StageopdrachtStatus.Goedgekeurd
                     };
-                    stage.Stages = new List<Stage>() { { new Stage() { Stageopdracht = stage, Student = student1 } } };
-                    stages.Add(stage);
+                    stageopdrachten.Add(stageopdracht);
                 }
-                begeleider.Stages = stages;
+                var opdracht = stageopdrachten[stageopdrachten.Count - 1];
+                opdracht.Stages = new List<Stage>() { 
+                { new Stage() { Stageopdracht = opdracht, Student = student } } };
+                opdracht.Status = StageopdrachtStatus.Toegewezen;
+
+                begeleider.Stages = stageopdrachten;
                 context.Begeleiders.Add(begeleider);
                 context.Begeleiders.Add(new Begeleider() { HogentEmail = "adminBegeleider@test.be" });
                 #endregion
@@ -290,7 +299,7 @@ namespace StageBeheersTool.Models.DAL
                 }
                 throw new ApplicationException("Fout bij aanmaken database " + message);
             }
-           // AddOudeGegevens(context);
+            AddOudeGegevens(context);
         }
 
         public async void AddOudeGegevens(StageToolDbContext context)
@@ -324,12 +333,25 @@ namespace StageBeheersTool.Models.DAL
                     }
                     context.Studenten.AddRange(studenten);
                     context.SaveChanges();
-
+                    var bedrijven = new List<Bedrijf>();
                     foreach (var stagebedrijf in oudeContext.Stagebedrijf.Include(b => b.relatie).Include(b => b.stage).ToList())
                     {
                         var bedrijf = Converter.ToBedrijf(stagebedrijf);
 
-                        context.Bedrijven.AddOrUpdate(bedrijf);
+                        var bedrijfEmailBestaatAl = bedrijven.Count(b => b.Email == bedrijf.Email) > 0;//kolom email van bedrijven is uniek
+                        if (bedrijfEmailBestaatAl)
+                        {
+                            var email = bedrijf.Email;
+                            if (string.IsNullOrWhiteSpace(email))
+                            {
+                                bedrijf.Email = "geenEmail" + Guid.NewGuid();//bedrijf zonder contactpersonen
+                            }
+                            else
+                            {
+                                bedrijf.Email = email + 2;
+                            }
+                        }
+                        bedrijven.Add(bedrijf);
 
                         var stageopdrachten = new List<Stageopdracht>();
                         foreach (var stage in stagebedrijf.stage.ToList()) //relatie: mentor, relatie1: constractond
@@ -360,17 +382,18 @@ namespace StageBeheersTool.Models.DAL
                                 .Select(oudeStudent => context.Studenten.FirstOrDefault(s => s.HogentEmail == oudeStudent.email))
                                 .Where(student => student != null).ToList();
 
-                            var stagestudentrelaties = new List<Stage>();
+                            var stages = new List<Stage>();
                             foreach (var student in stageopdrachtstudenten)
                             {
-                                stagestudentrelaties.Add(new Stage { Stageopdracht = stageopdracht, Student = student });
+                                stages.Add(new Stage { Stageopdracht = stageopdracht, Student = student });
                             }
-                            stageopdracht.Stages = stagestudentrelaties;
+                            stageopdracht.Stages = stages;
                             stageopdracht.Bedrijf = bedrijf;
                             stageopdrachten.Add(stageopdracht);
                         }
                         bedrijf.Stageopdrachten = stageopdrachten;
                     }
+                    context.Bedrijven.AddRange(bedrijven);
                 }
                 context.SaveChanges();
 

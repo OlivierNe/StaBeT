@@ -1,4 +1,4 @@
-﻿<li class="dropdown nav">
+﻿@*<li class="dropdown nav">
     <a class="dropdown-toggle" data-toggle="dropdown" href="">
         Stageopdrachten  @AcademiejaarHelper.HuidigAcademiejaar()
         <span class="caret"></span>
@@ -48,7 +48,7 @@
             @Html.ActionLink("Nieuwe student", "Create", "Student")
         </li>
         <li>
-            @Html.ActionLink("Studenten", "Index", "Student")
+            @Html.ActionLink("Studenten", "List", "Student")
         </li>
         <li>
             @Html.ActionLink("Studenten met ingediend stagedossier", "MetIngediendStagedossier", "Stageopdracht")
@@ -89,6 +89,6 @@
         </li>
     </ul>
 </li>
-<li class="nav">@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+<li class="nav">@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>*@
 
 

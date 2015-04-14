@@ -194,7 +194,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\AcademiejaarController.cs" />
+    <Compile Include="Controllers\InstellingenController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BedrijfController.cs" />
@@ -209,6 +209,7 @@
     <Compile Include="Helpers\AuthorizeAttribute.cs" />
     <Compile Include="Helpers\AcademiejaarHelper.cs" />
     <Compile Include="Helpers\ExcelFileResult.cs" />
+    <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="Models\Authentication\UserWithRoles.cs" />
     <Compile Include="Models\DAL\Extensions\LinqExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBedrijfExtensions.cs" />
@@ -225,6 +226,8 @@
     <Compile Include="Models\DAL\AcademiejaarRepository.cs" />
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
     <Compile Include="Models\DAL\Mapping\AcademiejaarInstellingenMapper.cs" />
+    <Compile Include="Models\DAL\InstellingenRepository.cs" />
+    <Compile Include="Models\DAL\Mapping\InstellingenMapper.cs" />
     <Compile Include="Models\DAL\Mapping\StagebegeleidingAanvraagMapper.cs" />
     <Compile Include="Models\DAL\Mapping\StageMapper.cs" />
     <Compile Include="Models\DAL\Mapping\VoorkeurStageMapper.cs" />
@@ -234,11 +237,13 @@
     <Compile Include="Models\Domain\Admin.cs" />
     <Compile Include="Models\Domain\BegeleidAanvraagStatus.cs" />
     <Compile Include="Models\Domain\HoGentPersoon.cs" />
+    <Compile Include="Models\Domain\Instelling.cs" />
     <Compile Include="Models\Domain\Interfaces\IAcademiejaarRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\IContactpersoonRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\IImageService.cs" />
+    <Compile Include="Models\Domain\Interfaces\IInstellingenRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\ISpreadsheetService.cs" />
-    <Compile Include="Models\Domain\StageBegeleidingAanvraag.cs" />
+    <Compile Include="Models\Domain\StagebegeleidingAanvraag.cs" />
     <Compile Include="Models\Domain\StagedossierStatus.cs" />
     <Compile Include="Models\Domain\Stage.cs" />
     <Compile Include="Models\Domain\VoorkeurStage.cs" />
@@ -291,7 +296,7 @@
     <Compile Include="ViewModels\AdminViewModels.cs" />
     <Compile Include="ViewModels\BedrijfViewModels.cs" />
     <Compile Include="ViewModels\BegeleiderViewModels.cs" />
-    <Compile Include="ViewModels\AcademiejaarInstellingenViewModels.cs" />
+    <Compile Include="ViewModels\InstellingenViewModels.cs" />
     <Compile Include="ViewModels\ContactpersoonViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -359,7 +364,8 @@
     <Content Include="Scripts\academiejaarInstellingen.js" />
     <Content Include="Scripts\account-list.js" />
     <Content Include="Scripts\AddAdmin.js" />
-    <Content Include="Scripts\createHogentPersoon.js" />
+    <Content Include="Scripts\createBedrijf.js" />
+    <Content Include="Scripts\createUserObject.js" />
     <Content Include="Scripts\lib\bootstrap.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Scripts\createStageForm.js" />
@@ -450,13 +456,13 @@
     <Content Include="Views\Begeleider\Details.cshtml" />
     <Content Include="Views\Begeleider\Edit.cshtml" />
     <Content Include="Views\Stageopdracht\StageopdrachtAfkeuren.cshtml" />
-    <Content Include="Views\Student\Index.cshtml" />
+    <Content Include="Views\Student\List.cshtml" />
     <Content Include="Views\Stageopdracht\AanvragenStagebegeleiding.cshtml" />
-    <Content Include="Views\Academiejaar\Index.cshtml" />
+    <Content Include="Views\Instellingen\HuidigAcademiejaar.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\NullableDateTime.cshtml" />
-    <Content Include="Views\Academiejaar\Lijst.cshtml" />
+    <Content Include="Views\Instellingen\AlleAcademiejaren.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\NullableDateTime.cshtml" />
-    <Content Include="Views\Academiejaar\Create.cshtml" />
+    <Content Include="Views\Instellingen\CreateAcadInstellingen.cshtml" />
     <Content Include="Views\Account\Activate.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\StageopdrachtStatus.cshtml" />
     <Content Include="Views\Stageopdracht\_ZoekFormulier.cshtml" />
@@ -467,7 +473,7 @@
     <Content Include="Views\Stageopdracht\_ZoekFormulierArchief.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\Delete.cshtml" />
-    <Content Include="Views\Bedrijf\Index.cshtml">
+    <Content Include="Views\Bedrijf\List.cshtml">
       <SubType>Code</SubType>
     </Content>
     <Content Include="Views\Bedrijf\_BedrijfList.cshtml" />
@@ -479,7 +485,7 @@
     <Content Include="Views\Contactpersoon\_ContactpersoonList.cshtml" />
     <Content Include="Views\Student\_studentList.cshtml" />
     <Content Include="Views\Begeleider\_begeleidersList.cshtml" />
-    <Content Include="Views\Begeleider\Index.cshtml" />
+    <Content Include="Views\Begeleider\List.cshtml" />
     <Content Include="Views\Student\Create.cshtml" />
     <Content Include="Views\Begeleider\Create.cshtml" />
     <Content Include="Views\Student\Delete.cshtml" />
@@ -494,6 +500,8 @@
     <Content Include="Views\Stageopdracht\_StagesMetStagedossier.cshtml" />
     <Content Include="Views\Stageopdracht\StageToewijzen.cshtml" />
     <Content Include="Views\Shared\_AdminSidebar.cshtml" />
+    <Content Include="Views\Instellingen\AlgemeneInstellingen.cshtml" />
+    <Content Include="Views\Bedrijf\Delete.cshtml" />
     <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />

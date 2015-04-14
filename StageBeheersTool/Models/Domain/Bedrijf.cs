@@ -48,6 +48,13 @@ namespace StageBeheersTool.Models.Domain
             Stageopdrachten = new List<Stageopdracht>();
             Contactpersonen = new List<Contactpersoon>();
         }
+
+        public Bedrijf(string naam, string email)
+            : this()
+        {
+            this.Naam = naam;
+            this.Email = email;
+        }
         #endregion
 
         #region public methods

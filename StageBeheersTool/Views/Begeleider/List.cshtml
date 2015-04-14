@@ -1,11 +1,11 @@
-﻿@model IEnumerable<Begeleider>
+﻿@model BegeleiderListVM
 
 @{
     ViewBag.Title = "Stagebegeleiders";
 }
-
 <h2>@ViewBag.Title</h2>
-@if (CurrentUser.IsAdmin())
+
+@if (Model.ToonActies)
 {<p>
         @Html.ActionLink("Nieuwe stagebegeleider", "Create")
     </p>
@@ -16,13 +16,13 @@
     <div class="form-group">
         <label class="control-label col-md-1" for="voornaam">Voornaam</label>
         <div class="col-md-11">
-            <input type="text" class="form-control" id="voornaam" name="voornaam" />
+            @Html.EditorFor(model => model.Voornaam, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-md-1" for="naam">Naam</label>
         <div class="col-md-11">
-            <input type="text" class="form-control" id="naam" name="naam" />
+            @Html.EditorFor(model => model.Naam, new { @class = "form-control" })
         </div>
     </div>
     <div class="col-md-offset-1">

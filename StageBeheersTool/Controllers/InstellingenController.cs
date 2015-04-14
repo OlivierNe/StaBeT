@@ -9,17 +9,20 @@ using System.Web.Mvc;
 namespace StageBeheersTool.Controllers
 {
     [Authorize(Roles = Role.Admin)]
-    public class AcademiejaarController : Controller
+    public class InstellingenController : Controller
     {
         private readonly IAcademiejaarRepository _academiejaarRepository;
+        private readonly IInstellingenRepository _instellingenRepository;
 
-        public AcademiejaarController(IAcademiejaarRepository academiejaarRepository)
+        public InstellingenController(IAcademiejaarRepository academiejaarRepository,
+            IInstellingenRepository instellingenRepository)
         {
             _academiejaarRepository = academiejaarRepository;
+            _instellingenRepository = instellingenRepository;
         }
 
-        // GET: Academiejaar
-        public ActionResult Index()
+        #region academiejaar instellingen
+        public ActionResult HuidigAcademiejaar()
         {
             var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
             if (academiejaarInstellingen == null)
@@ -35,24 +38,23 @@ namespace StageBeheersTool.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(AcademiejaarInstellingenVM model)
+        public ActionResult HuidigAcademiejaar(AcademiejaarInstellingenVM model)
         {
             if (ModelState.IsValid)
             {
                 var academiejaarInstellingen = Mapper.Map<AcademiejaarInstellingen>(model);
                 _academiejaarRepository.Update(academiejaarInstellingen);
                 SetViewMessage(string.Format(Resources.SuccesParametersAcademiejaar, model.Academiejaar));
-                return View("Index", model);
             }
-            return View("Index", model);
+            return View(model);
         }
 
-        public ActionResult Lijst()
+        public ActionResult AlleAcademiejaren()
         {
             return View(Mapper.Map<IEnumerable<AcademiejaarInstellingen>, IEnumerable<AcademiejaarInstellingenVM>>(_academiejaarRepository.FindAll()));
         }
 
-        public ActionResult Create(string academiejaar = null)
+        public ActionResult CreateAcadInstellingen(string academiejaar = null)
         {
             AcademiejaarInstellingen academiejaarInstellingen;
             if (academiejaar != null)
@@ -68,7 +70,7 @@ namespace StageBeheersTool.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(AcademiejaarInstellingenVM model)
+        public ActionResult CreateAcadInstellingen(AcademiejaarInstellingenVM model)
         {
             if (ModelState.IsValid)
             {
@@ -78,6 +80,34 @@ namespace StageBeheersTool.Controllers
             }
             return View(model);
         }
+        #endregion
+
+        #region algemene instellingen
+
+        public ActionResult AlgemeneInstellingen()
+        {
+            var model = new InstellingenVM();
+            var mailboxStages = _instellingenRepository.Find(Instelling.MailboxStages);
+            if (mailboxStages != null)
+            {
+                model.MailboxStages = mailboxStages.Value;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AlgemeneInstellingen(InstellingenVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                _instellingenRepository.AddOrUpdate(new Instelling(Instelling.MailboxStages, model.MailboxStages));
+                SetViewMessage(Resources.SuccesEditSaved);
+            }
+            return View(model);
+        }
+
+        #endregion
 
         #region Helpers
 

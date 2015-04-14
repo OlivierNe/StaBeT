@@ -72,7 +72,8 @@ namespace StageBeheersTool.ViewModels
         public string Gemeente { get; set; }
         public string Straat { get; set; }
         public string Postcode { get; set; }
-
+        public string Email { get; set; }
+        public int Id { get; set; }
     }
 
 }

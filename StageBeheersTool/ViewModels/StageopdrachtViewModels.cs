@@ -339,7 +339,8 @@ namespace StageBeheersTool.ViewModels
             StagebegeleiderSelectList = new SelectList(stagebegeleiders, "Id", "Naam", SelectedStagebegeleiderId != null ? SelectedStagebegeleiderId.ToString() : "");
             AcademiejaarSelectList = new SelectList(academiejaren);
             var statusOpties = new SelectListItem[] { new SelectListItem { Value = ((int)StageopdrachtStatus.NietBeoordeeld).ToString(), Text = "Niet beoordeeld"},
-                     new SelectListItem { Value = ((int)StageopdrachtStatus.Goedgekeurd).ToString(), Text = "Goedgekeurd"}, 
+                     new SelectListItem { Value = ((int)StageopdrachtStatus.Toegewezen).ToString(), Text = "Toegewezen"}, 
+                new SelectListItem { Value = ((int)StageopdrachtStatus.Goedgekeurd).ToString(), Text = "Goedgekeurd"}, 
                      new SelectListItem {Value = ((int)StageopdrachtStatus.Afgekeurd).ToString(), Text = "Afgekeurd"}};
             StatusSelectList = new SelectList(statusOpties, "Value", "Text", SelectedStatus != null ? ((StageopdrachtStatus)SelectedStatus).ToString() : "");
         }

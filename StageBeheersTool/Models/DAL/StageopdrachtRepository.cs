@@ -1,4 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿using System.Data.Entity.Infrastructure;
+using System.Linq.Expressions;
+using MySql.Data.MySqlClient;
 using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
@@ -201,8 +203,20 @@ namespace StageBeheersTool.Models.DAL
 
         public void Delete(Stageopdracht stageopdracht)
         {
-            _stageopdrachten.Remove(stageopdracht);
-            SaveChanges();
+            try
+            {
+                _stageopdrachten.Remove(stageopdracht);
+                SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var sqlException = ex.InnerException.InnerException as MySqlException;
+                if (sqlException != null && sqlException.Number == 1451)
+                {
+                    throw new ApplicationException(string.Format(Resources.ErrorDeleteStageopdracht, stageopdracht.Titel));
+                }
+                throw;
+            }
         }
 
         public StagebegeleidingAanvraag FindAanvraagById(int id)
