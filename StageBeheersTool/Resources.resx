@@ -281,9 +281,6 @@
     <value>Aanvraag stagebegeleiding afgekeurd. Begeleider {0} losgekoppeld van stage '{1}'.</value>
     <comment>0=naam begeleider, 1= titel stage</comment>
   </data>
-  <data name="TitelAanvragenStagebegeleidingIndex" xml:space="preserve">
-    <value>Aanvragen stagebegeleiding</value>
-  </data>
   <data name="TitelLijstenExporterenExcel" xml:space="preserve">
     <value>Lijsten exporteren</value>
   </data>
@@ -300,7 +297,7 @@
     <value>Toegewezen stages zonder begeleider</value>
   </data>
   <data name="TitelAanvragenStagebegeleiding" xml:space="preserve">
-    <value>Aanvragen begeleiders</value>
+    <value>Aanvragen stagebegeleiding</value>
   </data>
   <data name="TitelAfgekeurdeStageopdrachten" xml:space="preserve">
     <value>Afgekeurde stageopdrachten</value>
@@ -471,5 +468,17 @@
   </data>
   <data name="SuccesCreateStageopdracht" xml:space="preserve">
     <value>Stageopdracht succesvol aangemaakt.</value>
+  </data>
+  <data name="SuccesCreateContactpersoon" xml:space="preserve">
+    <value>Contactpersoon '{0}' aangemaakt.</value>
+    <comment>0=naam contactpersoon</comment>
+  </data>
+  <data name="SuccesDeleteContactpersoon" xml:space="preserve">
+    <value>Contactpersoon '{0}' succesvol verwijderd.</value>
+    <comment>0=naam contactpersoon</comment>
+  </data>
+  <data name="ErrorMailBedrijf" xml:space="preserve">
+    <value>E-mail verzenden mislukt. Het bedrijf '{0}' heeft geen geldig E-mailadres ({1}).</value>
+    <comment>0=naam bedrijf, 1=email bedrijf</comment>
   </data>
 </root>

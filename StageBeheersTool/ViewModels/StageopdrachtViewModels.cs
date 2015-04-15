@@ -1,4 +1,5 @@
-﻿using StageBeheersTool.Helpers;
+﻿using System.Web;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,11 @@ namespace StageBeheersTool.ViewModels
         public StagedossierStatus? CurrentStudentStagedossierStatus { get; set; }
 
         public string Title { get; set; }
-        public string OverzichtAction { get; set; }
+
+        public string Overzicht
+        {
+            get { return HttpContext.Current.Request.Url.PathAndQuery; }
+        }
 
         private SelectList _academiejaarList;
 
@@ -108,8 +113,8 @@ namespace StageBeheersTool.ViewModels
         public bool ToonStudenten { get; set; }
         public bool ToonStatus { get; set; }
 
-        private string _overzichtAction;
-        public string OverzichtAction { get { return _overzichtAction ?? "Index"; } set { _overzichtAction = value; } }
+        private string _overzicht;
+        public string Overzicht { get { return _overzicht ?? "/Stageopdracht/Index"; } set { _overzicht = value; } }
 
         public string Stagementor
         {
@@ -185,6 +190,9 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "Bedrijf")]
         public int BedrijfId { get; set; }
 
+        private string _overzicht;
+        public string Overzicht { get { return _overzicht ?? "/Stageopdracht/Index"; } set { _overzicht = value; } }
+
         public SelectList SpecialisatieSelectList { get; set; }
         public SelectList ContractondertekenaarsSelectList { get; set; }
         public SelectList StagementorsSelectList { get; set; }
@@ -258,9 +266,9 @@ namespace StageBeheersTool.ViewModels
 
         public void SetAdres(string gemeente, string postcode, string straat)
         {
-            this.Gemeente = gemeente;
-            this.Postcode = postcode;
-            this.Straat = straat;
+            Gemeente = gemeente;
+            Postcode = postcode;
+            Straat = straat;
         }
 
         #endregion

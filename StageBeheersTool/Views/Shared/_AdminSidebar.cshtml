@@ -13,7 +13,6 @@
                 <li>@Html.ActionLink(Resources.TitelBeschikbareStages + " voor studenten", "BeschikbareStages", "Stageopdracht") </li>
                 <li>@Html.ActionLink(Resources.TitelToegewezenStagesZonderBegeleider, "ToegewezenStagesZonderBegeleider", "Stageopdracht") </li>
                 <li>@Html.ActionLink(Resources.TitelToegewezenStages, "ToegewezenStages", "Stageopdracht") </li>
-                <li>@Html.ActionLink(Resources.TitelAanvragenStagebegeleiding, "AanvragenStagebegeleiding", "Stageopdracht")  </li>
                 <li>@Html.ActionLink(Resources.TitelLijstenExporterenExcel, "LijstExcel", "Stageopdracht")  </li>
             </ul>
         </li>
@@ -32,7 +31,7 @@
                     @Html.ActionLink(Resources.TitelNieuwContactpersoon, "Create", "Contactpersoon")
                 </li>
                 <li>
-                    @Html.ActionLink(Resources.TitelContactpersoonIndex, "Index", "Contactpersoon")
+                    @Html.ActionLink(Resources.TitelContactpersoonIndex, "List", "Contactpersoon")
                 </li>
             </ul>
         </li>
@@ -67,6 +66,8 @@
                 <li>
                     @Html.ActionLink("Begeleiders", "List", "Begeleider")
                 </li>
+
+                <li>@Html.ActionLink(Resources.TitelAanvragenStagebegeleiding, "AanvragenStagebegeleiding", "Stageopdracht")  </li>
             </ul>
         </li>
 

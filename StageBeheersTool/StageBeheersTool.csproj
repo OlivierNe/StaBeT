@@ -366,7 +366,6 @@
     <Content Include="Scripts\academiejaarInstellingen.js" />
     <Content Include="Scripts\account-list.js" />
     <Content Include="Scripts\AddAdmin.js" />
-    <Content Include="Scripts\createBedrijf.js" />
     <Content Include="Scripts\createUserObject.js" />
     <Content Include="Scripts\lib\bootstrap.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
@@ -382,14 +381,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Scripts\lib\jquery-2.1.3.intellisense.js" />
-    <Content Include="Scripts\createStageFormAdmin.js" />
     <Content Include="Scripts\lib\datepicker-nl-BE.js" />
     <Content Include="Scripts\lib\jquery-2.1.3.js" />
     <Content Include="Scripts\lib\jquery-2.1.3.min.js" />
     <Content Include="Scripts\lib\jquery-ui-1.11.4.js" />
     <Content Include="Scripts\lib\jquery-ui-1.11.4.min.js" />
     <Content Include="Scripts\lib\gridmvc.js" />
-    <Content Include="Scripts\lib\gridmvc.lang.ru.js" />
     <Content Include="Scripts\lib\gridmvc.min.js" />
     <Content Include="Scripts\lib\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\lib\jquery.unobtrusive-ajax.min.js" />
@@ -400,6 +397,7 @@
     <Content Include="Scripts\lib\jquery.validate.min.js" />
     <Content Include="Scripts\lib\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\lib\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\lib\messages_nl.js" />
     <Content Include="Scripts\lib\modernizr-2.6.2.js" />
     <Content Include="Scripts\lib\respond.js" />
     <Content Include="Scripts\lib\respond.min.js" />
@@ -440,7 +438,7 @@
     <Content Include="Views\Stageopdracht\Delete.cshtml" />
     <Content Include="Views\Stageopdracht\Details.cshtml" />
     <Content Include="Views\Stageopdracht\Edit.cshtml" />
-    <Content Include="Views\Contactpersoon\Index.cshtml" />
+    <Content Include="Views\Contactpersoon\List.cshtml" />
     <Content Include="Views\Contactpersoon\Create.cshtml" />
     <Content Include="Views\Contactpersoon\Details.cshtml" />
     <Content Include="Views\Contactpersoon\Edit.cshtml" />

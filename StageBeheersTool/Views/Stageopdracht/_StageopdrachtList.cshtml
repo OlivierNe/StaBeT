@@ -7,7 +7,7 @@
             .Encoded(false).Sanitized(false)
             .RenderValueAs(so =>
                 Html.ActionLink(so.Titel,
-                "Details", new { id = so.Id, overzicht = Model.OverzichtAction })).SetWidth(300);
+                "Details", new { id = so.Id, overzicht = Model.Overzicht })).SetWidth(300);
         if (Model.ToonBedrijf)
         {
             columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf")

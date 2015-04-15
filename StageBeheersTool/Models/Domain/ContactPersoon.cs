@@ -12,7 +12,6 @@ namespace StageBeheersTool.Models.Domain
 
         #endregion
 
-
         protected bool Equals(Contactpersoon other)
         {
             return string.Equals(other.Id, Id);
@@ -31,8 +30,5 @@ namespace StageBeheersTool.Models.Domain
             return Id.GetHashCode();
         }
 
-
     }
-
-
 }

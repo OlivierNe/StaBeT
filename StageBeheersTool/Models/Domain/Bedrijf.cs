@@ -60,6 +60,16 @@ namespace StageBeheersTool.Models.Domain
         #region public methods
         public void AddStageopdracht(Stageopdracht stageopdracht)
         {
+            if (stageopdracht.Contractondertekenaar != null)
+            {
+                stageopdracht.ContractondertekenaarEmail = stageopdracht.Contractondertekenaar.Email;
+                stageopdracht.ContractondertekenaarNaam = stageopdracht.Contractondertekenaar.Naam;
+            }
+            if (stageopdracht.Stagementor != null)
+            {
+                stageopdracht.StagementorEmail = stageopdracht.Stagementor.Email;
+                stageopdracht.StagementorNaam = stageopdracht.Stagementor.Naam;
+            }
             Stageopdrachten.Add(stageopdracht);
         }
 
@@ -94,8 +104,10 @@ namespace StageBeheersTool.Models.Domain
 
         public void AddContactpersoon(Contactpersoon contactpersoon)
         {
+            contactpersoon.Bedrijf = this;
             Contactpersonen.Add(contactpersoon);
         }
+
 
         public Contactpersoon FindContactpersoonById(int id)
         {
@@ -158,7 +170,7 @@ namespace StageBeheersTool.Models.Domain
             //}
             //if (stageopdracht.IsAfgekeurd())
             //{
-                //return true;
+            //return true;
             //}
             if (stageopdracht.IsBeoordeeld() == false)
             {

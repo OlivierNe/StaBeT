@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
@@ -22,7 +23,7 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Bedrijf, Role.Admin)]
-        public ActionResult Index(ContactpersoonIndexVM model)
+        public ActionResult List(ContactpersoonIndexVM model)
         {
             if (CurrentUser.IsBedrijf())
             {
@@ -39,21 +40,24 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_ContactpersoonList", model);
             }
+            ViewBag.Title = "Overzicht contactpersonen";
             return View(model);
         }
 
         [Authorize(Role.Admin)]
         public ActionResult VanBedrijf(int bedrijfId)
         {
+            var bedrijf = _bedrijfRepository.FindById(bedrijfId);
             var model = new ContactpersoonIndexVM
             {
-                Contactpersonen = _contactpersoonRepository.FindAllVanBedrijf(bedrijfId)
+                Contactpersonen = bedrijf.Contactpersonen
             };
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_ContactpersoonList");
             }
-            return View("Index", model);
+            ViewBag.Title = "Overzicht contactpersonen van " + bedrijf.Naam;
+            return View("List", model);
         }
 
         [Authorize(Role.Bedrijf, Role.Admin)]
@@ -79,10 +83,20 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 var contactpersoon = Mapper.Map<ContactpersoonCreateVM, Contactpersoon>(model);
-                var bedrijf = _bedrijfRepository.FindById(model.BedrijfId);
+                var bedrijf = FindBedrijf(model.BedrijfId);
+                if (bedrijf == null)
+                {
+                    SetViewError("Bedrijf niet gevonden.");
+                    return View(model);
+                }
                 bedrijf.AddContactpersoon(contactpersoon);
                 _bedrijfRepository.SaveChanges();
-                return RedirectToAction("Index");
+                SetViewMessage(String.Format(Resources.SuccesCreateContactpersoon, contactpersoon.Naam));
+                if (CurrentUser.IsAdmin())
+                {
+                    return RedirectToAction("VanBedrijf", new { bedrijfId = bedrijf.Id });
+                }
+                return RedirectToAction("List");
             }
             return View(model);
         }
@@ -160,8 +174,8 @@ namespace StageBeheersTool.Controllers
             var bedrijf = contactpersoon.Bedrijf;
             bedrijf.KoppelContactpersoonLosVanOpdrachten(contactpersoon);
             _contactpersoonRepository.Delete(contactpersoon);
-            TempData["message"] = "Contactpersoon " + contactpersoon.Naam + " verwijderd.";
-            return RedirectToAction("Index");
+            SetViewMessage(String.Format(Resources.SuccesDeleteContactpersoon, contactpersoon.Naam));
+            return RedirectToAction("List");
         }
 
         #region Helpers
@@ -184,6 +198,15 @@ namespace StageBeheersTool.Controllers
                 return bedrijf.FindContactpersoonById(id); //bedrijf mag enkel zijn eigen contactpersonen beheren
             }
             return _contactpersoonRepository.FindById(id);//ingelogd als admin
+        }
+
+        private Bedrijf FindBedrijf(int id)
+        {
+            if (CurrentUser.IsBedrijf())
+            {
+                return _userService.FindBedrijf();
+            }
+            return _bedrijfRepository.FindById(id);
         }
 
         #endregion

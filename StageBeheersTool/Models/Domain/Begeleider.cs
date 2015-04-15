@@ -70,7 +70,7 @@ namespace StageBeheersTool.Models.Domain
 
         public bool MagAanvraagIndienen(Stageopdracht stageopdracht)
         {
-            return !HeeftStageBegeleidingAangevraagd(stageopdracht) && stageopdracht.IsGoedgekeurd()
+            return !HeeftStageBegeleidingAangevraagd(stageopdracht) && stageopdracht.IsToegewezen()
                     && stageopdracht.HeeftStageBegeleider() == false;
         }
         

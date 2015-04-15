@@ -2,11 +2,8 @@
 
 @{
     ViewBag.Title = "Stageopdracht verwijderen";
-    var message = TempData["message"];
 }
-<h4 class="text-danger">
-    @message
-</h4>
+
 <h3>Deze stageopdracht verwijderen?</h3>
 <div>
     <dl class="dl-horizontal">
@@ -52,12 +49,14 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Verwijderen" class="btn btn-default" /> |
-            @Html.ActionLink("Terug naar overzicht", "Index")
+        <div class="col-sm-offset-2">
+            <input type="submit" value="Verwijderen" class="btn btn-danger" />
+            <a href="@ViewBag.Overzicht" class="btn btn-default">Annuleren</a>
         </div>
+        <a href="@ViewBag.Overzicht">Terug naar overzicht</a>
     }
 </div>

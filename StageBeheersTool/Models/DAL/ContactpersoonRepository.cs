@@ -39,11 +39,11 @@ namespace StageBeheersTool.Models.DAL
             SaveChanges();
         }
 
-        public bool Update(Contactpersoon contactpersoon)
+        public void Update(Contactpersoon contactpersoon)
         {
             var teUpdatenPersoon = FindById(contactpersoon.Id);
             if (teUpdatenPersoon == null)
-                return false;
+                return;
             teUpdatenPersoon.Voornaam = contactpersoon.Voornaam;
             teUpdatenPersoon.Familienaam = contactpersoon.Familienaam;
             teUpdatenPersoon.Gsm = contactpersoon.Gsm;
@@ -55,7 +55,6 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenPersoon.Email = contactpersoon.Email;
 
             SaveChanges();
-            return true;
         }
 
         public void SaveChanges()

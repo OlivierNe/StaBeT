@@ -96,11 +96,11 @@
         <p>
             @if (Model.ToonEdit)
             {
-                @Html.ActionLink("Aanpassen", "Edit", new { Model.Stageopdracht.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Aanpassen", "Edit", new { Model.Stageopdracht.Id, Model.Overzicht }, new { @class = "btn btn-default" })
             }
             @if (Model.ToonVerwijderen)
             {
-                @Html.ActionLink("Verwijderen", "Delete", new { Model.Stageopdracht.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Verwijderen", "Delete", new { Model.Stageopdracht.Id, Model.Overzicht }, new { @class = "btn btn-default" })
             }
             @if (Model.ToonVoorkeurToevoegen)
             {
@@ -115,24 +115,40 @@
             @if (Model.ToonAanvraagIndienen)
             {
                 @Html.ActionLink("Deze stage begeleiden", "AanvraagIndienen", "Stageopdracht",
-                    new { Model.Stageopdracht.Id, overzicht = Model.OverzichtAction },
+                    new { Model.Stageopdracht.Id, Model.Overzicht },
                     new { @class = "btn btn-default", @title = "Aanvraag om deze stage te begeleiden indienen" })
             }
             @if (Model.ToonAanvraagAnnuleren)
             {
                 @Html.ActionLink("Aanvraag annuleren", "AanvraagAnnuleren", "Stageopdracht",
-                    new { Model.Stageopdracht.Id, overzicht = Model.OverzichtAction },
+                         new { Model.Stageopdracht.Id, Model.Overzicht },
                     new { @class = "btn btn-default", @title = "Aanvraag om deze stage te begeleiden annuleren" })
             }
 
             @if (Model.ToonOordelen)
             {
-                @Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { Model.Stageopdracht.Id }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { Model.Stageopdracht.Id }, new { @class = "btn btn-default" })
+                if (Model.Stageopdracht.IsGoedgekeurd())
+                {
+                    @Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { Model.Stageopdracht.Id, Model.Overzicht },
+                        new { @class = "btn btn-default", disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { Model.Stageopdracht.Id, Model.Overzicht },
+                        new { @class = "btn btn-default" })
+                }
+                if (Model.Stageopdracht.IsAfgekeurd())
+                {
+                    @Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { Model.Stageopdracht.Id, Model.Overzicht },
+                        new { @class = "btn btn-default", disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { Model.Stageopdracht.Id, Model.Overzicht },
+                        new { @class = "btn btn-default" })
+                }
             }
         </p>
     </div>
-    @*@Html.ActionLink("Terug naar overzicht", Model.OverzichtAction, new { }, new { })*@
-    <a href="javascript:history.back();">Terug</a>
-
+    <a href="@HttpUtility.UrlDecode(Model.Overzicht)">Terug naar overzicht</a>
 </div>

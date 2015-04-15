@@ -14,7 +14,7 @@
         InsertionMode = InsertionMode.Replace
     };
 }
-<h2 class="col-md-offset-2">@ViewBag.Title</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm("Create", "Stageopdracht", FormMethod.Post, new { @id = "stageopdrachtForm" }))
 { @Html.AntiForgeryToken()
@@ -171,12 +171,8 @@
 }
 
 @section Scripts {
-    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/stagetool-form.js"></script>
     <script src="~/Scripts/createStageForm.js"></script>
     <script src="~/Scripts/specialisatie.js"></script>
-    @if (User.IsInRole(Role.Admin))
-    {
-        <script src="~/Scripts/createStageFormAdmin.js"></script>
-    }
 }

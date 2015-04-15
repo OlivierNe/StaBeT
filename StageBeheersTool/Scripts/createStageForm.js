@@ -12,6 +12,28 @@ $(function () {
     });
     initContrOndForm();
     initStagementorForm();
+
+    $("#BedrijfId").change(function () {
+        $.ajax({ url: "/Bedrijf/BedrijfJson/" + $("#BedrijfId").val() })
+            .success(function (bedrijf) {
+                $("#Gemeente").val(bedrijf.Gemeente);
+                $("#Postcode").val(bedrijf.Postcode);
+                $("#Straat").val(bedrijf.Straat);
+                $("#Straatnummer").val(bedrijf.Straatnummer);
+
+                $("#StagementorId").children('option:not(:first)').remove();
+                for (var i = 0; i < bedrijf.Stagementors.length; i++) {
+                    var option = new Option(bedrijf.Stagementors[i].Naam, bedrijf.Stagementors[i].Id);
+                    $("#StagementorId").append(option);
+                }
+                $("#ContractondertekenaarId").children('option:not(:first)').remove();
+                for (var i = 0; i < bedrijf.Contractondertekenaars.length; i++) {
+                    var option = new Option(bedrijf.Contractondertekenaars[i].Naam, bedrijf.Contractondertekenaars[i].Id);
+                    $("#ContractondertekenaarId").append(option);
+                }
+            });
+    });
+
 });
 function initClientsideValidation() {
     var form = $("#stageopdrachtForm");
@@ -74,7 +96,7 @@ function initStagementorForm() {
             $("#stagementorForm").empty();
             $("#ContractondertekenaarId option[value='-1']").remove();
             $("#stagementorDropdown").show();
-        })
+        });
     });
 }
 
@@ -112,8 +134,8 @@ function initContrOndForm() {
     }
     $("#Contractondertekenaar_IsStagementor").change(function () {
         if ($(this).is(":checked")) {
-            var o = new Option($("#Contractondertekenaar_Familienaam").val() + " " + $("#Contractondertekenaar_Voornaam").val(), "-1");
-            $("#StagementorId").append(o);
+            var option = new Option($("#Contractondertekenaar_Familienaam").val() + " " + $("#Contractondertekenaar_Voornaam").val(), "-1");
+            $("#StagementorId").append(option);
         }
         else {
             $("#StagementorId option[value='-1']").remove();

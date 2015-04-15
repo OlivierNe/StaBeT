@@ -100,7 +100,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ContractondertekenaarId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ContractondertekenaarId, Model.ContractondertekenaarsSelectList, "-- Selecteer een contractondertekenaar --", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ContractondertekenaarId, Model.ContractondertekenaarsSelectList,
+                    "-- Selecteer een contractondertekenaar --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ContractondertekenaarId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -108,7 +109,7 @@
         @Html.HiddenFor(model => model.Id)
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Opslaan" class="btn btn-default" />
+                <input type="submit" value="Opslaan" class="btn btn-success" />
                 @{
     var url = Request.UrlReferrer == null ? ("Details/" + Model.Id) : Request.UrlReferrer.AbsolutePath;
                 }
@@ -117,10 +118,7 @@
         </div>
     </div>
 }
-<div>
-    @Html.ActionLink("Terug naar overzicht", "Index")
-</div>
-
+<a href="@HttpUtility.UrlDecode(Model.Overzicht)">Terug naar overzicht</a>
 @section scripts{
     <script src="~/Scripts/stagetool-form.js"></script>
     <script src="~/Scripts/specialisatie.js"></script>

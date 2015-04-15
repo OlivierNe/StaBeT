@@ -7,7 +7,7 @@
         .RenderValueAs(cp => Html.ActionLink(cp.Naam, "Details", new { id = cp.Id })).SetWidth(200);
 
     columns.Add(cp => cp.Email).Titled("E-mail").Encoded(false).Sanitized(false)
-            .RenderValueAs(cp => Html.DisplayFor(model => cp.Email));
+            .RenderValueAs(cp => Html.DisplayEmail(cp.Email));
 
     if (Model.ToonBedrijf)
     {

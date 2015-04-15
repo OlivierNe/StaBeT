@@ -35,6 +35,7 @@ namespace StageBeheersTool.Models.Domain
         public static void KeurStageopdrachtAf(Stageopdracht stageopdracht)
         {
             stageopdracht.Status = StageopdrachtStatus.Afgekeurd;
+            stageopdracht.Stagebegeleider = null;
         }
 
         public static bool KeurStagedossierGoed(VoorkeurStage voorkeurStage)

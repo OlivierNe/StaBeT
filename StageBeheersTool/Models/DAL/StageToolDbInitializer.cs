@@ -14,7 +14,7 @@ using StageBeheersTool.OudeGegevens;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        //DropCreateDatabaseAlways<StageToolDbContext>
+       // DropCreateDatabaseAlways<StageToolDbContext>
    DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
@@ -362,7 +362,11 @@ namespace StageBeheersTool.Models.DAL
                                 var stagementor = bedrijf.Contactpersonen.FirstOrDefault(c => c.Familienaam == stage.relatie.naam
                                                                                 && c.Voornaam == stage.relatie.voornaam);
                                 if (stagementor != null)
+                                {
                                     stagementor.IsStagementor = true;
+                                    stageopdracht.StagementorEmail = stagementor.Email;
+                                    stageopdracht.StagementorNaam = stagementor.Naam;
+                                }
                                 stageopdracht.Stagementor = stagementor;
                             }
                             if (stage.relatie1 != null)
@@ -371,7 +375,11 @@ namespace StageBeheersTool.Models.DAL
                                                                                 && c.Voornaam == stage.relatie1.voornaam);
                                 stageopdracht.Contractondertekenaar = contrOnd;
                                 if (contrOnd != null)
+                                {
                                     contrOnd.IsContractondertekenaar = true;
+                                    stageopdracht.ContractondertekenaarEmail = contrOnd.Email;
+                                    stageopdracht.ContractondertekenaarNaam = contrOnd.Naam;
+                                }
                             }
                             if (stage.docent != null)
                             {

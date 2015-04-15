@@ -14,7 +14,9 @@ namespace StageBeheersTool
                         "~/Scripts/lib/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/lib/jquery.validate*", "~/Scripts/lib/jquery.validate.unobtrusive*"));
+                        "~/Scripts/lib/jquery.validate*",
+                        "~/Scripts/lib/messages_nl.js",
+                        "~/Scripts/lib/jquery.validate.unobtrusive*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.

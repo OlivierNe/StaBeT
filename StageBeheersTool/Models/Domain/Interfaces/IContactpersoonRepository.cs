@@ -8,7 +8,7 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<Contactpersoon> FindAll();
         IQueryable<Contactpersoon> FindAllVanBedrijf(int bedrijfId);
         Contactpersoon FindById(int id);
-        bool Update(Contactpersoon contactpersoon);
+        void Update(Contactpersoon contactpersoon);
         void SaveChanges();
     }
 }
