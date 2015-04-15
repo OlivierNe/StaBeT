@@ -236,10 +236,12 @@
     <Compile Include="Models\Domain\AcademiejaarInstellingen.cs" />
     <Compile Include="Models\Domain\Admin.cs" />
     <Compile Include="Models\Domain\BegeleidAanvraagStatus.cs" />
+    <Compile Include="Helpers\EmailMessages.cs" />
     <Compile Include="Models\Domain\HoGentPersoon.cs" />
     <Compile Include="Models\Domain\Instelling.cs" />
     <Compile Include="Models\Domain\Interfaces\IAcademiejaarRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\IContactpersoonRepository.cs" />
+    <Compile Include="Models\Domain\Interfaces\IEmailService.cs" />
     <Compile Include="Models\Domain\Interfaces\IImageService.cs" />
     <Compile Include="Models\Domain\Interfaces\IInstellingenRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\ISpreadsheetService.cs" />
@@ -481,7 +483,6 @@
     <Content Include="Views\Shared\_StudentHeader.cshtml" />
     <Content Include="Views\Shared\_BedrijfHeader.cshtml" />
     <Content Include="Views\Shared\_BegeleiderHeader.cshtml" />
-    <Content Include="Views\Shared\_AdminHeader.cshtml" />
     <Content Include="Views\Contactpersoon\_ContactpersoonList.cshtml" />
     <Content Include="Views\Student\_studentList.cshtml" />
     <Content Include="Views\Begeleider\_begeleidersList.cshtml" />
@@ -491,7 +492,7 @@
     <Content Include="Views\Student\Delete.cshtml" />
     <Content Include="Views\Stageopdracht\_StagebegeleidingAanvragen.cshtml" />
     <Content Include="Views\Stageopdracht\LijstExcel.cshtml" />
-    <Content Include="Views\Stageopdracht\StageOverzicht.cshtml" />
+    <Content Include="Views\Stageopdracht\StageopdrachtOverzicht.cshtml" />
     <Content Include="Views\Account\_UserList.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
     <Content Include="Views\Account\Create.cshtml" />

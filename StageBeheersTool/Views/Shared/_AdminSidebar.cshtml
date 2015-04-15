@@ -1,91 +1,94 @@
-﻿<ul class="nav nav-pills sidebar-ul" id="sidebarItems">
-    <li class="sidebar-nav sidebar-menu">
-        <a class="" data-toggle="collapse" data-target="#stageopdrachtOpties">
-            Stageopdrachten <b class="glyphicon glyphicon-triangle-bottom"></b>
-        </a>
-        <ul class="collapse" role="menu" id="stageopdrachtOpties">
-            <li> @Html.ActionLink(Resources.TitelNieuweStageopdracht, "Create", "Stageopdracht")</li>
-            <li>@Html.ActionLink(Resources.TitelBedrijfStageVoorstellen, "BedrijfStageVoorstellen", "Stageopdracht") </li>
-            <li>@Html.ActionLink(Resources.TitelGoedgekeurdeStageopdrachten, "GoedgekeurdeStages", "Stageopdracht") </li>
-            <li>@Html.ActionLink(Resources.TitelAfgekeurdeStageopdrachten, "AfgekeurdeStages", "Stageopdracht") </li>
-            <li>@Html.ActionLink(Resources.TitelBeschikbareStages + " voor studenten", "BeschikbareStages", "Stageopdracht") </li>
-            <li>@Html.ActionLink(Resources.TitelToegewezenStagesZonderBegeleider, "ToegewezenStagesZonderBegeleider", "Stageopdracht") </li>
-            <li>@Html.ActionLink(Resources.TitelToegewezenStages, "ToegewezenStages", "Stageopdracht") </li>
-            <li>@Html.ActionLink(Resources.TitelAanvragenStagebegeleiding, "AanvragenStagebegeleiding", "Stageopdracht")  </li>
-            <li>@Html.ActionLink(Resources.TitelLijstenExporterenExcel, "LijstExcel", "Stageopdracht")  </li>
-        </ul>
-    </li>
-    <li class="sidebar-nav sidebar-menu">
-        <a class="" data-toggle="collapse" data-target="#BedrijfOpties">
-            Bedrijven<b class="glyphicon glyphicon-triangle-bottom"></b>
-        </a>
-        <ul class="collapse" id="BedrijfOpties">
-            <li>
-                @Html.ActionLink(Resources.TitelNieuwBedrijf, "Create", "Bedrijf")
-            </li>
-            <li>
-                @Html.ActionLink(Resources.TitelBedrijvenIndex, "Index", "Bedrijf")
-            </li>
-            <li>
-                @Html.ActionLink(Resources.TitelNieuwContactpersoon, "Create", "Contactpersoon")
-            </li>
-            <li>
-                @Html.ActionLink(Resources.TitelContactpersoonIndex, "Index", "Contactpersoon")
-            </li>
-        </ul>
-    </li>
-    <li class="sidebar-nav sidebar-menu">
-        <a class="" data-toggle="collapse" data-target="#StudentOpties">
-            Studenten <b class="glyphicon glyphicon-triangle-bottom"></b>
-        </a>
-        <ul class="collapse" id="StudentOpties">
-            <li>
-                @Html.ActionLink("Nieuwe student", "Create", "Student")
-            </li>
-            <li>
-                @Html.ActionLink("Studenten", "List", "Student")
-            </li>
-            <li>
-                @Html.ActionLink("Studenten met ingediend stagedossier", "MetIngediendStagedossier", "Stageopdracht")
-            </li>
-            <li>
-                @Html.ActionLink("Studenten met stage", "MetToegewezenStage", "Student")
-            </li>
-        </ul>
-    </li>
+﻿
+<div id="sidebar-wrapper">
+    <ul class="nav nav-pills sidebar-ul" id="sidebarItems">
+        <li class="sidebar-nav sidebar-menu">
+            <a class="" data-toggle="collapse" data-target="#stageopdrachtOpties">
+                Stageopdrachten <b class="glyphicon glyphicon-triangle-bottom"></b>
+            </a>
+            <ul class="collapse" role="menu" id="stageopdrachtOpties">
+                <li> @Html.ActionLink(Resources.TitelNieuweStageopdracht, "Create", "Stageopdracht")</li>
+                <li>@Html.ActionLink(Resources.TitelBedrijfStageVoorstellen, "BedrijfStageVoorstellen", "Stageopdracht") </li>
+                <li>@Html.ActionLink(Resources.TitelGoedgekeurdeStageopdrachten, "GoedgekeurdeStages", "Stageopdracht") </li>
+                <li>@Html.ActionLink(Resources.TitelAfgekeurdeStageopdrachten, "AfgekeurdeStages", "Stageopdracht") </li>
+                <li>@Html.ActionLink(Resources.TitelBeschikbareStages + " voor studenten", "BeschikbareStages", "Stageopdracht") </li>
+                <li>@Html.ActionLink(Resources.TitelToegewezenStagesZonderBegeleider, "ToegewezenStagesZonderBegeleider", "Stageopdracht") </li>
+                <li>@Html.ActionLink(Resources.TitelToegewezenStages, "ToegewezenStages", "Stageopdracht") </li>
+                <li>@Html.ActionLink(Resources.TitelAanvragenStagebegeleiding, "AanvragenStagebegeleiding", "Stageopdracht")  </li>
+                <li>@Html.ActionLink(Resources.TitelLijstenExporterenExcel, "LijstExcel", "Stageopdracht")  </li>
+            </ul>
+        </li>
+        <li class="sidebar-nav sidebar-menu">
+            <a class="" data-toggle="collapse" data-target="#BedrijfOpties">
+                Bedrijven<b class="glyphicon glyphicon-triangle-bottom"></b>
+            </a>
+            <ul class="collapse" id="BedrijfOpties">
+                <li>
+                    @Html.ActionLink(Resources.TitelNieuwBedrijf, "Create", "Bedrijf")
+                </li>
+                <li>
+                    @Html.ActionLink(Resources.TitelBedrijvenIndex, "List", "Bedrijf")
+                </li>
+                <li>
+                    @Html.ActionLink(Resources.TitelNieuwContactpersoon, "Create", "Contactpersoon")
+                </li>
+                <li>
+                    @Html.ActionLink(Resources.TitelContactpersoonIndex, "Index", "Contactpersoon")
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-nav sidebar-menu">
+            <a class="" data-toggle="collapse" data-target="#StudentOpties">
+                Studenten <b class="glyphicon glyphicon-triangle-bottom"></b>
+            </a>
+            <ul class="collapse" id="StudentOpties">
+                <li>
+                    @Html.ActionLink("Nieuwe student", "Create", "Student")
+                </li>
+                <li>
+                    @Html.ActionLink("Studenten", "List", "Student")
+                </li>
+                <li>
+                    @Html.ActionLink("Studenten met ingediend stagedossier", "MetIngediendStagedossier", "Stageopdracht")
+                </li>
+                <li>
+                    @Html.ActionLink("Studenten met stage", "MetToegewezenStage", "Student")
+                </li>
+            </ul>
+        </li>
 
-    <li class="sidebar-nav sidebar-menu">
-        <a class="" data-toggle="collapse" data-target="#BegeleiderOpties">
-            Begeleiders <b class="glyphicon glyphicon-triangle-bottom"></b>
-        </a>
-        <ul class="collapse" id="BegeleiderOpties">
-            <li>
-                @Html.ActionLink("Nieuwe begeleider", "Create", "Begeleider")
-            </li>
-            <li>
-                @Html.ActionLink("Begeleiders", "List", "Begeleider")
-            </li>
-        </ul>
-    </li>
+        <li class="sidebar-nav sidebar-menu">
+            <a class="" data-toggle="collapse" data-target="#BegeleiderOpties">
+                Begeleiders <b class="glyphicon glyphicon-triangle-bottom"></b>
+            </a>
+            <ul class="collapse" id="BegeleiderOpties">
+                <li>
+                    @Html.ActionLink("Nieuwe begeleider", "Create", "Begeleider")
+                </li>
+                <li>
+                    @Html.ActionLink("Begeleiders", "List", "Begeleider")
+                </li>
+            </ul>
+        </li>
 
-    <li class="sidebar-nav">
-        @Html.ActionLink("Gebruikers", "Index", "Account")
-    </li>
-    <li class="sidebar-nav">@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { })</li>
-    <li class="sidebar-nav sidebar-menu">
-        <a class="" data-toggle="collapse" data-target="#InstellingenOpties">
-            Instellingen <b class="glyphicon glyphicon-triangle-bottom"></b>
-        </a>
-        <ul class="collapse" id="InstellingenOpties">
-            <li class="">
-                @Html.ActionLink("Algemene instellingen", "AlgemeneInstellingen", "Instellingen")
-            </li>
-            <li class="">
-                @Html.ActionLink(Resources.TitelParametersAcademiejaar, "HuidigAcademiejaar", "Instellingen")
-            </li>
-            <li class="">
-                @Html.ActionLink(Resources.TitelAdminIndex, "Index", "Admin")
-            </li>
-        </ul>
-    </li>
-</ul>
+        <li class="sidebar-nav">
+            @Html.ActionLink("Gebruikers", "Index", "Account")
+        </li>
+        <li class="sidebar-nav">@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { })</li>
+        <li class="sidebar-nav sidebar-menu">
+            <a class="" data-toggle="collapse" data-target="#InstellingenOpties">
+                Instellingen <b class="glyphicon glyphicon-triangle-bottom"></b>
+            </a>
+            <ul class="collapse" id="InstellingenOpties">
+                <li class="">
+                    @Html.ActionLink("Algemene instellingen", "AlgemeneInstellingen", "Instellingen")
+                </li>
+                <li class="">
+                    @Html.ActionLink(Resources.TitelParametersAcademiejaar, "HuidigAcademiejaar", "Instellingen")
+                </li>
+                <li class="">
+                    @Html.ActionLink(Resources.TitelAdminIndex, "Index", "Admin")
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

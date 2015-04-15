@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNet.Identity;
-using System;
 using System.Configuration;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.Models.Services
 {
-    public class EmailService : IIdentityMessageService
+    public class EmailService : IEmailService
     {
-
         public Task SendAsync(IdentityMessage message)
         {
             using (var mailMessage = new MailMessage())
@@ -25,14 +24,7 @@ namespace StageBeheersTool.Models.Services
                     EnableSsl = false,
                     Port = int.Parse(ConfigurationManager.AppSettings["smtpPort"])
                 };
-                try
-                {
-                   // smtp.Send(mailMessage);
-                }
-                catch (Exception)
-                {
-                    Task.FromResult(1);
-                }
+                // smtp.Send(mailMessage);
             }
             return Task.FromResult(0);
         }

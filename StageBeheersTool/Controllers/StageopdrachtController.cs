@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AutoMapper;
-using Microsoft.AspNet.Identity;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.ViewModels;
-using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity.Owin;
 using StageBeheersTool.Models.Authentication;
 using System.Threading.Tasks;
 
@@ -23,14 +20,17 @@ namespace StageBeheersTool.Controllers
         private readonly IBedrijfRepository _bedrijfRepository;
         private readonly ISpecialisatieRepository _specialisatieRepository;
         private readonly IAcademiejaarRepository _academiejaarRepository;
+        private readonly IInstellingenRepository _instellingenRepository;
         private readonly IUserService _userService;
         private readonly IBegeleiderRepository _begeleiderRepository;
         private readonly ISpreadsheetService _spreadsheetService;
+        private readonly IEmailService _emailService;
 
         public StageopdrachtController(IStageopdrachtRepository stageopdrachtRepository,
             IBedrijfRepository bedrijfRepository, ISpecialisatieRepository specialisatieRepository,
             IUserService userService, IAcademiejaarRepository academiejaarRepository,
-            IBegeleiderRepository begeleiderRepository, ISpreadsheetService spreadsheetService)
+            IBegeleiderRepository begeleiderRepository, ISpreadsheetService spreadsheetService,
+            IEmailService emailService, IInstellingenRepository instellingenRepository)
         {
             _stageopdrachtRepository = stageopdrachtRepository;
             _bedrijfRepository = bedrijfRepository;
@@ -39,6 +39,8 @@ namespace StageBeheersTool.Controllers
             _userService = userService;
             _begeleiderRepository = begeleiderRepository;
             _spreadsheetService = spreadsheetService;
+            _emailService = emailService;
+            _instellingenRepository = instellingenRepository;
         }
 
         #region lijsten
@@ -79,7 +81,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("StageOverzicht", model);
+            return View("StageopdrachtOverzicht", model);
         }
 
         /// <summary>
@@ -101,7 +103,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("StageOverzicht", model);
+            return View("StageopdrachtOverzicht", model);
         }
 
         /// <summary>
@@ -123,7 +125,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("StageOverzicht", model);
+            return View("StageopdrachtOverzicht", model);
         }
 
         /// <summary>
@@ -146,7 +148,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("StageOverzicht", model);
+            return View("StageopdrachtOverzicht", model);
         }
 
         /// <summary>
@@ -169,7 +171,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("StageOverzicht", model);
+            return View("StageopdrachtOverzicht", model);
         }
 
         /// <summary>
@@ -193,7 +195,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("StageOverzicht", model);
+            return View("StageopdrachtOverzicht", model);
         }
 
         /// <summary>
@@ -214,7 +216,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("StageOverzicht", model);
+            return View("StageopdrachtOverzicht", model);
         }
 
         /// <summary>
@@ -229,13 +231,14 @@ namespace StageBeheersTool.Controllers
                 Stageopdrachten = stageopdrachten,
                 Title = Resources.TitelMijnStages,
                 ToonStudenten = true,
+                ToonStatus = true,
                 OverzichtAction = ControllerContext.RouteData.Values["action"].ToString()
             };
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("StageOverzicht", model);
+            return View("StageopdrachtOverzicht", model);
         }
 
         [Authorize(Role.Admin, Role.Begeleider, Role.Bedrijf)]
@@ -258,6 +261,7 @@ namespace StageBeheersTool.Controllers
                 OverzichtAction = ControllerContext.RouteData.Values["action"].ToString(),
                 Title = academiejaar == null ? "Alle stageopdrachten" : "Overzicht stageopdrachten " + academiejaar,
                 Academiejaar = academiejaar,
+                ToonStatus = academiejaar == null,
                 ToonStudenten = true,
                 ToonBedrijf = true,
                 ToonAcademiejaar = (academiejaar == null),
@@ -298,7 +302,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("StageOverzicht", model);
+            return View("StageopdrachtOverzicht", model);
         }
 
         [Authorize(Role.Admin)]
@@ -423,9 +427,9 @@ namespace StageBeheersTool.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Role.Bedrijf, Role.Admin)]
-        public ActionResult Create(StageopdrachtCreateVM model)
+        public async Task<ActionResult> Create(StageopdrachtCreateVM model)
         {
-            if (CurrentUser.IsAdmin() && model.BedrijfId == null)
+            if (CurrentUser.IsAdmin() && model.BedrijfId == 0)
             {
                 ModelState.AddModelError("BedrijfId", Resources.ErrorBedrijfVerplicht);
             }
@@ -436,7 +440,7 @@ namespace StageBeheersTool.Controllers
             }
             else
             {
-                bedrijf = _bedrijfRepository.FindById((int)model.BedrijfId);
+                bedrijf = _bedrijfRepository.FindById(model.BedrijfId);
             }
 
             if (ModelState.IsValid)
@@ -444,7 +448,8 @@ namespace StageBeheersTool.Controllers
                 var stageopdracht = Mapper.Map<Stageopdracht>(model);
                 if (stageopdracht.Stagementor == null)
                 {
-                    stageopdracht.Stagementor = model.StagementorId != null ? bedrijf.FindContactpersoonById((int)model.StagementorId) : null;
+                    stageopdracht.Stagementor = model.StagementorId != null ?
+                        bedrijf.FindContactpersoonById((int)model.StagementorId) : null;
                 }
                 if (model.StagementorId == -1)
                 {
@@ -457,7 +462,8 @@ namespace StageBeheersTool.Controllers
                 }
                 if (stageopdracht.Contractondertekenaar == null)
                 {
-                    stageopdracht.Contractondertekenaar = model.ContractondertekenaarId != null ? bedrijf.FindContactpersoonById((int)model.ContractondertekenaarId) : null;
+                    stageopdracht.Contractondertekenaar = model.ContractondertekenaarId != null ?
+                        bedrijf.FindContactpersoonById((int)model.ContractondertekenaarId) : null;
                 }
                 if (model.ContractondertekenaarId == -1)
                 {
@@ -470,7 +476,9 @@ namespace StageBeheersTool.Controllers
                 }
                 bedrijf.AddStageopdracht(stageopdracht);
                 _userService.SaveChanges();
-                SetViewMessage("Stageopdracht succesvol aangemaakt.");
+                var stageMailbox = _instellingenRepository.Find(Instelling.MailboxStages);
+                await _emailService.SendAsync(EmailMessages.StageopdrachtAangemaakt(stageopdracht, stageMailbox));
+                SetViewMessage(Resources.SuccesCreateStageopdracht);
                 return RedirectToAction("Details", new { id = stageopdracht.Id });
             }
             if (CurrentUser.IsBedrijf())
@@ -513,10 +521,10 @@ namespace StageBeheersTool.Controllers
             if (CurrentUser.IsBedrijf())
             {
                 var bedrijf = stageopdracht.Bedrijf;
-                model.ToonEdit = academiejaarInstellingen == null
-                    || bedrijf.MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen.DeadlineBedrijfStageEdit);
+                model.ToonEdit = bedrijf.MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen);
                 model.EditDeadline = academiejaarInstellingen == null ? null : academiejaarInstellingen.DeadlineBedrijfStageEditToString();
                 model.ToonBedrijfeditDeadline = model.ToonEdit;
+                model.ToonStatus = true;
             }
             else if (CurrentUser.IsStudent())
             {
@@ -533,7 +541,7 @@ namespace StageBeheersTool.Controllers
                 var begeleider = _userService.FindBegeleider();
                 model.ToonAanvraagIndienen = begeleider.MagAanvraagIndienen(stageopdracht);
                 model.ToonAanvraagAnnuleren = begeleider.MagAanvraagAnnuleren(stageopdracht);
-                model.ToonEdit = begeleider.MagStageWijzigen(stageopdracht);
+                model.ToonEdit = begeleider.MagStageopdrachtWijzigen(stageopdracht);
                 model.ToonStudenten = true;
             }
             else if (CurrentUser.IsAdmin())
@@ -547,9 +555,9 @@ namespace StageBeheersTool.Controllers
             {
                 model.ToonEdit = false;
             }
+            model.Stageopdracht = stageopdracht;
             model.ToonVerwijderen = CurrentUser.IsAdmin() || CurrentUser.IsBedrijf() && (model.Stageopdracht.IsGoedgekeurd() == false);
             model.OverzichtAction = overzicht;
-            model.Stageopdracht = stageopdracht;
 
             return View(model);
         }
@@ -565,13 +573,13 @@ namespace StageBeheersTool.Controllers
                 return HttpNotFound();
             }
             var academiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(stageopdracht.Academiejaar);
-            if (academiejaarInstellingen != null)
+            if (CurrentUser.IsBedrijf() && stageopdracht.Bedrijf.MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen) == false)
             {
-                var deadline = academiejaarInstellingen.DeadlineBedrijfStageEdit;
-                if (CurrentUser.IsBedrijf() && stageopdracht.Bedrijf.MagStageopdrachtWijzigen(stageopdracht, deadline) == false)
-                {
-                    return new HttpStatusCodeResult(403);
-                }
+                return new HttpStatusCodeResult(403);
+            }
+            if (CurrentUser.IsBegeleider() && _userService.FindBegeleider().MagStageopdrachtWijzigen(stageopdracht) == false)
+            {
+                return new HttpStatusCodeResult(403);
             }
             var model = Mapper.Map<Stageopdracht, StageopdrachtEditVM>(stageopdracht);
             model.ContractondertekenaarId = stageopdracht.Contractondertekenaar == null ? null : (int?)stageopdracht.Contractondertekenaar.Id;
@@ -584,29 +592,33 @@ namespace StageBeheersTool.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Role.Bedrijf, Role.Begeleider, Role.Admin)]
-        public ActionResult Edit(StageopdrachtEditVM model)
+        public async Task<ActionResult> Edit(StageopdrachtEditVM model)
         {
-            Stageopdracht stageopdracht;
-            if (ModelState.IsValid)
-            {
-                var opdracht = FindStageopdracht(model.Id);
-                if (opdracht == null)
-                {
-                    return HttpNotFound();
-                }
-                var bedrijf = opdracht.Bedrijf;
-                stageopdracht = Mapper.Map<StageopdrachtEditVM, Stageopdracht>(model);
-                stageopdracht.Stagementor = model.StagementorId != null ? bedrijf.FindContactpersoonById((int)model.StagementorId) : null;
-                stageopdracht.Contractondertekenaar = model.ContractondertekenaarId
-                    != null ? bedrijf.FindContactpersoonById((int)model.ContractondertekenaarId) : null;
-                _stageopdrachtRepository.Update(stageopdracht);
-                _userService.SaveChanges();
-                return RedirectToAction("Details", new { id = model.Id });
-            }
-            stageopdracht = _stageopdrachtRepository.FindById(model.Id);
+            var stageopdracht = FindStageopdracht(model.Id);
             if (stageopdracht == null)
             {
                 return HttpNotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                var academiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(stageopdracht.Academiejaar);
+                if (CurrentUser.IsBedrijf() && stageopdracht.Bedrijf.MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen) == false)
+                {
+                    return new HttpStatusCodeResult(403);
+                }
+                if (CurrentUser.IsBegeleider() && _userService.FindBegeleider().MagStageopdrachtWijzigen(stageopdracht) == false)
+                {
+                    return new HttpStatusCodeResult(403);
+                }
+                stageopdracht = Mapper.Map<StageopdrachtEditVM, Stageopdracht>(model);
+                stageopdracht.Stagementor = model.StagementorId != null ?
+                    stageopdracht.Bedrijf.FindContactpersoonById((int)model.StagementorId) : null;
+                stageopdracht.Contractondertekenaar = model.ContractondertekenaarId != null ?
+                    stageopdracht.Bedrijf.FindContactpersoonById((int)model.ContractondertekenaarId) : null;
+
+                _stageopdrachtRepository.Update(stageopdracht);
+                await _emailService.SendAsync(EmailMessages.StageopdrachtGewijzigd(stageopdracht));
+                return RedirectToAction("Details", new { id = model.Id });
             }
             model.SetSelectLists(_specialisatieRepository.FindAll(),
                 stageopdracht.Bedrijf.FindAllContractOndertekenaars(),
@@ -648,6 +660,8 @@ namespace StageBeheersTool.Controllers
             try
             {
                 _stageopdrachtRepository.Delete(stageopdracht);
+                var stagesMailBox = _instellingenRepository.Find(Instelling.MailboxStages);
+                _emailService.SendAsync(EmailMessages.StageopdrachtVerwijderd(stageopdracht, stagesMailBox));
             }
             catch (ApplicationException ex)
             {
@@ -729,7 +743,7 @@ namespace StageBeheersTool.Controllers
             {
                 return PartialView("_StageopdrachtList", model);
             }
-            return View("StageOverzicht", model);
+            return View("StageopdrachtOverzicht", model);
         }
         #endregion
 
@@ -761,7 +775,7 @@ namespace StageBeheersTool.Controllers
         [ActionName("AanduidenDossierIngediend")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AanduidenDossierIngediendConfirmed(int id)
+        public async Task<ActionResult> AanduidenDossierIngediendConfirmed(int id)
         {
             var stageopdracht = _stageopdrachtRepository.FindById(id);
             if (stageopdracht == null)
@@ -772,9 +786,11 @@ namespace StageBeheersTool.Controllers
             try
             {
                 student.SetStagedossierIngediend(stageopdracht);
+                _userService.SaveChanges();
                 SetViewMessage(string.Format(Resources.SuccesStagedossierAangeduidAlsIngediend,
                      stageopdracht.Titel));
-                _userService.SaveChanges();
+                var stagesMailbox = _instellingenRepository.Find(Instelling.MailboxStages);
+                await _emailService.SendAsync(EmailMessages.StagedossierIngediend(stageopdracht, student, stagesMailbox));
             }
             catch (ApplicationException ex)
             {
@@ -914,13 +930,7 @@ namespace StageBeheersTool.Controllers
         {
             var stageopdracht = _stageopdrachtRepository.FindById(id);
             Admin.KeurStageopdrachtGoed(stageopdracht);
-            var emailService = Request.GetOwinContext().GetUserManager<ApplicationUserManager>().EmailService;
-            await emailService.SendAsync(new IdentityMessage
-            {
-                Destination = stageopdracht.Bedrijf.Email,
-                Subject = "Stageopdracht goedgekeurd.",
-                Body = "Stageopdracht " + stageopdracht.Titel + " werd goedgekeurd."
-            });
+            await _emailService.SendAsync(EmailMessages.StageopdrachtGoedkeurenMail(stageopdracht));
             _stageopdrachtRepository.SaveChanges();
             SetViewMessage(string.Format(Resources.SuccesStageGoedgekeurd, stageopdracht.Titel));
             return RedirectToAction("BedrijfStageVoorstellen");
@@ -949,13 +959,8 @@ namespace StageBeheersTool.Controllers
             }
             var stageopdracht = _stageopdrachtRepository.FindById(model.Id);
             Admin.KeurStageopdrachtAf(stageopdracht);
-            var emailService = Request.GetOwinContext().GetUserManager<ApplicationUserManager>().EmailService;
-            await emailService.SendAsync(new IdentityMessage
-            {
-                Destination = stageopdracht.Bedrijf.Email,
-                Subject = model.Onderwerp,
-                Body = model.Reden
-            });
+            await _emailService.SendAsync(EmailMessages.StageopdrachtAfkeurenMail(stageopdracht, model.Reden,
+                    model.Onderwerp));
             _stageopdrachtRepository.SaveChanges();
             SetViewMessage(string.Format(Resources.SuccesStageAfgekeurd, stageopdracht.Titel));
             return RedirectToAction("BedrijfStageVoorstellen");

@@ -142,23 +142,43 @@ namespace StageBeheersTool.Models.Domain
             return false;
         }
 
-        public bool MagStageopdrachtWijzigen(Stageopdracht opdracht, DateTime? deadline)
+        public bool MagStageopdrachtWijzigen(Stageopdracht stageopdracht, AcademiejaarInstellingen academiejaarInstellingen)
         {
-            if (opdracht == null)
+            if (stageopdracht == null)
             {
                 return false;
             }
-            if (deadline == null)
-            {
-                return true;
-            }
-            if (opdracht.Academiejaar.Equals(AcademiejaarHelper.HuidigAcademiejaar()) == false)
+            if (FindStageopdrachtById(stageopdracht.Id) == null)
             {
                 return false;
             }
-            if (DateTime.Now.Date <= ((DateTime)deadline).Date)
+            //if (stageopdracht.Academiejaar == AcademiejaarHelper.HuidigAcademiejaar() == false)
+            //{
+            //    return false;
+            //}
+            //if (stageopdracht.IsAfgekeurd())
+            //{
+                //return true;
+            //}
+            if (stageopdracht.IsBeoordeeld() == false)
             {
                 return true;
+            }
+            if (stageopdracht.IsGoedgekeurd())
+            {
+                if (academiejaarInstellingen == null)
+                {
+                    return true;
+                }
+                var deadline = academiejaarInstellingen.DeadlineBedrijfStageEdit;
+                if (deadline == null)
+                {
+                    return true;
+                }
+                if (DateTime.Now.Date <= ((DateTime)deadline).Date)
+                {
+                    return true;
+                }
             }
             return false;
         }

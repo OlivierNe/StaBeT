@@ -41,12 +41,10 @@
         </div>
     </nav>
     <div id="wrapper">
-        <div id="sidebar-wrapper">
-            @if (CurrentUser.IsAdmin())
-            {
-                @Html.Partial("_AdminSidebar")
-            }
-        </div>
+        @if (CurrentUser.IsAdmin())
+        {
+            @Html.Partial("_AdminSidebar")
+        }
         <div class="container body-content" id="page-content-wrapper">
             @if (TempData["message"] != null)
             {

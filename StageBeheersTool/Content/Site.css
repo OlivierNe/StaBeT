@@ -108,6 +108,8 @@ textarea {
 /*sidebar*/
 #wrapper {
     padding-left: 250px;
+    width: 100%;
+    position: relative;
     -moz-transition: all 0.4s ease 0s;
     -o-transition: all 0.4s ease 0s;
     -webkit-transition: all 0.4s ease 0s;
@@ -121,7 +123,7 @@ textarea {
     position: fixed;
     height: 100%;
     overflow-y: auto;
-    z-index: 1000;
+    overflow-x: hidden;
     transition: all 0.4s ease 0s;
 }
 
@@ -194,28 +196,20 @@ textarea {
     background-color: #dddddd;
 }
 
-/*
-@media (max-width:500px) {
+
+@media (max-width:750px) {
 
     #wrapper {
-      padding-left: 0;
+        padding-left: 25px;
     }
 
+    .sidebar-nav {
+        position: relative;
+    }
     #sidebar-wrapper {
-      left: 0;
+        position: relative;
     }
-
-    #wrapper.active {
-      position: relative;
-      left: 250px;
-    }
-
-    #wrapper.active #sidebar-wrapper {
-      left: 250px;
-      width: 250px;
-      transition: all 0.4s ease 0s;
-    }
-}*/
+}
 
 /*end sidebar*/
 

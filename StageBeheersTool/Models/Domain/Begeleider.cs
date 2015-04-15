@@ -74,7 +74,7 @@ namespace StageBeheersTool.Models.Domain
                     && stageopdracht.HeeftStageBegeleider() == false;
         }
         
-        public bool MagStageWijzigen(Stageopdracht stageopdracht)
+        public bool MagStageopdrachtWijzigen(Stageopdracht stageopdracht)
         {
             return stageopdracht.Stagebegeleider != null && this.Equals(stageopdracht.Stagebegeleider);
         }

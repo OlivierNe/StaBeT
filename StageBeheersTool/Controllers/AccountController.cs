@@ -8,6 +8,7 @@ using System.Web.Script.Serialization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.ViewModels;
 using StageBeheersTool.Models.Domain;
 using AutoMapper;
@@ -23,6 +24,7 @@ namespace StageBeheersTool.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
 
         public ApplicationSignInManager SignInManager
         {
@@ -36,9 +38,10 @@ namespace StageBeheersTool.Controllers
             private set { _userManager = value; }
         }
 
-        public AccountController(IUserService userService)
+        public AccountController(IUserService userService, IEmailService emailService)
         {
             _userService = userService;
+            _emailService = emailService;
         }
 
         #region Accounts beheren
@@ -376,15 +379,9 @@ namespace StageBeheersTool.Controllers
                 if (result.Succeeded)
                 {
                     var bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
-
                     _userService.CreateUserObject(bedrijf);
-                    IdentityMessage message = new IdentityMessage()
-                    {
-                        Subject = "Registratie",
-                        Destination = bedrijf.Email,
-                        Body = string.Format(Resources.EmailRegistratieBedrijf, bedrijf.Email, generatedPassword)
-                    };
-                    await UserManager.EmailService.SendAsync(message);
+
+                    await _emailService.SendAsync(EmailMessages.BedrijfGeregistreerd(user.Email, generatedPassword));
                     SetViewMessage(Resources.SuccesEmailRegistratieBedrijfVerzonden);
                     return RedirectToAction("Login", "Account");
                 }

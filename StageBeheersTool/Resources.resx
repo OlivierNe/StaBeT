@@ -220,10 +220,6 @@
   <data name="DisplayNewPassword" xml:space="preserve">
     <value>Nieuw wachtwoord</value>
   </data>
-  <data name="EmailRegistratieBedrijf" xml:space="preserve">
-    <value>&lt;strong&gt;Account aangemaakt: &lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Login: {0}&lt;/li&gt;&lt;li&gt;Wachtwoord: {1}&lt;/li&gt;&lt;/ul&gt;</value>
-    <comment>0 = email bedrijf, 1=wachtwoord</comment>
-  </data>
   <data name="ErrorOngeldigeLoginPoging" xml:space="preserve">
     <value>Het ingevoerde e-mailadres of wachtwoord is onjuist.</value>
   </data>
@@ -472,5 +468,8 @@
   <data name="SuccesCreateBedrijf" xml:space="preserve">
     <value>Bedrijf '{0}' succesvol aangemaakt.</value>
     <comment>0=naam bedrijf</comment>
+  </data>
+  <data name="SuccesCreateStageopdracht" xml:space="preserve">
+    <value>Stageopdracht succesvol aangemaakt.</value>
   </data>
 </root>

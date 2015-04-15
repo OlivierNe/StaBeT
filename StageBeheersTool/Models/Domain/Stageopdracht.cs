@@ -93,6 +93,11 @@ namespace StageBeheersTool.Models.Domain
         #endregion
 
         #region Public methods
+
+        public bool IsBeoordeeld()
+        {
+            return Status != StageopdrachtStatus.NietBeoordeeld;
+        }
         public bool IsGoedgekeurd()
         {
             return Status == StageopdrachtStatus.Goedgekeurd || StageopdrachtStatus.Toegewezen == Status;

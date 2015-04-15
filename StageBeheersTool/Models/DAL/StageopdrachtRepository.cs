@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Infrastructure;
+﻿using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 using System.Linq.Expressions;
 using MySql.Data.MySqlClient;
 using StageBeheersTool.Models.Authentication;
@@ -164,7 +165,6 @@ namespace StageBeheersTool.Models.DAL
             var teUpdatenStageopdracht = FindById(stageopdracht.Id);
             if (teUpdatenStageopdracht == null)
                 return;
-            //if(!teUpdatenStageopdracht.IsInHuidigAcademiejaar())
             teUpdatenStageopdracht.Omschrijving = stageopdracht.Omschrijving;
             teUpdatenStageopdracht.Titel = stageopdracht.Titel;
             teUpdatenStageopdracht.Semester1 = stageopdracht.Semester1;
@@ -198,6 +198,7 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenStageopdracht.Postcode = stageopdracht.Postcode;
             teUpdatenStageopdracht.Straat = stageopdracht.Straat;
             teUpdatenStageopdracht.Straatnummer = stageopdracht.Straatnummer;
+
             SaveChanges();
         }
 

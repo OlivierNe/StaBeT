@@ -395,7 +395,7 @@ namespace StageBeheersTool.Models.DAL
                     }
                     context.Bedrijven.AddRange(bedrijven);
                 }
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 #region begeleider & student logins
                 var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));

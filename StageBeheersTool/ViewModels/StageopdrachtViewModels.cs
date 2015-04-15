@@ -183,7 +183,7 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "Stagementor")]
         public int? StagementorId { get; set; }
         [Display(Name = "Bedrijf")]
-        public int? BedrijfId { get; set; }
+        public int BedrijfId { get; set; }
 
         public SelectList SpecialisatieSelectList { get; set; }
         public SelectList ContractondertekenaarsSelectList { get; set; }
@@ -211,7 +211,7 @@ namespace StageBeheersTool.ViewModels
 
         public void SetBedrijfSelectList(IEnumerable<Bedrijf> bedrijven, IEnumerable<Specialisatie> specialisaties)
         {
-            BedrijvenSelectList = new SelectList(bedrijven, "Id", "Naam", BedrijfId != null ? BedrijfId.ToString() : "");
+            BedrijvenSelectList = new SelectList(bedrijven, "Id", "Naam", BedrijfId != 0 ? BedrijfId.ToString() : "");
             SetSelectLists(specialisaties, new List<Contactpersoon>(), new List<Contactpersoon>());
         }
 
@@ -287,7 +287,6 @@ namespace StageBeheersTool.ViewModels
     {
         public int Id { get; set; }
         public string Titel { get; set; }
-        [Required]
         public string Aan { get; set; }
         [Required]
         public string Onderwerp { get; set; }

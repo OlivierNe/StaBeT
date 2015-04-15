@@ -45,6 +45,7 @@ namespace StageBeheersTool.Models.DAL
                 .Property(c => c.UserName).HasMaxLength(128).IsRequired();
             //modelBuilder.Entity<IdentityUserRole>().ToTable("aspNetUsers");
             //.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("UserNameIndex") { IsUnique = false }));
+
         }
 
         public DbSet<Bedrijf> Bedrijven { get; set; }
