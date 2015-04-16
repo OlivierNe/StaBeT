@@ -2,7 +2,6 @@
 
 namespace StageBeheersTool.Models.Domain
 {
-    //n op n relatie tussen student & stage voor extra properties aan de relatie toe te kunnen voegen
     public class Stage
     {
         #region Properties
@@ -12,16 +11,21 @@ namespace StageBeheersTool.Models.Domain
         public virtual Student Student { get; set; }
         public virtual Stageopdracht Stageopdracht { get; set; }
 
+        public DateTime? Begindatum { get; set; }
+        public DateTime? Einddatum { get; set; }
+        public int Semester { get; set; }
+        public bool AangepasteStageperiode { get; set; }
+        public virtual AcademiejaarInstellingen AcademiejaarInstellingen { get; set; }
+
         public Bedrijf Bedrijf
         {
             get { return Stageopdracht.Bedrijf; }
         }
 
-        public DateTime Begindatum { get; set; }
-        public DateTime Einddatum { get; set; }
-        public int Semester { get; set; }
-        public bool AangepasteStageperiode { get; set; }
-
+        public Begeleider Begeleider
+        {
+            get { return Stageopdracht.Stagebegeleider; }
+        }
         #endregion
 
         #region Constructors
@@ -37,9 +41,13 @@ namespace StageBeheersTool.Models.Domain
         #endregion
 
         #region methods
-        public void SetAangepasteStageperiode(DateTime begindatum, DateTime einddatum, int semester)
+        public void SetAangepasteStageperiode(DateTime? begindatum, DateTime? einddatum, int semester)
         {
-            if (begindatum.CompareTo(einddatum) >= 0)
+            if (begindatum == null || einddatum == null)
+            {
+                throw new ApplicationException(Resources.ErrorSetStageperiode);
+            }
+            if (((DateTime)begindatum).CompareTo((DateTime)einddatum) >= 0)
             {
                 throw new ApplicationException(Resources.ErrorBegindatumNaEinddatum);
             }
@@ -50,55 +58,51 @@ namespace StageBeheersTool.Models.Domain
             Begindatum = begindatum;
             Einddatum = einddatum;
             AangepasteStageperiode = true;
+            Semester = semester;
         }
 
-        public void SetStageperiode(AcademiejaarInstellingen academiejaarInstellingen, int semester)
+        public bool HeeftAangepasteStageperiode()
         {
-            if (semester == 1)
+            return AangepasteStageperiode;
+        }
+
+        public DateTime? GetEinddatum()
+        {
+            if (AangepasteStageperiode)
             {
-                if (academiejaarInstellingen == null || academiejaarInstellingen.Semester1Begin == null ||
-                    academiejaarInstellingen.Semester1Einde == null)
-                {
-                    throw new ApplicationException(Resources.ErrorGeenStageperiodesIngesteld);
-                }
-                Begindatum = (DateTime)academiejaarInstellingen.Semester1Begin;
-                Einddatum = (DateTime)academiejaarInstellingen.Semester1Einde;
+                return Einddatum;
             }
-            else if (semester == 2)
+            if (AcademiejaarInstellingen == null)
             {
-                if (academiejaarInstellingen == null || academiejaarInstellingen.Semester2Begin == null ||
-                   academiejaarInstellingen.Semester2Einde == null)
-                {
-                    throw new ApplicationException(Resources.ErrorGeenStageperiodesIngesteld);
-                }
-                Begindatum = (DateTime)academiejaarInstellingen.Semester2Begin;
-                Einddatum = (DateTime)academiejaarInstellingen.Semester2Einde;
+                return null;
             }
-            else
+            if (Semester == 1)
             {
-                throw new ApplicationException(Resources.ErrorOngeldigSemester);
+                return AcademiejaarInstellingen.Semester1Einde;
             }
+            return AcademiejaarInstellingen.Semester2Einde;
         }
 
-        protected bool Equals(Stageopdracht other)
+        public DateTime? GetBeginDatum()
         {
-            return string.Equals(other.Id, this.Id);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Stageopdracht)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return Id;
+            if (AangepasteStageperiode)
+            {
+                return Begindatum;
+            }
+            if (AcademiejaarInstellingen == null)
+            {
+                return null;
+            }
+            if (Semester == 1)
+            {
+                return AcademiejaarInstellingen.Semester1Begin;
+            }
+            return AcademiejaarInstellingen.Semester1Einde;
         }
 
         #endregion
+
+
 
     }
 }

@@ -4,7 +4,7 @@
 }
 <div id="details">
     <h3>@Model.Stageopdracht.Titel</h3>
-    <div style="white-space: pre-line">@Html.DisplayFor(model => model.Stageopdracht.Omschrijving)</div>
+    <div class="omschrijving">@Html.DisplayFor(model => model.Stageopdracht.Omschrijving)</div>
     <hr />
     <h4>Details</h4>
     <dl class="dl-horizontal" style="margin-top:25px;">
@@ -14,7 +14,7 @@
             |
             @if (Model.BedrijfHeeftGeldigEmail())
             {
-                <a href="mailto:@Model.Stageopdracht.Bedrijf.Email">@Model.Stageopdracht.Bedrijf.Email</a>
+                @Html.DisplayEmail(Model.Stageopdracht.Bedrijf.Email)
             }
         </dd>
 
@@ -24,8 +24,7 @@
         <dt>
             @Html.DisplayNameFor(model => model.Stageopdracht.Semester)
         </dt>
-
-        <dd style="white-space: pre-line">@Html.DisplayFor(model => model.Semester)</dd>
+        <dd class="omschrijving">@Html.DisplayFor(model => model.Semester)</dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Stageopdracht.Academiejaar)
@@ -51,14 +50,14 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Stageopdracht.ContractondertekenaarNaam)
-            <a href="mailto:@Model.Stageopdracht.ContractondertekenaarEmail"> @Html.DisplayFor(model => model.Stageopdracht.ContractondertekenaarEmail)</a>
+            @Html.DisplayEmail(Model.Stageopdracht.ContractondertekenaarEmail)
         </dd>
         <dt>
             @Html.NameFor(model => model.Stagementor)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Stageopdracht.StagementorNaam)
-            <a href="mailto:@Model.Stageopdracht.StagementorEmail"> @Html.DisplayFor(model => model.Stageopdracht.StagementorEmail)</a>
+            @Html.DisplayEmail(Model.Stageopdracht.StagementorEmail)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)

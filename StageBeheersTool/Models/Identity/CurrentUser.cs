@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using StageBeheersTool.Helpers;
 
-namespace StageBeheersTool.Models.Authentication
+namespace StageBeheersTool.Models.Identity
 {
     public class CurrentUser
     {

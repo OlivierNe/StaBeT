@@ -281,20 +281,20 @@
     <value>Aanvraag stagebegeleiding afgekeurd. Begeleider {0} losgekoppeld van stage '{1}'.</value>
     <comment>0=naam begeleider, 1= titel stage</comment>
   </data>
-  <data name="TitelLijstenExporterenExcel" xml:space="preserve">
-    <value>Lijsten exporteren</value>
+  <data name="TitelStageopdrachtNaarExcel" xml:space="preserve">
+    <value>Lijst stageopdracht naar excel exporteren</value>
   </data>
   <data name="TitelBedrijfStageVoorstellen" xml:space="preserve">
     <value>Nieuwe stage voorstellen</value>
   </data>
-  <data name="TitelBeschikbareStages" xml:space="preserve">
-    <value>Beschikbare stages</value>
+  <data name="TitelBeschikbareStageopdrachten" xml:space="preserve">
+    <value>Beschikbare stageopdrachten</value>
   </data>
   <data name="TitelGoedgekeurdeStageopdrachten" xml:space="preserve">
     <value>Goedgekeurde stageopdrachten</value>
   </data>
-  <data name="TitelToegewezenStagesZonderBegeleider" xml:space="preserve">
-    <value>Toegewezen stages zonder begeleider</value>
+  <data name="TitelToegewezenStageopdrachtenZonderBegeleider" xml:space="preserve">
+    <value>Toegewezen stageopdrachten zonder begeleider</value>
   </data>
   <data name="TitelAanvragenStagebegeleiding" xml:space="preserve">
     <value>Aanvragen stagebegeleiding</value>
@@ -306,7 +306,7 @@
     <value>Toegewezen stages</value>
   </data>
   <data name="SuccesStageGoedgekeurd" xml:space="preserve">
-    <value>Stageopdracht '{0}' goedgekeurd.  Standaard E-mail verstuurd.</value>
+    <value>Stageopdracht '{0}' goedgekeurd.</value>
     <comment>0=titel stageopdracht</comment>
   </data>
   <data name="SuccesStageAfgekeurd" xml:space="preserve">
@@ -385,7 +385,7 @@
     <value>Voorkeurstage verwijderen mislukt. Opgegeven voorkeurstage niet bij mijn voorkeurstages gevonden.</value>
   </data>
   <data name="succesVoorkeurToevoegen" xml:space="preserve">
-    <value>Stageopdracht '{0}' is aan mijn voorkeurstages toegevoegd.</value>
+    <value>Stageopdracht '{0}' toegevoegd als voorkeur.</value>
     <comment>0=titel stageopdracht</comment>
   </data>
   <data name="ErrorVerwijderGoedgekeurdeStage" xml:space="preserve">
@@ -484,5 +484,23 @@
   <data name="TitelStageopdrachtenVanBedrijf" xml:space="preserve">
     <value>Overzicht stageopdrachten van {0}</value>
     <comment>0=naam bedrijf</comment>
+  </data>
+  <data name="TitelMijnStageopdrachten" xml:space="preserve">
+    <value>Mijn stageopdrachten</value>
+  </data>
+  <data name="TitelToegewezenStageopdrachten" xml:space="preserve">
+    <value>Toegewezen stageopdrachten</value>
+  </data>
+  <data name="TitelOverzichtStages" xml:space="preserve">
+    <value>Overzicht stages</value>
+  </data>
+  <data name="SuccesEditStage" xml:space="preserve">
+    <value>Stage wijzigingen opgeslagen.</value>
+  </data>
+  <data name="ErrorSetStageperiode" xml:space="preserve">
+    <value>Stageperiode mag niet leeg zijn bij aangepaste een stageperiode.</value>
+  </data>
+  <data name="TitelStageNaarExcel" xml:space="preserve">
+    <value>Lijst stages naar excel exporteren</value>
   </data>
 </root>

@@ -6,9 +6,9 @@ using AutoMapper;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
+using StageBeheersTool.Models.Identity;
 using StageBeheersTool.ViewModels;
 using System.Web.Mvc;
-using StageBeheersTool.Models.Authentication;
 using System.Threading.Tasks;
 
 namespace StageBeheersTool.Controllers
@@ -50,18 +50,18 @@ namespace StageBeheersTool.Controllers
         {
             if (CurrentUser.IsBegeleider())
             {
-                return RedirectToAction("MijnStages", "Stageopdracht");
+                return RedirectToAction("MijnStageopdrachten", "Stageopdracht");
             }
             if (CurrentUser.IsBedrijf())
             {
-                return RedirectToAction("BedrijfMijnStages", "Stageopdracht");
+                return RedirectToAction("BedrijfMijnStageopdrachten", "Stageopdracht");
             }
             if (CurrentUser.IsAdmin())
             {
                 return RedirectToAction("BedrijfStageVoorstellen", "Stageopdracht");
             }
             //student
-            return RedirectToAction("BeschikbareStages", "Stageopdracht");
+            return RedirectToAction("BeschikbareStageopdrachten", "Stageopdracht");
         }
 
         /// <summary>
@@ -127,20 +127,20 @@ namespace StageBeheersTool.Controllers
         }
 
         /// <summary>
-        /// Alle beschikbare stages waar een student nog uit kan kiezen
+        /// Alle beschikbare stageopdrachten waar een student nog uit kan kiezen
         /// (enige lijst die studenten te zien krijgen)
         /// </summary>
         [Authorize(Role.Admin, Role.Begeleider, Role.Student)]
-        public ActionResult BeschikbareStages(StageopdrachtListVM model)
+        public ActionResult BeschikbareStageopdrachten(StageopdrachtListVM model)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindBeschikbareStages().WithFilter(model.Semester,
+            var stageopdrachten = _stageopdrachtRepository.FindBeschikbareStageopdrachten().WithFilter(model.Semester,
                 model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, model.Student);
             model.Stageopdrachten = stageopdrachten;
             model.ToonZoeken = true;
             model.ToonBedrijf = true;
             model.ToonSemester = true;
             model.ToonAantalStudenten = true;
-            model.Title = Resources.TitelBeschikbareStages;
+            model.Title = Resources.TitelBeschikbareStageopdrachten;
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageopdrachtList", model);
@@ -149,10 +149,10 @@ namespace StageBeheersTool.Controllers
         }
 
         /// <summary>
-        /// Toegewezen stages met minstens 1 student zonder begeleider van het huidige academiejaar
+        /// Toegewezen stageopdrachten met minstens 1 student zonder begeleider van het huidige academiejaar
         /// </summary>
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult ToegewezenStagesZonderBegeleider(StageopdrachtListVM model)
+        public ActionResult ToegewezenStageopdrachtenZonderBegeleider(StageopdrachtListVM model)
         {
             var stageopdrachten = _stageopdrachtRepository.FindToegewezenStageopdrachtenZonderBegeleider().WithFilter(model.Semester,
                 model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, model.Student);
@@ -162,7 +162,7 @@ namespace StageBeheersTool.Controllers
             model.ToonStudenten = true;
             model.ToonBedrijf = true;
             model.ToonSemester = true;
-            model.Title = Resources.TitelToegewezenStagesZonderBegeleider;
+            model.Title = Resources.TitelToegewezenStageopdrachtenZonderBegeleider;
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageopdrachtList", model);
@@ -171,12 +171,12 @@ namespace StageBeheersTool.Controllers
         }
 
         /// <summary>
-        /// Toegewezen stages met minstens 1 student en een stagebegeleider van het huidige academiejaar
+        /// Toegewezen stageopdrachten met minstens 1 student en een stagebegeleider van het huidige academiejaar
         /// </summary>
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult ToegewezenStages(StageopdrachtListVM model)
+        public ActionResult ToegewezenStageopdrachten(StageopdrachtListVM model)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindToegewezenStages().WithFilter(model.Semester,
+            var stageopdrachten = _stageopdrachtRepository.FindToegewezenStageopdrachten().WithFilter(model.Semester,
                 model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, model.Student);
             model.Stageopdrachten = stageopdrachten;
             model.ToonZoeken = true;
@@ -197,13 +197,13 @@ namespace StageBeheersTool.Controllers
         /// Alle stages van de ingelogde begeleider
         /// </summary>
         [Authorize(Role.Begeleider)]
-        public ActionResult MijnStages()
+        public ActionResult MijnStageopdrachten()
         {
             var stageopdrachten = _stageopdrachtRepository.FindStageopdrachtenVanHuidigeBegeleider();
             var model = new StageopdrachtListVM
             {
                 Stageopdrachten = stageopdrachten,
-                Title = Resources.TitelMijnStages,
+                Title = Resources.TitelMijnStageopdrachten,
                 ToonStudenten = true,
             };
             if (Request.IsAjaxRequest())
@@ -217,13 +217,13 @@ namespace StageBeheersTool.Controllers
         /// alle stages van het ingelogde bedrijf
         /// </summary>
         [Authorize(Role.Bedrijf)]
-        public ActionResult BedrijfMijnStages()
+        public ActionResult BedrijfMijnStageopdrachten()
         {
             var stageopdrachten = _stageopdrachtRepository.FindStageopdrachtenVanHuidigBedrijf();
             var model = new StageopdrachtListVM
             {
                 Stageopdrachten = stageopdrachten,
-                Title = Resources.TitelMijnStages,
+                Title = Resources.TitelMijnStageopdrachten,
                 ToonStudenten = true,
                 ToonStatus = true,
             };
@@ -338,8 +338,7 @@ namespace StageBeheersTool.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LijstExcel(StageopdrachtLijstExcelVM model)
         {
-            var headers = model.GetHeaders();
-            if (headers.Count <= 0)
+            if (model.SelectedOpties.Length <= 0)
             {
                 ModelState.AddModelError("", Resources.ErrorExcelGeenKolommen);
             }
@@ -351,58 +350,50 @@ namespace StageBeheersTool.Controllers
                 model.InitSelectLists(begeleiders, academiejaren);
                 return View(model);
             }
-            var stages = _stageopdrachtRepository.FindAll()
-                .WithFilter(academiejaar: model.SelectedAcademiejaar, begeleiderId: model.SelectedStagebegeleiderId,
-                    status: (StageopdrachtStatus?)model.SelectedStatus).ToList();
+
+            var stageopdrachten = _stageopdrachtRepository.FindAll()
+                .WithFilter(model.SelectedStagebegeleiderId, model.SelectedAcademiejaar,(StageopdrachtStatus?)model.SelectedStatus).ToList();
 
             _spreadsheetService.CreateSpreadsheet(model.TabbladNaam);
-            _spreadsheetService.AddHeaders(headers);
-            _spreadsheetService.CreateColumnWidth(1, (uint)headers.Count, 25);
+            _spreadsheetService.AddHeaders(model.SelectedOpties.ToList());
+            _spreadsheetService.CreateColumnWidth(1, (uint)model.SelectedOpties.Length, 25);
 
-            foreach (var stage in stages)
+            foreach (var stageopdracht in stageopdrachten)
             {
                 var row = new List<string>();
-                if (model.Titel)
+                foreach (var kolom in model.SelectedOpties)
                 {
-                    row.Add(stage.Titel);
-                }
-                if (model.Omschrijving)
-                {
-                    row.Add(stage.Omschrijving);
-                }
-                if (model.Stageplaats)
-                {
-                    row.Add(stage.Stageplaats);
-                }
-                if (model.Bedrijfsnaam)
-                {
-                    row.Add(stage.Bedrijf.Naam);
-                }
-                if (model.Bedrijfsadres)
-                {
-                    row.Add(stage.Bedrijf.Adres);
-                }
-                if (model.Begeleider)
-                {
-                    row.Add(stage.Stagebegeleider == null ? "" : stage.Stagebegeleider.Naam);
-                }
-                if (model.Studenten)
-                {
-                    row.Add(stage.ToonStudenten);
-                }
-                if (model.Status)
-                {
-                    row.Add(stage.Status.ToString());
+                    switch (kolom)
+                    {
+                        case "Titel":
+                            row.Add(stageopdracht.Titel);
+                            break;
+                        case "Omschrijving":
+                            row.Add(stageopdracht.Omschrijving);
+                            break;
+                        case "Stageplaats":
+                            row.Add(stageopdracht.Stageplaats);
+                            break;
+                        case "Bedrijf":
+                            row.Add(stageopdracht.Bedrijf.Naam);
+                            break;
+                        case "Begeleider":
+                            row.Add(stageopdracht.Stagebegeleider == null ? "" : stageopdracht.Stagebegeleider.Naam);
+                            break;
+                        case "Student":
+                            row.Add(stageopdracht.ToonStudenten);
+                            break;
+                        case "Status":
+                            row.Add(stageopdracht.Status.ToString());
+                            break;
+                    }
                 }
                 _spreadsheetService.AddRow(row);
             }
-
             _spreadsheetService.CloseSpreadsheet();
-
             MemoryStream reportStream = _spreadsheetService.GetStream();
             return new ExcelFileResult(reportStream, model.Bestandsnaam);
         }
-
         #endregion
 
         #region create
@@ -433,12 +424,7 @@ namespace StageBeheersTool.Controllers
                 model = new StageopdrachtCreateVM(_bedrijfRepository.FindAll(), _specialisatieRepository.FindAll());
             }
             model.AantalStudenten = 2;
-            var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
-            if (academiejaarInstellingen != null)
-            {
-                model.StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
-                model.StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
-            }
+            model.SetStageperiodes(_academiejaarRepository.FindVanHuidigAcademiejaar());
             return View(model);
         }
 
@@ -530,17 +516,13 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            var academiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(stageopdracht.Academiejaar);
-            if (academiejaarInstellingen != null)
-            {
-                model.StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
-                model.StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
-            }
+
+            var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
+            model.SetStageperiodes(academiejaarInstellingen);
             if (CurrentUser.IsBedrijf())
             {
                 var bedrijf = stageopdracht.Bedrijf;
                 model.ToonEdit = bedrijf.MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen);
-                model.EditDeadline = academiejaarInstellingen == null ? null : academiejaarInstellingen.DeadlineBedrijfStageEditToString();
                 model.ToonBedrijfeditDeadline = model.ToonEdit;
                 model.ToonStatus = true;
             }
@@ -741,7 +723,7 @@ namespace StageBeheersTool.Controllers
         {
             var student = _userService.FindStudent();
             var stageopdrachten = student.GetAllVoorkeurStages();
-            var gekozenStage = student.FindGekozenVoorkeurStage();
+            var gekozenStageopdracht = student.FindGekozenVoorkeurStage();
 
             var model = new StageopdrachtListVM
             {
@@ -751,7 +733,8 @@ namespace StageBeheersTool.Controllers
                 ToonBedrijf = true,
                 ToonSemester = true,
                 ToonDossierIndienen = true,
-                StageIdDossierIngediend = gekozenStage == null ? null : (int?)gekozenStage.Id,
+                ToonVoorkeurVerwijderen = student.KanVoorkeurstageVerwijderen(gekozenStageopdracht),
+                StageIdDossierIngediend = gekozenStageopdracht == null ? null : (int?)gekozenStageopdracht.Id,
                 CurrentStudentStagedossierStatus = student.GetStagedossierStatus()
             };
 
@@ -855,86 +838,6 @@ namespace StageBeheersTool.Controllers
             Admin.KeurStagedossierAf(studentVoorkeurstage);
             SetViewMessage(string.Format(Resources.SuccesStagedossierAfgekeurd, studentVoorkeurstage.Student.Naam));
             _stageopdrachtRepository.SaveChanges();
-            return RedirectToAction("MetIngediendStagedossier");
-        }
-
-        [Authorize(Role.Admin)]
-        public ActionResult StageToewijzen(int studentId, int stageId)
-        {
-            var studentVoorkeurstage = _stageopdrachtRepository
-              .FindStudentVoorkeurStageByIds(stageId: stageId, studentId: studentId);
-            if (studentVoorkeurstage == null)
-            {
-                return HttpNotFound();
-            }
-            if (studentVoorkeurstage.HeeftGoedgekeurdStagedossier() == false)
-            {
-                SetViewError(Resources.ErrorStageAanStudentKoppelenZonderGoedgekeurdStagedossier);
-                return RedirectToAction("MetIngediendStagedossier");
-            }
-            if (studentVoorkeurstage.Student.HeeftToegewezenStage())
-            {
-                SetViewError(Resources.ErrorStudentHeeftAlToegewezenStage);
-                return RedirectToAction("MetIngediendStagedossier");
-            }
-            var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
-            var model = new StageAanStudentToewijzenVM();
-
-            if (academiejaarInstellingen != null)
-            {
-                model.Semester1Begin = academiejaarInstellingen.Semester1Begin;
-                model.Semester1Einde = academiejaarInstellingen.Semester1Einde;
-                model.Semester2Begin = academiejaarInstellingen.Semester2Begin;
-                model.Semester2Einde = academiejaarInstellingen.Semester2Einde;
-            }
-            model.Semester = studentVoorkeurstage.Stageopdracht.Semester1 ? 1 : 2;
-            model.Stageopdracht = studentVoorkeurstage.Stageopdracht;
-            model.Student = studentVoorkeurstage.Student;
-            model.StudentId = studentVoorkeurstage.Student.Id;
-            model.StageopdrachtId = studentVoorkeurstage.Stageopdracht.Id;
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [Authorize(Role.Admin)]
-        [ValidateAntiForgeryToken]
-        public ActionResult StageToewijzen(StageAanStudentToewijzenVM model)
-        {
-            var studentVoorkeurstage = _stageopdrachtRepository
-               .FindStudentVoorkeurStageByIds(stageId: model.StageopdrachtId, studentId: model.StudentId);
-            if (studentVoorkeurstage == null)
-            {
-                return HttpNotFound();
-            }
-            model.Stageopdracht = studentVoorkeurstage.Stageopdracht;
-            model.Student = studentVoorkeurstage.Student;
-            if (ModelState.IsValid == false)
-            {
-                return View(model);
-            }
-
-            try
-            {
-                var stage = Admin.KoppelStageopdrachtAanStudent(studentVoorkeurstage);
-                if (model.AangepasteStageperiode)
-                {
-                    stage.SetAangepasteStageperiode((DateTime)model.Begindatum, (DateTime)model.Einddatum, model.Semester);
-                }
-                else
-                {
-                    var acadParameters = _academiejaarRepository.FindVanHuidigAcademiejaar();
-                    stage.SetStageperiode(acadParameters, model.Semester);
-                }
-                _stageopdrachtRepository.SaveChanges();
-            }
-            catch (ApplicationException ex)
-            {
-                SetViewError(ex.Message);
-                return View(model);
-            }
-            SetViewMessage(string.Format(Resources.SuccesStageAanStudentToegewezen,
-                studentVoorkeurstage.Stageopdracht.Titel, studentVoorkeurstage.Student.Naam));
             return RedirectToAction("MetIngediendStagedossier");
         }
 

@@ -6,7 +6,7 @@ using StageBeheersTool.Models.DAL.Mapping;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Web.Mvc;
 using System.Diagnostics;
-using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.Identity;
 
 namespace StageBeheersTool.Models.DAL
 {
@@ -48,15 +48,19 @@ namespace StageBeheersTool.Models.DAL
 
         }
 
-        public DbSet<Bedrijf> Bedrijven { get; set; }
-        public DbSet<Stageopdracht> Stageopdrachten { get; set; }
-        public DbSet<Specialisatie> Specialisaties { get; set; }
-        public DbSet<Keuzepakket> Keuzepakketten { get; set; }
-        public DbSet<Contactpersoon> Contactpersonen { get; set; }
         public DbSet<Begeleider> Begeleiders { get; set; }
         public DbSet<Student> Studenten { get; set; }
-        public DbSet<StagebegeleidingAanvraag> StageBegeleidAanvragen { get; set; }
+        public DbSet<Bedrijf> Bedrijven { get; set; }
+        public DbSet<Contactpersoon> Contactpersonen { get; set; }
+
+        public DbSet<Stageopdracht> Stageopdrachten { get; set; }
+        public DbSet<Stage> Stages { get; set; }
         public DbSet<VoorkeurStage> StudentVoorkeurStages { get; set; }
+        public DbSet<StagebegeleidingAanvraag> StageBegeleidAanvragen { get; set; }
+
+        public DbSet<Specialisatie> Specialisaties { get; set; }
+        public DbSet<Keuzepakket> Keuzepakketten { get; set; }
+
         public DbSet<AcademiejaarInstellingen> AcademiejarenInstellingen { get; set; }
         public DbSet<Instelling> Instellingen { get; set; }
 

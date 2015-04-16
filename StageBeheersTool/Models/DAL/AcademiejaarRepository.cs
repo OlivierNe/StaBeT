@@ -20,6 +20,11 @@ namespace StageBeheersTool.Models.DAL
         public void Add(AcademiejaarInstellingen academiejaar)
         {
             _academiejarenInstellingen.AddOrUpdate(academiejaar);
+            var stages = _dbContext.Stages.Where(stage => stage.Stageopdracht.Academiejaar == academiejaar.Academiejaar);
+            foreach (var stage in stages)
+            {
+                stage.AcademiejaarInstellingen = academiejaar;
+            }
             SaveChanges();
         }
 

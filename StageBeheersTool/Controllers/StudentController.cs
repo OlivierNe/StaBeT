@@ -1,11 +1,11 @@
 ﻿using System;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
+using StageBeheersTool.Models.Identity;
 using StageBeheersTool.ViewModels;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
-using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.Controllers
 {
@@ -95,7 +95,7 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider, Role.Student)]
-        public ActionResult Details(int? id, string overzicht = "Index")
+        public ActionResult Details(int? id, string overzicht = "List")
         {
             var student = FindStudent(id);
             if (student == null)
@@ -105,6 +105,7 @@ namespace StageBeheersTool.Controllers
             var model = Mapper.Map<StudentDetailsVM>(student);
             model.ToonEdit = CurrentUser.IsStudent() || CurrentUser.IsAdmin();
             model.ToonTerugNaarLijst = CurrentUser.IsAdmin() || CurrentUser.IsBegeleider();
+            model.ToonDelete = CurrentUser.IsAdmin();
             model.Overzicht = overzicht;
             return View(model);
         }

@@ -1,18 +1,15 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using StageBeheersTool.Models.DAL;
-using StageBeheersTool.Models.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 
-namespace StageBeheersTool.Models.Authentication
+namespace StageBeheersTool.Models.Identity
 {
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
     public class ApplicationUserManager : UserManager<ApplicationUser>
@@ -151,8 +148,4 @@ namespace StageBeheersTool.Models.Authentication
         }
 
     }
-
-
-
-
 }

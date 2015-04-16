@@ -62,6 +62,7 @@ namespace StageBeheersTool.Models.Domain
             }
             var student = studentVoorkeurstage.Student;
             var stageopdracht = studentVoorkeurstage.Stageopdracht;
+            stageopdracht.Status = StageopdrachtStatus.Toegewezen;
             var stage = new Stage(stageopdracht, student);
             student.Stages.Add(stage);
             return stage;

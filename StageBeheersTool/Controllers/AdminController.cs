@@ -1,12 +1,12 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
-using StageBeheersTool.Models.Authentication;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
+using StageBeheersTool.Models.Identity;
 using StageBeheersTool.ViewModels;
 
 

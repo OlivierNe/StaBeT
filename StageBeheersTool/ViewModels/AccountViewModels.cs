@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.Identity;
 
 namespace StageBeheersTool.ViewModels
 {

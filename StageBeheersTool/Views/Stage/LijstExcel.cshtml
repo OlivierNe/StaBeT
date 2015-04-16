@@ -1,7 +1,8 @@
-﻿@model StageopdrachtLijstExcelVM
+﻿@model StageLijstExcelVM
 
 @{
-    ViewBag.Title = Resources.TitelStageopdrachtNaarExcel;
+    ViewBag.Title = Resources.TitelStageNaarExcel;
+
 }
 <h2>@ViewBag.Title</h2>
 
@@ -26,14 +27,6 @@
             @Html.LabelFor(model => model.SelectedStagebegeleiderId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.SelectedStagebegeleiderId, Model.StagebegeleiderSelectList, "-- Stagebegeleider --",
-                    new { @class = "form-control" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.SelectedStatus, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.SelectedStatus, Model.StatusSelectList, "-- Status --",
                     new { @class = "form-control" })
             </div>
         </div>
@@ -84,5 +77,3 @@
         });
     </script>
 }
-
-

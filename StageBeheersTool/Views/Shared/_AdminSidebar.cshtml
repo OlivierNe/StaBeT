@@ -10,12 +10,23 @@
                 <li>@Html.ActionLink(Resources.TitelBedrijfStageVoorstellen, "BedrijfStageVoorstellen", "Stageopdracht") </li>
                 <li>@Html.ActionLink(Resources.TitelGoedgekeurdeStageopdrachten, "GoedgekeurdeStages", "Stageopdracht") </li>
                 <li>@Html.ActionLink(Resources.TitelAfgekeurdeStageopdrachten, "AfgekeurdeStages", "Stageopdracht") </li>
-                <li>@Html.ActionLink(Resources.TitelBeschikbareStages + " voor studenten", "BeschikbareStages", "Stageopdracht") </li>
-                <li>@Html.ActionLink(Resources.TitelToegewezenStagesZonderBegeleider, "ToegewezenStagesZonderBegeleider", "Stageopdracht") </li>
-                <li>@Html.ActionLink(Resources.TitelToegewezenStages, "ToegewezenStages", "Stageopdracht") </li>
-                <li>@Html.ActionLink(Resources.TitelLijstenExporterenExcel, "LijstExcel", "Stageopdracht")  </li>
+                <li>@Html.ActionLink(Resources.TitelBeschikbareStageopdrachten + " voor studenten", "BeschikbareStageopdrachten", "Stageopdracht") </li>
+                <li>@Html.ActionLink(Resources.TitelToegewezenStageopdrachtenZonderBegeleider, "ToegewezenStageopdrachtenZonderBegeleider", "Stageopdracht") </li>
+                <li>@Html.ActionLink(Resources.TitelToegewezenStageopdrachten, "ToegewezenStageopdrachten", "Stageopdracht") </li>
+                <li>@Html.ActionLink(Resources.TitelStageopdrachtNaarExcel, "LijstExcel", "Stageopdracht")  </li>
             </ul>
         </li>
+
+        <li class="sidebar-nav sidebar-menu">
+            <a class="" data-toggle="collapse" data-target="#StageOpties">
+                Stages <b class="glyphicon glyphicon-triangle-bottom"></b>
+            </a>
+            <ul class="collapse" id="StageOpties">
+                <li>@Html.ActionLink(Resources.TitelOverzichtStages + " " + AcademiejaarHelper.HuidigAcademiejaar(), "List", "Stage")</li>
+                <li>@Html.ActionLink(Resources.TitelStageNaarExcel, "LijstExcel", "Stage")  </li>
+            </ul>
+        </li>
+
         <li class="sidebar-nav sidebar-menu">
             <a class="" data-toggle="collapse" data-target="#BedrijfOpties">
                 Bedrijven<b class="glyphicon glyphicon-triangle-bottom"></b>

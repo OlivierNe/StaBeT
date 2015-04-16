@@ -10,9 +10,9 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<Stageopdracht> FindStageopdrachtVoorstellen();
         IQueryable<Stageopdracht> FindGoedgekeurdeStageopdrachten();
         IQueryable<Stageopdracht> FindAfgekeurdeStageopdrachten();
-        IQueryable<Stageopdracht> FindBeschikbareStages();
+        IQueryable<Stageopdracht> FindBeschikbareStageopdrachten();
         IQueryable<Stageopdracht> FindToegewezenStageopdrachtenZonderBegeleider();
-        IQueryable<Stageopdracht> FindToegewezenStages();
+        IQueryable<Stageopdracht> FindToegewezenStageopdrachten();
         IQueryable<Stageopdracht> FindAllFromAcademiejaar(string academiejaar);
         IQueryable<Stageopdracht> FindStageopdrachtenVanHuidigeBegeleider();
         IQueryable<Stageopdracht> FindStageopdrachtenVanHuidigBedrijf();

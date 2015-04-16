@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using StageBeheersTool.Helpers;
-using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.Domain;
+using StageBeheersTool.Models.Identity;
 using StageBeheersTool.ViewModels;
 using System.Collections.Generic;
 using System.Web.Mvc;

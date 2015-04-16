@@ -1,5 +1,3 @@
-using DocumentFormat.OpenXml.Wordprocessing;
-
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(StageBeheersTool.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(StageBeheersTool.App_Start.NinjectWebCommon), "Stop")]
 
@@ -69,6 +67,7 @@ namespace StageBeheersTool.App_Start
         {
             kernel.Bind<IBedrijfRepository>().To<BedrijfRepository>().InRequestScope();
             kernel.Bind<IStageopdrachtRepository>().To<StageopdrachtRepository>().InRequestScope();
+            kernel.Bind<IStageRepository>().To<StageRepository>().InRequestScope();
             kernel.Bind<ISpecialisatieRepository>().To<SpecialisatieRepository>().InRequestScope();
             kernel.Bind<IKeuzepakketRepository>().To<KeuzepakketRepository>().InRequestScope();
             kernel.Bind<IStudentRepository>().To<StudentRepository>().InRequestScope();

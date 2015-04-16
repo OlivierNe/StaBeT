@@ -2,10 +2,10 @@
 using AutoMapper;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
+using StageBeheersTool.Models.Identity;
 using StageBeheersTool.ViewModels;
 using System.Web;
 using System.Web.Mvc;
-using StageBeheersTool.Models.Authentication;
 
 namespace StageBeheersTool.Controllers
 {

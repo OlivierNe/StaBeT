@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
 
-namespace StageBeheersTool.Models.Authentication
+namespace StageBeheersTool.Models.Identity
 {
     // Configure the application sign-in manager which is used in this application.
     public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
@@ -33,5 +29,4 @@ namespace StageBeheersTool.Models.Authentication
             return await base.PasswordSignInAsync(user.UserName, password, isPersistent, shouldLockout);
         }
     }
-
 }

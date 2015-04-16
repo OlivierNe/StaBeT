@@ -1,4 +1,5 @@
-﻿@model BegeleiderDetailsVM
+﻿@using StageBeheersTool.Models.Identity
+@model BegeleiderDetailsVM
 @{
     ViewBag.Title = "Details begeleider";
     var imageUrl = string.IsNullOrWhiteSpace(Model.FotoUrl) ? "~/Images/profiel.jpg" : Model.FotoUrl;

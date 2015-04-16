@@ -1,4 +1,5 @@
-﻿@model Bedrijf
+﻿@using StageBeheersTool.Models.Identity
+@model Bedrijf
 
 @{
     ViewBag.Title = "Bedrijfsgegevens";
@@ -7,19 +8,6 @@
 <h2>@ViewBag.Title</h2>
 
 <div>
-    @if (CurrentUser.IsBedrijf())
-    {
-        @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id })
-        @Html.Raw("|")
-        @Html.ActionLink("Wachtwoord wijzigen", "ChangePassword", "Account")
-    }
-    else if (CurrentUser.IsAdmin() || CurrentUser.IsBegeleider())
-    {
-        @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id })
-        @Html.Raw("|")
-        @Html.ActionLink("Terug naar lijst", "List", "Bedrijf")
-
-    }
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -44,7 +32,7 @@
         </dd>
 
         <dt>
-            Adres
+            @Html.DisplayNameFor(model => model.Adres)
         </dt>
         <dd>
             <a href="https://maps.google.com/?q=@Model.Adres" target="_blank">@Model.Adres</a>
@@ -58,21 +46,11 @@
             @Html.DisplayFor(model => model.Telefoon)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Bereikbaarheid)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Bereikbaarheid)</dt>
+        <dd class="omschrijving">@Html.DisplayFor(model => model.Bereikbaarheid)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Bereikbaarheid)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Bedrijfsactiviteiten)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Bedrijfsactiviteiten)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.Bedrijfsactiviteiten)</dt>
+        <dd class="omschrijving">@Html.DisplayFor(model => model.Bedrijfsactiviteiten)</dd>
     </dl>
     @if (CurrentUser.IsAdmin() || CurrentUser.IsBegeleider())
     {
@@ -84,5 +62,15 @@
                 @Html.ActionLink("Stageopdrachten", "VanBedrijf", "Stageopdracht", new { Model.Id }, new { })
             </li>
         </ul>
+    }
+    @if (CurrentUser.IsBedrijf())
+    {
+        @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+        @Html.ActionLink("Wachtwoord wijzigen", "ChangePassword", "Account", new { }, new { @class = "btn btn-default" })
+    }
+    else if (CurrentUser.IsAdmin() || CurrentUser.IsBegeleider())
+    {
+        @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+        <p><a href="@ViewBag.Overzicht">Terug naar lijst</a></p>
     }
 </div>

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.Domain;
+using StageBeheersTool.Models.Identity;
 using StageBeheersTool.ViewModels;
 
 namespace StageBeheersTool.App_Start
@@ -14,6 +14,9 @@ namespace StageBeheersTool.App_Start
             Mapper.CreateMap<StageopdrachtEditVM, Stageopdracht>();
             Mapper.CreateMap<Stageopdracht, StageopdrachtEditVM>();
             Mapper.CreateMap<Stageopdracht, StageopdrachtAfkeurenVM>();
+
+            Mapper.CreateMap<Stage, StageEditVM>();
+            Mapper.CreateMap<StageEditVM, Stage>();
 
             Mapper.CreateMap<ContactpersoonCreateVM, Contactpersoon>();
             Mapper.CreateMap<ContactpersoonEditVM, Contactpersoon>();

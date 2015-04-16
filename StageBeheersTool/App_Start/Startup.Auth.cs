@@ -5,7 +5,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using StageBeheersTool.Models.DAL;
-using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.Identity;
 
 namespace StageBeheersTool
 {

@@ -201,6 +201,7 @@
     <Compile Include="Controllers\BegeleiderController.cs" />
     <Compile Include="Controllers\ContactpersoonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StageController.cs" />
     <Compile Include="Controllers\StageopdrachtController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Global.asax.cs">
@@ -210,7 +211,9 @@
     <Compile Include="Helpers\AcademiejaarHelper.cs" />
     <Compile Include="Helpers\ExcelFileResult.cs" />
     <Compile Include="Helpers\HtmlHelpers.cs" />
-    <Compile Include="Models\Authentication\UserWithRoles.cs" />
+    <Compile Include="Models\DAL\Extensions\QueryableStageExtensions.cs" />
+    <Compile Include="Models\DAL\StageRepository.cs" />
+    <Compile Include="Models\Identity\UserWithRoles.cs" />
     <Compile Include="Models\DAL\Extensions\LinqExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBedrijfExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBegeleiderExtensions.cs" />
@@ -218,11 +221,11 @@
     <Compile Include="Helpers\IdentityHelpers.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableContactpersoonExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableStageopdrachtExtensions.cs" />
-    <Compile Include="Models\Authentication\ApplicationSignInManager.cs" />
-    <Compile Include="Models\Authentication\ApplicationUser.cs" />
-    <Compile Include="Models\Authentication\ApplicationUserManager.cs" />
-    <Compile Include="Models\Authentication\CurrentUser.cs" />
-    <Compile Include="Models\Authentication\Role.cs" />
+    <Compile Include="Models\Identity\ApplicationSignInManager.cs" />
+    <Compile Include="Models\Identity\ApplicationUser.cs" />
+    <Compile Include="Models\Identity\ApplicationUserManager.cs" />
+    <Compile Include="Models\Identity\CurrentUser.cs" />
+    <Compile Include="Models\Identity\Role.cs" />
     <Compile Include="Models\DAL\AcademiejaarRepository.cs" />
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
     <Compile Include="Models\DAL\Mapping\AcademiejaarInstellingenMapper.cs" />
@@ -245,6 +248,7 @@
     <Compile Include="Models\Domain\Interfaces\IImageService.cs" />
     <Compile Include="Models\Domain\Interfaces\IInstellingenRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\ISpreadsheetService.cs" />
+    <Compile Include="Models\Domain\Interfaces\IStageRepository.cs" />
     <Compile Include="Models\Domain\StagebegeleidingAanvraag.cs" />
     <Compile Include="Models\Domain\StagedossierStatus.cs" />
     <Compile Include="Models\Domain\Stage.cs" />
@@ -303,6 +307,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\StageopdrachtViewModels.cs" />
+    <Compile Include="ViewModels\StageViewModels.cs" />
     <Compile Include="ViewModels\StudentViewModels.cs" />
     <Compile Include="Web References\be.hogent.webservice\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -311,6 +316,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-duallistbox.css" />
+    <Content Include="Content\bootstrap-duallistbox.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -388,6 +395,8 @@
     <Content Include="Scripts\lib\jquery-ui-1.11.4.min.js" />
     <Content Include="Scripts\lib\gridmvc.js" />
     <Content Include="Scripts\lib\gridmvc.min.js" />
+    <Content Include="Scripts\lib\jquery.bootstrap-duallistbox.js" />
+    <Content Include="Scripts\lib\jquery.bootstrap-duallistbox.min.js" />
     <Content Include="Scripts\lib\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\lib\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Models\Domain\Domain.cd" />
@@ -489,7 +498,7 @@
     <Content Include="Views\Begeleider\Create.cshtml" />
     <Content Include="Views\Student\Delete.cshtml" />
     <Content Include="Views\Stageopdracht\_StagebegeleidingAanvragen.cshtml" />
-    <Content Include="Views\Stageopdracht\LijstExcel.cshtml" />
+    <Content Include="Views\Stage\LijstExcel.cshtml" />
     <Content Include="Views\Stageopdracht\StageopdrachtOverzicht.cshtml" />
     <Content Include="Views\Account\_UserList.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
@@ -497,10 +506,15 @@
     <Content Include="Views\Stageopdracht\AanduidenDossierIngediend.cshtml" />
     <Content Include="Views\Stageopdracht\StagesMetStagedossier.cshtml" />
     <Content Include="Views\Stageopdracht\_StagesMetStagedossier.cshtml" />
-    <Content Include="Views\Stageopdracht\StageToewijzen.cshtml" />
+    <Content Include="Views\Stage\StageToewijzen.cshtml" />
     <Content Include="Views\Shared\_AdminSidebar.cshtml" />
     <Content Include="Views\Instellingen\AlgemeneInstellingen.cshtml" />
     <Content Include="Views\Bedrijf\Delete.cshtml" />
+    <Content Include="Views\Stage\StageOverzicht.cshtml" />
+    <Content Include="Views\Stage\_StageList.cshtml" />
+    <Content Include="Views\Stage\Details.cshtml" />
+    <Content Include="Views\Stage\Edit.cshtml" />
+    <Content Include="Views\Stageopdracht\LijstExcel.cshtml" />
     <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />

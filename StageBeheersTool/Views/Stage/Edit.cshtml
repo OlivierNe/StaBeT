@@ -1,0 +1,97 @@
+﻿@model StageEditVM
+
+@{
+    ViewBag.Title = "Stage wijzigen";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <dl class="dl-horizontal">
+            <dt>
+                Student
+            </dt>
+            <dd>
+                @Html.ActionLink(Model.Student.Naam, "Details", "Student", new { Model.Student.Id }, new { target = "_blank" })
+            </dd>
+            <dt>
+                E-mail
+            </dt>
+            <dd>
+                @Html.DisplayEmail(Model.Student.HogentEmail)
+            </dd>
+            <dt>
+                @Html.NameFor(model => model.Stageopdracht)
+            </dt>
+            <dd>
+                @Html.ActionLink(Model.Stageopdracht.Titel, "Details", "Stageopdracht", new { Model.Stageopdracht.Id }, new { target = "_blank" })
+            </dd>
+        </dl>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Semester, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Semester, Model.SemesterSelectList, "-- Semester --",
+                    new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Stageperiode</label>
+            <div class="checkbox">
+                <label>
+                    @Html.EditorFor(model => model.AangepasteStageperiode, new { htmlAttributes = new { @class = "" } })Aangepaste stageperiode
+                </label>
+            </div>
+        </div>
+
+        <div id="stageperiodes">
+            <div class="form-group ">
+                @Html.LabelFor(model => model.Begindatum, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Begindatum)
+                    @Html.ValidationMessageFor(model => model.Begindatum, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Einddatum, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Einddatum)
+                    @Html.ValidationMessageFor(model => model.Einddatum, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.StageopdrachtId)
+            @Html.HiddenFor(model => model.StudentId)
+            <div style="display:none">
+                <div id="Semester1Begin">@Html.DisplayFor(model => model.Semester1Begin)</div>
+                <div id="Semester1Einde">@Html.DisplayFor(model => model.Semester1Einde)</div>
+                <div id="Semester2Begin">@Html.DisplayFor(model => model.Semester2Begin)</div>
+                <div id="Semester2Einde">@Html.DisplayFor(model => model.Semester2Einde)</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Opslaan" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+
+@section scripts{
+    <script src="~/Scripts/lib/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/lib/datepicker-nl-BE.js"></script>
+    <script src="~/Scripts/stageToewijzen.js"></script>
+}
+@section styles{
+    <link href="~/Content/themes/base/core.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/datepicker.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/theme.css" rel="stylesheet" />
+}

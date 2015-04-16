@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
+using StageBeheersTool.Models.Identity;
 using StageBeheersTool.ViewModels;
 using System.Web.Mvc;
 
@@ -62,7 +62,7 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Bedrijf, Role.Admin, Role.Begeleider, Role.Student)]
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
             var bedrijf = FindBedrijf(id);
             if (bedrijf == null)

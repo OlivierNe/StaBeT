@@ -20,7 +20,7 @@
         {
             if (s.Status == StagedossierStatus.Goedgekeurd)
             {
-                return Html.ActionLink("Stage aan student toewijzen", "StageToewijzen", "Stageopdracht",
+                return Html.ActionLink("Stage aan student toewijzen", "StageToewijzen", "Stage",
                     new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id }, new { @class = "btn btn-default" });
             }
             return MvcHtmlString.Empty;

@@ -101,6 +101,8 @@ namespace StageBeheersTool.ViewModels
         public string FotoUrl { get; set; }
 
         public string Overzicht { get; set; }
+
+        public bool ToonDelete { get; set; }
         public bool ToonEdit { get; set; }
         public bool ToonTerugNaarLijst { get; set; }
     }

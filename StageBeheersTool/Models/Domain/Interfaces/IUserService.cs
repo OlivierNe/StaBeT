@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.Identity;
 
 namespace StageBeheersTool.Models.Domain
 {

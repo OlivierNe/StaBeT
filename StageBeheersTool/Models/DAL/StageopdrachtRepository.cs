@@ -1,8 +1,6 @@
-﻿using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
+﻿using System.Data.Entity.Infrastructure;
 using System.Linq.Expressions;
 using MySql.Data.MySqlClient;
-using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using System;
@@ -10,6 +8,7 @@ using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
 using StageBeheersTool.Helpers;
+using StageBeheersTool.Models.Identity;
 
 namespace StageBeheersTool.Models.DAL
 {
@@ -79,7 +78,7 @@ namespace StageBeheersTool.Models.DAL
         /// lijst waar studenten uit kunnen kiezen om te solliciteren
         /// </summary>
         /// <returns>Alle goedgekeurde stageopdrachten met minstens 1 plaats vrij</returns>
-        public IQueryable<Stageopdracht> FindBeschikbareStages()
+        public IQueryable<Stageopdracht> FindBeschikbareStageopdrachten()
         {
             return _stageopdrachten.
                 Where(IsinHuidigAcademiejaar())
@@ -104,7 +103,7 @@ namespace StageBeheersTool.Models.DAL
         /// <summary>
         /// </summary>
         /// <returns>Alle toegewezen stages van het huidige academiejaar</returns>
-        public IQueryable<Stageopdracht> FindToegewezenStages()
+        public IQueryable<Stageopdracht> FindToegewezenStageopdrachten()
         {
             return _stageopdrachten
                 .Where(IsinHuidigAcademiejaar())

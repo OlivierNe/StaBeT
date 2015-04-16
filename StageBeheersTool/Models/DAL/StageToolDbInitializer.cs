@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
-using StageBeheersTool.Models.Authentication;
+using StageBeheersTool.Models.Identity;
 using StageBeheersTool.OudeGegevens;
 
 
@@ -199,38 +199,39 @@ namespace StageBeheersTool.Models.DAL
                 };
 
                 var stageopdrachten = new List<Stageopdracht>();
-                for (int i = 0, acadJaar = 2008; i < 36; i++)
-                {
-                    if (i % 6 == 0)
-                    {
-                        acadJaar++;
-                    }
-                    var academiejaar = acadJaar + "-" + (acadJaar + 1);
-                    var stageopdracht = new Stageopdracht()
-                    {
-                        Omschrijving = "omschrijving",
-                        Titel = "stage " + academiejaar,
-                        Academiejaar = academiejaar,
-                        AantalStudenten = 1,
-                        Bedrijf = bedrijf1,
-                        Gemeente = "Gemeente123",
-                        Semester2 = true,
-                        Specialisatie = "TEST",
-                        Stagebegeleider = begeleider,
-                        Status = StageopdrachtStatus.Goedgekeurd
-                    };
-                    stageopdrachten.Add(stageopdracht);
-                }
-                var opdracht = stageopdrachten[stageopdrachten.Count - 1];
-                opdracht.Stages = new List<Stage>() { 
-                { new Stage() { Stageopdracht = opdracht, Student = student } } };
-                opdracht.Status = StageopdrachtStatus.Toegewezen;
+                //for (int i = 0, acadJaar = 2008; i < 36; i++)
+                //{
+                //    if (i % 6 == 0)
+                //    {
+                //        acadJaar++;
+                //    }
+                //    var academiejaar = acadJaar + "-" + (acadJaar + 1);
+                //    var stageopdracht = new Stageopdracht()
+                //    {
+                //        Omschrijving = "omschrijving",
+                //        Titel = "stage " + academiejaar,
+                //        Academiejaar = academiejaar,
+                //        AantalStudenten = 1,
+                //        Bedrijf = bedrijf1,
+                //        Gemeente = "Gemeente123",
+                //        Semester2 = true,
+                //        Specialisatie = "TEST",
+                //        Stagebegeleider = begeleider,
+                //        Status = StageopdrachtStatus.Goedgekeurd
+                //    };
+                //    stageopdrachten.Add(stageopdracht);
+                //}
+                //var opdracht = stageopdrachten[stageopdrachten.Count - 1];
+                //opdracht.Stages = new List<Stage>() { 
+                //{ new Stage() { Stageopdracht = opdracht, Student = student } } };
+                //opdracht.Status = StageopdrachtStatus.Toegewezen;
 
-                begeleider.Stages = stageopdrachten;
+                //begeleider.Stageopdrachten = stageopdrachten;
+
                 context.Begeleiders.Add(begeleider);
                 context.Begeleiders.Add(new Begeleider() { HogentEmail = "adminBegeleider@test.be" });
                 #endregion
-
+                /*
                 #region goedgekeurde/toegewezen test stages
                 var random = new Random();
                 for (int i = 0; i < 15; i++)
@@ -277,7 +278,7 @@ namespace StageBeheersTool.Models.DAL
                 }
                 context.Stageopdrachten.AddRange(teststages);
                 #endregion
-
+*/
                 context.SaveChanges();
             }
             catch (DbEntityValidationException e)
@@ -392,7 +393,7 @@ namespace StageBeheersTool.Models.DAL
                             var stages = new List<Stage>();
                             foreach (var student in stageopdrachtstudenten)
                             {
-                                stages.Add(new Stage { Stageopdracht = stageopdracht, Student = student });
+                                stages.Add(new Stage { Stageopdracht = stageopdracht, Student = student, Semester = 2 });
                             }
                             stageopdracht.Stages = stages;
                             stageopdracht.Bedrijf = bedrijf;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace StageBeheersTool.Models.Authentication
+namespace StageBeheersTool.Models.Identity
 {
     public class UserMetRoles
     {

@@ -110,7 +110,7 @@ namespace StageBeheersTool.OudeGegevens
                 case null:
                     return StageopdrachtStatus.Toegewezen;
                 default: //betaald, ...
-                    return StageopdrachtStatus.NietBeoordeeld;
+                    return StageopdrachtStatus.Goedgekeurd;
             }
         }
 

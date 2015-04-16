@@ -9,11 +9,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using StageBeheersTool.Helpers;
+using StageBeheersTool.Models.Identity;
 using StageBeheersTool.ViewModels;
 using StageBeheersTool.Models.Domain;
 using AutoMapper;
 using System.Web.Security;
-using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.be.hogent.webservice;
 
 namespace StageBeheersTool.Controllers
@@ -312,7 +312,7 @@ namespace StageBeheersTool.Controllers
                 if (dataStudent["ACTIVE"] != 0) //inloggen gelukt
                 {
                     await SignInManager.SignInAsync(user, model.RememberMe, false);
-                    return RedirectToStageopdrachtLijst(user);
+                    return RedirectToAction("Index", "Stageopdracht");
                 }
                 else //inloggen mislukt
                 {
@@ -329,7 +329,7 @@ namespace StageBeheersTool.Controllers
                     user = await UserManager.FindByEmailAsync(model.Email);
                     if (user.EmailConfirmed)
                     {
-                        return RedirectToStageopdrachtLijst(user);
+                        return RedirectToAction("Index", "Stageopdracht");
                     }
                     else
                     {
@@ -427,7 +427,7 @@ namespace StageBeheersTool.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("BedrijfMijnStages", "Stageopdracht");
+                        return RedirectToAction("Index", "Stageopdracht");
                     }
                 }
             }
@@ -642,28 +642,6 @@ namespace StageBeheersTool.Controllers
                 ModelState.AddModelError("", error);
             }
         }
-
-        private ActionResult RedirectToStageopdrachtLijst(ApplicationUser user)
-        {
-            if (UserManager.IsInRole(user.Id, Role.Student))
-            {
-                return RedirectToAction("BeschikbareStages", "Stageopdracht");
-            }
-            if (UserManager.IsInRole(user.Id, Role.Begeleider))
-            {
-                return RedirectToAction("MijnStages", "Stageopdracht");
-            }
-            if (UserManager.IsInRole(user.Id, Role.Bedrijf))
-            {
-                return RedirectToAction("BedrijfMijnStages", "Stageopdracht");
-            }
-            if (UserManager.IsInRole(user.Id, Role.Admin))
-            {
-                return RedirectToAction("BedrijfStageVoorstellen", "Stageopdracht");
-            }
-            return RedirectToAction("Index", "Home");
-        }
-
         private void SetViewError(string error)
         {
             TempData["error"] = error;

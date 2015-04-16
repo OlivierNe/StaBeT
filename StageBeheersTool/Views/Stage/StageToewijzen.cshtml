@@ -25,13 +25,13 @@
                 E-mail
             </dt>
             <dd>
-                <a href="mailto:@Model.Student.HogentEmail">@Model.Student.HogentEmail</a>
+                @Html.DisplayEmail(Model.Student.HogentEmail)
             </dd>
             <dt>
                 @Html.NameFor(model => model.Stageopdracht)
             </dt>
             <dd>
-                @Html.ActionLink(Model.Stageopdracht.Titel, "Details", new { Model.Stageopdracht.Id }, new { target = "_blank" })
+                @Html.ActionLink(Model.Stageopdracht.Titel, "Details", "Stageopdracht", new { Model.Stageopdracht.Id }, new { target = "_blank" })
             </dd>
         </dl>
         <div class="form-group">
@@ -79,7 +79,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Opslaan" class="btn btn-default" />
+                <input type="submit" value="Opslaan" class="btn btn-success" />
             </div>
         </div>
     </div>

@@ -1,0 +1,71 @@
+﻿@model StageDetailsVM
+@{
+    ViewBag.Title = "Details stage";
+}
+
+<div>
+    <h4>@ViewBag.Title</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Stage.Student)
+        </dt>
+        <dd>
+            @Html.ActionLink(Model.Stage.Student.Naam, "Details", "Student", new { Model.Stage.Student.Id }, new { })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stage.Stageopdracht)
+        </dt>
+        <dd>
+            @Html.ActionLink(Model.Stage.Stageopdracht.Titel, "Details", "Stageopdracht", new { Model.Stage.Stageopdracht.Id }, new { })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stage.Bedrijf)
+        </dt>
+        <dd>
+            @Html.ActionLink(Model.Stage.Bedrijf.Naam, "Details", "Bedrijf", new { Model.Stage.Bedrijf.Id }, new { })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stage.Begeleider)
+        </dt>
+        <dd>
+            @if (Model.Stage.Begeleider != null)
+            {
+                @Html.ActionLink(Model.Stage.Begeleider.Naam, "Details", "Begeleider", new {Model.Stage.Begeleider.Id}, new {})
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stage.Semester)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stage.Semester)
+        </dd>
+
+        <dt>Aangepaste stageperiode</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stage.AangepasteStageperiode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Begindatum)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Begindatum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Einddatum)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Einddatum)
+        </dd>
+
+    </dl>
+</div>
+<p>      
+    @Html.ActionLink("Back to List", "Index")
+</p>

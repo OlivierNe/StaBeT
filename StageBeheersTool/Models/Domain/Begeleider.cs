@@ -8,14 +8,14 @@ namespace StageBeheersTool.Models.Domain
 
         #region Properties
         public string Aanspreking { get; set; }
-        public virtual ICollection<Stageopdracht> Stages { get; set; }
+        public virtual ICollection<Stageopdracht> Stageopdrachten { get; set; }
         public virtual ICollection<StagebegeleidingAanvraag> StageAanvragen { get; set; }
         #endregion
 
         #region Public Constructors
         public Begeleider()
         {
-            Stages = new List<Stageopdracht>();
+            Stageopdrachten = new List<Stageopdracht>();
             StageAanvragen = new List<StagebegeleidingAanvraag>();
         }
 
@@ -24,7 +24,7 @@ namespace StageBeheersTool.Models.Domain
         #region Public methods
         public Stageopdracht FindStage(int id)
         {
-            return Stages.SingleOrDefault(so => so.Id == id);
+            return Stageopdrachten.SingleOrDefault(so => so.Id == id);
         }
 
 
@@ -58,7 +58,7 @@ namespace StageBeheersTool.Models.Domain
 
         public bool BegeleidStage(Stageopdracht stageopdracht)
         {
-            return Stages.Any(so => so.Id == stageopdracht.Id);
+            return Stageopdrachten.Any(so => so.Id == stageopdracht.Id);
         }
 
 

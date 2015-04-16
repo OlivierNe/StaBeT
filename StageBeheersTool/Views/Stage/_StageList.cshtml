@@ -1,0 +1,36 @@
+﻿@model StageListVM
+
+<div id="grid-tableDiv">
+    @Html.Grid(Model.Stages).Columns(columns =>
+{
+
+    columns.Add(stage => stage.Student.Familienaam).Titled("Student").Sanitized(false).Encoded(false)
+       .RenderValueAs(stage => Html.ActionLink(stage.Student.Naam, "Details", "Student", new { stage.Student.Id }, new { })).SetWidth(150);
+
+    columns.Add(stage => stage.Stageopdracht.Titel).Titled("Stageopdracht").Sanitized(false).Encoded(false)
+       .RenderValueAs(stage => Html.ActionLink(stage.Stageopdracht.Titel, "Details", "Stageopdracht", new { stage.Stageopdracht.Id }, new { }));
+
+    columns.Add(stage => stage.Stageopdracht.Bedrijf.Naam).Titled("Bedrijf").Sanitized(false).Encoded(false)
+       .RenderValueAs(stage => Html.ActionLink(stage.Bedrijf.Naam, "Details", "Bedrijf", new { stage.Bedrijf.Id }, new { }));
+
+    columns.Add(stage => stage.Stageopdracht.Stagebegeleider.Familienaam).Titled("Begeleider").Sanitized(false).Encoded(false)
+       .RenderValueAs(stage =>
+       {
+           if (stage.Begeleider == null)
+           {
+               return new MvcHtmlString("");
+           }
+           return Html.ActionLink(stage.Stageopdracht.Stagebegeleider.Naam, "Details", "Begeleider", new { stage.Stageopdracht.Stagebegeleider.Id }, new { });
+       }).Sortable(true).SetWidth(150);
+
+    columns.Add().Sanitized(false).Encoded(false)
+        .RenderValueAs(stage =>
+            Html.ActionLink("Details", "Details", "Stage", new { stage.Id }, new { @class = "btn btn-default" }));
+
+    columns.Add().Sanitized(false).Encoded(false)
+        .RenderValueAs(stage =>
+            Html.ActionLink("Wijzigen", "Edit", "Stage", new { stage.Id }, new { @class = "btn btn-default" }));
+
+
+}).Sortable(true).WithPaging(10).EmptyText("Geen stages gevonden")
+</div>

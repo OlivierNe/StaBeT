@@ -1,14 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using StageBeheersTool.Models.DAL;
 using Microsoft.AspNet.Identity.Owin;
+using StageBeheersTool.Models.DAL;
 
-namespace StageBeheersTool.Models.Authentication
+namespace StageBeheersTool.Models.Identity
 {
     public class ApplicationUser : IdentityUser
     {

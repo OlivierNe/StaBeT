@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity.Owin;
-using StageBeheersTool.Models.Authentication;
 using StageBeheersTool.Models.DAL;
 using StageBeheersTool.Models.Domain;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNet.Identity;
+using StageBeheersTool.Models.Identity;
 
 namespace StageBeheersTool.Models.Services
 {

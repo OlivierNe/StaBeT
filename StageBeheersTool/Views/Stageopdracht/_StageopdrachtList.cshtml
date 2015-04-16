@@ -18,7 +18,7 @@
                         !string.IsNullOrWhiteSpace(so.Bedrijf.Gemeente) ? " - " + so.Bedrijf.Gemeente : "";
                     return Html.ActionLink(so.Bedrijf.Naam + locatie,
                         "Details", "Bedrijf", new { so.Bedrijf.Id }, new { });
-                });
+                }).SetWidth(200);
         }
         if (Model.ToonBegeleider)
         {
@@ -82,6 +82,7 @@
                 .RenderValueAs(so => so.IsAfgekeurd() == false
                     ? Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { id = so.Id }, new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
         }
+
         if (Model.ToonDossierIndienen)
         {
             columns.Add().Sanitized(false).Encoded(false)
@@ -90,7 +91,7 @@
                     if (Model.StageIdDossierIngediend == null)
                     {
                         return Html.ActionLink("Stagedossier ingediend", "AanduidenDossierIngediend",
-                            new { so.Id }, new { @class = "btn btn-default", title = "Aanduiden dat mijn stagedossier voor deze stageopdracht is ingediend" });
+                            new { so.Id }, new { @class = "btn btn-default", title = "Aanduiden dat het stagedossier voor deze stageopdracht is ingediend" });
                     }
                     if (so.Id == Model.StageIdDossierIngediend)
                     {
@@ -98,6 +99,13 @@
                     }
                     return MvcHtmlString.Empty;
                 });
+        }
+        
+        if (Model.ToonVoorkeurVerwijderen)
+        {
+            columns.Add().Sanitized(false).Encoded(false)
+                .RenderValueAs(so => Html.ActionLink("Verwijderen uit mijn voorkeurstages", "VerwijderenUitVoorkeur", "Stageopdracht",
+                    new { so.Id }, new { @class = "btn btn-default", @title = "Verwijderen uit mijn voorkeurstages" }));
         }
     }).WithPaging(10).Sortable().EmptyText("Geen stageopdrachten gevonden")
 </div>

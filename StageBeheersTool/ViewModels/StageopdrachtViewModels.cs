@@ -24,6 +24,7 @@ namespace StageBeheersTool.ViewModels
         public bool ToonBegeleider { get; set; }
         public bool ToonAcademiejaar { get; set; }
         public bool ToonDossierIndienen { get; set; }
+        public bool ToonVoorkeurVerwijderen { get; set; }
 
         public int? StageIdDossierIngediend { get; set; }
         public StagedossierStatus? CurrentStudentStagedossierStatus { get; set; }
@@ -76,6 +77,8 @@ namespace StageBeheersTool.ViewModels
     public class StageopdrachtDetailsVM
     {
         public Stageopdracht Stageopdracht { get; set; }
+
+
         public string Semester
         {
             get
@@ -93,8 +96,17 @@ namespace StageBeheersTool.ViewModels
                 {
                     semester += "2 " + StageperiodeSem2;
                 }
-
                 return semester;
+            }
+        }
+
+        public void SetStageperiodes(AcademiejaarInstellingen academiejaarInstellingen)
+        {
+            if (academiejaarInstellingen != null)
+            {
+                StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
+                StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
+                EditDeadline = academiejaarInstellingen.DeadlineBedrijfStageEditToString();
             }
         }
 
@@ -271,7 +283,17 @@ namespace StageBeheersTool.ViewModels
             Straat = straat;
         }
 
+        public void SetStageperiodes(AcademiejaarInstellingen academiejaarInstellingen)
+        {
+            if (academiejaarInstellingen != null)
+            {
+                StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
+                StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
+            }
+        }
         #endregion
+
+
     }
 
     public class StageopdrachtEditVM : StageopdrachtCreateVM
@@ -315,7 +337,6 @@ namespace StageBeheersTool.ViewModels
         public SelectList StagebegeleiderSelectList { get; set; }
         public SelectList AcademiejaarSelectList { get; set; }
         public SelectList StatusSelectList { get; set; }
-        //...
 
         [Display(Name = "Tabblad naam")]
         [Required]
@@ -323,115 +344,27 @@ namespace StageBeheersTool.ViewModels
         [Required]
         public string Bestandsnaam { get; set; }
 
-        public bool Bedrijfsnaam { get; set; }
-        public bool Bedrijfsadres { get; set; }
-        //andere bedrijfsgegevens
-
-        public bool Stageplaats { get; set; }
-        public bool Titel { get; set; }
-        public bool Omschrijving { get; set; }
-        public bool Studenten { get; set; }
-        public bool Begeleider { get; set; }
-        public bool Status { get; set; }
-        //...
+        public SelectList Opties { get; set; }
+        public string[] SelectedOpties { get; set; }
 
         public StageopdrachtLijstExcelVM()
         {
-            TabbladNaam = "Stages";
-            Bestandsnaam = "Stages";
+            TabbladNaam = "Stageopdrachten";
+            Bestandsnaam = "Stageopdrachten";
         }
 
         public void InitSelectLists(IEnumerable<Begeleider> stagebegeleiders, string[] academiejaren)
         {
             StagebegeleiderSelectList = new SelectList(stagebegeleiders, "Id", "Naam", SelectedStagebegeleiderId != null ? SelectedStagebegeleiderId.ToString() : "");
             AcademiejaarSelectList = new SelectList(academiejaren);
-            var statusOpties = new SelectListItem[] { new SelectListItem { Value = ((int)StageopdrachtStatus.NietBeoordeeld).ToString(), Text = "Niet beoordeeld"},
+            var statusOpties = new[] { new SelectListItem { Value = ((int)StageopdrachtStatus.NietBeoordeeld).ToString(), Text = "Niet beoordeeld"},
                      new SelectListItem { Value = ((int)StageopdrachtStatus.Toegewezen).ToString(), Text = "Toegewezen"}, 
                 new SelectListItem { Value = ((int)StageopdrachtStatus.Goedgekeurd).ToString(), Text = "Goedgekeurd"}, 
                      new SelectListItem {Value = ((int)StageopdrachtStatus.Afgekeurd).ToString(), Text = "Afgekeurd"}};
             StatusSelectList = new SelectList(statusOpties, "Value", "Text", SelectedStatus != null ? ((StageopdrachtStatus)SelectedStatus).ToString() : "");
+            Opties = new SelectList(new[] { "Bedrijf", "Stageplaats", "Titel", "Omschrijving", "Student", "Begeleider","Status" });
         }
-
-        public List<String> GetHeaders()
-        {
-            var headers = new List<String>();
-            if (Titel)
-            {
-                headers.Add("Titel");
-            }
-            if (Omschrijving)
-            {
-                headers.Add("Omschrijving");
-            }
-            if (Stageplaats)
-            {
-                headers.Add("Stageplaats");
-            }
-            if (Bedrijfsnaam)
-            {
-                headers.Add("Bedrijfsnaam");
-            }
-            if (Bedrijfsadres)
-            {
-                headers.Add("Bedrijfsadres");
-            }
-            if (Begeleider)
-            {
-                headers.Add("Stagebegeleider");
-            }
-            if (Studenten)
-            {
-                headers.Add("Studenten");
-            }
-            if (Status)
-            {
-                headers.Add("Status");
-            }
-            return headers;
-        }
+      
     }
 
-    public class StageAanStudentToewijzenVM : IValidatableObject
-    {
-        public int StageopdrachtId { get; set; }
-        public int StudentId { get; set; }
-        public Stageopdracht Stageopdracht { get; set; }
-        public Student Student { get; set; }
-
-        [UIHint("NullableDateTime")]
-        public DateTime? Begindatum { get; set; }
-        [UIHint("NullableDateTime")]
-        public DateTime? Einddatum { get; set; }
-        [Range(1, 2)]
-        public int Semester { get; set; }
-
-        public SelectList SemesterSelectList
-        {
-            get
-            {
-                return new SelectList(new[] { "1", "2" }, Semester == 0 ? 2 : Semester);
-            }
-        }
-
-        public bool AangepasteStageperiode { get; set; }
-
-        [UIHint("NullableDateTime")]
-        public DateTime? Semester1Begin { get; set; }
-        [UIHint("NullableDateTime")]
-        public DateTime? Semester1Einde { get; set; }
-        [UIHint("NullableDateTime")]
-        public DateTime? Semester2Begin { get; set; }
-        [UIHint("NullableDateTime")]
-        public DateTime? Semester2Einde { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var errors = new List<ValidationResult>();
-            if (AangepasteStageperiode && (Einddatum == null || Begindatum == null))
-            {
-                errors.Add(new ValidationResult(Resources.ErrorVerplichtBeginEnEindDatum));
-            }
-            return errors;
-        }
-    }
 }
