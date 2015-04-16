@@ -14,7 +14,7 @@ using StageBeheersTool.OudeGegevens;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-       // DropCreateDatabaseAlways<StageToolDbContext>
+        //DropCreateDatabaseAlways<StageToolDbContext>
    DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
@@ -174,32 +174,7 @@ namespace StageBeheersTool.Models.DAL
 
                 bedrijf1.AddContactpersoon(contractOndertekenaar1);
 
-                var random = new Random();
-                for (int i = 0; i < 15; i++)
-                {
-                    Stageopdracht stageopdracht = new Stageopdracht()
-                    {
-                        Titel = "TEST " + i,
-                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count))].Naam,
-                        Semester1 = random.Next(0, 2) == 0,
-                        Semester2 = random.Next(0, 2) == 0,
-                        Omschrijving = "omschrijving" + i,
-                        Academiejaar = "2014-2015",
-                        AantalStudenten = 2,
-                        Contractondertekenaar = contractOndertekenaar1,
-                        Stagementor = stagementors[random.Next(0, stagementors.Count)],
-                        Bedrijf = bedrijf1,
-                        Gemeente = "Gemeente1"
-                    };
-                    if (i % 2 == 0)
-                    {
-                        stageopdracht.Status = StageopdrachtStatus.Goedgekeurd;
-                    }
-                    bedrijf1.AddStageopdracht(stageopdracht);
-                }
-
                 context.Bedrijven.Add(bedrijf1);
-                context.SaveChanges();
                 #endregion
 
                 #region studenten
@@ -257,6 +232,30 @@ namespace StageBeheersTool.Models.DAL
                 #endregion
 
                 #region goedgekeurde/toegewezen test stages
+                var random = new Random();
+                for (int i = 0; i < 15; i++)
+                {
+                    Stageopdracht stageopdracht = new Stageopdracht()
+                    {
+                        Titel = "TEST " + i,
+                        Specialisatie = specialisaties[random.Next(0, (specialisaties.Count))].Naam,
+                        Semester1 = random.Next(0, 2) == 0,
+                        Semester2 = random.Next(0, 2) == 0,
+                        Omschrijving = "omschrijving" + i,
+                        Academiejaar = "2014-2015",
+                        AantalStudenten = 2,
+                        Contractondertekenaar = contractOndertekenaar1,
+                        Stagementor = stagementors[random.Next(0, stagementors.Count)],
+                        Bedrijf = bedrijf1,
+                        Gemeente = "Gemeente1"
+                    };
+                    if (i % 2 == 0)
+                    {
+                        stageopdracht.Status = StageopdrachtStatus.Goedgekeurd;
+                    }
+                    bedrijf1.AddStageopdracht(stageopdracht);
+                }
+
                 var teststages = new List<Stageopdracht>();
                 for (int i = 15; i < 51; i++)
                 {

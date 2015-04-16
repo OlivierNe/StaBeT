@@ -234,6 +234,33 @@ namespace StageBeheersTool.Controllers
             return View("StageopdrachtOverzicht", model);
         }
 
+        /// <summary>
+        /// alle stageopdrachten van een bedrijf
+        /// </summary>
+        [Authorize(Role.Admin)]
+        public ActionResult VanBedrijf(int id)
+        {
+            var bedrijf = _bedrijfRepository.FindById(id);
+            if (bedrijf == null)
+            {
+                return HttpNotFound();
+            }
+            var stageopdrachten = bedrijf.Stageopdrachten;
+            var model = new StageopdrachtListVM
+            {
+                Stageopdrachten = stageopdrachten,
+                Title = String.Format(Resources.TitelStageopdrachtenVanBedrijf, bedrijf.Naam),
+                ToonStudenten = true,
+                ToonStatus = true,
+                ToonAcademiejaar = true
+            };
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_StageopdrachtList", model);
+            }
+            return View("StageopdrachtOverzicht", model);
+        }
+
         [Authorize(Role.Admin, Role.Begeleider, Role.Bedrijf)]
         public ActionResult Archief()
         {

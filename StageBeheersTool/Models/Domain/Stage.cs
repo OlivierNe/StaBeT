@@ -7,7 +7,8 @@ namespace StageBeheersTool.Models.Domain
     {
         #region Properties
         public int Id { get; set; }
-
+        public int StudentId { get; set; }
+        public int StageopdrachtId { get; set; }
         public virtual Student Student { get; set; }
         public virtual Stageopdracht Stageopdracht { get; set; }
 

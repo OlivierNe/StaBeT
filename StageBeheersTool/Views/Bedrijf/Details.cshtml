@@ -7,32 +7,31 @@
 <h2>@ViewBag.Title</h2>
 
 <div>
-    @if (User.IsInRole(Role.Bedrijf))
+    @if (CurrentUser.IsBedrijf())
     {
         @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id })
         @Html.Raw("|")
         @Html.ActionLink("Wachtwoord wijzigen", "ChangePassword", "Account")
     }
-    else if (User.IsInRole(Role.Admin) || User.IsInRole(Role.Begeleider))
+    else if (CurrentUser.IsAdmin() || CurrentUser.IsBegeleider())
     {
         @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id })
         @Html.Raw("|")
-        @Html.ActionLink("Terug naar lijst", "Index", "Bedrijf")
+        @Html.ActionLink("Terug naar lijst", "List", "Bedrijf")
+
     }
     <hr />
     <dl class="dl-horizontal">
         <dt>
             E-mail
         </dt>
-
         <dd>
-            <a href="mailto:@Html.DisplayFor(model => model.Email)">@Html.DisplayFor(model => model.Email)</a>
+            @Html.DisplayEmail(Model.Email)
         </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Naam)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Naam)
         </dd>
@@ -43,7 +42,7 @@
         <dd>
             <a href="@Model.WebsiteUri" target="_blank">@Model.WebsiteUri</a>
         </dd>
-            
+
         <dt>
             Adres
         </dt>
@@ -75,9 +74,15 @@
             @Html.DisplayFor(model => model.Bedrijfsactiviteiten)
         </dd>
     </dl>
-    @if (User.IsInRole(Role.Admin) || User.IsInRole(Role.Begeleider))
+    @if (CurrentUser.IsAdmin() || CurrentUser.IsBegeleider())
     {
-        @Html.ActionLink("Contactpersonen", "VanBedrijf", "Contactpersoon", new { bedrijfId = Model.Id }, new { })
+        <ul>
+            <li>
+                @Html.ActionLink("Contactpersonen", "VanBedrijf", "Contactpersoon", new { bedrijfId = Model.Id }, new { })
+            </li>
+            <li>
+                @Html.ActionLink("Stageopdrachten", "VanBedrijf", "Stageopdracht", new { Model.Id }, new { })
+            </li>
+        </ul>
     }
-
 </div>

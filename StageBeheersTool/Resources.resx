@@ -481,4 +481,8 @@
     <value>E-mail verzenden mislukt. Het bedrijf '{0}' heeft geen geldig E-mailadres ({1}).</value>
     <comment>0=naam bedrijf, 1=email bedrijf</comment>
   </data>
+  <data name="TitelStageopdrachtenVanBedrijf" xml:space="preserve">
+    <value>Overzicht stageopdrachten van {0}</value>
+    <comment>0=naam bedrijf</comment>
+  </data>
 </root>

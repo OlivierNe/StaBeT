@@ -1,4 +1,9 @@
-﻿$(function () {
+﻿if ($("#sidebar-wrapper").length === 0) {
+    $("#page-content-wrapper").css("padding-left", "0");
+}
+$("#page-content-wrapper").css("visibility", "visible");
+
+$(function () {
     "use strict";
 
     window.setTimeout(function () {
@@ -16,4 +21,5 @@
             return false;
         }
     });
+
 });
