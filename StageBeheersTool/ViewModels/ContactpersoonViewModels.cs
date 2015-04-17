@@ -5,12 +5,15 @@ using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.ViewModels
 {
-    public class ContactpersoonIndexVM
+    public class ContactpersoonListVM
     {
         public IEnumerable<Contactpersoon> Contactpersonen { get; set; }
+        public bool ToonZoeken { get; set; }
         public bool ToonBedrijf { get; set; }
+
         public string Naam { get; set; }
         public string Bedrijf { get; set; }
+
     }
 
     public class ContactpersoonCreateVM
@@ -42,6 +45,7 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "Bedrijf")]
         public int BedrijfId { get; set; }
         public SelectList BedrijvenSelectList { get; set; }
+        public string Overzicht { get; set; }
 
         public void SetBedrijven(IEnumerable<Bedrijf> bedrijven)
         {

@@ -9,7 +9,7 @@ using System.Web.Mvc;
 namespace StageBeheersTool.Controllers
 {
     [Authorize(Roles = Role.Admin)]
-    public class InstellingenController : Controller
+    public class InstellingenController : BaseController
     {
         private readonly IAcademiejaarRepository _academiejaarRepository;
         private readonly IInstellingenRepository _instellingenRepository;
@@ -105,20 +105,6 @@ namespace StageBeheersTool.Controllers
                 SetViewMessage(Resources.SuccesEditSaved);
             }
             return View(model);
-        }
-
-        #endregion
-
-        #region Helpers
-
-        private void SetViewError(string error)
-        {
-            TempData["error"] = error;
-        }
-
-        private void SetViewMessage(string message)
-        {
-            TempData["message"] = message;
         }
 
         #endregion

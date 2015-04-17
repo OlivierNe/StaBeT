@@ -31,11 +31,6 @@ namespace StageBeheersTool.ViewModels
 
         public string Title { get; set; }
 
-        public string Overzicht
-        {
-            get { return HttpContext.Current.Request.Url.PathAndQuery; }
-        }
-
         private SelectList _academiejaarList;
 
         public SelectList AantalStudentenList
@@ -125,9 +120,6 @@ namespace StageBeheersTool.ViewModels
         public bool ToonStudenten { get; set; }
         public bool ToonStatus { get; set; }
 
-        private string _overzicht;
-        public string Overzicht { get { return _overzicht ?? "/Stageopdracht/Index"; } set { _overzicht = value; } }
-
         public string Stagementor
         {
             get
@@ -202,8 +194,7 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "Bedrijf")]
         public int BedrijfId { get; set; }
 
-        private string _overzicht;
-        public string Overzicht { get { return _overzicht ?? "/Stageopdracht/Index"; } set { _overzicht = value; } }
+        public string Overzicht { get; set; }
 
         public SelectList SpecialisatieSelectList { get; set; }
         public SelectList ContractondertekenaarsSelectList { get; set; }
@@ -323,6 +314,7 @@ namespace StageBeheersTool.ViewModels
         [DataType(DataType.MultilineText)]
         [Required]
         public string Reden { get; set; }
+        public string Overzicht { get; set; }
     }
 
     public class StageopdrachtLijstExcelVM

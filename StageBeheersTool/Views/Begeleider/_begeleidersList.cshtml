@@ -1,17 +1,23 @@
 ﻿@model BegeleiderListVM
+@{
+    var overzicht = ViewHelpers.CurrentOverzicht();
+}
 
 <div id="grid-tableDiv">
     @Html.Grid(Model.Begeleiders).Columns(columns =>
 {
-    columns.Add(b => b.Familienaam).Encoded(false).Sanitized(false)
-        .RenderValueAs(b => Html.ActionLink(b.Naam, "Details", "Begeleider", new { id = b.Id }, new { })).Titled("Naam");
+    columns.Add(b => b.Familienaam).Encoded(false).Sanitized(false).Titled("Naam")
+        .RenderValueAs(b => Html.ActionLink(b.Naam, "Details", "Begeleider", new { b.Id, overzicht }, new { }));
+
     columns.Add(b => b.HogentEmail).Titled("HoGent E-mail").Encoded(false).Sanitized(false)
-        .RenderValueAs(b => "<a href=\"mailto:" + b.HogentEmail + "\">" + b.HogentEmail + "</a>");
+        .RenderValueAs(b => Html.DisplayEmail(b.HogentEmail));
+
     if (Model.ToonActies)
     {
         columns.Add().Sanitized(false).Encoded(false)
-           .RenderValueAs(s => Html.ActionLink("Wijzigen", "Edit", new { s.Id }, new { @class = "btn btn-default" }) + " "
-               + Html.ActionLink("Verwijderen", "Delete", new { s.Id }, new { @class = "btn btn-default" }));
+           .RenderValueAs(b => Html.ActionLink("Wijzigen", "Edit", new { b.Id, overzicht }, new { @class = "btn btn-default" }) + " "
+               + Html.ActionLink("Verwijderen", "Delete", new { b.Id, overzicht }, new { @class = "btn btn-default" }));
     }
+
 }).Sortable(true).WithPaging(10).EmptyText("Geen begeleiders gevonden")
 </div>

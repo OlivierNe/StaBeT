@@ -99,8 +99,9 @@
         </div>
     </div>
 }
-@*<a href="@ViewBag.Overzicht">@ViewBag.Overzicht</a>
-@Html.ActionLink("Annuleren", "List", "Student", new { }, new { @class = "btn btn-default" })*@
+<p>
+    @Html.OverzichtActionLink()
+</p>
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/stagetool-form.js"></script>

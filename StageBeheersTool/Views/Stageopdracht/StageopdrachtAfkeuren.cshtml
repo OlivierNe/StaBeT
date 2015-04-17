@@ -15,7 +15,7 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
-
+        @Html.HiddenOverzicht()
         <div class="form-group">
             @Html.LabelFor(model => model.Aan, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -43,15 +43,15 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Afkeuren" class="btn btn-danger" />
-                @Html.ActionLink("Annuleren", "BedrijfStageVoorstellen", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Terug naar overzicht", "BedrijfStageVoorstellen")
-</div>
+
+<p>
+    @Html.OverzichtActionLink()
+</p>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/stagetool-form.js"></script>

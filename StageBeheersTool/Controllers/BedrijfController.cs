@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace StageBeheersTool.Controllers
 {
-    public class BedrijfController : Controller
+    public class BedrijfController : BaseController
     {
         private readonly IBedrijfRepository _bedrijfRepository;
         private readonly IUserService _userService;
@@ -69,7 +69,15 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            return View(bedrijf);
+            var model = new BedrijfDetailsVM
+            {
+                Bedrijf = bedrijf,
+                ToonEdit = CurrentUser.IsAdmin() || CurrentUser.IsBedrijf(),
+                ToonChangePassword = CurrentUser.IsBedrijf(),
+                ToonExtra = CurrentUser.IsAdmin() || CurrentUser.IsBegeleider(),
+                ToonTerug = CurrentUser.IsAdmin() || CurrentUser.IsBegeleider(),
+            };
+            return View(model);
         }
 
         [Authorize(Role.Bedrijf, Role.Admin)]
@@ -80,7 +88,9 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            return View(Mapper.Map<EditBedrijfVM>(bedrijf));
+            var model = Mapper.Map<EditBedrijfVM>(bedrijf);
+            model.ToonTerug = CurrentUser.IsAdmin();
+            return View(model);
         }
 
         [Authorize(Role.Bedrijf, Role.Admin)]
@@ -95,7 +105,7 @@ namespace StageBeheersTool.Controllers
             }
             _bedrijfRepository.Update(bedrijf);
             SetViewMessage(Resources.SuccesEditBedrijf);
-            return RedirectToAction("Details", new { id = bedrijf.Id });
+            return RedirectToAction("Details", new { id = bedrijf.Id, Overzicht });
         }
 
         [Authorize(Role.Admin)]
@@ -113,7 +123,7 @@ namespace StageBeheersTool.Controllers
         [ActionName("Delete")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id, string overzicht = "/Bedrijf/List")
         {
             var bedrijf = _bedrijfRepository.FindById(id);
             if (bedrijf == null)
@@ -134,7 +144,7 @@ namespace StageBeheersTool.Controllers
             {
                 _userService.DeleteLogin(bedrijf.Email);
             }
-            return RedirectToAction("List");
+            return Redirect(overzicht);
         }
 
         [Authorize(Role.Admin)]
@@ -173,16 +183,6 @@ namespace StageBeheersTool.Controllers
                 return null;
             }
             return _bedrijfRepository.FindById((int)id);
-        }
-
-        private void SetViewError(string error)
-        {
-            TempData["error"] = error;
-        }
-
-        private void SetViewMessage(string message)
-        {
-            TempData["message"] = message;
         }
 
         #endregion

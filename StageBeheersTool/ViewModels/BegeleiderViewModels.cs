@@ -41,6 +41,8 @@ namespace StageBeheersTool.ViewModels
         public string Straat { get; set; }
         [Display(Name = "Ook een login account aanmaken?")]
         public bool LoginAccountAanmaken { get; set; }
+
+        public string Overzicht { get; set; }
     }
 
     public class BegeleiderEditVM
@@ -67,6 +69,8 @@ namespace StageBeheersTool.ViewModels
         public string Straat { get; set; }
         [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string FotoUrl { get; set; }
+
+        public string Overzicht { get; set; }
     }
 
     public class BegeleiderDetailsVM
@@ -85,6 +89,8 @@ namespace StageBeheersTool.ViewModels
 
         public bool ToonEdit { get; set; }
         public bool ToonTerugNaarLijst { get; set; }
+        public bool ToonVerwijderen { get; set; }
+      
     }
 
     public class BegeleiderJsonVM

@@ -9,12 +9,11 @@ using System.Web.Mvc;
 
 namespace StageBeheersTool.Controllers
 {
-    public class BegeleiderController : Controller
+    public class BegeleiderController : BaseController
     {
         private readonly IBegeleiderRepository _begeleiderRepository;
         private readonly IImageService _imageService;
         private readonly IUserService _userService;
-
         public BegeleiderController(IBegeleiderRepository begeleiderRepository, IImageService imageService,
             IUserService userservice)
         {
@@ -39,7 +38,8 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Admin)]
         public ActionResult Create()
         {
-            return View();
+            var model = new BegeleiderCreateVM { LoginAccountAanmaken = true };
+            return View(model);
         }
 
         [Authorize(Role.Admin)]
@@ -58,7 +58,7 @@ namespace StageBeheersTool.Controllers
                     {
                         _userService.CreateLogin(begeleider.HogentEmail, "wachtwoord", Role.Begeleider);//TODO: tijdelijk "wachtwoord"
                     }
-                    return RedirectToAction("Details", new { begeleider.Id });
+                    return RedirectToAction("Details", new { begeleider.Id, Overzicht });
                 }
                 catch (ApplicationException ex)
                 {
@@ -79,6 +79,7 @@ namespace StageBeheersTool.Controllers
             var model = Mapper.Map<BegeleiderDetailsVM>(begeleider);
             model.ToonEdit = CurrentUser.IsAdmin() || begeleider.Equals(_userService.FindBegeleider());
             model.ToonTerugNaarLijst = id != 0;
+            model.ToonVerwijderen = CurrentUser.IsAdmin();
             return View(model);
         }
 
@@ -134,8 +135,8 @@ namespace StageBeheersTool.Controllers
             }
             var begeleiderModel = Mapper.Map<Begeleider>(model);
             _begeleiderRepository.Update(begeleiderModel);
-            TempData["message"] = "Gegevens gewijzigd.";
-            return RedirectToAction("Details", new { id = model.Id });
+            SetViewMessage("Gegevens gewijzigd.");
+            return RedirectToAction("Details", new { model.Id, Overzicht });
         }
 
         [Authorize(Role.Admin)]
@@ -174,7 +175,7 @@ namespace StageBeheersTool.Controllers
             {
                 _userService.DeleteLogin(begeleider.HogentEmail);
             }
-            return RedirectToAction("List");
+            return Redirect(Overzicht);
         }
 
         [Authorize(Role.Admin)]
@@ -199,16 +200,6 @@ namespace StageBeheersTool.Controllers
                 return _userService.FindBegeleider();
             }
             return _begeleiderRepository.FindById(id);
-        }
-
-        private void SetViewError(string error)
-        {
-            TempData["error"] = error;
-        }
-
-        private void SetViewMessage(string message)
-        {
-            TempData["message"] = message;
         }
 
         #endregion

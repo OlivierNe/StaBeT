@@ -8,7 +8,7 @@
 <ul>
     @foreach (var academiejaar in Model)
     {
-        <li> @Html.ActionLink("Academiejaar " + academiejaar, "VanAcademiejaar", new { academiejaar = academiejaar })</li>
+        <li> @Html.ActionLink("Academiejaar " + academiejaar, "VanAcademiejaar", new { academiejaar })</li>
     }
     <li>@Html.ActionLink("Alle academiejaren", "VanAcademiejaar")</li>
 </ul>

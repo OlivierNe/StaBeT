@@ -19,7 +19,7 @@ using StageBeheersTool.be.hogent.webservice;
 namespace StageBeheersTool.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -312,7 +312,7 @@ namespace StageBeheersTool.Controllers
                 if (dataStudent["ACTIVE"] != 0) //inloggen gelukt
                 {
                     await SignInManager.SignInAsync(user, model.RememberMe, false);
-                    return RedirectToAction("Index", "Stageopdracht");
+                    return RedirectToAction("List", "Stageopdracht");
                 }
                 else //inloggen mislukt
                 {
@@ -329,7 +329,7 @@ namespace StageBeheersTool.Controllers
                     user = await UserManager.FindByEmailAsync(model.Email);
                     if (user.EmailConfirmed)
                     {
-                        return RedirectToAction("Index", "Stageopdracht");
+                        return RedirectToAction("List", "Stageopdracht");
                     }
                     else
                     {
@@ -427,7 +427,7 @@ namespace StageBeheersTool.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("Index", "Stageopdracht");
+                        return RedirectToAction("List", "Stageopdracht");
                     }
                 }
             }
@@ -641,15 +641,6 @@ namespace StageBeheersTool.Controllers
             {
                 ModelState.AddModelError("", error);
             }
-        }
-        private void SetViewError(string error)
-        {
-            TempData["error"] = error;
-        }
-
-        private void SetViewMessage(string message)
-        {
-            TempData["message"] = message;
         }
 
         #endregion

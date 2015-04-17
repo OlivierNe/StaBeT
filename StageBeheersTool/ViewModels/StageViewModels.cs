@@ -9,7 +9,6 @@ namespace StageBeheersTool.ViewModels
     public class StageListVM
     {
         public IEnumerable<Stage> Stages { get; set; }
-        public string Overzicht { get; set; }
 
         public string Student { get; set; }
         public string Stageopdracht { get; set; }
@@ -31,15 +30,11 @@ namespace StageBeheersTool.ViewModels
         {
             get { return Stage.AangepasteStageperiode; }
         }
-
-        public string Overzicht { get; set; }
     }
 
     public class StageEditVM : StageAanStudentToewijzenVM
     {
         public int Id { get; set; }
-
-
     }
 
     public class StageAanStudentToewijzenVM : IValidatableObject
@@ -88,6 +83,8 @@ namespace StageBeheersTool.ViewModels
 
         [UIHint("NullableDateTime")]
         public DateTime? Semester2Einde { get; set; }
+
+        public string Overzicht { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

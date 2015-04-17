@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace StageBeheersTool.Controllers
 {
-    public class ContactpersoonController : Controller
+    public class ContactpersoonController : BaseController
     {
         private readonly IUserService _userService;
         private readonly IBedrijfRepository _bedrijfRepository;
@@ -23,7 +23,7 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Bedrijf, Role.Admin)]
-        public ActionResult List(ContactpersoonIndexVM model)
+        public ActionResult List(ContactpersoonListVM model)
         {
             if (CurrentUser.IsBedrijf())
             {
@@ -32,7 +32,7 @@ namespace StageBeheersTool.Controllers
             }
             else //admin
             {
-                model.ToonBedrijf = true;
+                model.ToonZoeken = true;
                 model.Contactpersonen = _contactpersoonRepository.FindAll()
                     .WithFilter(model.Bedrijf, model.Naam);
             }
@@ -48,7 +48,7 @@ namespace StageBeheersTool.Controllers
         public ActionResult VanBedrijf(int bedrijfId)
         {
             var bedrijf = _bedrijfRepository.FindById(bedrijfId);
-            var model = new ContactpersoonIndexVM
+            var model = new ContactpersoonListVM
             {
                 Contactpersonen = bedrijf.Contactpersonen
             };
@@ -179,16 +179,6 @@ namespace StageBeheersTool.Controllers
         }
 
         #region Helpers
-
-        private void SetViewError(string error)
-        {
-            TempData["error"] = error;
-        }
-
-        private void SetViewMessage(string message)
-        {
-            TempData["message"] = message;
-        }
 
         private Contactpersoon FindContactpersoon(int id)
         {

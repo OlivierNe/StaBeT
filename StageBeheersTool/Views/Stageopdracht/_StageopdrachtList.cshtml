@@ -1,4 +1,7 @@
 ﻿@model StageopdrachtListVM
+@{
+    var overzicht = ViewHelpers.CurrentOverzicht();
+}
 
 <div id="grid-tableDiv">
     @Html.Grid(Model.Stageopdrachten).Columns(columns =>
@@ -7,7 +10,7 @@
             .Encoded(false).Sanitized(false)
             .RenderValueAs(so =>
                 Html.ActionLink(so.Titel,
-                "Details", new { id = so.Id, overzicht = Model.Overzicht })).SetWidth(300);
+                "Details", new { id = so.Id, overzicht })).SetWidth(300);
         if (Model.ToonBedrijf)
         {
             columns.Add(so => so.Bedrijf.Naam).Titled("Bedrijf")
@@ -17,7 +20,7 @@
                     var locatie = !string.IsNullOrWhiteSpace(so.Gemeente) ? " - " + so.Gemeente :
                         !string.IsNullOrWhiteSpace(so.Bedrijf.Gemeente) ? " - " + so.Bedrijf.Gemeente : "";
                     return Html.ActionLink(so.Bedrijf.Naam + locatie,
-                        "Details", "Bedrijf", new { so.Bedrijf.Id }, new { });
+                        "Details", "Bedrijf", new { so.Bedrijf.Id, overzicht }, new { });
                 }).SetWidth(200);
         }
         if (Model.ToonBegeleider)
@@ -28,7 +31,7 @@
                 {
                     if (so.Stagebegeleider != null)
                     {
-                        return Html.ActionLink(so.Stagebegeleider.Naam, "Details", "Begeleider", new { so.Stagebegeleider.Id }, new { });
+                        return Html.ActionLink(so.Stagebegeleider.Naam, "Details", "Begeleider", new { so.Stagebegeleider.Id, overzicht }, new { });
                     }
                     return new MvcHtmlString("");
                 }).Sortable(true).ThenSortBy(so => so.Stagebegeleider.Voornaam);
@@ -43,7 +46,7 @@
                     foreach (var stage in so.Stages)
                     {
                         retVal += "<li>" + Html.ActionLink(stage.Student.Naam,
-                            "Details", "Student", new { id = stage.Student.Id }, new { }) + "</li>";
+                            "Details", "Student", new { id = stage.Student.Id, overzicht }, new { }) + "</li>";
                     }
                     retVal += "</ul>";
                     return retVal;
@@ -77,10 +80,13 @@
         {
             columns.Add().Sanitized(false).Encoded(false)
                 .RenderValueAs(so => so.IsGoedgekeurd() == false
-                    ? Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { id = so.Id }, new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
+                    ? Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { id = so.Id, overzicht },
+                    new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
+            
             columns.Add().Sanitized(false).Encoded(false)
                 .RenderValueAs(so => so.IsAfgekeurd() == false
-                    ? Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { id = so.Id }, new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
+                    ? Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { id = so.Id, overzicht },
+                    new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
         }
 
         if (Model.ToonDossierIndienen)
@@ -91,21 +97,26 @@
                     if (Model.StageIdDossierIngediend == null)
                     {
                         return Html.ActionLink("Stagedossier ingediend", "AanduidenDossierIngediend",
-                            new { so.Id }, new { @class = "btn btn-default", title = "Aanduiden dat het stagedossier voor deze stageopdracht is ingediend" });
+                            new { so.Id }, new
+                            {
+                                @class = "btn btn-default",
+                                title = "Aanduiden dat het stagedossier voor deze stageopdracht is ingediend"
+                            });
                     }
                     if (so.Id == Model.StageIdDossierIngediend)
                     {
-                        return new MvcHtmlString("<div class='text text-info'>Stagedossier " + Model.CurrentStudentStagedossierStatus + "</div>");
+                        return new MvcHtmlString("<div class='text text-info'>Stagedossier " +
+                            Model.CurrentStudentStagedossierStatus + "</div>");
                     }
                     return MvcHtmlString.Empty;
                 });
         }
-        
+
         if (Model.ToonVoorkeurVerwijderen)
         {
             columns.Add().Sanitized(false).Encoded(false)
                 .RenderValueAs(so => Html.ActionLink("Verwijderen uit mijn voorkeurstages", "VerwijderenUitVoorkeur", "Stageopdracht",
-                    new { so.Id }, new { @class = "btn btn-default", @title = "Verwijderen uit mijn voorkeurstages" }));
+                    new { so.Id }, new { @class = "btn btn-default", title = "Verwijderen uit mijn voorkeurstages" }));
         }
     }).WithPaging(10).Sortable().EmptyText("Geen stageopdrachten gevonden")
 </div>

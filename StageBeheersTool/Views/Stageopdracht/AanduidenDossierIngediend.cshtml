@@ -26,7 +26,7 @@
             |
             @if (Model.Bedrijf.HeeftGeldigEmail())
             {
-                <a href="mailto:@Model.Bedrijf.Email">@Model.Bedrijf.Email</a>
+                @Html.DisplayEmail(Model.Bedrijf.Email)
             }
         </dd>
 
@@ -65,13 +65,13 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ContractondertekenaarNaam)
-            <a href="mailto:@Model.ContractondertekenaarEmail"> @Html.DisplayFor(model => model.ContractondertekenaarEmail)</a>
+            @Html.DisplayEmail(Model.ContractondertekenaarEmail)
         </dd>
 
         <dt>@Html.NameFor(model => model.Stagementor)</dt>
         <dd>
             @Html.DisplayFor(model => model.StagementorNaam)
-            <a href="mailto:@Model.StagementorEmail"> @Html.DisplayFor(model => model.StagementorEmail)</a>
+            @Html.DisplayEmail(Model.StagementorEmail)
         </dd>
 
         <dt>

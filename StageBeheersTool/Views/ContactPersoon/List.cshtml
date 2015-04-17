@@ -1,10 +1,10 @@
-﻿@model ContactpersoonIndexVM
+﻿@model ContactpersoonListVM
 
 <h2>@ViewBag.Title</h2>
 <p>
     @Html.ActionLink("Nieuw contactpersoon", "Create", "Contactpersoon")
 </p>
-@if (Model.ToonBedrijf)
+@if (Model.ToonZoeken)
 {
     <a id="searchA" class="btn btn-default" style="display:inline">Zoeken</a>
     using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-horizontal" }))

@@ -56,7 +56,9 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Verwijderen" class="btn btn-danger" />
-            @Html.ActionLink("Annuleren", "List", "Student", new { }, new { @class = "btn btn-default" })
         </div>
     }
+    <p>
+        @Html.OverzichtActionLink()
+    </p>
 </div>

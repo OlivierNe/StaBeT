@@ -11,21 +11,24 @@
             @Html.DisplayNameFor(model => model.Stage.Student)
         </dt>
         <dd>
-            @Html.ActionLink(Model.Stage.Student.Naam, "Details", "Student", new { Model.Stage.Student.Id }, new { })
+            @Html.ActionLink(Model.Stage.Student.Naam, "Details", "Student",
+                new { Model.Stage.Student.Id, Model.Overzicht }, new { })
         </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Stage.Stageopdracht)
         </dt>
         <dd>
-            @Html.ActionLink(Model.Stage.Stageopdracht.Titel, "Details", "Stageopdracht", new { Model.Stage.Stageopdracht.Id }, new { })
+            @Html.ActionLink(Model.Stage.Stageopdracht.Titel, "Details", "Stageopdracht",
+                new { Model.Stage.Stageopdracht.Id, Model.Overzicht }, new { })
         </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Stage.Bedrijf)
         </dt>
         <dd>
-            @Html.ActionLink(Model.Stage.Bedrijf.Naam, "Details", "Bedrijf", new { Model.Stage.Bedrijf.Id }, new { })
+            @Html.ActionLink(Model.Stage.Bedrijf.Naam, "Details", "Bedrijf",
+                new { Model.Stage.Bedrijf.Id, Model.Overzicht }, new { })
         </dd>
 
         <dt>
@@ -34,7 +37,8 @@
         <dd>
             @if (Model.Stage.Begeleider != null)
             {
-                @Html.ActionLink(Model.Stage.Begeleider.Naam, "Details", "Begeleider", new {Model.Stage.Begeleider.Id}, new {})
+                @Html.ActionLink(Model.Stage.Begeleider.Naam, "Details", "Begeleider",
+                    new { Model.Stage.Begeleider.Id, Model.Overzicht }, new { })
             }
         </dd>
 
@@ -66,6 +70,6 @@
 
     </dl>
 </div>
-<p>      
-    @Html.ActionLink("Back to List", "Index")
+<p>
+    <a href="@HttpUtility.UrlDecode(Model.Overzicht)">Terug naar overzicht</a>
 </p>

@@ -310,7 +310,7 @@
     <comment>0=titel stageopdracht</comment>
   </data>
   <data name="SuccesStageAfgekeurd" xml:space="preserve">
-    <value>Stageopdracht '{0}' afgekeurd.  E-mail verstuurd.</value>
+    <value>Stageopdracht '{0}' afgekeurd.</value>
     <comment>0=titel stageopdracht</comment>
   </data>
   <data name="TitelMijnStages" xml:space="preserve">

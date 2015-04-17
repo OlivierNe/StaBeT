@@ -194,6 +194,9 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\BaseController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controllers\InstellingenController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -210,7 +213,7 @@
     <Compile Include="Helpers\AuthorizeAttribute.cs" />
     <Compile Include="Helpers\AcademiejaarHelper.cs" />
     <Compile Include="Helpers\ExcelFileResult.cs" />
-    <Compile Include="Helpers\HtmlHelpers.cs" />
+    <Compile Include="Helpers\ViewHelpers.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableStageExtensions.cs" />
     <Compile Include="Models\DAL\StageRepository.cs" />
     <Compile Include="Models\Identity\UserWithRoles.cs" />
@@ -454,7 +457,6 @@
     <Content Include="Views\Contactpersoon\Delete.cshtml" />
     <Content Include="Views\Shared\_GridPager.cshtml" />
     <Content Include="Views\Shared\_Grid.cshtml" />
-    <Content Include="Views\Stageopdracht\Index.cshtml" />
     <Content Include="Views\Stageopdracht\_CreateStagementorForm.cshtml" />
     <Content Include="Views\Student\Details.cshtml" />
     <Content Include="Views\Student\Edit.cshtml" />

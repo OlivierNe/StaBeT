@@ -70,10 +70,12 @@
     </dl>
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
-
+    @Html.HiddenOverzicht()
         <div class="form-actions no-color">
             <input type="submit" value="Verwijderen" class="btn btn-danger" /> |
-            @Html.ActionLink("Terug naar overzicht", "Index")
         </div>
     }
+    <p>
+        @Html.OverzichtActionLink()
+    </p>
 </div>

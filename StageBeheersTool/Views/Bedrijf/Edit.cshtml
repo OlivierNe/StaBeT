@@ -76,15 +76,18 @@
                 @Html.ValidationMessageFor(model => model.Bedrijfsactiviteiten, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        @Html.HiddenOverzicht()
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Opslaan" class="btn btn-success" />
-                    @Html.ActionLink("Annuleren", "Details", "Student", new { Model.Id }, new { @class = "btn btn-default" })
-                </div>
+                <input type="submit" value="Opslaan" class="btn btn-success" />
             </div>
         </div>
+        @if (Model.ToonTerug)
+        {
+            <p>
+                @Html.OverzichtActionLink()
+            </p>
+        }
     </div>
 }
 

@@ -13,7 +13,7 @@ using StageBeheersTool.ViewModels;
 namespace StageBeheersTool.Controllers
 {
     [Authorize(Role.Admin)]
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
         private ApplicationUserManager _userManager;
 
@@ -115,18 +115,5 @@ namespace StageBeheersTool.Controllers
             return RedirectToAction("Index");
         }
 
-        #region Helpers
-
-        private void SetViewError(string error)
-        {
-            TempData["error"] = error;
-        }
-
-        private void SetViewMessage(string message)
-        {
-            TempData["message"] = message;
-        }
-
-        #endregion
     }
 }

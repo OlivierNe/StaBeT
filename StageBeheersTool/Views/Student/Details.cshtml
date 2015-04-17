@@ -57,14 +57,18 @@
 <p>
     @if (Model.ToonEdit)
     {
-        @Html.ActionLink("Gegevens wijzigen", "Edit", new { Model.Id }, new { @class = "btn btn-default" })
+        @Html.ActionLink("Gegevens wijzigen", "Edit", new { Model.Id, overzicht = ViewHelpers.GetOverzicht() },
+            new { @class = "btn btn-default" })
     }
     @if (Model.ToonDelete)
     {
-        @Html.ActionLink("Verwijderen", "Delete", new { Model.Id }, new { @class = "btn btn-default" })
+        @Html.ActionLink("Verwijderen", "Delete", new { Model.Id, overzicht = ViewHelpers.GetOverzicht() },
+            new { @class = "btn btn-default" })
     }
 </p>
 @if (Model.ToonTerugNaarLijst)
 {
-    @Html.ActionLink("Terug naar lijst", Model.Overzicht)
+    <p>
+        @Html.OverzichtActionLink()
+    </p>
 }

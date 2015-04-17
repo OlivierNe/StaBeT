@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace StageBeheersTool.Controllers
 {
     [Authorize]
-    public class StageopdrachtController : Controller
+    public class StageopdrachtController : BaseController
     {
         private readonly IStageopdrachtRepository _stageopdrachtRepository;
         private readonly IBedrijfRepository _bedrijfRepository;
@@ -46,7 +46,7 @@ namespace StageBeheersTool.Controllers
         #region lijsten
 
         [Authorize(Role.Student, Role.Bedrijf, Role.Begeleider, Role.Admin)]
-        public ActionResult Index(StageopdrachtListVM model)
+        public ActionResult List(StageopdrachtListVM model)
         {
             if (CurrentUser.IsBegeleider())
             {
@@ -118,7 +118,6 @@ namespace StageBeheersTool.Controllers
             model.ToonSemester = true;
             model.ToonBedrijf = true;
             model.Title = Resources.TitelAfgekeurdeStageopdrachten;
-            //  model.Overzicht = ControllerContext.RouteData.Values["action"].ToString();
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageopdrachtList", model);
@@ -483,7 +482,7 @@ namespace StageBeheersTool.Controllers
                 var stageMailbox = _instellingenRepository.Find(Instelling.MailboxStages);
                 await _emailService.SendAsync(EmailMessages.StageopdrachtAangemaakt(stageopdracht, stageMailbox));
                 SetViewMessage(Resources.SuccesCreateStageopdracht);
-                return RedirectToAction("Details", new { id = stageopdracht.Id });
+                return RedirectToAction("Details", new {stageopdracht.Id, Overzicht });
             }
             if (CurrentUser.IsBedrijf())
             {
@@ -508,7 +507,7 @@ namespace StageBeheersTool.Controllers
         #region details
 
         [Authorize(Role.Student, Role.Admin, Role.Begeleider, Role.Bedrijf)]
-        public ActionResult Details(int id, string overzicht = "/Stageopdracht/Index")
+        public ActionResult Details(int id)
         {
             var model = new StageopdrachtDetailsVM();
             var stageopdracht = FindStageopdracht(id);
@@ -557,7 +556,6 @@ namespace StageBeheersTool.Controllers
             }
             model.Stageopdracht = stageopdracht;
             model.ToonVerwijderen = CurrentUser.IsAdmin() || CurrentUser.IsBedrijf() && (model.Stageopdracht.IsGoedgekeurd() == false);
-            model.Overzicht = overzicht;
             return View(model);
         }
         #endregion
@@ -618,7 +616,7 @@ namespace StageBeheersTool.Controllers
                 stageopdracht.Bedrijf = bedrijf;
                 _stageopdrachtRepository.Update(stageopdracht);
                 await _emailService.SendAsync(EmailMessages.StageopdrachtGewijzigd(stageopdracht));
-                return RedirectToAction("Details", new { model.Id });
+                return RedirectToAction("Details", new { model.Id, Overzicht });
             }
             model.SetSelectLists(_specialisatieRepository.FindAll(),
                 stageopdracht.Bedrijf.FindAllContractOndertekenaars(),
@@ -630,14 +628,13 @@ namespace StageBeheersTool.Controllers
 
         #region stageopdracht verwijderen
         [Authorize(Role.Bedrijf, Role.Admin)]
-        public ActionResult Delete(int id, string overzicht = "/Stageopdracht/Index")
+        public ActionResult Delete(int id)
         {
             var stageopdracht = FindStageopdracht(id);
             if (stageopdracht == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Overzicht = overzicht;
             return View(stageopdracht);
         }
 
@@ -645,7 +642,7 @@ namespace StageBeheersTool.Controllers
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Role.Bedrijf, Role.Admin)]
-        public ActionResult DeleteConfirmed(int id, string overzicht = "/Stageopdracht/Index")
+        public ActionResult DeleteConfirmed(int id, string overzicht = "/Stageopdracht/List")
         {
             var stageopdracht = FindStageopdracht(id);
             if (stageopdracht == null)
@@ -669,7 +666,7 @@ namespace StageBeheersTool.Controllers
                 return View(stageopdracht);
             }
             SetViewMessage(string.Format(Resources.SuccesVerwijderStageopdracht, stageopdracht.Titel));
-            return Redirect(overzicht);
+            return RedirectToLocal(overzicht);
         }
         #endregion
 
@@ -823,7 +820,7 @@ namespace StageBeheersTool.Controllers
             SetViewMessage(string.Format(Resources.SuccesStagedossierGoedgekeurd,
                 studentVoorkeurstage.Student.Naam));
             _stageopdrachtRepository.SaveChanges();
-            return RedirectToAction("MetIngediendStagedossier");
+            return RedirectToLocal(Overzicht);
         }
 
         [Authorize(Role.Admin)]
@@ -838,7 +835,7 @@ namespace StageBeheersTool.Controllers
             Admin.KeurStagedossierAf(studentVoorkeurstage);
             SetViewMessage(string.Format(Resources.SuccesStagedossierAfgekeurd, studentVoorkeurstage.Student.Naam));
             _stageopdrachtRepository.SaveChanges();
-            return RedirectToAction("MetIngediendStagedossier");
+            return RedirectToLocal(Overzicht);
         }
 
         #endregion
@@ -859,7 +856,7 @@ namespace StageBeheersTool.Controllers
             }
             _stageopdrachtRepository.SaveChanges();
             SetViewMessage(string.Format(Resources.SuccesStageGoedgekeurd, stageopdracht.Titel));
-            return RedirectToAction("BedrijfStageVoorstellen");
+            return RedirectToLocal(Overzicht);
         }
 
         [Authorize(Role.Admin)]
@@ -893,17 +890,16 @@ namespace StageBeheersTool.Controllers
             else
             {
                 SetViewError(String.Format(Resources.ErrorMailBedrijf, stageopdracht.Bedrijf.Naam, stageopdracht.Bedrijf.Email));
-                return View(model);
             }
             _stageopdrachtRepository.SaveChanges();
             SetViewMessage(string.Format(Resources.SuccesStageAfgekeurd, stageopdracht.Titel));
-            return RedirectToAction("BedrijfStageVoorstellen");
+            return RedirectToLocal(Overzicht);
         }
         #endregion
 
         #region stagebegeleiding aanvragen
         [Authorize(Role.Begeleider)]
-        public ActionResult AanvraagIndienen(int id, string overzicht)
+        public ActionResult AanvraagIndienen(int id)
         {
             var stageopdracht = _stageopdrachtRepository.FindById(id);
             if (stageopdracht == null)
@@ -913,11 +909,11 @@ namespace StageBeheersTool.Controllers
             var begeleider = _userService.FindBegeleider();
             begeleider.AddAanvraag(stageopdracht);
             _stageopdrachtRepository.SaveChanges();
-            return RedirectToAction("Details", new { id, overzicht });
+            return RedirectToAction("Details", new { id, Overzicht });
         }
 
         [Authorize(Role.Begeleider)]
-        public ActionResult AanvraagAnnuleren(int id, string overzicht)
+        public ActionResult AanvraagAnnuleren(int id)
         {
             var stageopdracht = _stageopdrachtRepository.FindById(id);
             if (stageopdracht == null)
@@ -931,7 +927,7 @@ namespace StageBeheersTool.Controllers
             }
             _stageopdrachtRepository.DeleteAanvraag(begeleider.FindAanvraag(stageopdracht));
             _stageopdrachtRepository.SaveChanges();
-            return RedirectToAction("Details", new { id, overzicht });
+            return RedirectToAction("Details", new { id, Overzicht });
         }
 
         [Authorize(Role.Admin)]
@@ -976,7 +972,7 @@ namespace StageBeheersTool.Controllers
             {
                 SetViewError(ex.Message);
             }
-            return RedirectToAction("AanvragenStagebegeleiding");
+            return RedirectToLocal(Overzicht);
         }
 
         [Authorize(Role.Admin)]
@@ -990,7 +986,7 @@ namespace StageBeheersTool.Controllers
             var result = Admin.KeurStageBegeleidAanvraagAf(aanvraag);
             SetViewMessage(result);
             _stageopdrachtRepository.SaveChanges();
-            return RedirectToAction("AanvragenStagebegeleiding");
+            return RedirectToLocal(Overzicht);
         }
         #endregion
 
@@ -1003,16 +999,6 @@ namespace StageBeheersTool.Controllers
                 return _userService.FindBedrijf().FindStageopdrachtById(id);
             }
             return _stageopdrachtRepository.FindById(id);
-        }
-
-        private void SetViewError(string error)
-        {
-            TempData["error"] = error;
-        }
-
-        private void SetViewMessage(string message)
-        {
-            TempData["message"] = message;
         }
 
         #endregion

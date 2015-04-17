@@ -1,4 +1,5 @@
-﻿using StageBeheersTool.Models.Domain;
+﻿using System.Web;
+using StageBeheersTool.Models.Domain;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
@@ -11,7 +12,6 @@ namespace StageBeheersTool.ViewModels
 
         public bool ToonStage { get; set; }
         public bool ToonActies { get; set; }
-        public string Overzicht { get; set; }
 
         public string Naam { get; set; }
         public string Voornaam { get; set; }
@@ -47,6 +47,8 @@ namespace StageBeheersTool.ViewModels
         [Display(Name = "Ook een login account aanmaken?")]
         public bool LoginAccountAanmaken { get; set; }
 
+        public string Overzicht { get; set; }
+
         public void SetKeuzevakSelectList(IEnumerable<Keuzepakket> keuzepakketten)
         {
             KeuzevakSelectList = new SelectList(keuzepakketten, "Id", "Naam", KeuzepakketId != 0 ? KeuzepakketId.ToString() : "");
@@ -79,6 +81,9 @@ namespace StageBeheersTool.ViewModels
         public string FotoUrl { get; set; }
         public SelectList KeuzevakSelectList { get; set; }
 
+        public bool ToonTerug { get; set; }
+        public string Overzicht { get; set; }
+
         public void SetKeuzevakSelectList(IEnumerable<Keuzepakket> keuzepakketten)
         {
             KeuzevakSelectList = new SelectList(keuzepakketten, "Id", "Naam", KeuzepakketId != 0 ? KeuzepakketId.ToString() : "");
@@ -99,8 +104,6 @@ namespace StageBeheersTool.ViewModels
         public Keuzepakket Keuzepakket { get; set; }
         public string Gsm { get; set; }
         public string FotoUrl { get; set; }
-
-        public string Overzicht { get; set; }
 
         public bool ToonDelete { get; set; }
         public bool ToonEdit { get; set; }

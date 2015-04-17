@@ -4,9 +4,10 @@
     @Html.Grid(Model).Columns(columns =>
     {
         columns.Add(b => b.Naam).Sanitized(false).Encoded(false)
-            .RenderValueAs(bedrijf => Html.ActionLink(string.IsNullOrWhiteSpace(bedrijf.Naam) ? "/" : bedrijf.Naam, "Details", new { id = bedrijf.Id }));
+            .RenderValueAs(bedrijf => Html.ActionLink(string.IsNullOrWhiteSpace(bedrijf.Naam) ? "/" :
+                bedrijf.Naam, "Details", new { id = bedrijf.Id, overzicht = ViewHelpers.CurrentOverzicht() }));
         columns.Add(b => b.Email).Titled("E-mail").Sanitized(false).Encoded(false)
-                    .RenderValueAs(b => "<a href=\"mailto:" + b.Email + "\">" + b.Email + "</a>"); ;
+                    .RenderValueAs(b => Html.DisplayEmail(b.Email));
         columns.Add(b => b.Telefoon).Titled("Tel/gsm");
         columns.Add(b => b.Bedrijfsactiviteiten);
         columns.Add(b => b.Gemeente);

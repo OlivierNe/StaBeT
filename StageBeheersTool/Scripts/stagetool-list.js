@@ -22,7 +22,9 @@ $(function () {
     });
 
     $cancelBtn.on("click", function () {
-        $searchForm.trigger("reset");
+        $searchForm.find('input:text, input:password, input:file, select, textarea').val('');
+        $searchForm.find('input:radio, input:checkbox')
+             .removeAttr('checked').removeAttr('selected');
         $searchForm.submit();
         $searchA.css("display", "inline");
         $searchForm.css("display", "none");
@@ -45,7 +47,6 @@ $(function () {
             },
             data: $(this).serialize()
         }).done(ajaxDone);
-
         return false;
     });
     var registerListener = function () {

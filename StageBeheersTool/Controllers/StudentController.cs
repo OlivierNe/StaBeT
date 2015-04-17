@@ -10,7 +10,7 @@ using AutoMapper;
 namespace StageBeheersTool.Controllers
 {
     [Authorize]
-    public class StudentController : Controller
+    public class StudentController : BaseController
     {
         private readonly IStudentRepository _studentRepository;
         private readonly IKeuzepakketRepository _keuzepakketRepository;
@@ -48,7 +48,6 @@ namespace StageBeheersTool.Controllers
             model.Studenten = studenten;
 
             model.ToonStage = true;
-            model.Overzicht = ControllerContext.RouteData.Values["action"].ToString();
 
             if (Request.IsAjaxRequest())
             {
@@ -95,7 +94,7 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin, Role.Begeleider, Role.Student)]
-        public ActionResult Details(int? id, string overzicht = "List")
+        public ActionResult Details(int? id)
         {
             var student = FindStudent(id);
             if (student == null)
@@ -106,7 +105,6 @@ namespace StageBeheersTool.Controllers
             model.ToonEdit = CurrentUser.IsStudent() || CurrentUser.IsAdmin();
             model.ToonTerugNaarLijst = CurrentUser.IsAdmin() || CurrentUser.IsBegeleider();
             model.ToonDelete = CurrentUser.IsAdmin();
-            model.Overzicht = overzicht;
             return View(model);
         }
 
@@ -122,6 +120,7 @@ namespace StageBeheersTool.Controllers
             var model = Mapper.Map<Student, StudentEditVM>(student);
             model.SetKeuzevakSelectList(_keuzepakketRepository.FindAll());
             model.KeuzepakketId = student.Keuzepakket == null ? null : (int?)student.Keuzepakket.Id;
+            model.ToonTerug = !CurrentUser.IsStudent();
             return View("Edit", model);
         }
 
@@ -152,7 +151,7 @@ namespace StageBeheersTool.Controllers
             studentModel.Keuzepakket = model.KeuzepakketId == null ? null : _keuzepakketRepository.FindBy((int)model.KeuzepakketId);
             _studentRepository.Update(studentModel);
             SetViewMessage("Gegevens gewijzigd.");
-            return RedirectToAction("Details", new { studentModel.Id });
+            return RedirectToAction("Details", new { studentModel.Id, Overzicht });
         }
 
         [Authorize(Role.Admin)]
@@ -170,7 +169,7 @@ namespace StageBeheersTool.Controllers
         [ActionName("Delete")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id, string overzicht = "/Student/List")
         {
             var student = FindStudent(id);
             if (student == null)
@@ -191,7 +190,7 @@ namespace StageBeheersTool.Controllers
             {
                 _userService.DeleteLogin(student.HogentEmail);
             }
-            return RedirectToAction("List");
+            return RedirectToLocal(overzicht);
         }
 
         [Authorize(Role.Admin)]
@@ -219,16 +218,6 @@ namespace StageBeheersTool.Controllers
                 return null;
             }
             return _studentRepository.FindById((int)id);//admin/begeleider
-        }
-
-        private void SetViewError(string error)
-        {
-            TempData["error"] = error;
-        }
-
-        private void SetViewMessage(string message)
-        {
-            TempData["message"] = message;
         }
 
         #endregion

@@ -1,23 +1,27 @@
 ﻿@model StudentListVM
-
+@{
+    var overzicht = ViewHelpers.CurrentOverzicht();
+}
 <div id="grid-tableDiv">
     @Html.Grid(Model.Studenten).Columns(columns =>
     {
-        columns.Add(s => s.Familienaam).Encoded(false).Sanitized(false)
-            .RenderValueAs(s => Html.ActionLink(s.Naam, "Details", "Student", new { s.Id, Model.Overzicht }, new { })).Titled("Naam").SetWidth(300);
+        columns.Add(s => s.Familienaam).Encoded(false).Sanitized(false).Titled("Naam").SetWidth(300)
+            .RenderValueAs(s => Html.ActionLink(s.Naam, "Details", "Student", new { s.Id, overzicht }, new { }));
+
         columns.Add(s => s.HogentEmail).Titled("HoGent E-mail").Encoded(false).Sanitized(false)
-            .RenderValueAs(s => "<a href=\"mailto:" + s.HogentEmail + "\">" + s.HogentEmail + "</a>").SetWidth(300);
+            .RenderValueAs(s => Html.DisplayEmail(s.HogentEmail)).SetWidth(300);
+
         if (Model.ToonStage)
         {
             columns.Add().Titled("Stage").Sanitized(false).Encoded(false)
                 .RenderValueAs(s => Html.ActionLink(s.ToegewezenStageopdracht.Titel, "details", "Stageopdracht",
-                    new { s.ToegewezenStageopdracht.Id }, new { }));
+                    new { s.ToegewezenStageopdracht.Id, overzicht }, new { }));
         }
         if (Model.ToonActies)
         {
             columns.Add().Sanitized(false).Encoded(false)
-               .RenderValueAs(s => Html.ActionLink("Wijzigen", "Edit", new { s.Id }, new { @class = "btn btn-default" }) + " "
-                   + Html.ActionLink("Verwijderen", "Delete", new { s.Id }, new { @class = "btn btn-default" }));
+               .RenderValueAs(s => Html.ActionLink("Wijzigen", "Edit", new { s.Id, overzicht }, new { @class = "btn btn-default" }) + " "
+                   + Html.ActionLink("Verwijderen", "Delete", new { s.Id, overzicht }, new { @class = "btn btn-default" }));
         }
     }).Sortable(true).WithPaging(10).EmptyText("Geen studenten gevonden")
 </div>

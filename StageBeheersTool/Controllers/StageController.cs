@@ -12,7 +12,7 @@ using StageBeheersTool.ViewModels;
 
 namespace StageBeheersTool.Controllers
 {
-    public class StageController : Controller
+    public class StageController : BaseController
     {
         private readonly IStageopdrachtRepository _stageopdrachtRepository;
         private readonly IAcademiejaarRepository _academiejaarRepository;
@@ -153,7 +153,7 @@ namespace StageBeheersTool.Controllers
                 var stage = Mapper.Map<Stage>(model);
                 _stageRepository.Update(stage);
                 SetViewMessage(Resources.SuccesEditStage);
-                return RedirectToAction("Details", new { stage.Id });
+                return RedirectToAction("Details", new { stage.Id, Overzicht });
             }
             var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
             model.SetStageperiodes(academiejaarInstellingen);
@@ -231,17 +231,5 @@ namespace StageBeheersTool.Controllers
             return new ExcelFileResult(reportStream, model.Bestandsnaam);
         }
 
-
-        #region Helpers
-        private void SetViewError(string error)
-        {
-            TempData["error"] = error;
-        }
-
-        private void SetViewMessage(string message)
-        {
-            TempData["message"] = message;
-        }
-        #endregion
     }
 }

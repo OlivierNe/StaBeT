@@ -1,9 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.ViewModels
 {
+    public class BedrijfListVM
+    {
+        public IEnumerable<Bedrijf> Bedrijven { get; set; }
+       
+    }
+
+    public class BedrijfDetailsVM
+    {
+        public Bedrijf Bedrijf { get; set; }
+
+        public bool ToonEdit { get; set; }
+        public bool ToonChangePassword { get; set; }
+        public bool ToonExtra { get; set; }
+        public bool ToonTerug { get; set; }
+    }
+
     public class RegisterBedrijfViewModel
     {
         [Required]
@@ -34,6 +51,8 @@ namespace StageBeheersTool.ViewModels
         public string Bereikbaarheid { get; set; }
         [StringLength(200, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Bedrijfsactiviteiten { get; set; }
+
+        public string Overzicht { get; set; }
     }
 
     public class EditBedrijfVM
@@ -63,6 +82,9 @@ namespace StageBeheersTool.ViewModels
         public string Bereikbaarheid { get; set; }
         [StringLength(200, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Bedrijfsactiviteiten { get; set; }
+
+        public bool ToonTerug { get; set; }
+        public string Overzicht { get; set; }
     }
 
     public class BedrijfJsonVM

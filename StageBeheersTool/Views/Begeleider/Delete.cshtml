@@ -22,7 +22,7 @@
         </dt>
 
         <dd>
-            <a href="mailto:@Model.HogentEmail">@Model.HogentEmail</a>
+            @Html.DisplayEmail(Model.HogentEmail)
         </dd>
 
         <dt>
@@ -38,7 +38,7 @@
         </dt>
 
         <dd>
-            <a href="mailto:@Model.Email">@Model.Email</a>
+            @Html.DisplayEmail(Model.Email)
         </dd>
 
         <dt>
@@ -53,10 +53,13 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-
+        @Html.HiddenOverzicht()
         <div class="form-actions no-color">
             <input type="submit" value="Verwijderen" class="btn btn-danger" /> 
-            @Html.ActionLink("Annuleren", "Index", "Begeleider", new { }, new { @class = "btn btn-default" })
         </div>
     }
 </div>
+
+<p>
+    @Html.OverzichtActionLink()
+</p>

@@ -110,15 +110,14 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Opslaan" class="btn btn-success" />
-                @{
-    var url = Request.UrlReferrer == null ? ("Details/" + Model.Id) : Request.UrlReferrer.AbsolutePath;
-                }
-                <a href="@url" class="btn btn-default">Annuleren</a>
             </div>
         </div>
     </div>
 }
-<a href="@HttpUtility.UrlDecode(Model.Overzicht)">Terug naar overzicht</a>
+<p>
+    @Html.OverzichtActionLink()
+</p>
+
 @section scripts{
     <script src="~/Scripts/stagetool-form.js"></script>
     <script src="~/Scripts/specialisatie.js"></script>

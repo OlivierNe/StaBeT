@@ -9,16 +9,16 @@
 @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-inline" }))
 {
     <div class="form-group">
-        @Html.TextBoxFor(model => model.Student, new { @class = "form-control", placeholder = "Student" })
+        @Html.TextBoxFor(model => model.Student, new { @class = "form-control", placeholder = "Student", title = "Student" })
     </div>
     <div class="form-group">
-        @Html.TextBoxFor(model => model.Stageopdracht, new { @class = "form-control", placeholder = "Stageopdracht" })
+        @Html.TextBoxFor(model => model.Stageopdracht, new { @class = "form-control", placeholder = "Stageopdracht", title = "Stageopdracht" })
     </div>
     <div class="form-group">
-        @Html.TextBoxFor(model => model.Bedrijf, new { @class = "form-control", placeholder = "Bedrijf" })
+        @Html.TextBoxFor(model => model.Bedrijf, new { @class = "form-control", placeholder = "Bedrijf", title = "Bedrijf" })
     </div>
     <div class="form-group">
-        @Html.TextBoxFor(model => model.Begeleider, new { @class = "form-control", placeholder = "Begeleider" })
+        @Html.TextBoxFor(model => model.Begeleider, new { @class = "form-control", placeholder = "Begeleider", title = "Begeleider" })
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-default" id="zoekenSubmit">Zoeken</button>

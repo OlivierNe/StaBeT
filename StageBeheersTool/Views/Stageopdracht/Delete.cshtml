@@ -52,11 +52,12 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-
+        @Html.HiddenOverzicht()
         <div class="col-sm-offset-2">
             <input type="submit" value="Verwijderen" class="btn btn-danger" />
-            <a href="@ViewBag.Overzicht" class="btn btn-default">Annuleren</a>
         </div>
-        <a href="@ViewBag.Overzicht">Terug naar overzicht</a>
+    <p>
+        @Html.OverzichtActionLink()
+    </p>
     }
 </div>

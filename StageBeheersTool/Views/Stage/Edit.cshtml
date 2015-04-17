@@ -68,6 +68,7 @@
             </div>
             @Html.HiddenFor(model => model.StageopdrachtId)
             @Html.HiddenFor(model => model.StudentId)
+            @Html.HiddenOverzicht()
             <div style="display:none">
                 <div id="Semester1Begin">@Html.DisplayFor(model => model.Semester1Begin)</div>
                 <div id="Semester1Einde">@Html.DisplayFor(model => model.Semester1Einde)</div>
@@ -81,10 +82,11 @@
                 <input type="submit" value="Opslaan" class="btn btn-success" />
             </div>
         </div>
+        <p>
+            @Html.OverzichtActionLink()
+        </p>
     </div>
 }
-
-
 @section scripts{
     <script src="~/Scripts/lib/jquery-ui-1.11.4.min.js"></script>
     <script src="~/Scripts/lib/datepicker-nl-BE.js"></script>

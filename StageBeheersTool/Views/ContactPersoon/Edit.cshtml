@@ -88,7 +88,7 @@
         </div>
 
         @Html.HiddenFor(model => model.Id)
-
+        @Html.HiddenOverzicht()
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Opslaan" class="btn btn-success" />
@@ -97,9 +97,9 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Terug naar overzicht", "Index")
-</div>
+<p>
+    @Html.OverzichtActionLink()
+</p>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -1,4 +1,4 @@
-﻿@model ContactpersoonIndexVM
+﻿@model ContactpersoonListVM
 
 <div id="grid-tableDiv">
     @Html.Grid(Model.Contactpersonen).Columns(columns =>
@@ -13,7 +13,7 @@
     {
         columns.Add(cp => cp.Bedrijf.Naam).Titled("Bedrijf").Sanitized(false).Encoded(false)
             .RenderValueAs(cp => Html.ActionLink(string.IsNullOrWhiteSpace(cp.Bedrijf.Naam) ? "/" :
-                cp.Bedrijf.Naam, "Details", "Bedrijf", new { id = cp.Id }, new { }));
+                cp.Bedrijf.Naam, "Details", "Bedrijf", new { cp.Id, overzicht = ViewHelpers.CurrentOverzicht() }, new { }));
     }
 
     columns.Add(cp => cp.IsStagementor).Titled("Stagementor").Encoded(false).Sanitized(false)

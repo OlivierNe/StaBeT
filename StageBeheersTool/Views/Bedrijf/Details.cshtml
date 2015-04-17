@@ -1,5 +1,4 @@
-﻿@using StageBeheersTool.Models.Identity
-@model Bedrijf
+﻿@model BedrijfDetailsVM
 
 @{
     ViewBag.Title = "Bedrijfsgegevens";
@@ -14,63 +13,68 @@
             E-mail
         </dt>
         <dd>
-            @Html.DisplayEmail(Model.Email)
+            @Html.DisplayEmail(Model.Bedrijf.Email)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Naam)
+            @Html.DisplayNameFor(model => model.Bedrijf.Naam)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Naam)
+            @Html.DisplayFor(model => model.Bedrijf.Naam)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Website)
+            @Html.DisplayNameFor(model => model.Bedrijf.Website)
         </dt>
         <dd>
-            <a href="@Model.WebsiteUri" target="_blank">@Model.WebsiteUri</a>
+            <a href="@Model.Bedrijf.WebsiteUri" target="_blank">@Model.Bedrijf.WebsiteUri</a>
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Adres)
+            @Html.DisplayNameFor(model => model.Bedrijf.Adres)
         </dt>
         <dd>
-            <a href="https://maps.google.com/?q=@Model.Adres" target="_blank">@Model.Adres</a>
+            <a href="https://maps.google.com/?q=@Model.Bedrijf.Adres" target="_blank">@Model.Bedrijf.Adres</a>
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Telefoon)
+            @Html.DisplayNameFor(model => model.Bedrijf.Telefoon)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Telefoon)
+            @Html.DisplayFor(model => model.Bedrijf.Telefoon)
         </dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Bereikbaarheid)</dt>
-        <dd class="omschrijving">@Html.DisplayFor(model => model.Bereikbaarheid)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Bedrijf.Bereikbaarheid)</dt>
+        <dd class="omschrijving">@Html.DisplayFor(model => model.Bedrijf.Bereikbaarheid)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Bedrijfsactiviteiten)</dt>
-        <dd class="omschrijving">@Html.DisplayFor(model => model.Bedrijfsactiviteiten)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Bedrijf.Bedrijfsactiviteiten)</dt>
+        <dd class="omschrijving">@Html.DisplayFor(model => model.Bedrijf.Bedrijfsactiviteiten)</dd>
     </dl>
-    @if (CurrentUser.IsAdmin() || CurrentUser.IsBegeleider())
-    {
-        <ul>
-            <li>
-                @Html.ActionLink("Contactpersonen", "VanBedrijf", "Contactpersoon", new { bedrijfId = Model.Id }, new { })
-            </li>
-            <li>
-                @Html.ActionLink("Stageopdrachten", "VanBedrijf", "Stageopdracht", new { Model.Id }, new { })
-            </li>
-        </ul>
-    }
-    @if (CurrentUser.IsBedrijf())
-    {
-        @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
-        @Html.ActionLink("Wachtwoord wijzigen", "ChangePassword", "Account", new { }, new { @class = "btn btn-default" })
-    }
-    else if (CurrentUser.IsAdmin() || CurrentUser.IsBegeleider())
-    {
-        @Html.ActionLink("Gegevens wijzigen", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
-        <p><a href="@ViewBag.Overzicht">Terug naar lijst</a></p>
-    }
 </div>
+@if (Model.ToonExtra)
+{
+    <ul>
+        <li>
+            @Html.ActionLink("Contactpersonen", "VanBedrijf", "Contactpersoon", new { bedrijfId = Model.Bedrijf.Id }, new { })
+        </li>
+        <li>
+            @Html.ActionLink("Stageopdrachten", "VanBedrijf", "Stageopdracht", new { Model.Bedrijf.Id }, new { })
+        </li>
+    </ul>
+}
+@if (Model.ToonChangePassword)
+{
+    @Html.ActionLink("Wachtwoord wijzigen", "ChangePassword", "Account", new { }, new { @class = "btn btn-default" })
+}
+@if (Model.ToonEdit)
+{
+    @Html.ActionLink("Gegevens wijzigen", "Edit", new { Model.Bedrijf.Id, overzicht = ViewHelpers.GetOverzicht() },
+        new { @class = "btn btn-default" })
+}
+@if (Model.ToonTerug)
+{
+    <p>
+        @Html.OverzichtActionLink()
+    </p>
+}
