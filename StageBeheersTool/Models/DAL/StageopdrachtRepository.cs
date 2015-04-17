@@ -41,12 +41,12 @@ namespace StageBeheersTool.Models.DAL
 
         /// <summary>
         /// </summary>
-        /// <returns>Alle niet beoordeelde stageopdrachten van het huidige academiejaar</returns>
+        /// <returns>Alle niet beoordeelde stageopdrachten van het huidige en toekomstige academiejaren</returns>
         public IQueryable<Stageopdracht> FindStageopdrachtVoorstellen()
         {
-            //TODO:toekomstige academiejaren
+            var academiejaar = AcademiejaarHelper.HuidigAcademiejaar().Substring(0, 4);
             return _stageopdrachten
-                .Where(IsinHuidigAcademiejaar())
+                .Where(so => so.Academiejaar.Substring(0,4).CompareTo(academiejaar) >= 0)
                 .Where(so => so.Status == StageopdrachtStatus.NietBeoordeeld)
                 .IncludeAndOrder();
         }
@@ -56,7 +56,6 @@ namespace StageBeheersTool.Models.DAL
         /// <returns>Alle goedgekeurde stageopdrachten van het huidige academiejaar</returns>
         public IQueryable<Stageopdracht> FindGoedgekeurdeStageopdrachten()
         {
-            //TODO:Toegewezen stageopdrachten ook meegeven?
             return _stageopdrachten
                 .Where(IsinHuidigAcademiejaar())
                 .Where(so => so.Status == StageopdrachtStatus.Goedgekeurd)
@@ -328,13 +327,18 @@ namespace StageBeheersTool.Models.DAL
         }
 
         #region helpers
-
-
         private Expression<Func<Stageopdracht, bool>> IsinHuidigAcademiejaar()
         {
             var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
             return (so => so.Academiejaar == academiejaar);
         }
+
+        //private Expression<Func<Stageopdracht, bool>> IsNietInVerlopenAcademiejaar()
+        //{
+        //    //var academiejaar = Convert.ToInt32(AcademiejaarHelper.HuidigAcademiejaar().Substring(0, 4));
+        //    var academiejaar = AcademiejaarHelper.HuidigAcademiejaar().Substring(0, 4);
+        //    return Select so => so.Academiejaar.Substring(0, 4) >= academiejaar;
+        //}
 
         private Expression<Func<StagebegeleidingAanvraag, bool>> IsAanvraagInHuidigAcademiejaar()
         {

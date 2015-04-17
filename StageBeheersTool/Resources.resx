@@ -503,4 +503,13 @@
   <data name="TitelStageNaarExcel" xml:space="preserve">
     <value>Lijst stages naar excel exporteren</value>
   </data>
+  <data name="SuccesDeleteStage" xml:space="preserve">
+    <value>Stage verwijderd.</value>
+  </data>
+  <data name="TitelStagesToewijzen" xml:space="preserve">
+    <value>Stages toewijzen</value>
+  </data>
+  <data name="ErrorStageopdrachtAfkeuren" xml:space="preserve">
+    <value>Stageopdracht afkeuren mislukt. De stageopdracht is al toegewezen.</value>
+  </data>
 </root>

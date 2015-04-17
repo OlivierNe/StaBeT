@@ -1,6 +1,4 @@
-﻿
-
-using System.Linq;
+﻿using System.Linq;
 
 namespace StageBeheersTool.Models.Domain
 {
@@ -10,6 +8,7 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<Stage> FindAll();
         IQueryable<Stage> FindAllVanHuidigAcademiejaar();
         void Update(Stage stage);
+        void Delete(Stage stage);
         void SaveChanges();
     }
 }

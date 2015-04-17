@@ -34,7 +34,7 @@ namespace StageBeheersTool.Models.DAL
             var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
             return _stages.Where(stage => stage.Stageopdracht.Academiejaar == academiejaar).OrderByDescending(stage => stage.Id);
         }
-        
+
         public void Update(Stage stage)
         {
             var teUpdatenStage = FindById(stage.Id);
@@ -53,7 +53,18 @@ namespace StageBeheersTool.Models.DAL
             }
             SaveChanges();
         }
-        
+
+        public void Delete(Stage stage)
+        {
+            var stageopdracht = stage.Stageopdracht;
+            _stages.Remove(stage);
+            if (stageopdracht.AantalToegewezenStudenten() <= 0)
+            {
+                stageopdracht.Status = StageopdrachtStatus.Goedgekeurd;
+            }
+            SaveChanges();
+        }
+
         public void SaveChanges()
         {
             try
@@ -79,6 +90,6 @@ namespace StageBeheersTool.Models.DAL
                 throw new ApplicationException("" + message);
             }
         }
-       
+
     }
 }

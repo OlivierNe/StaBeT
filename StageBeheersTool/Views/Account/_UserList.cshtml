@@ -1,4 +1,7 @@
 ﻿@model AccountListVM
+@{
+    var overzicht = ViewHelpers.CurrentOverzicht();
+}
 
 <div id="grid-tableDiv">
     @Html.Grid(Model.Users).Columns(column =>
@@ -17,14 +20,13 @@
 
         column.Add(u => u.Bedrijf).Titled("Bedrijf").Sanitized(false).Encoded(false).
             RenderValueAs(u => Html.CheckBox("Bedrijf", u.Bedrijf, new { disabled = "disabled" }));
-
-
+        
         if (Model.ToonActies)
         {
             column.Add().Sanitized(false).Encoded(false).
-                RenderValueAs(u => Html.ActionLink("Wijzigen", "Edit", new { u.Id }, new { @class = "btn btn-default editBtn" })).SetWidth(50);
+                RenderValueAs(u => Html.ActionLink("Wijzigen", "Edit", new { u.Id, overzicht }, new { @class = "btn btn-default editBtn" })).SetWidth(50);
             column.Add().Sanitized(false).Encoded(false).
-                RenderValueAs(u => Html.ActionLink("Verwijderen", "Delete", new { u.Id }, new { @class = "btn btn-default delBtn" })).SetWidth(50);
+                RenderValueAs(u => Html.ActionLink("Verwijderen", "Delete", new { u.Id, overzicht }, new { @class = "btn btn-default delBtn" })).SetWidth(50);
             column.Add().Sanitized(false).Encoded(false)
                 .RenderValueAs(u => Html.Hidden("Id", u.Id));
         }

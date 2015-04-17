@@ -1,0 +1,43 @@
+﻿@model IEnumerable<VoorkeurStage>
+@{
+    var overzicht = ViewHelpers.CurrentOverzicht();
+}
+
+<div id="grid-tableDiv">
+    @Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(so => so.Stageopdracht.Titel).Titled("Stageopdracht").Encoded(false).Sanitized(false)
+           .RenderValueAs(s => Html.ActionLink(s.Stageopdracht.Titel,
+               "Details", "Stageopdracht", new { s.Stageopdracht.Id, overzicht }, new { })).SetWidth(300);
+
+    columns.Add(s => s.Student.Familienaam).Titled("Student").Sanitized(false).Encoded(false)
+            .RenderValueAs(s => Html.ActionLink(s.Student.Naam, "details", "Student",
+                new { s.Student.Id, overzicht }, new { })).SetWidth(150);
+
+    columns.Add(s => s.Status).Titled("Stagedossier status");
+
+    columns.Add().Sanitized(false).Encoded(false).Titled("Stagedossier").RenderValueAs(s => Html.ActionLink("Goedkeuren", "StagedossierGoedkeuren",
+        new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" })
+        + " " + Html.ActionLink("Afkeuren", "StagedossierAfkeuren",
+        new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" })).SetWidth(250);
+
+    columns.Add().Sanitized(false).Encoded(false)
+        .RenderValueAs(s =>
+        {
+            if (s.Stageopdracht.Stages.Any(stage => stage.Student.Id == s.Student.Id))
+            {
+                return Html.ActionLink("Toewijzen", "StageToewijzen", "Stage",
+                  new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id, overzicht },
+                  new { @class = "btn btn-default", disabled = "disabled" });
+            }
+            if (s.Status == StagedossierStatus.Goedgekeurd)
+            {
+                return Html.ActionLink("Toewijzen", "StageToewijzen", "Stage",
+                    new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id, overzicht },
+                    new { @class = "btn btn-default", title = "Stageopdracht aan student toewijzen" });
+            }
+            return MvcHtmlString.Empty;
+        });
+
+}).Sortable(true).WithPaging(10).EmptyText("Geen resultaten gevonden")
+</div>

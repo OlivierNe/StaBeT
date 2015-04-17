@@ -34,6 +34,10 @@ namespace StageBeheersTool.Models.Domain
 
         public static void KeurStageopdrachtAf(Stageopdracht stageopdracht)
         {
+            if (stageopdracht.IsToegewezen())
+            {
+                throw new ApplicationException(Resources.ErrorStageopdrachtAfkeuren);
+            }
             stageopdracht.Status = StageopdrachtStatus.Afgekeurd;
             stageopdracht.Stagebegeleider = null;
         }

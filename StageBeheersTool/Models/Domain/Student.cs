@@ -16,10 +16,18 @@ namespace StageBeheersTool.Models.Domain
 
         public Stageopdracht ToegewezenStageopdracht
         {
+            get { return Stage == null ? null : Stage.Stageopdracht; }
+        }
+
+        public Stage Stage
+        {
             get
             {
-                var mijnStageopdracht = Stages.FirstOrDefault(s => s.Stageopdracht.IsInHuidigAcademiejaar());
-                return mijnStageopdracht == null ? null : mijnStageopdracht.Stageopdracht;
+                if (Stages.Count > 1)
+                {
+                    return Stages.FirstOrDefault(s => s.Stageopdracht.IsInHuidigAcademiejaar());
+                }
+                return Stages.FirstOrDefault();
             }
         }
 

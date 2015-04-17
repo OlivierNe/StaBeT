@@ -419,7 +419,7 @@
     <Content Include="Scripts\stagetool-list.js" />
     <Content Include="Scripts\stagetool.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\List.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Begeleider\Delete.cshtml" />
     <Content Include="Web.config" />
@@ -505,9 +505,7 @@
     <Content Include="Views\Account\_UserList.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
     <Content Include="Views\Account\Create.cshtml" />
-    <Content Include="Views\Stageopdracht\AanduidenDossierIngediend.cshtml" />
-    <Content Include="Views\Stageopdracht\StagesMetStagedossier.cshtml" />
-    <Content Include="Views\Stageopdracht\_StagesMetStagedossier.cshtml" />
+    <Content Include="Views\Stage\AanduidenDossierIngediend.cshtml" />
     <Content Include="Views\Stage\StageToewijzen.cshtml" />
     <Content Include="Views\Shared\_AdminSidebar.cshtml" />
     <Content Include="Views\Instellingen\AlgemeneInstellingen.cshtml" />
@@ -517,6 +515,9 @@
     <Content Include="Views\Stage\Details.cshtml" />
     <Content Include="Views\Stage\Edit.cshtml" />
     <Content Include="Views\Stageopdracht\LijstExcel.cshtml" />
+    <Content Include="Views\Stage\Delete.cshtml" />
+    <Content Include="Views\Stage\StagesToewijzen.cshtml" />
+    <Content Include="Views\Stage\_StagesToewijzenList.cshtml" />
     <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />

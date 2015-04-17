@@ -1,4 +1,4 @@
-﻿@model StageBeheersTool.Models.Identity.ApplicationUser
+﻿@model ApplicationUser
 
 @{
     ViewBag.Title = "Gebruiker verwijderen";
@@ -19,9 +19,8 @@
         @Html.AntiForgeryToken()
         <div class="col-md-offset-1 ">
             <input type="submit" value="Verwijderen" class="btn btn-danger" />
-            @Html.ActionLink("Annuleren", "Index", new { }, new { @class = "btn btn-default" })
         </div>
     }
 </div>
 <br />
-@Html.ActionLink("Terug naar overzicht", "Index")
+@Html.ActionLink("Terug naar overzicht", "List")

@@ -25,6 +25,9 @@ namespace StageBeheersTool.ViewModels
         [UIHint("NullableDateTime")]
         public DateTime? Einddatum { get; set; }
 
+        public bool ToonEdit { get; set; }
+        public bool ToonVerwijderen { get; set; }
+
         [Display(Name = "Aangepaste stageperiode")]
         public bool AangepasteStageperiode
         {

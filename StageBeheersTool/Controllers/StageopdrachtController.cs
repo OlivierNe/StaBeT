@@ -266,8 +266,7 @@ namespace StageBeheersTool.Controllers
             var academiejaren = _stageopdrachtRepository.FindAllAcademiejaren();
             return View(academiejaren);
         }
-
-
+        
         [Authorize(Role.Admin, Role.Begeleider, Role.Bedrijf)]
         public ActionResult VanAcademiejaar(string academiejaar, string student, string bedrijf)
         {
@@ -626,7 +625,7 @@ namespace StageBeheersTool.Controllers
 
         #endregion
 
-        #region stageopdracht verwijderen
+        #region delete
         [Authorize(Role.Bedrijf, Role.Admin)]
         public ActionResult Delete(int id)
         {
@@ -743,103 +742,6 @@ namespace StageBeheersTool.Controllers
         }
         #endregion
 
-        #region stagedossier
-
-        [Authorize(Role.Student)]
-        public ActionResult AanduidenDossierIngediend(int id)
-        {
-            var stageopdracht = _stageopdrachtRepository.FindById(id);
-            if (stageopdracht == null)
-            {
-                return HttpNotFound();
-            }
-            var student = _userService.FindStudent();
-            if (student.HeeftStagedossierIngediend())
-            {
-                SetViewError(Resources.ErrorStagedossierReedsIngediend);
-                return RedirectToAction("MijnVoorkeurStages");
-            }
-            if (stageopdracht.IsBeschikbaar() == false)
-            {
-                SetViewError(Resources.ErrorStageNietMeerBeschikbaar);
-                return RedirectToAction("MijnVoorkeurStages");
-            }
-            return View(stageopdracht);
-        }
-
-        [Authorize(Role.Student)]
-        [ActionName("AanduidenDossierIngediend")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AanduidenDossierIngediendConfirmed(int id)
-        {
-            var stageopdracht = _stageopdrachtRepository.FindById(id);
-            if (stageopdracht == null)
-            {
-                return HttpNotFound();
-            }
-            var student = _userService.FindStudent();
-            try
-            {
-                student.SetStagedossierIngediend(stageopdracht);
-                _userService.SaveChanges();
-                SetViewMessage(string.Format(Resources.SuccesStagedossierAangeduidAlsIngediend,
-                     stageopdracht.Titel));
-                var stagesMailbox = _instellingenRepository.Find(Instelling.MailboxStages);
-                await _emailService.SendAsync(EmailMessages.StagedossierIngediend(stageopdracht, student, stagesMailbox));
-            }
-            catch (ApplicationException ex)
-            {
-                SetViewError(ex.Message);
-            }
-            return RedirectToAction("MijnVoorkeurStages");
-        }
-
-        [Authorize(Role.Admin)]
-        public ActionResult MetIngediendStagedossier()
-        {
-            var stageopdrachten = _stageopdrachtRepository.FindAllStudentVoorkeurenMetIngediendStagedossier();
-
-            if (Request.IsAjaxRequest())
-            {
-                return PartialView("_StagesMetStagedossier", stageopdrachten);
-            }
-            return View("StagesMetStagedossier", stageopdrachten);
-        }
-
-        [Authorize(Role.Admin)]
-        public ActionResult StagedossierGoedkeuren(int studentId, int stageId)
-        {
-            var studentVoorkeurstage = _stageopdrachtRepository
-                .FindStudentVoorkeurStageByIds(stageId: stageId, studentId: studentId);
-            if (studentVoorkeurstage == null)
-            {
-                return HttpNotFound();
-            }
-            Admin.KeurStagedossierGoed(studentVoorkeurstage);
-            SetViewMessage(string.Format(Resources.SuccesStagedossierGoedgekeurd,
-                studentVoorkeurstage.Student.Naam));
-            _stageopdrachtRepository.SaveChanges();
-            return RedirectToLocal(Overzicht);
-        }
-
-        [Authorize(Role.Admin)]
-        public ActionResult StagedossierAfkeuren(int studentId, int stageId)
-        {
-            var studentVoorkeurstage = _stageopdrachtRepository
-                .FindStudentVoorkeurStageByIds(stageId: stageId, studentId: studentId);
-            if (studentVoorkeurstage == null)
-            {
-                return HttpNotFound();
-            }
-            Admin.KeurStagedossierAf(studentVoorkeurstage);
-            SetViewMessage(string.Format(Resources.SuccesStagedossierAfgekeurd, studentVoorkeurstage.Student.Naam));
-            _stageopdrachtRepository.SaveChanges();
-            return RedirectToLocal(Overzicht);
-        }
-
-        #endregion
-
         #region stageopdracht beoordelen
         [Authorize(Role.Admin)]
         public async Task<ActionResult> StageopdrachtGoedkeuren(int id)
@@ -881,7 +783,15 @@ namespace StageBeheersTool.Controllers
                 return View(model);
             }
             var stageopdracht = _stageopdrachtRepository.FindById(model.Id);
-            Admin.KeurStageopdrachtAf(stageopdracht);
+            try
+            {
+                Admin.KeurStageopdrachtAf(stageopdracht);
+            }
+            catch (ApplicationException ex)
+            {
+                SetViewError(ex.Message);
+                return View(model);
+            }
             if (stageopdracht.Bedrijf.HeeftGeldigEmail())
             {
                 await _emailService.SendAsync(EmailMessages.StageopdrachtAfkeurenMail(stageopdracht, model.Reden,

@@ -1,5 +1,4 @@
-﻿
-<div id="sidebar-wrapper">
+﻿<div id="sidebar-wrapper">
     <ul class="nav nav-pills sidebar-ul" id="sidebarItems">
         <li class="sidebar-nav sidebar-menu">
             <a class="" data-toggle="collapse" data-target="#stageopdrachtOpties">
@@ -22,6 +21,7 @@
                 Stages <b class="glyphicon glyphicon-triangle-bottom"></b>
             </a>
             <ul class="collapse" id="StageOpties">
+                <li>@Html.ActionLink(Resources.TitelStagesToewijzen, "StagesToewijzen", "Stage")</li>
                 <li>@Html.ActionLink(Resources.TitelOverzichtStages + " " + AcademiejaarHelper.HuidigAcademiejaar(), "List", "Stage")</li>
                 <li>@Html.ActionLink(Resources.TitelStageNaarExcel, "LijstExcel", "Stage")  </li>
             </ul>
@@ -58,9 +58,6 @@
                     @Html.ActionLink("Studenten", "List", "Student")
                 </li>
                 <li>
-                    @Html.ActionLink("Studenten met ingediend stagedossier", "MetIngediendStagedossier", "Stageopdracht")
-                </li>
-                <li>
                     @Html.ActionLink("Studenten met stage", "MetToegewezenStage", "Student")
                 </li>
             </ul>
@@ -83,7 +80,7 @@
         </li>
 
         <li class="sidebar-nav">
-            @Html.ActionLink("Gebruikers", "Index", "Account")
+            @Html.ActionLink("Gebruikers", "List", "Account")
         </li>
         <li class="sidebar-nav">@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { })</li>
         <li class="sidebar-nav sidebar-menu">

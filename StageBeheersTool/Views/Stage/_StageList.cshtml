@@ -29,11 +29,10 @@
                new { stage.Stageopdracht.Stagebegeleider.Id, overzicht }, new { });
        }).Sortable(true).SetWidth(150);
 
-    columns.Add().Sanitized(false).Encoded(false)
+    columns.Add().Sanitized(false).Encoded(false).SetWidth(170)
         .RenderValueAs(stage =>
             Html.ActionLink("Details", "Details", "Stage", new { stage.Id, overzicht }, new { @class = "btn btn-default" })
             + " " + Html.ActionLink("Wijzigen", "Edit", "Stage", new { stage.Id, overzicht }, new { @class = "btn btn-default" }));
-
 
 }).Sortable(true).WithPaging(10).EmptyText("Geen stages gevonden")
 </div>

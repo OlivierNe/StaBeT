@@ -46,7 +46,7 @@ namespace StageBeheersTool.Controllers
 
         #region Accounts beheren
         [Authorize(Role.Admin, Role.Begeleider)]
-        public ActionResult Index(AccountListVM model)
+        public ActionResult List(AccountListVM model)
         {
             var users = _userService.GetUsersWithRoles()
                 .Where(user => (string.IsNullOrWhiteSpace(model.LoginZoeken) ||
@@ -112,7 +112,7 @@ namespace StageBeheersTool.Controllers
                 SetViewError(string.Format(Resources.ErrorAanmakenAccount, user.Email));
                 return View(model);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         [Authorize(Role.Admin)]
@@ -157,7 +157,7 @@ namespace StageBeheersTool.Controllers
             {
                 SetViewError(string.Format(Resources.ErrorCreateAccount, user.Email));
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         [Authorize(Role.Admin)]
@@ -271,7 +271,7 @@ namespace StageBeheersTool.Controllers
             if (result.Succeeded)
             {
                 SetViewMessage(string.Format(Resources.SuccesDeleteAccount, user.UserName));
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
             SetViewError(string.Format(Resources.ErrorDeleteAccount, user.UserName));
             return View(user);

@@ -108,10 +108,6 @@ namespace StageBeheersTool.Models.Domain
             return Status == StageopdrachtStatus.Afgekeurd;
         }
 
-        /// <summary>
-        /// Is minstens aan 1 student toegewezen
-        /// </summary>
-        /// <returns></returns>
         public bool IsToegewezen()
         {
             return Status == StageopdrachtStatus.Toegewezen;
@@ -153,7 +149,21 @@ namespace StageBeheersTool.Models.Domain
             }
             return true;
         }
+
+        public bool MagAfgekeurdWorden()
+        {
+            if (IsAfgekeurd())
+            {
+                return false;
+            }
+            if (IsToegewezen())
+            {
+                return false;
+            }
+            return true;
+        }
         #endregion
+
 
     }
 }

@@ -84,7 +84,7 @@
                     new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
             
             columns.Add().Sanitized(false).Encoded(false)
-                .RenderValueAs(so => so.IsAfgekeurd() == false
+                .RenderValueAs(so => so.MagAfgekeurdWorden() == false
                     ? Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { id = so.Id, overzicht },
                     new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
         }
@@ -96,7 +96,7 @@
                 {
                     if (Model.StageIdDossierIngediend == null)
                     {
-                        return Html.ActionLink("Stagedossier ingediend", "AanduidenDossierIngediend",
+                        return Html.ActionLink("Stagedossier ingediend", "AanduidenDossierIngediend", "Stage",
                             new { so.Id }, new
                             {
                                 @class = "btn btn-default",
