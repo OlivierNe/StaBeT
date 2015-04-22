@@ -1,3 +1,5 @@
+using DocumentFormat.OpenXml.Wordprocessing;
+
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(StageBeheersTool.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(StageBeheersTool.App_Start.NinjectWebCommon), "Stop")]
 
@@ -79,6 +81,7 @@ namespace StageBeheersTool.App_Start
             kernel.Bind<IUserService>().To<UserService>().InRequestScope();
             kernel.Bind<IImageService>().To<ImageService>().InRequestScope();
             kernel.Bind<ISpreadsheetService>().To<SpreadsheetService>().InRequestScope();
+            kernel.Bind<IDocumentService>().To<DocumentService>();
             kernel.Bind<IEmailService>().To<EmailService>().InRequestScope();
 
             kernel.Bind<StageToolDbContext>().ToSelf().InRequestScope();

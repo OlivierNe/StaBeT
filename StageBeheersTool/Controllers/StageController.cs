@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
+using Ionic.Zip;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
@@ -22,12 +24,14 @@ namespace StageBeheersTool.Controllers
         private readonly ISpreadsheetService _spreadsheetService;
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
+        private readonly IDocumentService _documentService;
         private readonly IInstellingenRepository _instellingenRepository;
 
         public StageController(IStageopdrachtRepository stageopdrachtRepository,
             IStageRepository stageRepository, IAcademiejaarRepository academiejaarRepository,
             IBegeleiderRepository begeleiderRepository, ISpreadsheetService spreadsheetService,
-            IUserService userService, IEmailService emailService, IInstellingenRepository instellingenRepository)
+            IUserService userService, IEmailService emailService, IInstellingenRepository instellingenRepository,
+            IDocumentService documentService)
         {
             _stageopdrachtRepository = stageopdrachtRepository;
             _academiejaarRepository = academiejaarRepository;
@@ -36,6 +40,7 @@ namespace StageBeheersTool.Controllers
             _spreadsheetService = spreadsheetService;
             _userService = userService;
             _emailService = emailService;
+            _documentService = documentService;
             _instellingenRepository = instellingenRepository;
         }
 
@@ -375,6 +380,59 @@ namespace StageBeheersTool.Controllers
                 SetViewError(ex.Message);
             }
             return RedirectToAction("MijnVoorkeurStages", "Stageopdracht");
+        }
+
+        #endregion
+
+        #region stagecontracten
+        [Authorize(Role.Admin)]
+        public ActionResult GenereerStagecontracten(StageListVM model)
+        {
+            var stages = _stageRepository.FindAllVanHuidigAcademiejaar()
+                .Where(stage => stage.Stageopdracht.Stagebegeleider != null)
+                .Include(stage => stage.Student)
+                .OrderBy(stage => stage.Student.Familienaam);
+            model.Stages = stages;
+            return View(model);
+        }
+        
+        //TODO:mergefields in word document bijvullen
+        [Authorize(Role.Admin)]
+        [HttpPost]
+        public ActionResult GenereerStagecontracten(int[] id)
+        {
+            if (id == null)
+            {
+                SetViewError("Geen student geselecteerd.");
+                return RedirectToAction("GenereerStagecontracten");
+            }
+            if (id.Length == 1)
+            {
+                return GenereerStagecontract(id[0]);
+            }
+            var outputStream = new MemoryStream();
+            var stages = from key in id
+                join stage in _stageRepository.FindAllVanHuidigAcademiejaar() on key equals stage.Id
+                select stage;
+
+            using (var zip = new ZipFile())
+            {
+                foreach (var stage in stages)
+                {
+                    var documentData = _documentService.GenerateStagecontract(stage);
+                    zip.AddEntry("Stagecontract - " + stage.Student.Naam + ".docx", documentData.ToArray());
+                }
+                zip.Save(outputStream);
+            }
+            return new ZipFileResult(outputStream, "Stagecontracten");
+        }
+
+        [Authorize(Role.Admin)]
+        public ActionResult GenereerStagecontract(int id)
+        {
+            var stage = _stageRepository.FindById(id);
+            var documentData = _documentService.GenerateStagecontract(stage);
+            return new DocFileResult(documentData, "Stagecontract - " + stage.Student.Naam);
         }
 
         #endregion

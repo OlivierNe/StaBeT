@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using StageBeheersTool.Models.Domain;
 using OudeGegevens.Models;
@@ -50,6 +51,29 @@ namespace StageBeheersTool.OudeGegevens
 
         public static Student ToStudent(student student)
         {
+            string[] formats = { "dd/MM/yyyy", "dd-MM-yyyy", "dd.MM.yyyy", "dd/MM/yy" };
+            DateTime gebdatum;
+            DateTime? geboortedatum;
+            var geboorteplaats = student.gebplaats;
+
+            if (student.gebdatum != null && 
+                DateTime.TryParseExact(student.gebdatum.Trim(), formats, CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out gebdatum))
+            {
+                geboortedatum = gebdatum;
+            }
+            else if (student.gebplaats != null && 
+                DateTime.TryParseExact(student.gebplaats.Trim(), formats, CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out gebdatum))//gebdatum en gebplaats omgewisseld in oude gegevens
+            {
+                geboortedatum = gebdatum;
+                geboorteplaats = student.gebdatum;
+            }
+            else
+            {
+                geboortedatum = null;
+            }
+
             return new Student()
             {
                 HogentEmail = student.email ?? "geenEmail" + Guid.NewGuid(),
@@ -60,7 +84,10 @@ namespace StageBeheersTool.OudeGegevens
                 Straat = student.straat,
                 Postcode = student.pc,
                 Gsm = student.GSM,
-                Telefoon = student.telefoon
+                Telefoon = student.telefoon,
+                Academiejaar = student.acjaar,
+                Geboortedatum = geboortedatum,
+                Geboorteplaats = geboorteplaats
             };
         }
 
@@ -101,7 +128,7 @@ namespace StageBeheersTool.OudeGegevens
             switch (status)
             {
                 case "A": //Approved
-                     return StageopdrachtStatus.Goedgekeurd;
+                    return StageopdrachtStatus.Goedgekeurd;
                 case "C": // C = Created
                     return StageopdrachtStatus.NietBeoordeeld;
                 case "NA": //Not Approved (?)

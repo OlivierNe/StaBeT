@@ -26,13 +26,22 @@ namespace StageBeheersTool.Models.DAL
 
         public IQueryable<Stage> FindAll()
         {
-            return _stages;
+            return _stages.Include(stage => stage.Stageopdracht)
+                .Include(stage => stage.Bedrijf)
+                .Include(stage => stage.Begeleider)
+                .Include(stage => stage.Student)
+                .OrderByDescending(stage => stage.Id);
         }
 
         public IQueryable<Stage> FindAllVanHuidigAcademiejaar()
         {
             var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
-            return _stages.Where(stage => stage.Stageopdracht.Academiejaar == academiejaar).OrderByDescending(stage => stage.Id);
+            return _stages.Where(stage => stage.Stageopdracht.Academiejaar == academiejaar)
+                .Include(stage => stage.Stageopdracht)
+                .Include(stage => stage.Stageopdracht.Bedrijf)
+                .Include(stage => stage.Stageopdracht.Stagebegeleider)
+                .Include(stage => stage.Student)
+                .OrderByDescending(stage => stage.Id);
         }
 
         public void Update(Stage stage)
@@ -51,6 +60,8 @@ namespace StageBeheersTool.Models.DAL
                 teUpdatenStage.Begindatum = null;
                 teUpdatenStage.Einddatum = null;
             }
+            teUpdatenStage.StagecontractOpgesteld = stage.StagecontractOpgesteld;
+            teUpdatenStage.GetekendStagecontract = stage.GetekendStagecontract;
             SaveChanges();
         }
 

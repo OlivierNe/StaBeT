@@ -38,6 +38,10 @@ namespace StageBeheersTool.ViewModels
     public class StageEditVM : StageAanStudentToewijzenVM
     {
         public int Id { get; set; }
+        [Display(Name = "Stagecontract opgesteld")]
+        public bool StagecontractOpgesteld { get; set; }
+        [Display(Name = "Getekend stagecontract")]
+        public bool GetekendStagecontract { get; set; }
     }
 
     public class StageAanStudentToewijzenVM : IValidatableObject

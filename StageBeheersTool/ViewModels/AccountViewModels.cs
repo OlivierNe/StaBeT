@@ -69,25 +69,17 @@ namespace StageBeheersTool.ViewModels
 
         public string Title { get; set; }
 
-        [DataType(DataType.Password)]
-        public string Wachtwoord { get; set; }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();
-            if ((Student && Begeleider) || (Student && Admin))
+            if ((Student && Begeleider) || (Student && Admin) || (Student && Bedrijf))
             {
-                results.Add(new ValidationResult("Ongeldige rollen combinatie: student kan geen begeleider of admin zijn."));
+                results.Add(new ValidationResult("Ongeldige rollen combinatie: student kan geen bedrijf, begeleider of admin zijn."));
             }
             if ((Bedrijf && Admin) || (Bedrijf && Student) || (Bedrijf && Begeleider))
             {
                 results.Add(new ValidationResult("Ongeldige rollen combinatie: accounts met de bedrijf rol kunnen geen student, begeleider of admin zijn."));
             }
-            if (Bedrijf && string.IsNullOrWhiteSpace(Wachtwoord))
-            {
-                results.Add(new ValidationResult("Verplicht wachtwoord op te geven voor bedrijven."));
-            }
-
             return results;
         }
     }

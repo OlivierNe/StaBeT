@@ -13,7 +13,7 @@ namespace StageBeheersTool.Models.Domain
         bool CreateUserObject(Begeleider begeleider);
         bool CreateUserObject(Student student);
         IEnumerable<UserMetRoles> GetUsersWithRoles();
-        ApplicationUser CreateLogin(string email, string wachtwoord, params string[] roles);
+        ApplicationUser CreateLogin(string email, string wachtwoord = null, params string[] roles);
         void DeleteLogin(string email);
         void SaveChanges();
     }

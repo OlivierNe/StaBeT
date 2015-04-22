@@ -52,6 +52,9 @@
     <Reference Include="GridMvc">
       <HintPath>..\packages\Grid.Mvc.3.0.0\lib\net40\GridMvc.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -212,10 +215,14 @@
     </Compile>
     <Compile Include="Helpers\AuthorizeAttribute.cs" />
     <Compile Include="Helpers\AcademiejaarHelper.cs" />
+    <Compile Include="Helpers\DocFileResult.cs" />
     <Compile Include="Helpers\ExcelFileResult.cs" />
     <Compile Include="Helpers\ViewHelpers.cs" />
+    <Compile Include="Helpers\ZipFileResult.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableStageExtensions.cs" />
     <Compile Include="Models\DAL\StageRepository.cs" />
+    <Compile Include="Models\Domain\Activiteitsverslag.cs" />
+    <Compile Include="Models\Domain\Interfaces\IDocumentService.cs" />
     <Compile Include="Models\Identity\UserWithRoles.cs" />
     <Compile Include="Models\DAL\Extensions\LinqExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBedrijfExtensions.cs" />
@@ -256,6 +263,7 @@
     <Compile Include="Models\Domain\StagedossierStatus.cs" />
     <Compile Include="Models\Domain\Stage.cs" />
     <Compile Include="Models\Domain\VoorkeurStage.cs" />
+    <Compile Include="Models\Services\DocumentService.cs" />
     <Compile Include="Models\Services\ImageService.cs" />
     <Compile Include="Models\Services\SpreadsheetService.cs" />
     <Compile Include="Models\Services\UserService.cs" />
@@ -386,6 +394,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="App_Data\Stagecontract Template.docx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -518,12 +527,12 @@
     <Content Include="Views\Stage\Delete.cshtml" />
     <Content Include="Views\Stage\StagesToewijzen.cshtml" />
     <Content Include="Views\Stage\_StagesToewijzenList.cshtml" />
+    <Content Include="Views\Stage\GenereerStagecontracten.cshtml" />
     <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Images\Begeleider\" />
     <Folder Include="Images\Student\" />
   </ItemGroup>

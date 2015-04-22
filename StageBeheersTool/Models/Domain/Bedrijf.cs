@@ -36,7 +36,7 @@ namespace StageBeheersTool.Models.Domain
         {
             get
             {
-                return string.Format("{0} {1}\n {2}", Postcode, Gemeente, Straat);
+                return string.Format("{0} {1} {2}", Postcode, Gemeente, Straat);
             }
         }
 

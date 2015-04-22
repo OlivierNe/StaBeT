@@ -66,6 +66,27 @@
                     @Html.ValidationMessageFor(model => model.Einddatum, "", new { @class = "text-danger" })
                 </div>
             </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.StagecontractOpgesteld, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.StagecontractOpgesteld)
+                        @Html.ValidationMessageFor(model => model.StagecontractOpgesteld, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.GetekendStagecontract, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.GetekendStagecontract)
+                        @Html.ValidationMessageFor(model => model.GetekendStagecontract, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
             @Html.HiddenFor(model => model.StageopdrachtId)
             @Html.HiddenFor(model => model.StudentId)
             @Html.HiddenOverzicht()

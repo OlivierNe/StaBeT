@@ -78,11 +78,7 @@ namespace StageBeheersTool.Controllers
             {
                 return View(model);
             }
-            if (string.IsNullOrWhiteSpace(model.Wachtwoord))//TODO:tijdelijk "wachtwoord" om te testen
-            {
-                model.Wachtwoord = "wachtwoord";
-            }
-            var user = _userService.CreateLogin(model.Email, model.Wachtwoord);
+            var user = _userService.CreateLogin(model.Email);
             model.Title = "Nieuw account";
             if (user != null)
             {
@@ -229,7 +225,6 @@ namespace StageBeheersTool.Controllers
             if (model.Bedrijf)
             {
                 await UserManager.AddToRoleAsync(user.Id, Role.Bedrijf);
-                await UserManager.ChangePasswordWithoutOldAsync(user, model.Wachtwoord);
                 _userService.CreateUserObject(new Bedrijf { Email = model.Email, Naam = model.Email });
             }
             else

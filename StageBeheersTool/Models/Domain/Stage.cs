@@ -8,6 +8,7 @@ namespace StageBeheersTool.Models.Domain
         public int Id { get; set; }
         public int StudentId { get; set; }
         public int StageopdrachtId { get; set; }
+
         public virtual Student Student { get; set; }
         public virtual Stageopdracht Stageopdracht { get; set; }
 
@@ -17,6 +18,11 @@ namespace StageBeheersTool.Models.Domain
         public bool AangepasteStageperiode { get; set; }
         public virtual AcademiejaarInstellingen AcademiejaarInstellingen { get; set; }
 
+        public bool StagecontractOpgesteld { get; set; }
+        public bool GetekendStagecontract { get; set; }
+
+
+        //not mapped properties
         public Bedrijf Bedrijf
         {
             get { return Stageopdracht.Bedrijf; }

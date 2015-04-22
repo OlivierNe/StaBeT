@@ -43,7 +43,6 @@ namespace StageBeheersTool.Models.Identity
             {
                 userIdentity.AddClaim(new Claim("Mode", Role.Begeleider)); //om te switchen tussen admin en begeleider
             }
-
             userIdentity.AddClaim(new Claim("Display", display));
             return userIdentity;
         }

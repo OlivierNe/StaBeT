@@ -3,10 +3,11 @@
     ViewBag.Title = "Details stage";
     var overzicht = ViewHelpers.GetOverzicht();
 }
+
 <div>
     <h4>@ViewBag.Title</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal panel">
         <dt>
             @Html.DisplayNameFor(model => model.Stage.Student)
         </dt>
@@ -67,6 +68,19 @@
         <dd>
             @Html.DisplayFor(model => model.Einddatum)
         </dd>
+
+        <dt>
+            Stagecontract opgesteld
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stage.StagecontractOpgesteld)
+        </dd>
+        <dt>
+            Getekend stagecontract
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stage.GetekendStagecontract)
+        </dd>
     </dl>
 </div>
 <p>
@@ -82,3 +96,17 @@
 <p>
     @Html.OverzichtActionLink()
 </p>
+
+@section styles{
+    <style>
+        .dl-horizontal dt {
+            white-space: normal;
+            width: 200px;
+            margin-right: 20px;
+        }
+
+        dd {
+            margin-left: 20px;
+        }
+    </style>
+}

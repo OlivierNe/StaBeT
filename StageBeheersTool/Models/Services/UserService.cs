@@ -93,7 +93,7 @@ namespace StageBeheersTool.Models.Services
             }
         }
 
-        public ApplicationUser CreateLogin(string email, string wachtwoord, params string[] roles)
+        public ApplicationUser CreateLogin(string email, string wachtwoord = null, params string[] roles)
         {
             var user = new ApplicationUser { UserName = email, Email = email, EmailConfirmed = true };
             IdentityResult result;

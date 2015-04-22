@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using OudeGegevens;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
         //DropCreateDatabaseAlways<StageToolDbContext>
-   DropCreateDatabaseIfModelChanges<StageToolDbContext>
+        DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
         public void RunSeed(StageToolDbContext ctx)
@@ -427,18 +428,27 @@ namespace StageBeheersTool.Models.DAL
                 }
 
                 //login studenten
-                var olivierStudent =
-                    context.Studenten.FirstOrDefault(st => st.HogentEmail == "olivier.neirynck.q1177@student.hogent.be");
-                var olivierLogin = new ApplicationUser
+                var acadj = AcademiejaarHelper.HuidigAcademiejaar();
+                var studentLogins = new List<ApplicationUser>();
+                foreach (var student in context.Studenten.Where(s => s.Academiejaar == acadj))
                 {
-                    Email = olivierStudent.HogentEmail,
-                    UserName = olivierStudent.HogentEmail,
-                    EmailConfirmed = true
-                };
-                userManager.Create(olivierLogin);
-                userManager.AddToRole(olivierLogin.Id, Role.Student);
-                #endregion
+                    var user = new ApplicationUser()
+                    {
+                        Email = student.HogentEmail,
+                        UserName = student.HogentEmail,
+                        EmailConfirmed = true
+                    };
+                    studentLogins.Add(user);
+                }
+                foreach (var studentLogin in studentLogins)
+                {
+                    userManager.Create(studentLogin);
+                    userManager.AddToRole(studentLogin.Id, Role.Student);
+                }
 
+                //login bedrijven: gaat niet -> bedrijven moeten wachtwoord opgeven. account aanmaken in AccountController/Activate
+
+                #endregion
             }
             catch (DbEntityValidationException e)
             {

@@ -1,0 +1,41 @@
+﻿@model StageListVM
+
+@{
+    ViewBag.Title = "Genereer stagecontracten";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    <button type="submit" class="btn btn-default" title="Genereer stagecontracten voor alle geselecteerde">Genereer</button>
+    @Html.Grid(Model.Stages).Columns(column =>
+    {
+        column.Add().Sanitized(false).Encoded(false)
+         .Titled("<input type='checkbox' name='toggle' id='toggle' title='alles selecteren/deselecteren'/>")
+         .RenderValueAs(stage => "<input type='checkbox' value='" + stage.Id + "' name='id'/>").SetWidth(50);
+
+        column.Add(stage => stage.Student.Familienaam).Sanitized(false).Encoded(false).Titled("Student")
+            .RenderValueAs(stage => Html.ActionLink(stage.Student.Naam, "Details", "Student",
+                new { stage.Student.Id }, new { target = "_blank" })).SetWidth(350);
+
+        column.Add().Sanitized(false).Encoded(false)
+            .RenderValueAs(stage => Html.ActionLink("Genereer", "GenereerStagecontract",
+                new { stage.Id }, new { @class = "", title = "Genereer het stagecontract voor deze student" }));
+    }).EmptyText("Geen studenten met stage voor dit academiejaar gevonden.");
+    <button type="submit" class="btn btn-default" title="Genereer stagecontracten voor alle geselecteerde">Genereer</button>
+}
+
+@section scripts
+{
+    <script>
+        $(function () {
+            $('#toggle').change(function () {
+                var self = this;
+                $('input[name=id]').each(function () {
+                    this.checked = self.checked;
+                });
+            });
+        });
+    </script>
+}

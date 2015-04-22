@@ -61,43 +61,19 @@
             </div>
         </div>
 
-        <div class="form-group" style="visibility: hidden">
-            @Html.LabelFor(model => model.Wachtwoord, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Wachtwoord, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
-                @Html.ValidationMessageFor(model => model.Wachtwoord, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
         @Html.HiddenFor(model => model.Id)
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Opslaan" class="btn btn-success" />
-                @Html.ActionLink("Annuleren", "Index", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
     </div>
 }
 <div>
-    @Html.ActionLink("Terug naar overzicht", "Index")
+    @Html.ActionLink("Terug naar overzicht", "List")
 </div>
 
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script>
-        $(function () {
-            $("#Bedrijf").change(function () {
-                console.log("changed");
-                if ($(this).is(":checked")) {
-                    $("#Wachtwoord").css("visibility", "visible");
-                } else {
-                    $("#Wachtwoord").css("visibility", "hidden");
-                }
-            });
-
-
-        })
-    </script>
-
 }
