@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using StageBeheersTool.Helpers;
 
 namespace StageBeheersTool.Models.Domain
 {
@@ -22,11 +23,10 @@ namespace StageBeheersTool.Models.Domain
         #endregion
 
         #region Public methods
-        public Stageopdracht FindStage(int id)
+        public Stageopdracht FindStageopdracht(int id)
         {
             return Stageopdrachten.SingleOrDefault(so => so.Id == id);
         }
-
 
         public void AddAanvraag(Stageopdracht stageopdracht)
         {
@@ -73,10 +73,26 @@ namespace StageBeheersTool.Models.Domain
             return !HeeftStageBegeleidingAangevraagd(stageopdracht) && stageopdracht.IsToegewezen()
                     && stageopdracht.HeeftStageBegeleider() == false;
         }
-        
+
         public bool MagStageopdrachtWijzigen(Stageopdracht stageopdracht)
         {
             return stageopdracht.Stagebegeleider != null && this.Equals(stageopdracht.Stagebegeleider);
+        }
+
+        public IEnumerable<Stage> GetMijnStages()
+        {
+            return Stageopdrachten.SelectMany(so => so.Stages);
+        }
+
+        public IEnumerable<Stage> GetMijnStagesVanHuidigAcademiejaar()
+        {
+            var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
+            return GetMijnStages().Where(stage => stage.Stageopdracht.Academiejaar == academiejaar);
+        }
+
+        public Stage FindStage(int id)
+        {
+            return Stageopdrachten.SelectMany(stageopdracht => stageopdracht.Stages.Where(stage => stage.Id == id)).FirstOrDefault();
         }
 
         protected bool Equals(Begeleider other)
@@ -98,7 +114,7 @@ namespace StageBeheersTool.Models.Domain
         }
 
         #endregion
-      
+
     }
 }
 

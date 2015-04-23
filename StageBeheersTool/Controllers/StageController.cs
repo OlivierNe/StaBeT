@@ -123,6 +123,25 @@ namespace StageBeheersTool.Controllers
             var stages = _stageRepository.FindAllVanHuidigAcademiejaar()
                 .WithFilter(model.Stageopdracht, model.Bedrijf, model.Student, model.Begeleider);
             model.Stages = stages;
+            model.ToonBegeleider = true;
+            model.ToonZoeken = true;
+            model.ToonEdit = CurrentUser.IsAdmin();
+            model.Title = Resources.TitelOverzichtStages + " " + AcademiejaarHelper.HuidigAcademiejaar();
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_StageList", model);
+            }
+            return View("StageOverzicht", model);
+        }
+
+        [Authorize(Role.Begeleider)]
+        public ActionResult MijnStages(StageListVM model)
+        {
+            var begeleider = _userService.GetBegeleider();
+            model.Stages = begeleider.GetMijnStagesVanHuidigAcademiejaar();
+            model.ToonActiviteitverslagen = true;
+            model.Title = Resources.TitelMijnStages;
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageList", model);
@@ -232,6 +251,15 @@ namespace StageBeheersTool.Controllers
             };
             return View(model);
         }
+
+        [Authorize(Role.Student)]
+        public ActionResult MijnStage()
+        {
+            var student = _userService.GetStudent();
+            var stage = student.Stage;
+            return View(stage);
+        }
+
         #endregion
 
         #region edit
@@ -340,7 +368,7 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            var student = _userService.FindStudent();
+            var student = _userService.GetStudent();
             if (student.HeeftStagedossierIngediend())
             {
                 SetViewError(Resources.ErrorStagedossierReedsIngediend);
@@ -365,7 +393,7 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            var student = _userService.FindStudent();
+            var student = _userService.GetStudent();
             try
             {
                 student.SetStagedossierIngediend(stageopdracht);

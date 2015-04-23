@@ -1,0 +1,30 @@
+﻿@model Stage
+
+@{
+    ViewBag.Title = "Activiteitsverslagen";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Grid(Model.Activiteitsverslagen.OrderBy(verslag => verslag.Week)).Columns(columns =>
+{
+    columns.Add(verslag => verslag.Week).SetWidth(50);
+
+    columns.Add(verslag => verslag.DatumIngave).Titled("Ingediend op").SetWidth(200);
+
+    columns.Add().Sanitized(false).Encoded(false)
+        .RenderValueAs(verslag =>
+        {
+            return Html.ActionLink("Indienen", "Indienen", "Activiteitsverslag", new { verslag.Week }, new { @class = "btn btn-default" });
+        }).SetWidth(100);
+
+    columns.Add().Sanitized(false).Encoded(false)
+        .RenderValueAs(verslag =>
+        {
+            if (verslag.HeeftFeedbackGekregen())
+            {
+                return Html.ActionLink("Feedback", "BekijkFeedback", new { verslag.Week }, new { @class = "btn btn-default" });
+            }
+            return MvcHtmlString.Empty;
+        });
+}).EmptyText("Geen activiteitsverslagen gevonden.")

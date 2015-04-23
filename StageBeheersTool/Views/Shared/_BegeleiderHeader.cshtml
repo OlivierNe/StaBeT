@@ -20,8 +20,15 @@
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" role="menu">
-        <li>@Html.ActionLink(AcademiejaarHelper.HuidigAcademiejaar(), "MijnStageopdrachten", "Stageopdracht", new { }, new { role = "menuitem" })</li>
-        <li>@Html.ActionLink("Per academiejaar", "MijnArchief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+        <li>
+            @Html.ActionLink("Mijn stages " + " " + AcademiejaarHelper.HuidigAcademiejaar(), "MijnStages", "Stage")
+        </li>
+        <li>
+            @Html.ActionLink(Resources.TitelMijnStageopdrachten + " " + AcademiejaarHelper.HuidigAcademiejaar(),
+                "MijnStageopdrachten", "Stageopdracht", new { }, new { role = "menuitem" })
+        </li>
+        <li>@Html.ActionLink("Per academiejaar", "MijnArchief", "Stageopdracht")</li>
     </ul>
+
 </li>
-<li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+<li>@Html.ActionLink("Archief", "Archief", "Stageopdracht")</li>

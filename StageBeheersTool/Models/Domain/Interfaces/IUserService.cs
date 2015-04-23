@@ -5,9 +5,9 @@ namespace StageBeheersTool.Models.Domain
 {
     public interface IUserService
     {
-        Bedrijf FindBedrijf();
-        Student FindStudent();
-        Begeleider FindBegeleider();
+        Bedrijf GetBedrijf();
+        Student GetStudent();
+        Begeleider GetBegeleider();
         void AddRolesToUser(ApplicationUser user, params string[] roles);
         bool CreateUserObject(Bedrijf bedrijf);
         bool CreateUserObject(Begeleider begeleider);

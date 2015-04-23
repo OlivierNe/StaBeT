@@ -10,11 +10,16 @@ namespace StageBeheersTool.ViewModels
     {
         public IEnumerable<Stage> Stages { get; set; }
 
+        public bool ToonZoeken { get; set; }
+        public bool ToonBegeleider { get; set; }
+        public bool ToonActiviteitverslagen { get; set; }
+        public bool ToonEdit { get; set; }
+
         public string Student { get; set; }
         public string Stageopdracht { get; set; }
         public string Bedrijf { get; set; }
         public string Begeleider { get; set; }
-
+        public string Title { get; set; }
     }
 
     public class StageDetailsVM

@@ -27,7 +27,7 @@ namespace StageBeheersTool.Controllers
         {
             if (CurrentUser.IsBedrijf())
             {
-                var bedrijf = _userService.FindBedrijf();
+                var bedrijf = _userService.GetBedrijf();
                 model.Contactpersonen = bedrijf.Contactpersonen;
             }
             else //admin
@@ -134,7 +134,7 @@ namespace StageBeheersTool.Controllers
                 var contactpersoon = Mapper.Map<ContactpersoonEditVM, Contactpersoon>(model);
                 if (CurrentUser.IsBedrijf())
                 {
-                    var bedrijf = _userService.FindBedrijf();
+                    var bedrijf = _userService.GetBedrijf();
                     if (bedrijf.FindContactpersoonById(contactpersoon.Id) != null)
                     {
                         _contactpersoonRepository.Update(contactpersoon);
@@ -184,7 +184,7 @@ namespace StageBeheersTool.Controllers
         {
             if (CurrentUser.IsBedrijf())
             {
-                var bedrijf = _userService.FindBedrijf();
+                var bedrijf = _userService.GetBedrijf();
                 return bedrijf.FindContactpersoonById(id); //bedrijf mag enkel zijn eigen contactpersonen beheren
             }
             return _contactpersoonRepository.FindById(id);//ingelogd als admin
@@ -194,7 +194,7 @@ namespace StageBeheersTool.Controllers
         {
             if (CurrentUser.IsBedrijf())
             {
-                return _userService.FindBedrijf();
+                return _userService.GetBedrijf();
             }
             return _bedrijfRepository.FindById(id);
         }

@@ -1,2 +1,10 @@
-﻿<li>@Html.ActionLink("Stageopdrachten", "BeschikbareStageopdrachten", "Stageopdracht")</li>
-<li>@Html.ActionLink(Resources.TitelMijnVoorkeurStages, "MijnVoorkeurStages", "Stageopdracht")</li>
+﻿@if (IdentityHelpers.StudentHeeftStage())
+{
+    <li>@Html.ActionLink("Mijn stage", "MijnStage", "Stage") </li>
+    <li>@Html.ActionLink("Activiteitsverslagen","MijnActiviteitsverslagen","Activiteitsverslag")</li>
+}
+else
+{
+    <li>@Html.ActionLink("Stageopdrachten", "BeschikbareStageopdrachten", "Stageopdracht")</li>
+    <li>@Html.ActionLink(Resources.TitelMijnVoorkeurStages, "MijnVoorkeurStages", "Stageopdracht")</li>
+}

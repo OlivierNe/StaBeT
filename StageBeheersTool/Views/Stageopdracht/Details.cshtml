@@ -65,15 +65,23 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
+            @if (Model.Stageopdracht.Stagebegeleider != null)
+            {
+                @Html.DisplayEmail(Model.Stageopdracht.Stagebegeleider.HogentEmail)
+            }
         </dd>
         @if (Model.ToonStudenten)
         {
             <dt>
                 Studenten
             </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Stageopdracht.ToonStudenten)
-            </dd>
+            foreach (var stage in Model.Stageopdracht.Stages)
+            {
+                <dd>
+                    @stage.Student.Naam
+                    @Html.DisplayEmail(stage.Student.HogentEmail)
+                </dd>
+            }
         }
         @if (Model.ToonStatus)
         {
@@ -96,7 +104,7 @@
         <p>
             @if (Model.ToonEdit)
             {
-                @Html.ActionLink("Aanpassen", "Edit", new { Model.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Bewerken", "Edit", new { Model.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" })
             }
             @if (Model.ToonVerwijderen)
             {

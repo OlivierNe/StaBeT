@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StageBeheersTool.Models.Domain
 {
@@ -21,8 +23,23 @@ namespace StageBeheersTool.Models.Domain
         public bool StagecontractOpgesteld { get; set; }
         public bool GetekendStagecontract { get; set; }
 
+        public virtual ICollection<Activiteitsverslag> Activiteitsverslagen { get; set; }
 
-        //not mapped properties
+        public string Stageperiode
+        {
+            get
+            {
+                if (Begindatum == null || Einddatum == null)
+                {
+                    return Semester == 1
+                        ? AcademiejaarInstellingen.StageperiodeSemester1()
+                        : AcademiejaarInstellingen.StageperiodeSemester2();
+                }
+                return String.Format("{0} - {1}", ((DateTime)Begindatum).ToString("d"),
+                    ((DateTime)Einddatum).ToString("d"));
+            }
+        }
+
         public Bedrijf Bedrijf
         {
             get { return Stageopdracht.Bedrijf; }
@@ -37,9 +54,11 @@ namespace StageBeheersTool.Models.Domain
         #region Constructors
         public Stage()
         {
+            Activiteitsverslagen = new List<Activiteitsverslag>();
         }
 
         public Stage(Stageopdracht stageopdracht, Student student)
+            : this()
         {
             Stageopdracht = stageopdracht;
             Student = student;
@@ -106,8 +125,26 @@ namespace StageBeheersTool.Models.Domain
             return AcademiejaarInstellingen.Semester1Einde;
         }
 
-        #endregion
+        public Activiteitsverslag GetActiviteitsverslagVanWeek(int week)
+        {
+            return Activiteitsverslagen.FirstOrDefault(verslag => verslag.Week == week);
+        }
 
+        public void InitializeActiviteitsverslagen()
+        {
+            if (Activiteitsverslagen == null)
+            {
+                Activiteitsverslagen = new List<Activiteitsverslag>();
+            }
+            for (var i = 0; i < 14; i++)
+            {
+                if (Activiteitsverslagen.All(verslag => verslag.Week != i + 1))
+                {
+                    Activiteitsverslagen.Add(new Activiteitsverslag { Week = i + 1 });
+                }
+            }
+        }
+        #endregion
 
 
     }

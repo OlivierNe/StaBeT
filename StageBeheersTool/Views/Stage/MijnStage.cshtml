@@ -1,0 +1,108 @@
+﻿@model Stage
+
+@{
+    ViewBag.Title = Resources.TitelMijnStages;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <hr />
+    <h4>@Model.Stageopdracht.Titel</h4>
+    <p class="omschrijving">@Html.DisplayFor(model => model.Stageopdracht.Omschrijving)</p>
+
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Bedrijf) </dt>
+        <dd>
+            @Html.ActionLink(Model.Stageopdracht.Bedrijf.Naam, "Details", "Bedrijf", new { Model.Stageopdracht.Bedrijf.Id }, new { })
+            |
+            @Html.DisplayEmail(Model.Stageopdracht.Bedrijf.Email)
+        </dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Stageplaats)</dt>
+        <dd><a href="https://maps.google.com/?q=@Model.Stageopdracht.Stageplaats" target="_blank">@Model.Stageopdracht.Stageplaats</a></dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stageopdracht.Specialisatie)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stageopdracht.Specialisatie)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stageopdracht.Contractondertekenaar)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stageopdracht.ContractondertekenaarNaam)
+            @Html.DisplayEmail(Model.Stageopdracht.ContractondertekenaarEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stageopdracht.Stagementor)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stageopdracht.StagementorNaam)
+            @Html.DisplayEmail(Model.Stageopdracht.StagementorEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam) 
+            @Html.DisplayEmail(Model.Begeleider.HogentEmail)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Stageopdracht.Academiejaar)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Stageopdracht.Academiejaar)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Semester)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Semester)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stageperiode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Stageperiode)
+        </dd>
+        
+        <dt>
+            Stagecontract opgesteld
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StagecontractOpgesteld)
+        </dd>
+
+        <dt>
+            Getekend stagecontract
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GetekendStagecontract)
+        </dd>
+
+    </dl>
+</div>
+
+
+@section styles{
+    <style>
+        .dl-horizontal dt {
+            white-space: normal;
+            width: 200px;
+            margin-right: 20px;
+        }
+
+        dd {
+            margin-left: 20px;
+        }
+    </style>
+}

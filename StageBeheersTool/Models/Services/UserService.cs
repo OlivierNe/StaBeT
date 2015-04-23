@@ -27,17 +27,17 @@ namespace StageBeheersTool.Models.Services
             _dbContext = ctx;
         }
 
-        public Bedrijf FindBedrijf()
+        public Bedrijf GetBedrijf()
         {
             return _dbContext.Bedrijven.FirstOrDefault(bedrijf => bedrijf.Email == HttpContext.Current.User.Identity.Name);
         }
 
-        public Student FindStudent()
+        public Student GetStudent()
         {
             return _dbContext.Studenten.FirstOrDefault(student => student.HogentEmail == HttpContext.Current.User.Identity.Name);
         }
 
-        public Begeleider FindBegeleider()
+        public Begeleider GetBegeleider()
         {
             return _dbContext.Begeleiders.FirstOrDefault(begeleider => begeleider.HogentEmail == HttpContext.Current.User.Identity.Name);
         }

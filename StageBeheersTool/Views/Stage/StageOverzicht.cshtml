@@ -1,29 +1,31 @@
 ﻿@model StageListVM
 
 @{
-    ViewBag.Title = Resources.TitelOverzichtStages + " " + AcademiejaarHelper.HuidigAcademiejaar();
+    ViewBag.Title = Model.Title;
 }
 <h2>@ViewBag.Title</h2>
-
-<a id="searchA" class="btn btn-default" style="display:inline">Zoeken</a>
-@using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-inline" }))
+@if (Model.ToonZoeken)
 {
-    <div class="form-group">
-        @Html.TextBoxFor(model => model.Student, new { @class = "form-control", placeholder = "Student", title = "Student" })
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(model => model.Stageopdracht, new { @class = "form-control", placeholder = "Stageopdracht", title = "Stageopdracht" })
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(model => model.Bedrijf, new { @class = "form-control", placeholder = "Bedrijf", title = "Bedrijf" })
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(model => model.Begeleider, new { @class = "form-control", placeholder = "Begeleider", title = "Begeleider" })
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-default" id="zoekenSubmit">Zoeken</button>
-        <a id="CancelBtn" class="btn btn-default">Annuleren</a>
-    </div>
+    <a id="searchA" class="btn btn-default" style="display: inline">Zoeken</a>
+    using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-inline" }))
+    {
+        <div class="form-group">
+            @Html.TextBoxFor(model => model.Student, new { @class = "form-control", placeholder = "Student", title = "Student" })
+        </div>
+        <div class="form-group">
+            @Html.TextBoxFor(model => model.Stageopdracht, new { @class = "form-control", placeholder = "Stageopdracht", title = "Stageopdracht" })
+        </div>
+        <div class="form-group">
+            @Html.TextBoxFor(model => model.Bedrijf, new { @class = "form-control", placeholder = "Bedrijf", title = "Bedrijf" })
+        </div>
+        <div class="form-group">
+            @Html.TextBoxFor(model => model.Begeleider, new { @class = "form-control", placeholder = "Begeleider", title = "Begeleider" })
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default" id="zoekenSubmit">Zoeken</button>
+            <a id="CancelBtn" class="btn btn-default">Annuleren</a>
+        </div>
+    }
 }
 
 @Html.Partial("_StageList")

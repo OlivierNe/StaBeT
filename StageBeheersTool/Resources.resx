@@ -515,4 +515,8 @@
   <data name="TitelStagecontracten" xml:space="preserve">
     <value>Stagecontracten genereren</value>
   </data>
+  <data name="SuccesIndienenActiviteitsverslag" xml:space="preserve">
+    <value>Activiteitsverslag voor week {0} ingediend.</value>
+    <comment>0=# stageweek</comment>
+  </data>
 </root>

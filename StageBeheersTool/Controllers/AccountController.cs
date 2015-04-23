@@ -498,7 +498,7 @@ namespace StageBeheersTool.Controllers
             }
             var identity = (ClaimsIdentity)User.Identity;
             var user = UserManager.FindByName(User.Identity.Name);
-            var claims = identity.Claims.Where(c => c.Type == "Mode").ToList();
+            var claims = identity.Claims.Where(c => c.Type == MyClaimTypes.LoginMode).ToList();
             if (claims.Count != 0)
             {
                 foreach (var claim in claims)
@@ -506,7 +506,7 @@ namespace StageBeheersTool.Controllers
                     UserManager.RemoveClaim(user.Id, claim);
                 }
             }
-            UserManager.AddClaim(user.Id, new Claim("Mode", mode));
+            UserManager.AddClaim(user.Id, new Claim(MyClaimTypes.LoginMode, mode));
             AuthenticationManager.SignOut();
             SignInManager.SignInAsync(user, false, false);
 

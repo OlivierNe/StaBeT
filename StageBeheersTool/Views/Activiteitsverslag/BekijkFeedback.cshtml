@@ -1,0 +1,25 @@
+﻿@model Activiteitsverslag
+
+@{
+    ViewBag.Title = "Activiteitsverslag week " + Model.Week;
+}
+
+<h2>@ViewBag.Title </h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Ingediend op</dt>
+        <dd>@Html.DisplayFor(model => model.DatumIngave)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Verslag)</dt>
+        <dd class="omschrijving">@Html.DisplayFor(model => model.Verslag)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Feedback)</dt>
+        <dd class="omschrijving">@Html.DisplayFor(model => model.Feedback)</dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Terug", "MijnActiviteitsverslagen")
+</p>

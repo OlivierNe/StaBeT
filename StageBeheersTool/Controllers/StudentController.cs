@@ -211,7 +211,7 @@ namespace StageBeheersTool.Controllers
         {
             if (CurrentUser.IsStudent())
             {
-                return _userService.FindStudent();
+                return _userService.GetStudent();
             }
             if (id == null)
             {

@@ -101,7 +101,7 @@ namespace StageBeheersTool.Controllers
             var bedrijf = Mapper.Map<Bedrijf>(model);
             if (CurrentUser.IsBedrijf())
             {
-                bedrijf.Id = _userService.FindBedrijf().Id;
+                bedrijf.Id = _userService.GetBedrijf().Id;
             }
             _bedrijfRepository.Update(bedrijf);
             SetViewMessage(Resources.SuccesEditBedrijf);
@@ -176,7 +176,7 @@ namespace StageBeheersTool.Controllers
         {
             if (CurrentUser.IsBedrijf())
             {
-                return _userService.FindBedrijf();
+                return _userService.GetBedrijf();
             }
             if (id == null)
             {

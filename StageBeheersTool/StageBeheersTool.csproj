@@ -197,6 +197,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\ActiviteitsverslagController.cs" />
     <Compile Include="Controllers\BaseController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -223,6 +224,7 @@
     <Compile Include="Models\DAL\StageRepository.cs" />
     <Compile Include="Models\Domain\Activiteitsverslag.cs" />
     <Compile Include="Models\Domain\Interfaces\IDocumentService.cs" />
+    <Compile Include="Models\Identity\MyClaimTypes.cs" />
     <Compile Include="Models\Identity\UserWithRoles.cs" />
     <Compile Include="Models\DAL\Extensions\LinqExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBedrijfExtensions.cs" />
@@ -310,6 +312,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AccountViewModels.cs" />
+    <Compile Include="ViewModels\ActiviteitsverslagViewModels.cs" />
     <Compile Include="ViewModels\AdminViewModels.cs" />
     <Compile Include="ViewModels\BedrijfViewModels.cs" />
     <Compile Include="ViewModels\BegeleiderViewModels.cs" />
@@ -528,6 +531,12 @@
     <Content Include="Views\Stage\StagesToewijzen.cshtml" />
     <Content Include="Views\Stage\_StagesToewijzenList.cshtml" />
     <Content Include="Views\Stage\GenereerStagecontracten.cshtml" />
+    <Content Include="Views\Activiteitsverslag\MijnActiviteitsverslagen.cshtml" />
+    <Content Include="Views\Activiteitsverslag\BekijkFeedback.cshtml" />
+    <Content Include="Views\Activiteitsverslag\VanStudent.cshtml" />
+    <Content Include="Views\Activiteitsverslag\GeefFeedback.cshtml" />
+    <Content Include="Views\Activiteitsverslag\Indienen.cshtml" />
+    <Content Include="Views\Stage\MijnStage.cshtml" />
     <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />

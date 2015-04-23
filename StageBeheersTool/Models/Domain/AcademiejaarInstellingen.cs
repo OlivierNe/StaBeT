@@ -18,7 +18,7 @@ namespace StageBeheersTool.Models.Domain
         {
             if (Semester1Begin != null && Semester1Einde != null)
             {
-                return string.Format("({0} - {1})",
+                return string.Format("{0} - {1}",
                     ((DateTime)Semester1Begin).ToString("dd/MM/yyyy"),
                     ((DateTime)Semester1Einde).ToString("dd/MM/yyyy"));
             }
@@ -29,7 +29,7 @@ namespace StageBeheersTool.Models.Domain
         {
             if (Semester2Begin != null && Semester2Einde != null)
             {
-                return string.Format("({0} - {1})",
+                return string.Format("{0} - {1}",
                     ((DateTime)Semester2Begin).ToString("dd/MM/yyyy"),
                     ((DateTime)Semester2Einde).ToString("dd/MM/yyyy"));
             }

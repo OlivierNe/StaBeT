@@ -50,18 +50,22 @@ namespace StageBeheersTool.Controllers
         {
             if (CurrentUser.IsBegeleider())
             {
-                return RedirectToAction("MijnStageopdrachten", "Stageopdracht");
+                return RedirectToAction("MijnStages", "Stage");
             }
-            if (CurrentUser.IsBedrijf())
+            if (CurrentUser.IsStudent())
             {
-                return RedirectToAction("BedrijfMijnStageopdrachten", "Stageopdracht");
+                if (IdentityHelpers.StudentHeeftStage())
+                {
+                    return RedirectToAction("MijnStage", "Stage");
+                }
+                return RedirectToAction("BeschikbareStageopdrachten", "Stageopdracht");
             }
             if (CurrentUser.IsAdmin())
             {
                 return RedirectToAction("BedrijfStageVoorstellen", "Stageopdracht");
             }
-            //student
-            return RedirectToAction("BeschikbareStageopdrachten", "Stageopdracht");
+            //bedrijf
+            return RedirectToAction("BedrijfMijnStageopdrachten", "Stageopdracht");
         }
 
         /// <summary>
@@ -266,7 +270,7 @@ namespace StageBeheersTool.Controllers
             var academiejaren = _stageopdrachtRepository.FindAllAcademiejaren();
             return View(academiejaren);
         }
-        
+
         [Authorize(Role.Admin, Role.Begeleider, Role.Bedrijf)]
         public ActionResult VanAcademiejaar(string academiejaar, string student, string bedrijf)
         {
@@ -350,7 +354,7 @@ namespace StageBeheersTool.Controllers
             }
 
             var stageopdrachten = _stageopdrachtRepository.FindAll()
-                .WithFilter(model.SelectedStagebegeleiderId, model.SelectedAcademiejaar,(StageopdrachtStatus?)model.SelectedStatus).ToList();
+                .WithFilter(model.SelectedStagebegeleiderId, model.SelectedAcademiejaar, (StageopdrachtStatus?)model.SelectedStatus).ToList();
 
             _spreadsheetService.CreateSpreadsheet(model.TabbladNaam);
             _spreadsheetService.AddHeaders(model.SelectedOpties.ToList());
@@ -412,7 +416,7 @@ namespace StageBeheersTool.Controllers
             StageopdrachtCreateVM model;
             if (CurrentUser.IsBedrijf())
             {
-                var bedrijf = _userService.FindBedrijf();
+                var bedrijf = _userService.GetBedrijf();
                 model = new StageopdrachtCreateVM(_specialisatieRepository.FindAll(),
                     bedrijf.FindAllContractOndertekenaars(), bedrijf.FindAllStagementors());
                 model.SetAdres(bedrijf.Gemeente, bedrijf.Postcode, bedrijf.Straat);
@@ -438,7 +442,7 @@ namespace StageBeheersTool.Controllers
             Bedrijf bedrijf;
             if (CurrentUser.IsBedrijf())
             {
-                bedrijf = _userService.FindBedrijf();
+                bedrijf = _userService.GetBedrijf();
             }
             else
             {
@@ -481,7 +485,7 @@ namespace StageBeheersTool.Controllers
                 var stageMailbox = _instellingenRepository.Find(Instelling.MailboxStages);
                 await _emailService.SendAsync(EmailMessages.StageopdrachtAangemaakt(stageopdracht, stageMailbox));
                 SetViewMessage(Resources.SuccesCreateStageopdracht);
-                return RedirectToAction("Details", new {stageopdracht.Id, Overzicht });
+                return RedirectToAction("Details", new { stageopdracht.Id, Overzicht });
             }
             if (CurrentUser.IsBedrijf())
             {
@@ -526,7 +530,7 @@ namespace StageBeheersTool.Controllers
             }
             else if (CurrentUser.IsStudent())
             {
-                var student = _userService.FindStudent();
+                var student = _userService.GetStudent();
                 if (student.MagStageopdrachtBekijken(stageopdracht) == false)
                 {
                     return new HttpStatusCodeResult(403);
@@ -536,7 +540,7 @@ namespace StageBeheersTool.Controllers
             }
             else if (CurrentUser.IsBegeleider())
             {
-                var begeleider = _userService.FindBegeleider();
+                var begeleider = _userService.GetBegeleider();
                 model.ToonAanvraagIndienen = begeleider.MagAanvraagIndienen(stageopdracht);
                 model.ToonAanvraagAnnuleren = begeleider.MagAanvraagAnnuleren(stageopdracht);
                 model.ToonEdit = begeleider.MagStageopdrachtWijzigen(stageopdracht);
@@ -573,7 +577,7 @@ namespace StageBeheersTool.Controllers
             {
                 return new HttpStatusCodeResult(403);
             }
-            if (CurrentUser.IsBegeleider() && _userService.FindBegeleider().MagStageopdrachtWijzigen(stageopdracht) == false)
+            if (CurrentUser.IsBegeleider() && _userService.GetBegeleider().MagStageopdrachtWijzigen(stageopdracht) == false)
             {
                 return new HttpStatusCodeResult(403);
             }
@@ -602,7 +606,7 @@ namespace StageBeheersTool.Controllers
                 {
                     return new HttpStatusCodeResult(403);
                 }
-                if (CurrentUser.IsBegeleider() && _userService.FindBegeleider().MagStageopdrachtWijzigen(stageopdracht) == false)
+                if (CurrentUser.IsBegeleider() && _userService.GetBegeleider().MagStageopdrachtWijzigen(stageopdracht) == false)
                 {
                     return new HttpStatusCodeResult(403);
                 }
@@ -680,7 +684,7 @@ namespace StageBeheersTool.Controllers
             }
             try
             {
-                var student = _userService.FindStudent();
+                var student = _userService.GetStudent();
                 student.AddVoorkeurStage(stageopdracht);
                 _userService.SaveChanges();
                 SetViewMessage(string.Format(Resources.succesVoorkeurToevoegen, stageopdracht.Titel));
@@ -702,7 +706,7 @@ namespace StageBeheersTool.Controllers
             }
             try
             {
-                var student = _userService.FindStudent();
+                var student = _userService.GetStudent();
                 student.RemoveVoorkeurStage(stageopdracht);
                 _userService.SaveChanges();
                 SetViewMessage(string.Format(Resources.SuccesVoorkeurStageVerwijderen, stageopdracht.Titel));
@@ -717,7 +721,7 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Student)]
         public ActionResult MijnVoorkeurStages()
         {
-            var student = _userService.FindStudent();
+            var student = _userService.GetStudent();
             var stageopdrachten = student.GetAllVoorkeurStages();
             var gekozenStageopdracht = student.FindGekozenVoorkeurStage();
 
@@ -816,7 +820,7 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            var begeleider = _userService.FindBegeleider();
+            var begeleider = _userService.GetBegeleider();
             begeleider.AddAanvraag(stageopdracht);
             _stageopdrachtRepository.SaveChanges();
             return RedirectToAction("Details", new { id, Overzicht });
@@ -830,7 +834,7 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            var begeleider = _userService.FindBegeleider();
+            var begeleider = _userService.GetBegeleider();
             if (begeleider.HeeftStageBegeleidingAangevraagd(stageopdracht) == false)
             {
                 return new HttpStatusCodeResult(403);
@@ -854,7 +858,7 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Begeleider)]
         public ActionResult MijnAanvragenStagebegeleiding()
         {
-            var begeleider = _userService.FindBegeleider();
+            var begeleider = _userService.GetBegeleider();
             var aanvragen = begeleider.StageAanvragen;
             if (Request.IsAjaxRequest())
             {
@@ -906,7 +910,7 @@ namespace StageBeheersTool.Controllers
         {
             if (CurrentUser.IsBedrijf())
             {
-                return _userService.FindBedrijf().FindStageopdrachtById(id);
+                return _userService.GetBedrijf().FindStageopdrachtById(id);
             }
             return _stageopdrachtRepository.FindById(id);
         }

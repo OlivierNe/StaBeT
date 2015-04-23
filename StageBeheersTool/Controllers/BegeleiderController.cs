@@ -77,7 +77,7 @@ namespace StageBeheersTool.Controllers
                 return HttpNotFound();
             }
             var model = Mapper.Map<BegeleiderDetailsVM>(begeleider);
-            model.ToonEdit = CurrentUser.IsAdmin() || begeleider.Equals(_userService.FindBegeleider());
+            model.ToonEdit = CurrentUser.IsAdmin() || begeleider.Equals(_userService.GetBegeleider());
             model.ToonTerugNaarLijst = id != 0;
             model.ToonVerwijderen = CurrentUser.IsAdmin();
             return View(model);
@@ -93,7 +93,7 @@ namespace StageBeheersTool.Controllers
             }
             else
             {
-                begeleider = _userService.FindBegeleider();
+                begeleider = _userService.GetBegeleider();
             }
             if (begeleider == null)
             {
@@ -115,7 +115,7 @@ namespace StageBeheersTool.Controllers
             }
             else
             {
-                begeleider = _userService.FindBegeleider();
+                begeleider = _userService.GetBegeleider();
             }
             if (begeleider == null)
             {
@@ -197,7 +197,7 @@ namespace StageBeheersTool.Controllers
         {
             if (id == 0)
             {
-                return _userService.FindBegeleider();
+                return _userService.GetBegeleider();
             }
             return _begeleiderRepository.FindById(id);
         }

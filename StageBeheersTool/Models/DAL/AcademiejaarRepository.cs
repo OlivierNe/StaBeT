@@ -47,6 +47,11 @@ namespace StageBeheersTool.Models.DAL
         public void Update(AcademiejaarInstellingen academiejaar)
         {
             _dbContext.Entry(academiejaar).State = EntityState.Modified;
+            var stages = _dbContext.Stages.Where(stage => stage.Stageopdracht.Academiejaar == academiejaar.Academiejaar);
+            foreach (var stage in stages)
+            {
+                stage.AcademiejaarInstellingen = academiejaar;
+            }
             SaveChanges();
         }
 
