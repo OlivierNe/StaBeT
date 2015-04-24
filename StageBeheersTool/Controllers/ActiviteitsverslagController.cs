@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.Identity;
@@ -10,13 +9,17 @@ namespace StageBeheersTool.Controllers
     public class ActiviteitsverslagController : BaseController
     {
         private readonly IUserService _userService;
+        private readonly IInstellingenRepository _instellingenRepository;
 
-        public ActiviteitsverslagController(IUserService userService)
+        public ActiviteitsverslagController(IUserService userService, 
+            IInstellingenRepository instellingenRepository)
         {
             _userService = userService;
+            _instellingenRepository = instellingenRepository;
         }
 
         #region student
+
         [Authorize(Role.Student)]
         public ActionResult MijnActiviteitsverslagen()
         {
@@ -26,9 +29,12 @@ namespace StageBeheersTool.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            if (stage.Activiteitsverslagen == null || stage.Activiteitsverslagen.Count < 14)
+            var aantalWekenStageInstelling = _instellingenRepository.Find(Instelling.AantalWekenStage) ??
+                                   new Instelling(Instelling.AantalWekenStage, "14");
+            var aantalWekenStage = aantalWekenStageInstelling.IntValue;
+            if (stage.Activiteitsverslagen.Count < aantalWekenStage)
             {
-                stage.InitializeActiviteitsverslagen();
+                stage.InitializeActiviteitsverslagen(aantalWekenStage);
                 _userService.SaveChanges();
             }
             return View(stage);

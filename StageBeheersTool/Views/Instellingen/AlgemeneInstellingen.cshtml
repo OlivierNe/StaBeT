@@ -18,6 +18,31 @@
                 @Html.ValidationMessageFor(model => model.MailboxStages, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AantalWekenStage, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AantalWekenStage, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AantalWekenStage, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Begin nieuw academiejaar</label>
+            <div class="form-inline">
+                <div class="col-md-1">
+                    @Html.EditorFor(model => model.Dag, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-md-2">
+                    @Html.DropDownListFor(model => model.Maand, Model.Maanden, "-- Selecteer een maand --",
+                        new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-10">
+                @Html.ValidationMessageFor(model => model.Dag, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.Maand, "", new { @class = "text-danger" })
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-md-offset-3 col-md-10">
                 <input type="submit" value="Opslaan" class="btn btn-success" />
@@ -27,3 +52,7 @@
     </div>
 }
 
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

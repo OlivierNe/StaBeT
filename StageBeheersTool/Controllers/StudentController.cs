@@ -93,7 +93,7 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
-        [Authorize(Role.Admin, Role.Begeleider, Role.Student)]
+        [Authorize(Role.Admin, Role.Begeleider, Role.Student, Role.Bedrijf)]
         public ActionResult Details(int? id)
         {
             var student = FindStudent(id);
@@ -216,6 +216,11 @@ namespace StageBeheersTool.Controllers
             if (id == null)
             {
                 return null;
+            }
+            if (CurrentUser.IsBedrijf())
+            {
+                var bedrijf = _userService.GetBedrijf();
+                return bedrijf.FindStudent((int)id);
             }
             return _studentRepository.FindById((int)id);//admin/begeleider
         }

@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Configuration;
+using System.Web;
+using System.Web.Caching;
+using System.Web.Mvc;
+using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.Helpers
 {
@@ -7,13 +11,29 @@ namespace StageBeheersTool.Helpers
     {
         public static string HuidigAcademiejaar()
         {
-            int maand = int.Parse(ConfigurationManager.AppSettings["MaandBeginNieuwSemester"]);
+            object academiejaar = HttpContext.Current.Cache["academiejaar"];
 
-            if (DateTime.Now.Month >= maand)
+            if (academiejaar != null)
             {
-                return DateTime.Now.Year + "-" + (DateTime.Now.Year + 1);
+                return academiejaar.ToString();
             }
-            return (DateTime.Now.Year - 1) + "-" + DateTime.Now.Year;
+            var instellingenRepository =
+                DependencyResolver.Current.GetService(typeof(IInstellingenRepository)) as IInstellingenRepository;
+            var beginNieuwAcademiejaar = instellingenRepository.Find(Instelling.BeginNieuwAcademiejaar) ??
+                new Instelling("", new DateTime(1, 9, 1).ToString());
+            var datum = beginNieuwAcademiejaar.DateTimeValue;
+            datum = datum.AddYears(DateTime.Now.Year - datum.Year);
+            if (DateTime.Now >= datum)
+            {
+                academiejaar = DateTime.Now.Year + "-" + (DateTime.Now.Year + 1);
+            }
+            else
+            {
+                academiejaar = (DateTime.Now.Year - 1) + "-" + DateTime.Now.Year;
+            }
+            HttpContext.Current.Cache.Add("academiejaar", academiejaar, null, DateTime.Now.AddDays(1),
+                Cache.NoSlidingExpiration, CacheItemPriority.Default, null);//cache voor een dag (niet elk request naar db)
+            return academiejaar.ToString();
         }
 
         public static bool VroegerDanHuidig(string academiejaar)

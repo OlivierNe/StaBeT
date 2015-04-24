@@ -221,6 +221,7 @@
     <Compile Include="Helpers\ViewHelpers.cs" />
     <Compile Include="Helpers\ZipFileResult.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableStageExtensions.cs" />
+    <Compile Include="Models\DAL\Mapping\ActiviteitsverslagMapper.cs" />
     <Compile Include="Models\DAL\StageRepository.cs" />
     <Compile Include="Models\Domain\Activiteitsverslag.cs" />
     <Compile Include="Models\Domain\Interfaces\IDocumentService.cs" />

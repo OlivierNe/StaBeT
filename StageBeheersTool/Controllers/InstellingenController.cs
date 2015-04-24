@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Globalization;
+using AutoMapper;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.Identity;
@@ -87,11 +89,8 @@ namespace StageBeheersTool.Controllers
         public ActionResult AlgemeneInstellingen()
         {
             var model = new InstellingenVM();
-            var mailboxStages = _instellingenRepository.Find(Instelling.MailboxStages);
-            if (mailboxStages != null)
-            {
-                model.MailboxStages = mailboxStages.Value;
-            }
+            var instellingen = _instellingenRepository.FindAll();
+            model.InitInstellingen(instellingen);
             return View(model);
         }
 
@@ -102,6 +101,11 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 _instellingenRepository.AddOrUpdate(new Instelling(Instelling.MailboxStages, model.MailboxStages));
+                _instellingenRepository.AddOrUpdate(new Instelling(Instelling.AantalWekenStage,
+                    model.AantalWekenStage.ToString(CultureInfo.InvariantCulture)));
+                _instellingenRepository.AddOrUpdate(new Instelling(Instelling.BeginNieuwAcademiejaar,
+                    new DateTime(1, model.Maand, model.Dag).ToString()));
+                HttpContext.Cache.Remove("academiejaar");
                 SetViewMessage(Resources.SuccesEditSaved);
             }
             return View(model);

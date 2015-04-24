@@ -25,12 +25,6 @@ namespace StageBeheersTool
             var ctx = new StageToolDbContext();
             ctx.Database.Initialize(true);
             //init.AddOudeGegevens(ctx);
-            //var umanager = new ApplicationUserManager(new UserStore<ApplicationUser>(ctx));
-            //var user = new ApplicationUser() {UserName = "begeleider1@test.be", Email = "begeleider1@test.be"};
-            //umanager.CreateAsync(user, "wachtwoord");
-            //umanager.AddToRole(user.Id, Role.Begeleider);
-            //ctx.Begeleiders.Add(new Begeleider() {HogentEmail = "begeleider1@test.be"});
-            //ctx.SaveChanges();
         }
     }
 }

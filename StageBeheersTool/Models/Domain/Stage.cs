@@ -31,6 +31,7 @@ namespace StageBeheersTool.Models.Domain
             {
                 if (Begindatum == null || Einddatum == null)
                 {
+                    if (AcademiejaarInstellingen == null) return "";
                     return Semester == 1
                         ? AcademiejaarInstellingen.StageperiodeSemester1()
                         : AcademiejaarInstellingen.StageperiodeSemester2();
@@ -130,13 +131,13 @@ namespace StageBeheersTool.Models.Domain
             return Activiteitsverslagen.FirstOrDefault(verslag => verslag.Week == week);
         }
 
-        public void InitializeActiviteitsverslagen()
+        public void InitializeActiviteitsverslagen(int aantalWekenStage)
         {
             if (Activiteitsverslagen == null)
             {
                 Activiteitsverslagen = new List<Activiteitsverslag>();
             }
-            for (var i = 0; i < 14; i++)
+            for (var i = 0; i < aantalWekenStage; i++)
             {
                 if (Activiteitsverslagen.All(verslag => verslag.Week != i + 1))
                 {

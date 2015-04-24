@@ -24,7 +24,7 @@ namespace StageBeheersTool.Models.Services
                     EnableSsl = false,
                     Port = int.Parse(ConfigurationManager.AppSettings["smtpPort"])
                 };
-                // smtp.Send(mailMessage);
+                // smtp.Send(mailMessage);//TODO
             }
             return Task.FromResult(0);
         }

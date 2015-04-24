@@ -34,6 +34,7 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new InstellingenMapper());
             modelBuilder.Configurations.Add(new StageMapper());
             modelBuilder.Configurations.Add(new VoorkeurStageMapper());
+            modelBuilder.Configurations.Add(new ActiviteitsverslagMapper());
 
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

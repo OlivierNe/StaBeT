@@ -7,7 +7,7 @@ using StageBeheersTool.Helpers;
 namespace StageBeheersTool.Models.Domain
 {
 
-    public class Bedrijf
+    public class Bedrijf 
     {
         #region Properties
         public int Id { get; set; }
@@ -231,6 +231,13 @@ namespace StageBeheersTool.Models.Domain
             }
         }
 
+        public Student FindStudent(int id)
+        {
+            return Stageopdrachten.SelectMany(so => so.Stages)
+                    .Select(stage => stage.Student)
+                    .FirstOrDefault(student => student.Id == id);
+        }
+
         public bool HeeftGeldigEmail()
         {
             return new EmailAddressAttribute().IsValid(Email);
@@ -254,5 +261,7 @@ namespace StageBeheersTool.Models.Domain
             return (Email != null ? Email.GetHashCode() : 0);
         }
         #endregion
+
+
     }
 }
