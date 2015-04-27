@@ -27,8 +27,8 @@ namespace StageBeheersTool.Models.DAL
         public IQueryable<Stage> FindAll()
         {
             return _stages.Include(stage => stage.Stageopdracht)
-                .Include(stage => stage.Bedrijf)
-                .Include(stage => stage.Begeleider)
+                .Include(stage => stage.Stageopdracht.Bedrijf)
+                .Include(stage => stage.Stageopdracht.Stagebegeleider)
                 .Include(stage => stage.Student)
                 .OrderByDescending(stage => stage.Id);
         }

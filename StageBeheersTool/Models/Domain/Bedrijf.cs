@@ -78,6 +78,21 @@ namespace StageBeheersTool.Models.Domain
             return Stageopdrachten.FirstOrDefault(so => so.Id == id);
         }
 
+        public IEnumerable<Stageopdracht> FindStageopdrachtenVanAcademiejaar(string academiejaar)
+        {
+            return Stageopdrachten.Where(so => so.Academiejaar == academiejaar).OrderBy(so => so.Titel);
+        }
+
+        public string[] GetAcademiejaren()
+        {
+            return Stageopdrachten.Select(so => so.Academiejaar).Distinct().OrderByDescending(s => s).ToArray();
+        }
+
+        public IEnumerable<Stageopdracht> GetStageopdrachtenVanHuidigAcademiejaar()
+        {
+            var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
+            return Stageopdrachten.Where(so => so.Academiejaar == academiejaar).OrderBy(so => so.Titel);
+        }
 
         public bool UpdateStageopdracht(Stageopdracht stageopdracht)
         {

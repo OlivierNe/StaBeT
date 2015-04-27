@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $("input[type='checkbox'][name$='.IsAdmin'").each(function () {
+    $("input[type='checkbox'][name$='.IsAdmin']").each(function () {
         var $self = $(this);
         $self.change(function () {
             var name = $self.attr("name");

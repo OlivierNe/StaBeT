@@ -1,5 +1,4 @@
-﻿using System.Web;
-using StageBeheersTool.Helpers;
+﻿using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -31,8 +30,6 @@ namespace StageBeheersTool.ViewModels
 
         public string Title { get; set; }
 
-        private SelectList _academiejaarList;
-
         public SelectList AantalStudentenList
         {
             get
@@ -53,11 +50,19 @@ namespace StageBeheersTool.ViewModels
         {
             get
             {
-                return _academiejaarList ??
-                    (_academiejaarList = new SelectList(Academiejaren, Academiejaar ?? ""));
+                return new SelectList(Academiejaren, Academiejaar ?? "");
             }
         }
 
+        public SelectList SpecicialisatieSelectList
+        {
+            get
+            {
+                return new SelectList(Specialisaties, "Naam", "Naam", Specialisatie);
+            }
+        }
+
+        public IEnumerable<Specialisatie> Specialisaties { get; set; }
         public int? Semester { get; set; }
         [Display(Name = "Studenten")]
         public int? AantalStudenten { get; set; }
@@ -241,7 +246,7 @@ namespace StageBeheersTool.ViewModels
             ContractondertekenaarsSelectList = new SelectList(contractondertekenaars, "Id", "Naam",
                 ContractondertekenaarId != 0 ? ContractondertekenaarId.ToString() : "");
             StagementorsSelectList = new SelectList(stagementors, "Id", "Naam", StagementorId != 0 ? StagementorId.ToString() : "");
-            var aantalStudentenOpties = new SelectListItem[] { new SelectListItem() { Value = "1", Text = "1"},
+            var aantalStudentenOpties = new[] { new SelectListItem() { Value = "1", Text = "1"},
                      new SelectListItem() { Value = "2", Text = "2"}, new SelectListItem() { Value = "3", Text = "3" } };
             AantalStudentenSelectList = new SelectList(aantalStudentenOpties, "Value", "Text");
         }
@@ -354,9 +359,9 @@ namespace StageBeheersTool.ViewModels
                 new SelectListItem { Value = ((int)StageopdrachtStatus.Goedgekeurd).ToString(), Text = "Goedgekeurd"}, 
                      new SelectListItem {Value = ((int)StageopdrachtStatus.Afgekeurd).ToString(), Text = "Afgekeurd"}};
             StatusSelectList = new SelectList(statusOpties, "Value", "Text", SelectedStatus != null ? ((StageopdrachtStatus)SelectedStatus).ToString() : "");
-            Opties = new SelectList(new[] { "Bedrijf", "Stageplaats", "Titel", "Omschrijving", "Student", "Begeleider","Status" });
+            Opties = new SelectList(new[] { "Bedrijf", "Stageplaats", "Titel", "Omschrijving", "Student", "Begeleider", "Status" });
         }
-      
+
     }
 
 }

@@ -14,6 +14,8 @@ namespace StageBeheersTool.ViewModels
         public bool ToonBegeleider { get; set; }
         public bool ToonActiviteitverslagen { get; set; }
         public bool ToonEdit { get; set; }
+        public bool ToonEditStageopdracht { get; set; }
+        public bool ToonDetails { get; set; }
 
         public string Student { get; set; }
         public string Stageopdracht { get; set; }
@@ -139,6 +141,46 @@ namespace StageBeheersTool.ViewModels
         public SelectList Opties { get; set; }
         public string[] SelectedOpties { get; set; }
 
+        private IDictionary<string, string> _kolommen;
+        public IDictionary<string, string> Kolommen
+        {
+            get
+            {
+                //kolomnaam + property stage
+                return _kolommen ?? (_kolommen = new Dictionary<string, string>
+                {
+                    {"Bedrijf", "Bedrijf.Naam"},
+                    {"Bedrijf adres", "Bedrijf.Adres"},
+                    {"Bedrijf gemeente", "Bedrijf.Gemeente"},
+                    {"Bedrijfstelefoon", "Bedrijf.Telefoon"},
+                    {"Stageplaats", "Stageopdracht.Stageplaats"},
+                    {"Stageopdracht omschrijving", "Stageopdracht.Omschrijving"},
+                    {"Stageopdracht titel", "Stageopdracht.Titel"},
+                    {"Studentnaam", "Student.Familienaam"},
+                    {"Studentvoornaam", "Student.Voornaam"},
+                    {"Studentadres", "Student.Adres"},
+                    {"Studentgemeente", "Student.Gemeente"},
+                    {"Studentgeboortedatum", "Student.GeboortedatumToString"},
+                    {"Studentemail1", "Student.HogentEmail"},
+                    {"Studentemail2", "Student.Email"},
+                    {"Studenttelefoon", "Student.Telefoon"},
+                    {"Stagebegeleider", "Stageopdracht.Stagebegeleider.Naam"},
+                    {"Stagebegleideremail", "Stageopdracht.Stagebegeleider.HogentEmail"},
+                    {"Stagementor", "Stageopdracht.StagementorNaam"},
+                    {"Stagementoremail", "Stageopdracht.StagementorEmail"},
+                    {"Stagementortelefoon", "Stageopdracht.Stagementor.Telefoon"},
+                    {"Stagementorfunctie", "Stageopdracht.Stagementor.Bedrijfsfunctie"},
+                    {"Contractondertekenaar", "Stageopdracht.ContractondertekenaarNaam"},
+                    {"Contractondertekenaaremail", "Stageopdracht.ContractondertekenaarEmail"},
+                    {"Contractondertekenaartelefoon", "Stageopdracht.Contractondertekenaar.Telefoon"},
+                    {"Contractondertekenaarfunctie", "Stageopdracht.Contractondertekenaar.Bedrijfsfunctie"},
+                    {"Stageperiode", "Stageperiode"}
+                });
+                //TODO:verlenging contract, vrije dag voor bachelproef op, campus, studentstamboek
+            }
+            set { _kolommen = value; }
+        }
+
         public StageLijstExcelVM()
         {
             TabbladNaam = "Stages";
@@ -149,7 +191,7 @@ namespace StageBeheersTool.ViewModels
         {
             StagebegeleiderSelectList = new SelectList(stagebegeleiders, "Id", "Naam", SelectedStagebegeleiderId != null ? SelectedStagebegeleiderId.ToString() : "");
             AcademiejaarSelectList = new SelectList(academiejaren);
-            Opties = new SelectList(new[] { "Bedrijf", "Stageplaats", "Titel", "Omschrijving", "Student", "Begeleider" });
+            Opties = new SelectList(Kolommen.Keys);
         }
     }
 }

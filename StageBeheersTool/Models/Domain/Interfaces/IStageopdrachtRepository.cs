@@ -14,8 +14,6 @@ namespace StageBeheersTool.Models.Domain
         IQueryable<Stageopdracht> FindToegewezenStageopdrachtenZonderBegeleider();
         IQueryable<Stageopdracht> FindToegewezenStageopdrachten();
         IQueryable<Stageopdracht> FindAllFromAcademiejaar(string academiejaar);
-        IQueryable<Stageopdracht> FindStageopdrachtenVanHuidigeBegeleider();
-        IQueryable<Stageopdracht> FindStageopdrachtenVanHuidigBedrijf();
 
         void Update(Stageopdracht stageopdracht);
         void Delete(Stageopdracht stageopdracht);
@@ -31,9 +29,9 @@ namespace StageBeheersTool.Models.Domain
         void DeleteAanvraag(StagebegeleidingAanvraag aanvraag);
 
         string[] FindAllAcademiejaren();
-        string[] FindAllAcademiejarenVanBegeleider();
+        //string[] FindAllAcademiejarenVanBegeleider();
         IQueryable<Stageopdracht> FindAllVanAcademiejaar(string academiejaar);
-        IQueryable<Stageopdracht> FindMijnStagesVanAcademiejaar(string academiejaar);
+        //IQueryable<Stageopdracht> FindMijnStagesVanAcademiejaar(string academiejaar);
 
         void SaveChanges();
 

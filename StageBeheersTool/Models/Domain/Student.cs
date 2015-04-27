@@ -34,6 +34,11 @@ namespace StageBeheersTool.Models.Domain
             }
         }
 
+        public string GeboortedatumToString
+        {
+            get { return Geboortedatum == null ? "" : ((DateTime)Geboortedatum).ToString("dd-MM-yyyy"); }
+        }
+
         #endregion
 
         #region Constructors

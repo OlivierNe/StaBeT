@@ -1,6 +1,5 @@
 ﻿using System.Data.Entity;
 using System.Linq;
-using OudeGegevens.Models;
 using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.Models.DAL.Extensions
@@ -31,7 +30,8 @@ namespace StageBeheersTool.Models.DAL.Extensions
             }
             if (string.IsNullOrWhiteSpace(specialisatie) == false)
             {
-                stageopdrachten = stageopdrachten.Where(so => so.Specialisatie != null && so.Specialisatie.ToLower().Contains(specialisatie.ToLower()));
+                stageopdrachten = stageopdrachten.Where(so => so.Specialisatie != null && so.Specialisatie.ToLower()
+                    .Contains(specialisatie.ToLower()));
             }
             if (string.IsNullOrWhiteSpace(bedrijf) == false)
             {
@@ -44,9 +44,19 @@ namespace StageBeheersTool.Models.DAL.Extensions
             }
             if (string.IsNullOrWhiteSpace(student) == false)
             {
-                stageopdrachten = stageopdrachten.Where(so => so.Stages.Any(s =>
-                    (s.Student.Familienaam != null && s.Student.Familienaam.ToLower().Contains(student.ToLower())) ||
-                    (s.Student.Voornaam != null && s.Student.Voornaam.ToLower().Contains(student.ToLower()))));
+                string[] studentNaam = student.Split(' ');
+                if (studentNaam.Length <= 1)
+                {
+                    stageopdrachten = stageopdrachten.Where(so => so.Stages.Any(s =>
+                        (s.Student.Familienaam != null && s.Student.Familienaam.ToLower().Contains(student.ToLower())) ||
+                        (s.Student.Voornaam != null && s.Student.Voornaam.ToLower().Contains(student.ToLower()))));
+                }
+                else
+                {
+                    stageopdrachten = stageopdrachten.Where(so =>
+                        studentNaam.Any(str => so.Stages.Any(st => st.Student.Voornaam.ToLower().Contains(str)))
+                        && studentNaam.Any(str => so.Stages.Any(st => st.Student.Familienaam.ToLower().Contains(str))));
+                }
             }
             return stageopdrachten;
         }
@@ -54,14 +64,27 @@ namespace StageBeheersTool.Models.DAL.Extensions
         public static IQueryable<Stageopdracht> WithFilter(this IQueryable<Stageopdracht> stageopdrachten,
             string bedrijf, string student)
         {
-            if (student == null && bedrijf == null)
+            if (string.IsNullOrWhiteSpace(bedrijf) == false)
             {
-                return stageopdrachten;
+                stageopdrachten = stageopdrachten.Where(so => so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower()));
             }
-            return stageopdrachten.Where(so => (string.IsNullOrEmpty(bedrijf) || so.Bedrijf.Naam.ToLower().Contains(bedrijf.ToLower())) &&
-                       (string.IsNullOrEmpty(student) || so.Stages.Any(s =>
-                           (s.Student.Familienaam != null && s.Student.Familienaam.ToLower().Contains(student.ToLower())) ||
-                           (s.Student.Voornaam != null && s.Student.Voornaam.ToLower().Contains(student.ToLower())))));
+            if (string.IsNullOrWhiteSpace(student) == false)
+            {
+                string[] studentNaam = student.Split(' ');
+                if (studentNaam.Length <= 1)
+                {
+                    stageopdrachten = stageopdrachten.Where(so => so.Stages.Any(s =>
+                        (s.Student.Familienaam != null && s.Student.Familienaam.ToLower().Contains(student.ToLower())) ||
+                        (s.Student.Voornaam != null && s.Student.Voornaam.ToLower().Contains(student.ToLower()))));
+                }
+                else
+                {
+                    stageopdrachten = stageopdrachten.Where(so => 
+                        studentNaam.Any(str => so.Stages.Any(st => st.Student.Voornaam.ToLower().Contains(str)))
+                        && studentNaam.Any(str => so.Stages.Any(st => st.Student.Familienaam.ToLower().Contains(str))));
+                }
+            }
+            return stageopdrachten;
         }
 
         public static IQueryable<Stageopdracht> WithFilter(this IQueryable<Stageopdracht> stageopdrachten,

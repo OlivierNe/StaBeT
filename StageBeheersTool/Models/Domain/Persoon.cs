@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace StageBeheersTool.Models.Domain
 {
 
@@ -13,6 +15,14 @@ namespace StageBeheersTool.Models.Domain
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }
+
+        public string Adres
+        {
+            get
+            {
+                return string.Format("{0} {1} {2}", Postcode, Gemeente, Straat);
+            }
+        }
 
         public string Naam
         {

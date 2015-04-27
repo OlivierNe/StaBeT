@@ -57,7 +57,7 @@ namespace StageBeheersTool.ViewModels
     {
         public int Id { get; set; }
         [StringLength(20, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
-        public string Telefoonnummer { get; set; }
+        public string Telefoon { get; set; }
     }
 
     public class ContactpersoonJsonVM

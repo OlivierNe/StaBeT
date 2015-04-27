@@ -17,13 +17,6 @@
         <dd>
             @Html.DisplayFor(model => model.Naam)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Telefoon)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Telefoon)
-        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Email)
@@ -32,11 +25,18 @@
         <dd>
             @Html.DisplayEmail(Model.Email)
         </dd>
+        
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefoon)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Telefoon)
+        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Gsm)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Gsm)
         </dd>
@@ -44,7 +44,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.Aanspreektitel)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Aanspreektitel)
         </dd>
@@ -59,7 +58,6 @@
         <dt>
             Contractondertekenaar
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.IsContractondertekenaar)
         </dd>
@@ -67,7 +65,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.Bedrijfsfunctie)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Bedrijfsfunctie)
         </dd>

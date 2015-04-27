@@ -21,6 +21,10 @@ form input[type=text], input[type=email], input[type=password] {
     max-width: 400px;
 }
 
+select[multiple] {
+    max-width: none;
+}
+
 form input[type=number] {
     max-width: 100px;
 }
@@ -205,7 +209,8 @@ textarea {
 @media (max-width:750px) {
 
     #page-content-wrapper {
-        padding-left: 25px;
+        padding-left: 2px;
+        width: 100%;
     }
 
     .sidebar-nav {

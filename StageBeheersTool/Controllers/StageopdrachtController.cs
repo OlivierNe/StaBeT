@@ -64,8 +64,11 @@ namespace StageBeheersTool.Controllers
             {
                 return RedirectToAction("BedrijfStageVoorstellen", "Stageopdracht");
             }
-            //bedrijf
-            return RedirectToAction("BedrijfMijnStageopdrachten", "Stageopdracht");
+            if (CurrentUser.IsBedrijf())
+            {
+                return RedirectToAction("BedrijfMijnStageopdrachten", "Stageopdracht");
+            }
+            return new HttpUnauthorizedResult();
         }
 
         /// <summary>
@@ -95,6 +98,7 @@ namespace StageBeheersTool.Controllers
         {
             var stageopdrachten = _stageopdrachtRepository.FindGoedgekeurdeStageopdrachten().WithFilter(model.Semester,
                 model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, null);
+            model.Specialisaties = _specialisatieRepository.FindAll();
             model.Stageopdrachten = stageopdrachten;
             model.ToonZoeken = true;
             model.ToonAantalStudenten = true;
@@ -202,7 +206,8 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Begeleider)]
         public ActionResult MijnStageopdrachten()
         {
-            var stageopdrachten = _stageopdrachtRepository.FindStageopdrachtenVanHuidigeBegeleider();
+            var begeleider = _userService.GetBegeleider();
+            var stageopdrachten = begeleider.GetStageopdrachtenVanHuidigAcademiejaar();
             var model = new StageopdrachtListVM
             {
                 Stageopdrachten = stageopdrachten,
@@ -222,7 +227,8 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Bedrijf)]
         public ActionResult BedrijfMijnStageopdrachten()
         {
-            var stageopdrachten = _stageopdrachtRepository.FindStageopdrachtenVanHuidigBedrijf();
+            var bedrijf = _userService.GetBedrijf();
+            var stageopdrachten = bedrijf.Stageopdrachten;
             var model = new StageopdrachtListVM
             {
                 Stageopdrachten = stageopdrachten,
@@ -267,16 +273,37 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Admin, Role.Begeleider, Role.Bedrijf)]
         public ActionResult Archief()
         {
-            var academiejaren = _stageopdrachtRepository.FindAllAcademiejaren();
+            String[] academiejaren;
+            if (CurrentUser.IsBedrijf())
+            {
+                var bedrijf = _userService.GetBedrijf();
+                academiejaren = bedrijf.GetAcademiejaren();
+            }
+            else
+            {
+                academiejaren = _stageopdrachtRepository.FindAllAcademiejaren();
+            }
             return View(academiejaren);
         }
 
         [Authorize(Role.Admin, Role.Begeleider, Role.Bedrijf)]
         public ActionResult VanAcademiejaar(string academiejaar, string student, string bedrijf)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindAllVanAcademiejaar(academiejaar)
+            String[] academiejaren;
+            IEnumerable<Stageopdracht> stageopdrachten;
+            if (CurrentUser.IsBedrijf())
+            {
+                var ingelogdBedrijf = _userService.GetBedrijf();
+                stageopdrachten = ingelogdBedrijf.FindStageopdrachtenVanAcademiejaar(academiejaar)
+                    .AsQueryable().WithFilter(student: student, bedrijf: null);
+                academiejaren = ingelogdBedrijf.GetAcademiejaren();
+            }
+            else
+            {
+                stageopdrachten = _stageopdrachtRepository.FindAllVanAcademiejaar(academiejaar)
                 .WithFilter(student: student, bedrijf: bedrijf);
-            var academiejaren = _stageopdrachtRepository.FindAllAcademiejaren();
+                academiejaren = _stageopdrachtRepository.FindAllAcademiejaren();
+            }
             var model = new StageopdrachtListVM
             {
                 Stageopdrachten = stageopdrachten,
@@ -298,16 +325,18 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Begeleider)]
         public ActionResult MijnArchief()
         {
-            var academiejaren = _stageopdrachtRepository.FindAllAcademiejarenVanBegeleider();
+            var begeleider = _userService.GetBegeleider();
+            var academiejaren = begeleider.GetAcademiejaren();
             return View(academiejaren);
         }
 
         [Authorize(Role.Begeleider)]
         public ActionResult MijnStagesVanAcademiejaar(string academiejaar, string student, string bedrijf)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindMijnStagesVanAcademiejaar(academiejaar)
-                .WithFilter(student: student, bedrijf: bedrijf);
-            var academiejaren = _stageopdrachtRepository.FindAllAcademiejarenVanBegeleider();
+            var begeleider = _userService.GetBegeleider();
+            var stageopdrachten = begeleider.FindStageopdrachtenVanAcademiejaar(academiejaar)
+                .AsQueryable().WithFilter(student: student, bedrijf: bedrijf);
+            var academiejaren = begeleider.GetAcademiejaren();
             var model = new StageopdrachtListVM
             {
                 Stageopdrachten = stageopdrachten,

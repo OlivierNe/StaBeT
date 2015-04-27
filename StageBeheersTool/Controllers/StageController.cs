@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
@@ -125,9 +126,9 @@ namespace StageBeheersTool.Controllers
             model.Stages = stages;
             model.ToonBegeleider = true;
             model.ToonZoeken = true;
+            model.ToonDetails = true;
             model.ToonEdit = CurrentUser.IsAdmin();
             model.Title = Resources.TitelOverzichtStages + " " + AcademiejaarHelper.HuidigAcademiejaar();
-
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageList", model);
@@ -142,6 +143,8 @@ namespace StageBeheersTool.Controllers
             model.Stages = begeleider.GetMijnStagesVanHuidigAcademiejaar();
             model.ToonActiviteitverslagen = true;
             model.Title = Resources.TitelMijnStages;
+            model.ToonEditStageopdracht = true;
+
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageList", model);
@@ -201,28 +204,8 @@ namespace StageBeheersTool.Controllers
                 var row = new List<string>();
                 foreach (var kolom in model.SelectedOpties)
                 {
-                    switch (kolom)
-                    {
-                        case "Titel":
-                            row.Add(stage.Stageopdracht.Titel);
-                            break;
-                        case "Omschrijving":
-                            row.Add(stage.Stageopdracht.Omschrijving);
-                            break;
-                        case "Stageplaats":
-                            row.Add(stage.Stageopdracht.Stageplaats);
-                            break;
-                        case "Bedrijf":
-                            row.Add(stage.Stageopdracht.Bedrijf.Naam);
-                            break;
-                        case "Begeleider":
-                            row.Add(stage.Stageopdracht.Stagebegeleider == null ? "" : stage.Stageopdracht.Stagebegeleider.Naam);
-                            break;
-                        case "Student":
-                            row.Add(stage.Student.Naam);
-                            break;
-                    }
-
+                    var value = GetPropValue(stage, model.Kolommen[kolom]);
+                    row.Add(value == null ? "" : value.ToString());
                 }
                 _spreadsheetService.AddRow(row);
             }
@@ -423,7 +406,7 @@ namespace StageBeheersTool.Controllers
             model.Stages = stages;
             return View(model);
         }
-        
+
         //TODO:mergefields in word document bijvullen
         [Authorize(Role.Admin)]
         [HttpPost]
@@ -440,8 +423,8 @@ namespace StageBeheersTool.Controllers
             }
             var outputStream = new MemoryStream();
             var stages = from key in id
-                join stage in _stageRepository.FindAllVanHuidigAcademiejaar() on key equals stage.Id
-                select stage;
+                         join stage in _stageRepository.FindAllVanHuidigAcademiejaar() on key equals stage.Id
+                         select stage;
 
             using (var zip = new ZipFile())
             {
@@ -465,5 +448,25 @@ namespace StageBeheersTool.Controllers
 
         #endregion
 
+        #region helpers
+        private static Object GetPropValue(Object obj, string name)
+        {
+            foreach (string part in name.Split('.'))
+            {
+                if (obj == null)
+                {
+                    return null;
+                }
+                Type type = obj.GetType();
+                PropertyInfo info = type.GetProperty(part);
+                if (info == null)
+                {
+                    return null;
+                }
+                obj = info.GetValue(obj, null);
+            }
+            return obj;
+        }
+        #endregion
     }
 }

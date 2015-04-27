@@ -36,7 +36,7 @@ namespace StageBeheersTool.Models.Identity
                     {
                         display = student.Naam;
                     }
-                    userIdentity.AddClaim(new Claim(MyClaimTypes.StudentHeeftStage,student.HeeftToegewezenStage().ToString()));
+                    userIdentity.AddClaim(new Claim(MyClaimTypes.StudentHeeftStage, student.HeeftToegewezenStage().ToString()));
                 }
             }
             else if (userIdentity.HasRole(Role.Begeleider))
@@ -48,7 +48,10 @@ namespace StageBeheersTool.Models.Identity
             }
             if (userIdentity.HasRole(Role.Admin) && userIdentity.HasRole(Role.Begeleider))
             {
-                userIdentity.AddClaim(new Claim(MyClaimTypes.Display, Role.Begeleider)); //om te switchen tussen admin en begeleider
+                if (userIdentity.HasClaim(c => c.Type == MyClaimTypes.LoginMode) == false)
+                {
+                    manager.AddClaim(Id, new Claim(MyClaimTypes.LoginMode, Role.Begeleider));
+                }
             }
             userIdentity.AddClaim(new Claim(MyClaimTypes.Display, display));
             return userIdentity;

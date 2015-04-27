@@ -510,11 +510,7 @@ namespace StageBeheersTool.Controllers
             AuthenticationManager.SignOut();
             SignInManager.SignInAsync(user, false, false);
 
-            if (Request.UrlReferrer != null)
-            {
-                return Redirect(Request.UrlReferrer.AbsoluteUri);
-            }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("List", "Stageopdracht");
         }
 
         //

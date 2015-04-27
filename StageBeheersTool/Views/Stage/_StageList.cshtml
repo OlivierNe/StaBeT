@@ -33,8 +33,17 @@
     columns.Add().Sanitized(false).Encoded(false).SetWidth(170)
         .RenderValueAs(stage =>
         {
-            var retVal = Html.ActionLink("Details", "Details", "Stage",
-                new { stage.Id, overzicht }, new { @class = "btn btn-default" }).ToString();
+            string retVal = "";
+            if (Model.ToonDetails)
+            {
+                retVal += Html.ActionLink("Details", "Details", "Stage",
+               new { stage.Id, overzicht }, new { @class = "btn btn-default" });
+            }
+            if (Model.ToonEditStageopdracht)
+            {
+                retVal += " " + Html.ActionLink("Bewerken", "Edit", "Stageopdracht",
+                    new { stage.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" });
+            }
             if (Model.ToonEdit)
             {
                 retVal += " " + Html.ActionLink("Wijzigen", "Edit", "Stage",
