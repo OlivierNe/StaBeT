@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using AutoMapper;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.DAL.Extensions;
@@ -68,7 +69,7 @@ namespace StageBeheersTool.Controllers
             {
                 return RedirectToAction("BedrijfMijnStageopdrachten", "Stageopdracht");
             }
-            return new HttpUnauthorizedResult();
+            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
         }
 
         /// <summary>
@@ -122,6 +123,7 @@ namespace StageBeheersTool.Controllers
                 model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, null);
             model.Stageopdrachten = stageopdrachten;
             model.ToonZoeken = true;
+            model.Specialisaties = _specialisatieRepository.FindAll();
             model.ToonAantalStudenten = true;
             model.ToonSemester = true;
             model.ToonBedrijf = true;
@@ -144,6 +146,7 @@ namespace StageBeheersTool.Controllers
                 model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, model.Student);
             model.Stageopdrachten = stageopdrachten;
             model.ToonZoeken = true;
+            model.Specialisaties = _specialisatieRepository.FindAll();
             model.ToonBedrijf = true;
             model.ToonSemester = true;
             model.ToonAantalStudenten = true;
@@ -165,6 +168,7 @@ namespace StageBeheersTool.Controllers
                 model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, model.Student);
             model.Stageopdrachten = stageopdrachten;
             model.ToonZoeken = true;
+            model.Specialisaties = _specialisatieRepository.FindAll();
             model.ToonZoekenOpStudent = true;
             model.ToonStudenten = true;
             model.ToonBedrijf = true;
@@ -186,6 +190,7 @@ namespace StageBeheersTool.Controllers
             var stageopdrachten = _stageopdrachtRepository.FindToegewezenStageopdrachten().WithFilter(model.Semester,
                 model.AantalStudenten, model.Specialisatie, model.Bedrijf, model.Locatie, model.Student);
             model.Stageopdrachten = stageopdrachten;
+            model.Specialisaties = _specialisatieRepository.FindAll();
             model.ToonZoeken = true;
             model.ToonZoekenOpStudent = true;
             model.ToonStudenten = true;
@@ -213,6 +218,8 @@ namespace StageBeheersTool.Controllers
                 Stageopdrachten = stageopdrachten,
                 Title = Resources.TitelMijnStageopdrachten,
                 ToonStudenten = true,
+                ToonZoekenOpStudent = true,
+                ToonZoekenOpBedrijf = true
             };
             if (Request.IsAjaxRequest())
             {
@@ -228,13 +235,15 @@ namespace StageBeheersTool.Controllers
         public ActionResult BedrijfMijnStageopdrachten()
         {
             var bedrijf = _userService.GetBedrijf();
-            var stageopdrachten = bedrijf.Stageopdrachten;
+            var stageopdrachten = bedrijf.GetStageopdrachtenVanHuidigAcademiejaar();
             var model = new StageopdrachtListVM
             {
                 Stageopdrachten = stageopdrachten,
-                Title = Resources.TitelMijnStageopdrachten,
+                Title = Resources.TitelMijnStageopdrachten + " " +
+                    AcademiejaarHelper.HuidigAcademiejaar(),
                 ToonStudenten = true,
-                ToonStatus = true,
+                ToonZoekenOpStudent = true,
+                ToonStatus = true
             };
             if (Request.IsAjaxRequest())
             {
@@ -260,6 +269,7 @@ namespace StageBeheersTool.Controllers
                 Stageopdrachten = stageopdrachten,
                 Title = String.Format(Resources.TitelStageopdrachtenVanBedrijf, bedrijf.Naam),
                 ToonStudenten = true,
+                ToonZoekenOpStudent = true,
                 ToonStatus = true,
                 ToonAcademiejaar = true
             };
@@ -311,7 +321,9 @@ namespace StageBeheersTool.Controllers
                 Academiejaar = academiejaar,
                 ToonStatus = academiejaar == null,
                 ToonStudenten = true,
-                ToonBedrijf = true,
+                ToonZoekenOpStudent = !CurrentUser.IsBedrijf(),
+                ToonZoekenOpBedrijf = !CurrentUser.IsBedrijf(),
+                ToonBedrijf = !CurrentUser.IsBedrijf(),
                 ToonAcademiejaar = (academiejaar == null),
                 Academiejaren = academiejaren
             };

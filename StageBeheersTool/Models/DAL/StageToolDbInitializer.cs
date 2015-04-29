@@ -113,6 +113,432 @@ namespace StageBeheersTool.Models.DAL
                 context.Instellingen.Add(mailboxInstelling);
                 #endregion
 
+                #region evaluatievragen
+
+                var stagebezoek1Teller = 0;
+                var stagebezoek2Teller = 0;
+                var stagebezoek3Teller = 0;
+                var stagebezoekExtraTeller = 0;
+
+                var evaluatievragen = new List<Evaluatievraag>
+                {
+                    new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Voert de student de taakomschrijving uit (zie stage-overeenkomst)?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                    new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Toont de student inzet en enthousiasme voor het werk?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                   new Evaluatievraag
+                    {
+                       SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Heeft de student inzicht in de uit te voeren taken?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                    new Evaluatievraag
+                    {
+                      SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Voert de student de taken nauwkeurig en goed uit?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                    new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Respecteert de student gemaakte afspraken?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                    new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Neemt de student initiatief?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                    new Evaluatievraag
+                    {
+                      SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Kan de student omgaan met collega’s?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                   new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Rapporteert de student (wekelijks stagedagboek)?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                    new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Zoekt de student actief naar feedback?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                    new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Staat de student open voor kritiek?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Problemen gemeld door de stagementor:",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Verbeterpunten voor de stagiair?",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Begrijp je de opdracht(en)?",
+                        Stagebezoek = 1,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Heb je een planning gemaakt?",
+                        Stagebezoek = 1,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Taken die de stagiair uitvoert:",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Problemen gemeld door de stagiair",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Raadgevingen en afspraken met de stagiair:",
+                        Stagebezoek = 1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek1Teller
+                    },
+
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Verloopt de stage zoals gepland?",
+                        Stagebezoek = 2,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Merkt u een evolutie bij de student?",
+                        Stagebezoek = 2,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Werkt de student zelfstandig?",
+                        Stagebezoek = 2,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Extra info van de stagementor betreffende de student:",
+                        Stagebezoek = 2,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Meningvraag,
+                        Vraag = "Je werd goed opgevangen bij het begin van je stage",
+                        Stagebezoek = 2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Meningvraag,
+                        Vraag = "Je stage past bij je opleiding",
+                        Stagebezoek =2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Meningvraag,
+                        Vraag = "Je stage leunt aan bij je interesse",
+                        Stagebezoek = 2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Meningvraag,
+                        Vraag = "Je stage is leerzaam",
+                        Stagebezoek = 2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Meningvraag,
+                        Vraag = "Het niveau van je stage is hoog",
+                        Stagebezoek = 2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Meningvraag,
+                        Vraag = "Je werkt graag samen met je collega’s",
+                        Stagebezoek = 2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Meningvraag,
+                        Vraag = "Je kan terecht bij je stagementor",
+                        Stagebezoek = 2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Meerkeuzevraag,
+                        MeerkeuzeAntwoorden = "Analyse en ontwerpen;Programmeren;Databanken;Netwerken;Multimedia",
+                        Vraag = "Welke opleidingsonderdelen heb je al gebruikt?",
+                        Stagebezoek = 2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Heb je al nieuwe materie aangeleerd? Indien ja, welke?",
+                        Stagebezoek = 2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Je stagementor heeft het evaluatieformulier 1 met jou besproken",
+                        Stagebezoek = 2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Heb je al problemen ondervonden op je stage? Waar heb je hulp gezocht?",
+                        Stagebezoek = 2,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek2Teller
+                    },
+                     new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Bent u tevreden over de student?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Merkt u een evolutie bij de student?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    },  new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Werkt de student zelfstandig?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Komt de student de gemaakte afspraken na?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Communiceert de student met de collega’s?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Hanteert de student een correct taalgebruik?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Gaat de student op een positieve manier om met kritiek?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Kan de student ook moeilijkere taken aan?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Bezit de student voldoende kennis en vaardigheden om de opdrachten goed uit te voeren?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Positieve punten over de stagiair?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Verbeterpunten voor de opleiding?",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Problemen gemeld door de stagementor:",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Volg je de opgestelde planning?",
+                        Stagebezoek = 3,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Ligt de moeilijkheidsgraad van je taken hoog?",
+                        Stagebezoek = 3,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Pas je (nieuwe) materie gemakkelijk toe?",
+                        Stagebezoek = 3,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek3Teller
+                    },new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Hou je rekening met de raadgevingen van je stagementor?",
+                        Stagebezoek = 3,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.JaNeevraag,
+                        Vraag = "Heb je al een inleiding gemaakt voor je stageverslag?",
+                        Stagebezoek = 3,
+                        Voor = "Student",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Raadgevingen en afspraken met de stagiair:",
+                        Stagebezoek = 3,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoek3Teller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Problemen gemeld door de stagementor: ",
+                        Stagebezoek = -1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoekExtraTeller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Afspraken met de stagementor: ",
+                        Stagebezoek = -1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoekExtraTeller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Problemen gemeld door de stagiair:",
+                        Stagebezoek = -1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoekExtraTeller
+                    }, new Evaluatievraag
+                    {
+                        SoortVraag = SoortVraag.Openvraag,
+                        Vraag = "Raadgevingen en afspraken met de stagiair:",
+                        Stagebezoek = -1,
+                        Voor = "Stagementor",
+                        Volgorde = ++stagebezoekExtraTeller
+                    },
+                };
+                context.Evaluatievragen.AddRange(evaluatievragen);
+                #endregion
+
                 #region Keuzepakketten
                 //e-commerce-mobile-netwerken-mainframe
                 Keuzepakket keuzepakket1 = new Keuzepakket() { Naam = "Netwerken" };
@@ -426,6 +852,12 @@ namespace StageBeheersTool.Models.DAL
                     userManager.Create(begeleiderLogin);
                     userManager.AddToRole(begeleiderLogin.Id, Role.Begeleider);
                 }
+                var anneleen = context.Users.FirstOrDefault(u => u.UserName == "anneleen.bekkens@hogent.be");
+                if (anneleen != null)
+                    userManager.AddToRole(anneleen.Id, Role.Admin);
+                var sofie = new ApplicationUser { Email = "sofie.moreau@hogent.be", UserName = "sofie.moreau@hogent.be", EmailConfirmed = true };
+                userManager.Create(sofie);
+                userManager.AddToRole(sofie.Id, Role.Admin);
 
                 //login studenten
                 var acadj = AcademiejaarHelper.HuidigAcademiejaar();

@@ -24,7 +24,7 @@ namespace StageBeheersTool.Models.DAL.Mapping
                 .HasForeignKey(stage => stage.StageopdrachtId);
             HasOptional(stage => stage.AcademiejaarInstellingen).WithMany().WillCascadeOnDelete(true);
             HasMany(stage => stage.Activiteitsverslagen).WithRequired(verslag => verslag.Stage).WillCascadeOnDelete(true);
-
+            HasMany(stage => stage.EvaluatieAntwoorden).WithRequired(antwoord => antwoord.Stage).WillCascadeOnDelete(true);
         }
     }
 }

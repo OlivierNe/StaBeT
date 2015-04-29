@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -46,6 +47,8 @@ namespace StageBeheersTool.Controllers
         }
 
         #region Stage toewijzen
+
+
         [Authorize(Role.Admin)]
         public ActionResult StageToewijzen(int studentId, int stageId)
         {
@@ -118,6 +121,32 @@ namespace StageBeheersTool.Controllers
         #endregion
 
         #region lijsten
+        [Authorize(Role.Admin, Role.Bedrijf, Role.Student, Role.Begeleider)]
+        public ActionResult Index()
+        {
+            if (CurrentUser.IsBegeleider())
+            {
+                return RedirectToAction("MijnStages", "Stage");
+            }
+            if (CurrentUser.IsStudent())
+            {
+                if (IdentityHelpers.StudentHeeftStage())
+                {
+                    return RedirectToAction("MijnStage", "Stage");
+                }
+                return RedirectToAction("BeschikbareStageopdrachten", "Stageopdracht");
+            }
+            if (CurrentUser.IsAdmin())
+            {
+                return RedirectToAction("StagesToewijzen", "Stage");
+            }
+            if (CurrentUser.IsBedrijf())
+            {
+                return RedirectToAction("MijnToegewezenStages", "Stage");
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+        }
+
         [Authorize(Role.Admin, Role.Begeleider)]
         public ActionResult List(StageListVM model)
         {
@@ -145,6 +174,20 @@ namespace StageBeheersTool.Controllers
             model.Title = Resources.TitelMijnStages;
             model.ToonEditStageopdracht = true;
 
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_StageList", model);
+            }
+            return View("StageOverzicht", model);
+        }
+
+        [Authorize(Role.Bedrijf)]
+        public ActionResult MijnToegewezenStages(StageListVM model)
+        {
+            var bedrijf = _userService.GetBedrijf();
+            model.Stages = bedrijf.GetStagesVanHuidigAcademiejaar();
+            model.Title = Resources.TitelMijnStages + " " + AcademiejaarHelper.HuidigAcademiejaar();
+            model.ToonEvaluatieformulier = true;
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_StageList", model);

@@ -82,15 +82,16 @@
         </dd>
     </dl>
     <hr />
-    <p>Door op opslaan te klikken geeft u aan een stagedossier ingediend te hebben bij de stage administratie. 
+    <p>
+        Door op opslaan te klikken geeft u aan een stagedossier ingediend te hebben bij de stage administratie.
         (eventuele richtlijnen hier plaatsen?)
     </p>
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.Id)
-        
+
         <button type="submit" class="btn btn-success">Opslaan</button>
-        @Html.ActionLink("Annuleren", "MijnVoorkeurStages", new { }, new { @class = "btn btn-default" })
+        @Html.ActionLink("Annuleren", "MijnVoorkeurStages", "Stageopdracht", new { }, new { @class = "btn btn-default" })
     }
 </div>

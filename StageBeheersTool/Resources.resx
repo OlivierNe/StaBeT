@@ -519,4 +519,7 @@
     <value>Activiteitsverslag voor week {0} ingediend.</value>
     <comment>0=# stageweek</comment>
   </data>
+  <data name="SuccesSaveEvaluatieformulier" xml:space="preserve">
+    <value>Evaluatieformulier opgeslagen.</value>
+  </data>
 </root>

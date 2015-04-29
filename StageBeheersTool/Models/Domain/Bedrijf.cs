@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Microsoft.Ajax.Utilities;
 using StageBeheersTool.Helpers;
 
 namespace StageBeheersTool.Models.Domain
@@ -80,7 +81,8 @@ namespace StageBeheersTool.Models.Domain
 
         public IEnumerable<Stageopdracht> FindStageopdrachtenVanAcademiejaar(string academiejaar)
         {
-            return Stageopdrachten.Where(so => so.Academiejaar == academiejaar).OrderBy(so => so.Titel);
+            return Stageopdrachten.Where(so => string.IsNullOrEmpty(academiejaar) 
+                || so.Academiejaar == academiejaar).OrderBy(so => so.Titel);
         }
 
         public string[] GetAcademiejaren()
@@ -253,6 +255,29 @@ namespace StageBeheersTool.Models.Domain
                     .FirstOrDefault(student => student.Id == id);
         }
 
+        public bool HeeftStage(int stageId)
+        {
+            return Stageopdrachten.Any(so => so.Stages.Any(stage => stage.Id == stageId));
+        }
+
+        public IEnumerable<Stage> GetStages()
+        {
+            return Stageopdrachten.SelectMany(so => so.Stages);
+        }
+
+        public IEnumerable<Stage> GetStagesVanHuidigAcademiejaar()
+        {
+            var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
+            return Stageopdrachten.Where(so => so.Academiejaar == academiejaar)
+                .SelectMany(so => so.Stages)
+                .OrderBy(stage => stage.Stageopdracht.Titel);
+        } 
+
+        public Stage FindStage(int id)
+        {
+            return GetStages().FirstOrDefault(stage => stage.Id == id);
+        }
+
         public bool HeeftGeldigEmail()
         {
             return new EmailAddressAttribute().IsValid(Email);
@@ -276,7 +301,6 @@ namespace StageBeheersTool.Models.Domain
             return (Email != null ? Email.GetHashCode() : 0);
         }
         #endregion
-
 
     }
 }

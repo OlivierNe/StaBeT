@@ -13,6 +13,7 @@ namespace StageBeheersTool.ViewModels
         public IEnumerable<Stageopdracht> Stageopdrachten { get; set; }
         public bool ToonZoeken { get; set; }
         public bool ToonZoekenOpStudent { get; set; }
+        public bool ToonZoekenOpBedrijf { get; set; }
         public bool ToonOordelen { get; set; }
         public bool ToonStudenten { get; set; }
         public bool ToonStatus { get; set; }

@@ -24,7 +24,7 @@
                 new { @class = "form-control", style = "width:auto" })
         </div>
     </div>
-    if (User.IsInRole("bedrijf") == false)
+    if (Model.ToonZoekenOpBedrijf)
     {
         <div class="form-group">
             @Html.LabelFor(model => model.Bedrijf, new { @class = "control-label col-md-1" })
@@ -39,7 +39,7 @@
             </div>
         </div>
     }
-    if (Model.ToonStudenten)
+    if (Model.ToonZoekenOpStudent)
     {
         <div class="form-group">
             @Html.LabelFor(model => model.Student, new { @class = "control-label col-md-1" })

@@ -5,8 +5,10 @@
     </a>
     <ul class="dropdown-menu" role="menu">
         <li>@Html.ActionLink("Nieuwe stageopdracht", "Create", "Stageopdracht")</li>
-        <li>@Html.ActionLink("Stageopdrachten", "BedrijfMijnStageopdrachten", "Stageopdracht")</li>
-        <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht", new { }, new { role = "menuitem" })</li>
+        <li>@Html.ActionLink(Resources.TitelMijnStageopdrachten + " " +
+                    AcademiejaarHelper.HuidigAcademiejaar(), "BedrijfMijnStageopdrachten", "Stageopdracht")</li>
+        <li>@Html.ActionLink("Archief", "Archief", "Stageopdracht")</li>
     </ul>
 </li>
+<li>@Html.ActionLink("Stages" + " " + AcademiejaarHelper.HuidigAcademiejaar(), "MijnToegewezenStages", "Stage") </li>
 <li>@Html.ActionLink("Contactpersonen", "List", "Contactpersoon")</li>

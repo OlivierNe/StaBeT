@@ -1,0 +1,50 @@
+﻿@model Evaluatieantwoord
+
+@if (Model.Evaluatievraag != null)
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Id, Model.Evaluatievraag.Vraag, htmlAttributes: new { @class = "control-label col-md-4" })
+
+        <div class="col-md-8">
+            @switch (Model.Evaluatievraag.SoortVraag)
+            {
+                case SoortVraag.JaNeevraag:
+                        <label class="radio-inline">
+                            <input type="radio" name="@Model.Evaluatievraag.Id" value="Ja">Ja
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="@Model.Evaluatievraag.Id" value="Nee">Nee
+                        </label>
+                    break;
+                case SoortVraag.Meningvraag:
+                    <label class="radio-inline">
+                        <input type="radio" name="@Model.Evaluatievraag.Id" value="Volledig oneens" />
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="@Model.Evaluatievraag.Id" value="Eerder oneens" />
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="@Model.Evaluatievraag.Id" value="noch oneens, noch eens" />
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="@Model.Evaluatievraag.Id" value="Eerder eens" />
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="@Model.Evaluatievraag.Id" value="Volledig eens" />
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="@Model.Evaluatievraag.Id" value="Geen mening" />
+                    </label>
+                    break;
+                case SoortVraag.Meerkeuzevraag:
+                    var keuzes = Model.Evaluatievraag == null ? null : Model.Evaluatievraag.MeerkeuzeAntwoorden.Split(';');
+                    var selectList = new SelectList(keuzes);
+                    @Html.DropDownListFor(model => model.Antwoord, selectList)
+                    break;
+                case SoortVraag.Openvraag:
+                <textarea rows="4" cols="50" name="@Model.Evaluatievraag.Id">@Model.Antwoord</textarea>
+                    break;
+            }
+        </div>
+    </div>
+}

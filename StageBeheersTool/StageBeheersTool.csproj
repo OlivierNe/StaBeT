@@ -201,6 +201,7 @@
     <Compile Include="Controllers\BaseController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\EvaluatieformulierController.cs" />
     <Compile Include="Controllers\InstellingenController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -218,16 +219,22 @@
     <Compile Include="Helpers\AcademiejaarHelper.cs" />
     <Compile Include="Helpers\DocFileResult.cs" />
     <Compile Include="Helpers\ExcelFileResult.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\ViewHelpers.cs" />
     <Compile Include="Helpers\ZipFileResult.cs" />
+    <Compile Include="Models\DAL\EvaluatievraagRepository.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableStageExtensions.cs" />
     <Compile Include="Models\DAL\Mapping\ActiviteitsverslagMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\EvaluatieantwoordMapper.cs" />
+    <Compile Include="Models\DAL\Mapping\EvaluatievraagMapper.cs" />
     <Compile Include="Models\DAL\StageRepository.cs" />
     <Compile Include="Models\Domain\Activiteitsverslag.cs" />
+    <Compile Include="Models\Domain\Evaluatieantwoord.cs" />
+    <Compile Include="Models\Domain\Evaluatievraag.cs" />
+    <Compile Include="Models\Domain\Interfaces\IEvaluatievraagRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\IDocumentService.cs" />
     <Compile Include="Models\Identity\MyClaimTypes.cs" />
     <Compile Include="Models\Identity\UserWithRoles.cs" />
-    <Compile Include="Models\DAL\Extensions\LinqExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBedrijfExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBegeleiderExtensions.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableStudentExtensions.cs" />
@@ -317,6 +324,7 @@
     <Compile Include="ViewModels\AdminViewModels.cs" />
     <Compile Include="ViewModels\BedrijfViewModels.cs" />
     <Compile Include="ViewModels\BegeleiderViewModels.cs" />
+    <Compile Include="ViewModels\EvaluatieformulierViewModels.cs" />
     <Compile Include="ViewModels\InstellingenViewModels.cs" />
     <Compile Include="ViewModels\ContactpersoonViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -407,6 +415,7 @@
     <Content Include="Scripts\lib\datepicker-nl-BE.js" />
     <Content Include="Scripts\lib\jquery-2.1.3.js" />
     <Content Include="Scripts\lib\jquery-2.1.3.min.js" />
+    <Content Include="Scripts\lib\jquery-cycle.js" />
     <Content Include="Scripts\lib\jquery-ui-1.11.4.js" />
     <Content Include="Scripts\lib\jquery-ui-1.11.4.min.js" />
     <Content Include="Scripts\lib\gridmvc.js" />
@@ -538,6 +547,9 @@
     <Content Include="Views\Activiteitsverslag\GeefFeedback.cshtml" />
     <Content Include="Views\Activiteitsverslag\Indienen.cshtml" />
     <Content Include="Views\Stage\MijnStage.cshtml" />
+    <Content Include="Views\Evaluatieformulier\Index.cshtml" />
+    <Content Include="Views\Evaluatieformulier\Stagebezoek.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Evaluatieantwoord.cshtml" />
     <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />

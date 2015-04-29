@@ -1,0 +1,26 @@
+﻿@model int
+@{
+    ViewBag.Title = "Evaluatieformulieren";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+<h4>Opvolging stage</h4>
+<ul>
+    <li>
+        @Html.ActionLink("Eerste stagebezoek", "Stagebezoek", new { stageId = Model, stagebezoek = 1 }, new { })
+    </li>
+    <li>
+        @Html.ActionLink("Tweede stagebezoek", "Stagebezoek", new { stageId = Model, stagebezoek = 2 }, new { })
+    </li>
+    <li>
+        @Html.ActionLink("Derde stagebezoek", "Stagebezoek", new { stageId = Model, stagebezoek = 3 }, new { })
+    </li>
+    <li>
+        @Html.ActionLink("Extra stagebezoek", "Stagebezoek", new { stageId = Model, stagebezoek = -1 }, new { })
+    </li>
+</ul>
+
+<p>
+    @Html.OverzichtActionLink("/Stage/Index")
+</p>

@@ -24,6 +24,7 @@ namespace StageBeheersTool.Models.Domain
         public bool GetekendStagecontract { get; set; }
 
         public virtual ICollection<Activiteitsverslag> Activiteitsverslagen { get; set; }
+        public virtual ICollection<Evaluatieantwoord> EvaluatieAntwoorden { get; set; }
 
         public string Stageperiode
         {
@@ -145,8 +146,24 @@ namespace StageBeheersTool.Models.Domain
                 }
             }
         }
+
+        public void AddEvaluatieAntwoord(Evaluatievraag evaluatievraag, string antwoord)
+        {
+            if (evaluatievraag.IsGeldigAntwoord(antwoord) == false)
+            {
+                return;
+            }
+            var oudEvaluatieantwoord = EvaluatieAntwoorden
+                .FirstOrDefault(a => a.Evaluatievraag.Equals(evaluatievraag));
+            if (oudEvaluatieantwoord != null)
+            {
+                oudEvaluatieantwoord.Antwoord = antwoord;
+            }
+            else
+            {
+                EvaluatieAntwoorden.Add(new Evaluatieantwoord { Evaluatievraag = evaluatievraag, Antwoord = antwoord });
+            }
+        }
         #endregion
-
-
     }
 }

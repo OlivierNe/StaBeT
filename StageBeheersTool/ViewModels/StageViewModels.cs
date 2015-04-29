@@ -16,6 +16,7 @@ namespace StageBeheersTool.ViewModels
         public bool ToonEdit { get; set; }
         public bool ToonEditStageopdracht { get; set; }
         public bool ToonDetails { get; set; }
+        public bool ToonEvaluatieformulier { get; set; }
 
         public string Student { get; set; }
         public string Stageopdracht { get; set; }

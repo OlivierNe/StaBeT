@@ -1,4 +1,7 @@
-﻿using System.Web;
+﻿using System;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Mvc;
 
 namespace StageBeheersTool.Helpers
@@ -41,7 +44,7 @@ namespace StageBeheersTool.Helpers
         }
 
         public static MvcHtmlString HiddenOverzicht(this HtmlHelper helper)
-         {
+        {
             var hidden = new TagBuilder("input");
             hidden.Attributes.Add("type", "hidden");
             hidden.Attributes.Add("name", "Overzicht");
@@ -50,11 +53,36 @@ namespace StageBeheersTool.Helpers
             return MvcHtmlString.Create(hidden.ToString(TagRenderMode.Normal));
         }
 
-        public static MvcHtmlString OverzichtActionLink(this HtmlHelper helper)
+        public static MvcHtmlString OverzichtActionLink(this HtmlHelper helper, string fallbackOverzicht = null)
         {
             var actionlink = new TagBuilder("a");
             actionlink.SetInnerText("Terug naar overzicht");
-            actionlink.Attributes.Add("href", HttpUtility.UrlDecode(GetOverzicht()));
+            var overzicht = GetOverzicht();
+
+            if (fallbackOverzicht != null)
+            {
+                int van = overzicht.LastIndexOf('/');
+                if (van == -1)
+                {
+                    overzicht = fallbackOverzicht;
+                }
+                else
+                {
+                    var action = overzicht.Substring(++van);
+                    var tot = action.IndexOf('?');
+                    if (tot != -1) action = action.Remove(tot);
+                    if (string.IsNullOrEmpty(action)) action = "Index";
+                    var controller = overzicht.Split('/')[1];
+                    var controllerFullName = string.Format("StageBeheersTool.Controllers.{0}Controller", controller.FirstLetterToUpper());
+                    var cont = Assembly.GetExecutingAssembly().GetType(controllerFullName);
+                    var exists = cont != null && cont.GetMethod(action.FirstLetterToUpper()) != null;
+                    if (exists == false)
+                    {
+                        overzicht = fallbackOverzicht;
+                    }
+                }
+            }
+            actionlink.Attributes.Add("href", overzicht);
             return MvcHtmlString.Create(actionlink.ToString(TagRenderMode.Normal));
         }
 

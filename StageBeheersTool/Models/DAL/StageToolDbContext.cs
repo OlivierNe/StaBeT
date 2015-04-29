@@ -35,7 +35,8 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new StageMapper());
             modelBuilder.Configurations.Add(new VoorkeurStageMapper());
             modelBuilder.Configurations.Add(new ActiviteitsverslagMapper());
-
+            modelBuilder.Configurations.Add(new EvaluatievraagMapper());
+            modelBuilder.Configurations.Add(new EvaluatieantwoordMapper());
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
@@ -64,6 +65,8 @@ namespace StageBeheersTool.Models.DAL
 
         public DbSet<AcademiejaarInstellingen> AcademiejarenInstellingen { get; set; }
         public DbSet<Instelling> Instellingen { get; set; }
+
+        public DbSet<Evaluatievraag> Evaluatievragen { get; set; }
 
         public static StageToolDbContext Create()
         {

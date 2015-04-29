@@ -10,18 +10,24 @@
                 new { @class = "form-control", style = "width:auto" })
         </div>
     </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Bedrijf, new { @class = "control-label col-md-1" })
-        <div class="col-md-11">
-            @Html.EditorFor(model => model.Bedrijf, new { @class = "form-control" })
+    if (Model.ToonZoekenOpBedrijf)
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Bedrijf, new { @class = "control-label col-md-1" })
+            <div class="col-md-11">
+                @Html.EditorFor(model => model.Bedrijf, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Student, new { @class = "control-label col-md-1" })
-        <div class="col-md-11">
-            @Html.EditorFor(model => model.Student, new { @class = "form-control" })
+    }
+    if (Model.ToonZoekenOpStudent)
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Student, new { @class = "control-label col-md-1" })
+            <div class="col-md-11">
+                @Html.EditorFor(model => model.Student, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
+    }
     <div class="col-md-offset-1">
         <button type="submit" class="btn btn-default" id="zoekenSubmit">Zoeken</button>
         <a id="CancelBtn" class="btn btn-default">Annuleren</a>

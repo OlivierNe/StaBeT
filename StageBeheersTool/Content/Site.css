@@ -94,9 +94,10 @@ textarea {
     left: -6px;
 }
 
-/*li.nav:hover {
-    background: #000000;
-}*/
+
+td.vraag {
+    height: 35px;
+}
 
 .myBorder {
     background: #252525;
@@ -108,6 +109,42 @@ textarea {
 .omschrijving {
     white-space: pre-line;
 }
+
+ .table-header-rotated {
+            border-collapse: collapse;
+        }
+
+        .table-header-rotated th {
+            padding: 5px 10px;
+        }
+
+        .table-header-rotated td {
+            text-align: center;
+            padding: 5px 5px;
+            width: 100px;
+        }
+
+        .csstransforms .table-header-rotated th.rotate {
+            height: 140px;
+            white-space: nowrap;
+        }
+
+            .csstransforms .table-header-rotated th.rotate > div {
+                -webkit-transform: translate(25px, 51px) rotate(315deg);
+                -ms-transform: translate(25px, 51px) rotate(315deg);
+                transform: translate(25px, 51px) rotate(315deg);
+                width: 30px;
+            }
+
+                .csstransforms .table-header-rotated th.rotate > div > span {
+                    border-bottom: 1px solid #ccc;
+                    padding: 5px 10px;
+                }
+
+        .table-header-rotated th.row-header {
+            padding: 0 10px;
+            border-bottom: 1px solid #ccc;
+        }
 
 /*sidebar*/
 #wrapper {
@@ -224,3 +261,8 @@ textarea {
 
 /*end sidebar*/
 
+@media(max-width: 991px) {
+    #wrapper {
+        top: 50px;
+    }
+}

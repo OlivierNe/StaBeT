@@ -46,8 +46,13 @@
             }
             if (Model.ToonEdit)
             {
-                retVal += " " + Html.ActionLink("Wijzigen", "Edit", "Stage",
+                retVal += " " + Html.ActionLink("Bewerken", "Edit", "Stage",
                     new { stage.Id, overzicht }, new { @class = "btn btn-default" });
+            }
+            if (Model.ToonEvaluatieformulier)
+            {
+                retVal += " " + Html.ActionLink("Evaluatieformulieren", "Index", "Evaluatieformulier",
+                    new { stageid = stage.Id,overzicht }, new { @class = "btn btn-default" });
             }
             return retVal;
         });
@@ -57,7 +62,5 @@
             .RenderValueAs(stage => Html.ActionLink("Activiteitsverslagen", "VanStudent", "Activiteitsverslag",
                 new { stage.Id, overzicht }, new { @class = "btn btn-default", title = "Activiteitsverslagen bekijken" }));
     }
-
-
 }).Sortable(true).WithPaging(10).EmptyText("Geen stages gevonden")
 </div>
