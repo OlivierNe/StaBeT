@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using AutoMapper;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
@@ -106,7 +107,7 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Begeleider, Role.Admin)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(BegeleiderEditVM model, HttpPostedFileBase fotoFile)
+        public ActionResult Edit(BegeleiderEditVM model)
         {
             Begeleider begeleider;
             if (CurrentUser.IsAdmin())
@@ -121,21 +122,18 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            if (_imageService.IsValidImage(fotoFile))
-            {
-                if (_imageService.HasValidSize(fotoFile))
-                {
-                    model.FotoUrl = _imageService.SaveImage(fotoFile, begeleider.FotoUrl, "~/Images/Begeleider");
-                }
-                else
-                {
-                    ModelState.AddModelError("", string.Format(Resources.ErrorOngeldigeAfbeeldingGrootte, (_imageService.MaxSize() / 1024)));
-                    return View(model);
-                }
-            }
             var begeleiderModel = Mapper.Map<Begeleider>(model);
+            try
+            {
+                var foto = _imageService.GetFoto(model.FotoFile, begeleider.Naam);
+                begeleiderModel.Foto = foto;
+            }
+            catch (ApplicationException ex)
+            {
+                SetViewError(ex.Message);
+            }
             _begeleiderRepository.Update(begeleiderModel);
-            SetViewMessage("Gegevens gewijzigd.");
+            SetViewMessage("Wijzigingen opgeslagen.");
             return RedirectToAction("Details", new { model.Id, Overzicht });
         }
 

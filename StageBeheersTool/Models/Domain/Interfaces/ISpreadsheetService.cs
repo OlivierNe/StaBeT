@@ -11,6 +11,7 @@ namespace StageBeheersTool.Models.Domain
         void AddHeaders(List<string> headers);
         void AddRow(List<string> dataItems);
         MemoryStream GetStream();
+        IList<Student> ImportStudenten(Stream inputStream);
         void CloseSpreadsheet();
     }
 }

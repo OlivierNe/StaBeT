@@ -8,5 +8,6 @@ namespace StageBeheersTool.Models.Domain
         bool IsValidImage(HttpPostedFileBase image);
         bool HasValidSize(HttpPostedFileBase fotoFile);
         int MaxSize();
+        Foto GetFoto(HttpPostedFileBase file, string naam = null);
     }
 }

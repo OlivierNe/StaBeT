@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Security.Claims;
-using System.Web.Mvc;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using StageBeheersTool.Models.DAL;
@@ -117,6 +116,20 @@ namespace StageBeheersTool.Models.Services
             return user;
         }
 
+
+        public void CreateLogins(List<string> emailList, params string[] roles)
+        {
+            foreach (var email in emailList)
+            {
+                var user = new ApplicationUser { UserName = email, Email = email, EmailConfirmed = true };
+                var result = _userManager.Create(user);
+                if (result.Succeeded)
+                {
+                    AddRolesToUser(user, roles);
+                }
+            }
+        }
+
         public void DeleteAlleStudentAccounts()
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_dbContext));
@@ -159,7 +172,6 @@ namespace StageBeheersTool.Models.Services
             return _dbContext.Bedrijven.Any(s => s.Email == bedrijf.Email);
         }
         #endregion
-
     }
 
 }

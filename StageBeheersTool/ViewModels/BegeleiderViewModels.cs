@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.ViewModels
@@ -67,8 +68,8 @@ namespace StageBeheersTool.ViewModels
         public string Postcode { get; set; }
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Straat { get; set; }
-        [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
-        public string FotoUrl { get; set; }
+        public Foto Foto { get; set; }
+        public HttpPostedFileBase FotoFile { get; set; }
 
         public string Overzicht { get; set; }
     }
@@ -85,7 +86,7 @@ namespace StageBeheersTool.ViewModels
         public string Postcode { get; set; }
         public string Straat { get; set; }
         public string Gsm { get; set; }
-        public string FotoUrl { get; set; }
+        public Foto Foto { get; set; }
 
         public bool ToonEdit { get; set; }
         public bool ToonTerugNaarLijst { get; set; }

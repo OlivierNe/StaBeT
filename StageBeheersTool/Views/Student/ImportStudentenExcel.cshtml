@@ -8,7 +8,10 @@
 {
     @Html.AntiForgeryToken()
     <p>
-        <input type="file" name="file" id="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+        Gegevens studenten (excel bestand) <input type="file" name="file" id="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+    </p>
+    <p>
+        Foto's studenten (zip) <input type="file" id="zipFile" name="zipFile" accept="application/zip" />
     </p>
     <p>
         <button type="submit" class="btn btn-default">Importeren</button>

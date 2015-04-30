@@ -37,6 +37,7 @@ namespace StageBeheersTool.Models.DAL
             modelBuilder.Configurations.Add(new ActiviteitsverslagMapper());
             modelBuilder.Configurations.Add(new EvaluatievraagMapper());
             modelBuilder.Configurations.Add(new EvaluatieantwoordMapper());
+            modelBuilder.Configurations.Add(new FotoMapper());
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
@@ -47,8 +48,6 @@ namespace StageBeheersTool.Models.DAL
                 .Property(c => c.UserName).HasMaxLength(128).IsRequired();
             modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Roles).WithRequired().HasForeignKey(r => r.UserId).WillCascadeOnDelete(true);
             modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Claims).WithRequired().HasForeignKey(c => c.UserId).WillCascadeOnDelete(true);
-            //modelBuilder.Entity<IdentityUserRole>().ToTable("aspNetUsers");
-            //.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("UserNameIndex") { IsUnique = false }));
 
         }
 

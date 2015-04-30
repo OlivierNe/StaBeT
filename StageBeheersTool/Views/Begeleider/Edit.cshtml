@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Begeleider - gegevens wijzigen";
-    var imageUrl = string.IsNullOrWhiteSpace(Model.FotoUrl) ? "~/Images/profiel.jpg" : Model.FotoUrl;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -13,16 +12,19 @@
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
         <div class="form-group">
-            <div class="row">
-                <img class="col-md-push-2 col-xs-2 img-responsive" src="@Url.Content(imageUrl)" id="foto" />
-            </div>
-            <div class="row">
-                <input class="col-md-push-2 col-xs-4" type="file" name="fotoFile" id="fotoFile" accept="image/*" onchange="showpreview(this);" />
-            </div>
+            @if (Model.Foto == null)
+            {
+                <img class="col-sm-push-1 col-xs-2 img-responsive" id="foto" />
+            }
+            else
+            {
+                <img class="col-sm-push-1 col-xs-2 img-responsive" src="data:image;base64,@Convert.ToBase64String(Model.Foto.FotoData)" id="foto" />
+            }
         </div>
-
+        <div class="row">
+            <input class="col-md-push-2 col-xs-4" type="file" name="fotoFile" id="fotoFile" accept="image/*" onchange="showpreview(this);" />
+        </div>
         <div class="form-group">
             @Html.LabelFor(model => model.Familienaam, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -80,7 +82,6 @@
         </div>
 
         @Html.HiddenFor(model => model.Id)
-        @Html.HiddenFor(model => model.FotoUrl)
         @Html.HiddenOverzicht()
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

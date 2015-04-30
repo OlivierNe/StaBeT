@@ -22,8 +22,8 @@ namespace StageBeheersTool.Models.DAL.Mapping
             Property(begeleider => begeleider.Gemeente).HasMaxLength(30);
             Property(begeleider => begeleider.Straat).HasMaxLength(50);
             Property(begeleider => begeleider.Postcode).HasMaxLength(15);
-            Property(begeleider => begeleider.FotoUrl).HasMaxLength(100);
 
+            HasOptional(begeleider => begeleider.Foto).WithOptionalDependent().WillCascadeOnDelete(true);
             HasMany(begeleider => begeleider.Stageopdrachten).WithOptional(stageopdracht => stageopdracht.Stagebegeleider);
             HasMany(begeleider => begeleider.StageAanvragen).WithRequired(aanvraag => aanvraag.Begeleider).WillCascadeOnDelete(true);
         }

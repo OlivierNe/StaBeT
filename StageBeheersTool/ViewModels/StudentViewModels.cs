@@ -78,7 +78,9 @@ namespace StageBeheersTool.ViewModels
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Straat { get; set; }
         [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
-        public string FotoUrl { get; set; }
+        public Foto Foto { get; set; }
+        public HttpPostedFileBase FotoFile  { get; set; }
+
         public SelectList KeuzevakSelectList { get; set; }
 
         public bool ToonTerug { get; set; }
@@ -103,7 +105,7 @@ namespace StageBeheersTool.ViewModels
         public string Straat { get; set; }
         public Keuzepakket Keuzepakket { get; set; }
         public string Gsm { get; set; }
-        public string FotoUrl { get; set; }
+        public Foto Foto { get; set; }
 
         public bool ToonDelete { get; set; }
         public bool ToonEdit { get; set; }

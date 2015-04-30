@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Infrastructure;
+﻿using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using MySql.Data.MySqlClient;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
@@ -32,15 +33,40 @@ namespace StageBeheersTool.Models.DAL
                 var sqlException = ex.InnerException.InnerException as MySqlException;
                 if (sqlException != null && sqlException.Number == 1062)
                 {
-                    throw new ApplicationException(string.Format(Resources.ErrorStudentCreateHogentEmailBestaatAl, student.HogentEmail));
+                    throw new ApplicationException(string.Format(
+                        Resources.ErrorStudentCreateHogentEmailBestaatAl, student.HogentEmail));
                 }
                 throw;
             }
         }
 
+        public void AddAll(IList<Student> studenten)
+        {
+            foreach (var student in studenten)
+            {
+                var oudeStudent = FindByEmail(student.HogentEmail);
+                if (oudeStudent == null)
+                {
+
+                    _studenten.Add(student);
+                }
+                else
+                {
+                    UpdateStudent(oudeStudent, student);
+                }
+            }
+            SaveChanges();
+        }
+
         public Student FindByEmail(string hogentEmail)
         {
             return _studenten.SingleOrDefault(student => student.HogentEmail == hogentEmail);
+        }
+
+        public Student FindByNaam(string voornaam, string familienaam)
+        {
+            return _studenten.FirstOrDefault(student => student.Voornaam.ToLower() == voornaam.ToLower()
+                && student.Familienaam.ToLower() == familienaam.ToLower());
         }
 
         public Student FindById(int id)
@@ -57,7 +83,8 @@ namespace StageBeheersTool.Models.DAL
         {
             var huidigAcademiejaar = AcademiejaarHelper.HuidigAcademiejaar();
             return _studenten.Include(student => student.Stages)
-                .Where(student => student.Stages.Any(stage => stage.Stageopdracht.Academiejaar == huidigAcademiejaar))
+                .Where(student => student.Stages.Any(stage =>
+                    stage.Stageopdracht.Academiejaar == huidigAcademiejaar))
                 .OrderBy(student => student.Familienaam);
         }
 
@@ -66,6 +93,12 @@ namespace StageBeheersTool.Models.DAL
             var teUpdatenStudent = FindById(student.Id);
             if (teUpdatenStudent == null)
                 return;
+            UpdateStudent(teUpdatenStudent, student);
+            SaveChanges();
+        }
+
+        private void UpdateStudent(Student teUpdatenStudent, Student student)
+        {
             teUpdatenStudent.Voornaam = student.Voornaam;
             teUpdatenStudent.Familienaam = student.Familienaam;
             teUpdatenStudent.Keuzepakket = student.Keuzepakket;
@@ -74,8 +107,18 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenStudent.Postcode = student.Postcode;
             teUpdatenStudent.Gemeente = student.Gemeente;
             teUpdatenStudent.Straat = student.Straat;
-            teUpdatenStudent.FotoUrl = student.FotoUrl;
-            SaveChanges();
+            teUpdatenStudent.Geboortedatum = student.Geboortedatum;
+            teUpdatenStudent.Geboorteplaats = student.Geboorteplaats;
+            if (student.Foto != null)
+            {
+                teUpdatenStudent.Foto.FotoData = student.Foto.FotoData;
+                teUpdatenStudent.Foto.ContentType = student.Foto.ContentType;
+                teUpdatenStudent.Foto.Naam = student.Foto.Naam;
+            }
+            else
+            {
+                teUpdatenStudent.Foto = student.Foto;
+            }
         }
 
         public void Delete(Student student)
@@ -90,7 +133,8 @@ namespace StageBeheersTool.Models.DAL
                 var sqlException = ex.InnerException.InnerException as MySqlException;
                 if (sqlException != null && sqlException.Number == 1451)
                 {
-                    throw new ApplicationException(string.Format(Resources.ErrorDeleteStudent, student.Naam));
+                    throw new ApplicationException(string.Format(
+                        Resources.ErrorDeleteStudent, student.Naam));
                 }
                 throw;
             }
@@ -107,16 +151,11 @@ namespace StageBeheersTool.Models.DAL
                 string message = String.Empty;
                 foreach (var eve in e.EntityValidationErrors)
                 {
-
                     message +=
                         String.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
                             eve.Entry.Entity.GetType().Name, eve.Entry.GetValidationResult());
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        message +=
-                            String.Format("- Property: \"{0}\", Error: \"{1}\"",
-                                ve.PropertyName, ve.ErrorMessage);
-                    }
+                    message = eve.ValidationErrors.Aggregate(message, (current, ve) => current +
+                        String.Format("- Property: \"{0}\", Error: \"{1}\"", ve.PropertyName, ve.ErrorMessage));
                 }
                 throw new ApplicationException("" + message);
             }

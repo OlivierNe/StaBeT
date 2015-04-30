@@ -1,11 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
-using HtmlAgilityPack;
+using Ionic.Zip;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.Identity;
@@ -136,30 +132,27 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Student, Role.Admin)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(StudentEditVM model, HttpPostedFileBase fotoFile)
+        public ActionResult Edit(StudentEditVM model)
         {
             var student = FindStudent(model.Id);
             if (student == null)
             {
                 return HttpNotFound();
             }
-            if (_imageService.IsValidImage(fotoFile))
-            {
-                if (_imageService.HasValidSize(fotoFile))
-                {
-                    model.FotoUrl = _imageService.SaveImage(fotoFile, student.FotoUrl, "~/Images/Student");
-                }
-                else
-                {
-                    ModelState.AddModelError("", string.Format(Resources.ErrorOngeldigeAfbeeldingGrootte, (_imageService.MaxSize() / 1024)));
-                    return View(model);
-                }
-            }
             var studentModel = Mapper.Map<StudentEditVM, Student>(model);
             studentModel.Id = student.Id;
+            try
+            {
+                var foto = _imageService.GetFoto(model.FotoFile, student.Naam);
+                studentModel.Foto = foto;
+            }
+            catch (ApplicationException ex)
+            {
+                SetViewError(ex.Message);
+            }
             studentModel.Keuzepakket = model.KeuzepakketId == null ? null : _keuzepakketRepository.FindBy((int)model.KeuzepakketId);
             _studentRepository.Update(studentModel);
-            SetViewMessage("Gegevens gewijzigd.");
+            SetViewMessage("Wijzigingen opgeslagen");
             return RedirectToAction("Details", new { studentModel.Id, Overzicht });
         }
 
@@ -202,36 +195,73 @@ namespace StageBeheersTool.Controllers
             return RedirectToLocal(overzicht);
         }
 
+        [Authorize(Role.Admin)]
         public ActionResult ImportStudentenExcel()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult ImportStudentenExcel(HttpPostedFileBase file)
+        [ValidateAntiForgeryToken]
+        [Authorize(Role.Admin)]
+        public ActionResult ImportStudentenExcel(HttpPostedFileBase file, HttpPostedFileBase zipFile)
         {
-            try
+            if (file == null && zipFile == null)
             {
-                using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(file.InputStream, false))
+                SetViewError("Geen bestand geselecteerd.");
+                return View();
+            }
+            if (file != null)
+            {
+                try
                 {
-                    WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
-                    WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
-                    SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                    string text;
-                    foreach (Row r in sheetData.Elements<Row>())
+                    var studenten = _spreadsheetService.ImportStudenten(file.InputStream);
+                    _studentRepository.AddAll(studenten);
+                    var hogentEmails = studenten.Select(s => s.HogentEmail).ToList();
+                    _userService.CreateLogins(hogentEmails, Role.Student);
+                    SetViewMessage("Studenten succesvol geïmporteerd.");
+                }
+                catch (FileFormatException)
+                {
+                    SetViewError("Ongeldig bestand formaat.");
+                    return View();
+                }
+            }
+            if (zipFile != null)
+            {
+                using (ZipFile fotos = ZipFile.Read(zipFile.InputStream))
+                {
+                    foreach (ZipEntry fotoFile in fotos)
                     {
-                        foreach (Cell c in r.Elements<Cell>())
+                        using (MemoryStream fotoStream = new MemoryStream())
                         {
-                            text = c.CellValue.Text;
+                            var studentNaam = fotoFile.FileName.Substring(0, fotoFile.FileName.LastIndexOf('_'));
+                            var idx = studentNaam.LastIndexOf('_');
+                            var voornaam = studentNaam.Substring(idx).Trim('_', ' ');
+                            var familienaam = studentNaam.Substring(0, idx).Trim('_', ' ');
+                            var student = _studentRepository.FindByNaam(voornaam, familienaam);
+                            if (student == null)
+                                continue;
+                            fotoFile.Extract(fotoStream);
+                            if (student.Foto == null)
+                            {
+                                student.Foto = new Foto
+                                {
+                                    ContentType = "image/jpeg",
+                                    FotoData = fotoStream.ToArray(),
+                                    Naam = student.Naam
+                                };
+                            }
+                            else
+                            {
+                                student.Foto.ContentType = "image/jpeg";
+                                student.Foto.FotoData = fotoStream.ToArray();
+                                student.Foto.Naam = student.Naam;
+                            }
+                            _studentRepository.Update(student);
                         }
                     }
                 }
-            }
-            catch (FileFormatException ex)
-            {
-                HtmlDocument doc = new HtmlDocument();
-                doc.Load(file.InputStream);
-                HtmlNode table = doc.DocumentNode.SelectSingleNode("/table");
             }
             return View();
         }

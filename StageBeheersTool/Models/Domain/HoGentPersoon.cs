@@ -6,7 +6,8 @@ namespace StageBeheersTool.Models.Domain
     {
         #region Properties
         public string HogentEmail { get; set; }
-        public string FotoUrl { get; set; }
+       // public string FotoUrl { get; set; }
+        public virtual Foto Foto { get; set; }
 
         public new string Naam
         {
