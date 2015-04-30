@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Alle student accounts verwijderen";
+}
+
+<h3 class="text-danger">@ViewBag.Title?</h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <button class="btn btn-danger">Verwijderen</button>
+    @Html.ActionLink("Annuleren", "List", "Account", new { }, new { @class = "btn btn-default" })
+}
+
+

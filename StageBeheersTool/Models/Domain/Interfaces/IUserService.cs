@@ -15,6 +15,7 @@ namespace StageBeheersTool.Models.Domain
         IEnumerable<UserMetRoles> GetUsersWithRoles();
         ApplicationUser CreateLogin(string email, string wachtwoord = null, params string[] roles);
         void DeleteLogin(string email);
+        void DeleteAlleStudentAccounts();
         void SaveChanges();
     }
 }

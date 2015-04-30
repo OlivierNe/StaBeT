@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
+using System.Web.Mvc;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using StageBeheersTool.Models.DAL;
 using StageBeheersTool.Models.Domain;
@@ -13,6 +16,7 @@ namespace StageBeheersTool.Models.Services
     public class UserService : IUserService
     {
         private readonly StageToolDbContext _dbContext;
+        private readonly IDbSet<ApplicationUser> _users;
 
         private ApplicationUserManager _userManager
         {
@@ -25,6 +29,7 @@ namespace StageBeheersTool.Models.Services
         public UserService(StageToolDbContext ctx)
         {
             _dbContext = ctx;
+            _users = ctx.Users;
         }
 
         public Bedrijf GetBedrijf()
@@ -110,6 +115,18 @@ namespace StageBeheersTool.Models.Services
                 AddRolesToUser(user, roles);
             }
             return user;
+        }
+
+        public void DeleteAlleStudentAccounts()
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_dbContext));
+            IdentityRole role = roleManager.FindByName(Role.Student);
+            var studentAccounts = _users.Where(user => user.Roles.Any(identRole => identRole.RoleId == role.Id)).ToList();
+            foreach (var user in studentAccounts)
+            {
+                _users.Remove(user);
+            }
+            _dbContext.SaveChanges();
         }
 
         public void DeleteLogin(string email)

@@ -522,4 +522,7 @@
   <data name="SuccesSaveEvaluatieformulier" xml:space="preserve">
     <value>Evaluatieformulier opgeslagen.</value>
   </data>
+  <data name="SuccesDeleteAlleStudentAccounts" xml:space="preserve">
+    <value>Alle student accounts succesvol verwijderd.</value>
+  </data>
 </root>

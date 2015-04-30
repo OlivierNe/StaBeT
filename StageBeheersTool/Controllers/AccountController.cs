@@ -271,6 +271,23 @@ namespace StageBeheersTool.Controllers
             SetViewError(string.Format(Resources.ErrorDeleteAccount, user.UserName));
             return View(user);
         }
+
+        [Authorize(Role.Admin)]
+        public ActionResult DeleteAlleStudentAccounts()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Role.Admin)]
+        [ActionName("DeleteAlleStudentAccounts")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteAlleStudentAccountsConfirmed()
+        {
+            _userService.DeleteAlleStudentAccounts();
+            SetViewMessage(Resources.SuccesDeleteAlleStudentAccounts);
+            return RedirectToAction("List");
+        }
         #endregion
 
         //

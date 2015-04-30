@@ -8,9 +8,17 @@
 
 @if (Model.ToonActies)
 {
-    <p>
-        @Html.ActionLink("Nieuw account aanmaken", "Create")
-    </p>
+    <ul>
+        <li>
+            @Html.ActionLink("Nieuw account aanmaken", "Create")
+        </li>
+        <li>
+            @Html.ActionLink("Alle student accounts verwijderen", "DeleteAlleStudentAccounts")
+        </li>
+        <li>
+            @Html.ActionLink("Studenten importeren uit excel bestand", "ImportStudentenExcel","Student")
+        </li>
+    </ul>
 }
 
 @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-inline myBorder" }))

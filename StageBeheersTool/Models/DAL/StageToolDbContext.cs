@@ -45,6 +45,8 @@ namespace StageBeheersTool.Models.DAL
                 .Property(c => c.Name).HasMaxLength(128).IsRequired();
             modelBuilder.Entity<ApplicationUser>().ToTable("aspNetUsers")
                 .Property(c => c.UserName).HasMaxLength(128).IsRequired();
+            modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Roles).WithRequired().HasForeignKey(r => r.UserId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Claims).WithRequired().HasForeignKey(c => c.UserId).WillCascadeOnDelete(true);
             //modelBuilder.Entity<IdentityUserRole>().ToTable("aspNetUsers");
             //.HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("UserNameIndex") { IsUnique = false }));
 

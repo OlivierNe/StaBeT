@@ -1,4 +1,11 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using HtmlAgilityPack;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.Identity;
@@ -16,14 +23,16 @@ namespace StageBeheersTool.Controllers
         private readonly IKeuzepakketRepository _keuzepakketRepository;
         private readonly IUserService _userService;
         private readonly IImageService _imageService;
+        private readonly ISpreadsheetService _spreadsheetService;
 
         public StudentController(IStudentRepository studentRepository, IKeuzepakketRepository keuzepakketRepository,
-            IUserService userService, IImageService imageService)
+            IUserService userService, IImageService imageService, ISpreadsheetService spreadsheetService)
         {
             _studentRepository = studentRepository;
             _keuzepakketRepository = keuzepakketRepository;
             _imageService = imageService;
             _userService = userService;
+            _spreadsheetService = spreadsheetService;
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
@@ -191,6 +200,40 @@ namespace StageBeheersTool.Controllers
                 _userService.DeleteLogin(student.HogentEmail);
             }
             return RedirectToLocal(overzicht);
+        }
+
+        public ActionResult ImportStudentenExcel()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ImportStudentenExcel(HttpPostedFileBase file)
+        {
+            try
+            {
+                using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(file.InputStream, false))
+                {
+                    WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
+                    WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
+                    SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
+                    string text;
+                    foreach (Row r in sheetData.Elements<Row>())
+                    {
+                        foreach (Cell c in r.Elements<Cell>())
+                        {
+                            text = c.CellValue.Text;
+                        }
+                    }
+                }
+            }
+            catch (FileFormatException ex)
+            {
+                HtmlDocument doc = new HtmlDocument();
+                doc.Load(file.InputStream);
+                HtmlNode table = doc.DocumentNode.SelectSingleNode("/table");
+            }
+            return View();
         }
 
         [Authorize(Role.Admin)]

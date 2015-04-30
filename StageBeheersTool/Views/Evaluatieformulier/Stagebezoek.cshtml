@@ -31,13 +31,22 @@
                                     <input type="radio" name="@antwoord.Evaluatievraag.Id" value="Nee">Nee
                                 </label>
                             }
-                            else
+                            else if (antwoord.Antwoord == "Nee")
                             {
                                 <label class="radio-inline">
                                     <input type="radio" name="@antwoord.Evaluatievraag.Id" value="Ja">Ja
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="@antwoord.Evaluatievraag.Id" value="Nee" checked="checked">Nee
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="@antwoord.Evaluatievraag.Id" value="Ja">Ja
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="@antwoord.Evaluatievraag.Id" value="Nee">Nee
                                 </label>
                             }
                         </div>

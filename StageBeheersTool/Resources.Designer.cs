@@ -592,6 +592,15 @@ namespace StageBeheersTool {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alle student accounts succesvol verwijderd..
+        /// </summary>
+        public static string SuccesDeleteAlleStudentAccounts {
+            get {
+                return ResourceManager.GetString("SuccesDeleteAlleStudentAccounts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stagebedrijf &apos;{0}&apos; werd succesvol verwijderd..
         /// </summary>
         public static string SuccesDeleteBedrijf {
