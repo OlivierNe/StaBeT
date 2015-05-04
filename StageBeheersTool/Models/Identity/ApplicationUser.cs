@@ -46,13 +46,6 @@ namespace StageBeheersTool.Models.Identity
                 if (begeleider != null && string.IsNullOrEmpty(begeleider.Naam) == false)
                     display = begeleider.Naam;
             }
-            if (userIdentity.HasRole(Role.Admin) && userIdentity.HasRole(Role.Begeleider))
-            {
-                if (userIdentity.HasClaim(c => c.Type == MyClaimTypes.LoginMode) == false)
-                {
-                    manager.AddClaim(Id, new Claim(MyClaimTypes.LoginMode, Role.Begeleider));
-                }
-            }
             userIdentity.AddClaim(new Claim(MyClaimTypes.Display, display));
             return userIdentity;
         }
