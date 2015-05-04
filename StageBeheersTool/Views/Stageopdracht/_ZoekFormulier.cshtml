@@ -3,6 +3,16 @@
 <a id="searchA" class="btn btn-default" style="display:inline">Zoeken</a>
 @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", @class = "form-horizontal" }))
 {
+    if (Model.ToonZoekenOpAcademiejaar)
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Academiejaar, new { @class = "control-label col-md-1" })
+            <div class="col-md-11">
+                @Html.DropDownListFor(model => model.Academiejaar, Model.AcademiejaarSelectList, "--Academiejaar--",
+                new { @class = "form-control", style = "width:auto" })
+            </div>
+        </div>
+    }
     <div class="form-group">
         @Html.LabelFor(model => model.Semester, new { @class = "control-label col-md-1" })
         <div class="col-md-11">

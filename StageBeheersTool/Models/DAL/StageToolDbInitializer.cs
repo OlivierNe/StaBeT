@@ -15,8 +15,8 @@ using StageBeheersTool.OudeGegevens;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        DropCreateDatabaseAlways<StageToolDbContext>
-        //DropCreateDatabaseIfModelChanges<StageToolDbContext>
+        //DropCreateDatabaseAlways<StageToolDbContext>
+    DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
         public void RunSeed(StageToolDbContext ctx)
@@ -853,6 +853,12 @@ namespace StageBeheersTool.Models.DAL
                     }
                     context.Bedrijven.AddRange(bedrijven);
                 }
+
+                foreach (var so in context.Stageopdrachten.Where(so => so.Status == StageopdrachtStatus.Toegewezen && so.Stages.Count == 0).ToList())
+                {
+                    so.Status = StageopdrachtStatus.Goedgekeurd;
+                }
+
                 await context.SaveChangesAsync();
 
                 #region begeleider & student logins

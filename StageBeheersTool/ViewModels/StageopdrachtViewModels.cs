@@ -14,6 +14,7 @@ namespace StageBeheersTool.ViewModels
         public bool ToonZoeken { get; set; }
         public bool ToonZoekenOpStudent { get; set; }
         public bool ToonZoekenOpBedrijf { get; set; }
+        public bool ToonZoekenOpAcademiejaar { get; set; }
         public bool ToonOordelen { get; set; }
         public bool ToonStudenten { get; set; }
         public bool ToonStatus { get; set; }
@@ -357,6 +358,7 @@ namespace StageBeheersTool.ViewModels
             AcademiejaarSelectList = new SelectList(academiejaren);
             var statusOpties = new[] { new SelectListItem { Value = ((int)StageopdrachtStatus.NietBeoordeeld).ToString(), Text = "Niet beoordeeld"},
                      new SelectListItem { Value = ((int)StageopdrachtStatus.Toegewezen).ToString(), Text = "Toegewezen"}, 
+                     new SelectListItem{Value = "-2", Text = "Toegewezen (Zonder stagebegeleider)"},
                 new SelectListItem { Value = ((int)StageopdrachtStatus.Goedgekeurd).ToString(), Text = "Goedgekeurd"}, 
                      new SelectListItem {Value = ((int)StageopdrachtStatus.Afgekeurd).ToString(), Text = "Afgekeurd"}};
             StatusSelectList = new SelectList(statusOpties, "Value", "Text", SelectedStatus != null ? ((StageopdrachtStatus)SelectedStatus).ToString() : "");

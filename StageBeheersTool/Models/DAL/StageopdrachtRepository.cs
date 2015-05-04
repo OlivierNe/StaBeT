@@ -50,22 +50,20 @@ namespace StageBeheersTool.Models.DAL
 
         /// <summary>
         /// </summary>
-        /// <returns>Alle goedgekeurde stageopdrachten van het huidige academiejaar</returns>
+        /// <returns>Alle goedgekeurde stageopdrachten</returns>
         public IQueryable<Stageopdracht> FindGoedgekeurdeStageopdrachten()
         {
             return _stageopdrachten
-                .Where(IsinHuidigAcademiejaar())
                 .Where(so => so.Status == StageopdrachtStatus.Goedgekeurd)
                 .IncludeAndOrder();
         }
 
         /// <summary>
         /// </summary>
-        /// <returns>Alle afgekeurde stageopdrachten van het huidige academiejaar</returns>
+        /// <returns>Alle afgekeurde stageopdrachten</returns>
         public IQueryable<Stageopdracht> FindAfgekeurdeStageopdrachten()
         {
             return _stageopdrachten
-               .Where(IsinHuidigAcademiejaar())
                .Where(so => so.Status == StageopdrachtStatus.Afgekeurd)
                .IncludeAndOrder();
         }
