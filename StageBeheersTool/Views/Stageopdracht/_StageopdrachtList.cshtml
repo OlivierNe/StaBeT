@@ -82,9 +82,8 @@
                 .RenderValueAs(so => so.IsGoedgekeurd() == false
                     ? Html.ActionLink("Goedkeuren", "StageopdrachtGoedkeuren", new { id = so.Id, overzicht },
                     new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
-            
             columns.Add().Sanitized(false).Encoded(false)
-                .RenderValueAs(so => so.MagAfgekeurdWorden() == false
+                .RenderValueAs(so => so.MagAfgekeurdWorden()
                     ? Html.ActionLink("Afkeuren", "StageopdrachtAfkeuren", new { id = so.Id, overzicht },
                     new { @class = "btn btn-default" }) : MvcHtmlString.Empty);
         }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using Microsoft.AspNet.Identity;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using OudeGegevens.Models;
+using StageBeheersTool.Models.Identity;
 
 namespace StageBeheersTool.OudeGegevens
 {
@@ -49,20 +52,20 @@ namespace StageBeheersTool.OudeGegevens
             };
         }
 
-        public static Student ToStudent(student student)
+        public static Student ToStudent(student student, ApplicationUserManager manager = null)
         {
             string[] formats = { "dd/MM/yyyy", "dd-MM-yyyy", "dd.MM.yyyy", "dd/MM/yy" };
             DateTime gebdatum;
             DateTime? geboortedatum;
             var geboorteplaats = student.gebplaats;
 
-            if (student.gebdatum != null && 
+            if (student.gebdatum != null &&
                 DateTime.TryParseExact(student.gebdatum.Trim(), formats, CultureInfo.InvariantCulture,
                 DateTimeStyles.None, out gebdatum))
             {
                 geboortedatum = gebdatum;
             }
-            else if (student.gebplaats != null && 
+            else if (student.gebplaats != null &&
                 DateTime.TryParseExact(student.gebplaats.Trim(), formats, CultureInfo.InvariantCulture,
                 DateTimeStyles.None, out gebdatum))//gebdatum en gebplaats omgewisseld in oude gegevens
             {
@@ -74,18 +77,33 @@ namespace StageBeheersTool.OudeGegevens
                 geboortedatum = null;
             }
 
+            if (manager != null)
+            {
+                var acadj = AcademiejaarHelper.HuidigAcademiejaar();
+                if (acadj == student.acjaar)
+                {
+                    var user = new ApplicationUser()
+                    {
+                        Email = student.email,
+                        UserName = student.email,
+                        EmailConfirmed = true
+                    };
+                    manager.Create(user);
+                    manager.AddToRole(user.Id, Role.Student);
+                }
+            }
+
             return new Student()
             {
                 HogentEmail = student.email ?? "geenEmail" + Guid.NewGuid(),
                 Email = student.email2,
                 Voornaam = student.voornaam,
                 Familienaam = student.naam,
-                Gemeente = student.gemeente,
+                Gemeente = student.gemeente != null ? student.gemeente.Trim() : student.gemeente,
                 Straat = student.straat,
                 Postcode = student.pc,
                 Gsm = student.GSM,
                 Telefoon = student.telefoon,
-                Academiejaar = student.acjaar,
                 Geboortedatum = geboortedatum,
                 Geboorteplaats = geboorteplaats
             };

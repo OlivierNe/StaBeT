@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +14,8 @@ namespace StageBeheersTool.ViewModels
 
         public bool ToonStage { get; set; }
         public bool ToonActies { get; set; }
+        private string _titel;
+        public string Titel { get { return _titel ?? "Studenten"; } set { _titel = value; } }
 
         public string Naam { get; set; }
         public string Voornaam { get; set; }
@@ -23,6 +27,7 @@ namespace StageBeheersTool.ViewModels
         [Required]
         [Display(Name = "HoGent E-mail")]
         [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
+        [HoGentStudentEmail]
         public string HogentEmail { get; set; }
         [Display(Name = "Naam")]
         [StringLength(30, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
@@ -43,6 +48,10 @@ namespace StageBeheersTool.ViewModels
         public string Postcode { get; set; }
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Straat { get; set; }
+        [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
+        public string Geboorteplaats { get; set; }
+        [UIHint("NullableDateTime")]
+        public DateTime? Geboortedatum { get; set; }
         public SelectList KeuzevakSelectList { get; set; }
         [Display(Name = "Ook een login account aanmaken?")]
         public bool LoginAccountAanmaken { get; set; }
@@ -77,9 +86,13 @@ namespace StageBeheersTool.ViewModels
         public string Postcode { get; set; }
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Straat { get; set; }
+        [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
+        public string Geboorteplaats { get; set; }
+        [UIHint("NullableDateTime")]
+        public DateTime? Geboortedatum { get; set; }
         [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public Foto Foto { get; set; }
-        public HttpPostedFileBase FotoFile  { get; set; }
+        public HttpPostedFileBase FotoFile { get; set; }
 
         public SelectList KeuzevakSelectList { get; set; }
 
@@ -97,6 +110,7 @@ namespace StageBeheersTool.ViewModels
         public int Id { get; set; }
         public string Naam { get; set; }
         [Display(Name = "HoGent E-mail")]
+        [HoGentStudentEmail]
         public string HogentEmail { get; set; }
         [Display(Name = "E-mail")]
         public string Email { get; set; }
@@ -105,6 +119,10 @@ namespace StageBeheersTool.ViewModels
         public string Straat { get; set; }
         public Keuzepakket Keuzepakket { get; set; }
         public string Gsm { get; set; }
+        public string Geboorteplaats { get; set; }
+        [Display(Name = "Geboortedatum")]
+        public string GeboortedatumToString { get; set; }
+
         public Foto Foto { get; set; }
 
         public bool ToonDelete { get; set; }

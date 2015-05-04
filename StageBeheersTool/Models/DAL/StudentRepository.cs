@@ -109,7 +109,7 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenStudent.Straat = student.Straat;
             teUpdatenStudent.Geboortedatum = student.Geboortedatum;
             teUpdatenStudent.Geboorteplaats = student.Geboorteplaats;
-            if (student.Foto != null)
+            if (teUpdatenStudent.Foto != null)
             {
                 teUpdatenStudent.Foto.FotoData = student.Foto.FotoData;
                 teUpdatenStudent.Foto.ContentType = student.Foto.ContentType;

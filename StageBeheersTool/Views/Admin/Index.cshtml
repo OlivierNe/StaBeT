@@ -29,6 +29,10 @@
                     @Html.HiddenFor(model => model[i].HasChanged)
                     <td class="col-md-8">
                         @Html.ActionLink("Verwijderen", "Delete", new { Model[i].Email }, new { @class = "btn btn-default" })
+                        @if (Model[i].IsAdmin == false)
+                        {
+                            @Html.ActionLink("Verwijderen uit lijst", "DeleteFromList", new { Model[i].Email }, new { @class = "btn btn-default" })
+                        }
                     </td>
                 </tr>
             }

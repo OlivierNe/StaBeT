@@ -30,15 +30,57 @@ namespace StageBeheersTool.Models.Domain
         {
             get
             {
+                return String.Format("{0} - {1}", BeginStageperiode, EindeStageperiode);
+            }
+        }
+
+        public string BeginStageperiode
+        {
+            get
+            {
+                string beginStageperiode = "";
                 if (Begindatum == null || Einddatum == null)
                 {
                     if (AcademiejaarInstellingen == null) return "";
-                    return Semester == 1
-                        ? AcademiejaarInstellingen.StageperiodeSemester1()
-                        : AcademiejaarInstellingen.StageperiodeSemester2();
+                    if (Semester == 1 && AcademiejaarInstellingen.Semester1Begin != null)
+                    {
+                        beginStageperiode = ((DateTime)AcademiejaarInstellingen.Semester1Begin).ToString("dd/MM/yyyy");
+                    }
+                    else if (Semester == 2 && AcademiejaarInstellingen.Semester2Begin != null)
+                    {
+                        beginStageperiode = ((DateTime)AcademiejaarInstellingen.Semester2Begin).ToString("dd/MM/yyyy");
+                    }
                 }
-                return String.Format("{0} - {1}", ((DateTime)Begindatum).ToString("d"),
-                    ((DateTime)Einddatum).ToString("d"));
+                else
+                {
+                    beginStageperiode = ((DateTime)Begindatum).ToString("dd/MM/yyyy");
+                }
+                return beginStageperiode;
+            }
+        }
+
+        public string EindeStageperiode
+        {
+            get
+            {
+                string eindeStageperiode = "";
+                if (Begindatum == null || Einddatum == null)
+                {
+                    if (AcademiejaarInstellingen == null) return "";
+                    if (Semester == 1 && AcademiejaarInstellingen.Semester1Einde != null)
+                    {
+                        eindeStageperiode = ((DateTime)AcademiejaarInstellingen.Semester1Einde).ToString("dd/MM/yyyy");
+                    }
+                    else if (Semester == 2 && AcademiejaarInstellingen.Semester2Einde != null)
+                    {
+                        eindeStageperiode = ((DateTime)AcademiejaarInstellingen.Semester2Einde).ToString("dd/MM/yyyy");
+                    }
+                }
+                else
+                {
+                    eindeStageperiode = ((DateTime)Einddatum).ToString("dd/MM/yyyy");
+                }
+                return eindeStageperiode;
             }
         }
 

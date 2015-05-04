@@ -151,6 +151,7 @@ namespace StageBeheersTool.ViewModels
                 return _kolommen ?? (_kolommen = new Dictionary<string, string>
                 {
                     {"Bedrijf", "Bedrijf.Naam"},
+                    {"Bedrijf E-mail","Bedrijf.Email"},
                     {"Bedrijf adres", "Bedrijf.Adres"},
                     {"Bedrijf gemeente", "Bedrijf.Gemeente"},
                     {"Bedrijfstelefoon", "Bedrijf.Telefoon"},

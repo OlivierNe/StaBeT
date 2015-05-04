@@ -59,7 +59,7 @@
                     @Html.ActionLink("Studenten", "List", "Student")
                 </li>
                 <li>
-                    @Html.ActionLink("Studenten met stage", "MetToegewezenStage", "Student")
+                    @Html.ActionLink("Studenten met stage " + AcademiejaarHelper.HuidigAcademiejaar(), "MetToegewezenStage", "Student")
                 </li>
                 <li>
                     @Html.ActionLink("Studenten importeren", "ImportStudentenExcel", "Student")

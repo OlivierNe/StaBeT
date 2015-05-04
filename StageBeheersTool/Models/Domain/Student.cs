@@ -7,7 +7,6 @@ namespace StageBeheersTool.Models.Domain
     public class Student : HoGentPersoon
     {
         #region Properties
-        public string Academiejaar { get; set; }
         public string Geboorteplaats { get; set; }
         public DateTime? Geboortedatum { get; set; }
 

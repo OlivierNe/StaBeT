@@ -65,7 +65,7 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenBegeleider.Postcode = begeleider.Postcode;
             teUpdatenBegeleider.Gemeente = begeleider.Gemeente;
             teUpdatenBegeleider.Straat = begeleider.Straat;
-            if (begeleider.Foto != null)
+            if (teUpdatenBegeleider.Foto != null)
             {
                 teUpdatenBegeleider.Foto.FotoData = begeleider.Foto.FotoData;
                 teUpdatenBegeleider.Foto.ContentType = begeleider.Foto.ContentType;

@@ -420,6 +420,9 @@ namespace StageBeheersTool.Controllers
                         case "Bedrijf":
                             row.Add(stageopdracht.Bedrijf.Naam);
                             break;
+                        case "Bedrijf E-mail":
+                            row.Add(stageopdracht.Bedrijf.Email);
+                            break;
                         case "Begeleider":
                             row.Add(stageopdracht.Stagebegeleider == null ? "" : stageopdracht.Stagebegeleider.Naam);
                             break;
@@ -793,8 +796,10 @@ namespace StageBeheersTool.Controllers
         {
             var stageopdracht = _stageopdrachtRepository.FindById(id);
             Admin.KeurStageopdrachtGoed(stageopdracht);
+            string message = "";
             if (stageopdracht.Bedrijf.HeeftGeldigEmail())
             {
+                message = "E-mail verzonden.";
                 await _emailService.SendAsync(EmailMessages.StageopdrachtGoedkeurenMail(stageopdracht));
             }
             else
@@ -802,7 +807,7 @@ namespace StageBeheersTool.Controllers
                 SetViewError(String.Format(Resources.ErrorMailBedrijf, stageopdracht.Bedrijf.Naam, stageopdracht.Bedrijf.Email));
             }
             _stageopdrachtRepository.SaveChanges();
-            SetViewMessage(string.Format(Resources.SuccesStageGoedgekeurd, stageopdracht.Titel));
+            SetViewMessage(string.Format(Resources.SuccesStageGoedgekeurd, stageopdracht.Titel) + " " + message);
             return RedirectToLocal(Overzicht);
         }
 

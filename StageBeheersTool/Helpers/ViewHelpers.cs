@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.Helpers
 {
@@ -26,7 +28,6 @@ namespace StageBeheersTool.Helpers
         {
             return HttpContext.Current.Request.Url.PathAndQuery;
         }
-
 
         public static string GetOverzicht()
         {
@@ -86,5 +87,15 @@ namespace StageBeheersTool.Helpers
             return MvcHtmlString.Create(actionlink.ToString(TagRenderMode.Normal));
         }
 
+        public static MvcHtmlString DisplayFoto(this HtmlHelper helper, UrlHelper url, Foto foto)
+        {
+            var imgSrc = foto != null ? "data:image;base64," + Convert.ToBase64String(foto.FotoData) :
+                url.Content("~/Images/profiel.jpg");
+            var tag = new TagBuilder("img");
+            tag.AddCssClass("col-sm-push-2 col-xs-2 img-responsive");
+            tag.Attributes.Add("id", "foto");
+            tag.Attributes.Add("src", imgSrc);
+            return MvcHtmlString.Create(tag.ToString(TagRenderMode.SelfClosing));
+        }
     }
 }

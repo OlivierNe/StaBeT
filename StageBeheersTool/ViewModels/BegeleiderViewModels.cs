@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 
 namespace StageBeheersTool.ViewModels
@@ -15,12 +16,12 @@ namespace StageBeheersTool.ViewModels
         public string Voornaam { get; set; }
     }
 
-
     public class BegeleiderCreateVM
     {
         [EmailAddress]
         [Required]
         [Display(Name = "HoGent E-mail")]
+        [HoGentPersoneelEmail]
         [StringLength(100, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string HogentEmail { get; set; }
         [Display(Name = "Naam")]
@@ -55,6 +56,7 @@ namespace StageBeheersTool.ViewModels
         [StringLength(20, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "ErrorVeldlengte")]
         public string Voornaam { get; set; }
         [Display(Name = "Hogent E-mail")]
+        [HoGentPersoneelEmail]
         public string HogentEmail { get; set; }
         [Display(Name = "E-mail")]
         [EmailAddress]

@@ -86,6 +86,22 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Geboorteplaats, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Geboorteplaats, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Geboorteplaats, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Geboortedatum, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Geboortedatum, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Geboortedatum, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 checkbox">
                 @Html.CheckBoxFor(model => model.LoginAccountAanmaken, new { htmlAttributes = new { @class = "" } })
                 <label for="LoginAccountAanmaken">Ook een login account aanmaken?</label>

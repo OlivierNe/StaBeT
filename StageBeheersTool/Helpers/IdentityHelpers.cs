@@ -26,7 +26,8 @@ namespace StageBeheersTool.Helpers
         {
             var identity = (ClaimsIdentity)HttpContext.Current.User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
-            var mode = claims.Where(c => c.Type == MyClaimTypes.LoginMode).Select(c => c.Value).FirstOrDefault();
+            var mode = claims.Where(c => c.Type == MyClaimTypes.LoginMode).Select(c => c.Value)
+                .FirstOrDefault() ?? Role.Begeleider;
             return mode;
         }
 

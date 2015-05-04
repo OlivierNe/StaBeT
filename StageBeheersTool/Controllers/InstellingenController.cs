@@ -82,6 +82,27 @@ namespace StageBeheersTool.Controllers
             }
             return View(model);
         }
+
+        [Authorize(Role.Admin, Role.Bedrijf)]
+        public ActionResult GetStageperiodes(string academiejaar)
+        {
+            if (academiejaar == null)
+            {
+                academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
+            }
+            var academiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(academiejaar);
+            if (academiejaarInstellingen == null)
+            {
+                return HttpNotFound();
+            }
+
+            var model = new
+            {
+                stageperiodeSemester1 = academiejaarInstellingen.StageperiodeSemester1(),
+                stageperiodeSemester2 = academiejaarInstellingen.StageperiodeSemester2()
+            };
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #region algemene instellingen

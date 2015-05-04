@@ -105,8 +105,8 @@ namespace StageBeheersTool.ViewModels
         {
             if (academiejaarInstellingen != null)
             {
-                StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
-                StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
+                StageperiodeSem1 = "(" + academiejaarInstellingen.StageperiodeSemester1() + ")";
+                StageperiodeSem2 = "(" + academiejaarInstellingen.StageperiodeSemester2() + ")";
                 EditDeadline = academiejaarInstellingen.DeadlineBedrijfStageEditToString();
             }
         }
@@ -284,8 +284,8 @@ namespace StageBeheersTool.ViewModels
         {
             if (academiejaarInstellingen != null)
             {
-                StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
-                StageperiodeSem2 = academiejaarInstellingen.StageperiodeSemester2();
+                StageperiodeSem1 = "(" + academiejaarInstellingen.StageperiodeSemester1() + ")";
+                StageperiodeSem2 = "(" + academiejaarInstellingen.StageperiodeSemester2() + ")";
             }
         }
         #endregion
@@ -360,7 +360,10 @@ namespace StageBeheersTool.ViewModels
                 new SelectListItem { Value = ((int)StageopdrachtStatus.Goedgekeurd).ToString(), Text = "Goedgekeurd"}, 
                      new SelectListItem {Value = ((int)StageopdrachtStatus.Afgekeurd).ToString(), Text = "Afgekeurd"}};
             StatusSelectList = new SelectList(statusOpties, "Value", "Text", SelectedStatus != null ? ((StageopdrachtStatus)SelectedStatus).ToString() : "");
-            Opties = new SelectList(new[] { "Bedrijf", "Stageplaats", "Titel", "Omschrijving", "Student", "Begeleider", "Status" });
+            Opties = new SelectList(new[]
+            {
+                "Bedrijf", "Bedrijf E-mail","Stageplaats", "Titel", "Omschrijving", "Student", "Begeleider", "Status"
+            });
         }
 
     }

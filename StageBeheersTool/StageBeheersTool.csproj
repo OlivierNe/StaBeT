@@ -219,6 +219,8 @@
     <Compile Include="Helpers\AcademiejaarHelper.cs" />
     <Compile Include="Helpers\DocFileResult.cs" />
     <Compile Include="Helpers\ExcelFileResult.cs" />
+    <Compile Include="Helpers\HoGentPersoneelEmailAttribute.cs" />
+    <Compile Include="Helpers\HoGentStudentEmailAttribute.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\ViewHelpers.cs" />
     <Compile Include="Helpers\ZipFileResult.cs" />
@@ -558,10 +560,7 @@
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images\Begeleider\" />
-    <Folder Include="Images\Student\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

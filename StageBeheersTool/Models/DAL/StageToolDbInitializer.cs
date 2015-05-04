@@ -15,8 +15,8 @@ using StageBeheersTool.OudeGegevens;
 namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
-        //DropCreateDatabaseAlways<StageToolDbContext>
-        DropCreateDatabaseIfModelChanges<StageToolDbContext>
+        DropCreateDatabaseAlways<StageToolDbContext>
+        //DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
         public void RunSeed(StageToolDbContext ctx)
@@ -29,63 +29,6 @@ namespace StageBeheersTool.Models.DAL
             base.Seed(context);
             try
             {
-                #region logins/roles
-                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-                roleManager.Create(new IdentityRole("student"));
-                roleManager.Create(new IdentityRole("admin"));
-                roleManager.Create(new IdentityRole("begeleider"));
-                roleManager.Create(new IdentityRole("bedrijf"));
-                roleManager.Create(new IdentityRole("adminDisabled"));
-
-                var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
-
-                ApplicationUser user = new ApplicationUser() { Email = "bedrijf@test.be", UserName = "bedrijf@test.be", EmailConfirmed = true };
-                userManager.Create(user, "wachtwoord");
-                userManager.AddToRole(user.Id, "bedrijf");
-
-                ApplicationUser user2 = new ApplicationUser() { Email = "test@bedrijf2.be", UserName = "test@bedrijf2.be", EmailConfirmed = true };
-                userManager.Create(user2, "wachtwoord");
-                userManager.AddToRole(user2.Id, "bedrijf");
-
-                ApplicationUser user3 = new ApplicationUser()
-                {
-                    Email = "student@test.be",
-                    UserName = "student@test.be",
-                    EmailConfirmed = true
-                };
-                userManager.Create(user3, "wachtwoord");
-                userManager.AddToRole(user3.Id, "student");
-
-                ApplicationUser user4 = new ApplicationUser()
-                {
-                    Email = "begeleider@test.be",
-                    UserName = "begeleider@test.be",
-                    EmailConfirmed = true
-                };
-                userManager.Create(user4, "wachtwoord");
-                userManager.AddToRole(user4.Id, "begeleider");
-
-                ApplicationUser user5 = new ApplicationUser()
-                {
-                    Email = "admin@test.be",
-                    UserName = "admin@test.be",
-                    EmailConfirmed = true
-                };
-                userManager.Create(user5, "wachtwoord");
-                userManager.AddToRole(user5.Id, "admin");
-
-                ApplicationUser user6 = new ApplicationUser()
-                {
-                    Email = "adminBegeleider@test.be",
-                    UserName = "adminBegeleider@test.be",
-                    EmailConfirmed = true
-                };
-                userManager.Create(user6, "wachtwoord");
-                userManager.AddToRole(user6.Id, "admin");
-                userManager.AddToRole(user6.Id, "begeleider");
-
-                #endregion
-
                 #region specialisaties
                 Specialisatie specialisatie1 = new Specialisatie() { Naam = "Netwerken" };
                 Specialisatie specialisatie2 = new Specialisatie() { Naam = "Programmeren" };
@@ -109,8 +52,27 @@ namespace StageBeheersTool.Models.DAL
                 #endregion
 
                 #region instellingen
-                var mailboxInstelling = new Instelling(Instelling.MailboxStages, "stagetoegepasteinformatica@hogent.be");
-                context.Instellingen.Add(mailboxInstelling);
+                context.Instellingen.Add(new Instelling(Instelling.MailboxStages, "stagetoegepasteinformatica@hogent.be"));
+                context.Instellingen.Add(new Instelling(Instelling.AantalWekenStage, "14"));
+                context.Instellingen.Add(new Instelling(Instelling.BeginNieuwAcademiejaar, "01/09/0001 0:00:00"));
+
+                context.AcademiejarenInstellingen.Add(new AcademiejaarInstellingen()
+                {
+                    Academiejaar = "2014-2015",
+                    Semester1Begin = new DateTime(2014, 9, 22),
+                    Semester2Einde = new DateTime(2015, 2, 6),
+                    Semester2Begin = new DateTime(2015, 2, 9),
+                    Semester1Einde = new DateTime(2015, 6, 26)
+                });
+
+                context.AcademiejarenInstellingen.Add(new AcademiejaarInstellingen()
+                {
+                    Academiejaar = "2015-2016",
+                    Semester1Begin = new DateTime(2015, 9, 21),
+                    Semester2Einde = new DateTime(2016, 2, 5),
+                    Semester2Begin = new DateTime(2016, 2, 8),
+                    Semester1Einde = new DateTime(2016, 7, 1)
+                });
                 #endregion
 
                 #region evaluatievragen
@@ -554,6 +516,64 @@ namespace StageBeheersTool.Models.DAL
                 context.Keuzepakketten.AddRange(keuzepakketten);
                 #endregion
 
+                //testgegevens:
+                #region logins/roles
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+                roleManager.Create(new IdentityRole("student"));
+                roleManager.Create(new IdentityRole("admin"));
+                roleManager.Create(new IdentityRole("begeleider"));
+                roleManager.Create(new IdentityRole("bedrijf"));
+                roleManager.Create(new IdentityRole("adminDisabled"));
+
+                var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
+
+                ApplicationUser user = new ApplicationUser() { Email = "bedrijf@test.be", UserName = "bedrijf@test.be", EmailConfirmed = true };
+                userManager.Create(user, "wachtwoord");
+                userManager.AddToRole(user.Id, "bedrijf");
+
+                ApplicationUser user2 = new ApplicationUser() { Email = "test@bedrijf2.be", UserName = "test@bedrijf2.be", EmailConfirmed = true };
+                userManager.Create(user2, "wachtwoord");
+                userManager.AddToRole(user2.Id, "bedrijf");
+
+                ApplicationUser user3 = new ApplicationUser()
+                {
+                    Email = "student@test.be",
+                    UserName = "student@test.be",
+                    EmailConfirmed = true
+                };
+                userManager.Create(user3, "wachtwoord");
+                userManager.AddToRole(user3.Id, "student");
+
+                ApplicationUser user4 = new ApplicationUser()
+                {
+                    Email = "begeleider@test.be",
+                    UserName = "begeleider@test.be",
+                    EmailConfirmed = true
+                };
+                userManager.Create(user4, "wachtwoord");
+                userManager.AddToRole(user4.Id, "begeleider");
+
+                ApplicationUser user5 = new ApplicationUser()
+                {
+                    Email = "admin@test.be",
+                    UserName = "admin@test.be",
+                    EmailConfirmed = true
+                };
+                userManager.Create(user5, "wachtwoord");
+                userManager.AddToRole(user5.Id, "admin");
+
+                ApplicationUser user6 = new ApplicationUser()
+                {
+                    Email = "adminBegeleider@test.be",
+                    UserName = "adminBegeleider@test.be",
+                    EmailConfirmed = true
+                };
+                userManager.Create(user6, "wachtwoord");
+                userManager.AddToRole(user6.Id, "admin");
+                userManager.AddToRole(user6.Id, "begeleider");
+
+                #endregion
+
                 #region bedrijf1
 
                 Bedrijf bedrijf1 = new Bedrijf()
@@ -658,8 +678,9 @@ namespace StageBeheersTool.Models.DAL
                 context.Begeleiders.Add(begeleider);
                 context.Begeleiders.Add(new Begeleider() { HogentEmail = "adminBegeleider@test.be" });
                 #endregion
+
+                #region teststageopdrachten
                 /*
-                #region goedgekeurde/toegewezen test stages
                 var random = new Random();
                 for (int i = 0; i < 15; i++)
                 {
@@ -703,9 +724,9 @@ namespace StageBeheersTool.Models.DAL
                     //stage.Studenten = new List<StageStudentRelatie>() { { new StageStudentRelatie() { Stage = stage, Student = student1 } } };
                     teststages.Add(stage);
                 }
-                context.Stageopdrachten.AddRange(teststages);
+                context.Stageopdrachten.AddRange(teststages);*/
                 #endregion
-*/
+
                 context.SaveChanges();
             }
             catch (DbEntityValidationException e)
@@ -733,8 +754,10 @@ namespace StageBeheersTool.Models.DAL
         {
             try
             {
+                var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
                 using (var oudeContext = new OudeGegevensDbContext())
                 {
+
                     var begeleiders = new List<Begeleider>();
                     foreach (var docent in oudeContext.Docenten)
                     {
@@ -751,7 +774,7 @@ namespace StageBeheersTool.Models.DAL
                     var studenten = new List<Student>();
                     foreach (var oudeStudent in oudeContext.Studenten)
                     {
-                        var student = Converter.ToStudent(oudeStudent);
+                        var student = Converter.ToStudent(oudeStudent, userManager);
                         if (!context.Studenten.Any(s => s.HogentEmail == oudeStudent.email)
                             && studenten.All(s => s.HogentEmail != oudeStudent.email))
                         {
@@ -833,7 +856,6 @@ namespace StageBeheersTool.Models.DAL
                 await context.SaveChangesAsync();
 
                 #region begeleider & student logins
-                var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
 
                 //logins begeleiders
                 var begeleiderLogins = new List<ApplicationUser>();
@@ -862,7 +884,7 @@ namespace StageBeheersTool.Models.DAL
                 //login studenten
                 var acadj = AcademiejaarHelper.HuidigAcademiejaar();
                 var studentLogins = new List<ApplicationUser>();
-                foreach (var student in context.Studenten.Where(s => s.Academiejaar == acadj))
+                foreach (var student in context.Studenten.Where(s => s.Stages.Any(stage => stage.Stageopdracht.Academiejaar == acadj)))
                 {
                     var user = new ApplicationUser()
                     {

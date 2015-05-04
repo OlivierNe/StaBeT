@@ -13,6 +13,7 @@ $(function () {
     initContrOndForm();
     initStagementorForm();
 
+    //bedrijf
     $("#BedrijfId").change(function () {
         $.ajax({ url: "/Bedrijf/BedrijfJson/" + $("#BedrijfId").val() })
             .success(function (bedrijf) {
@@ -32,6 +33,31 @@ $(function () {
                     $("#ContractondertekenaarId").append(option);
                 }
             });
+    });
+
+    //academiejaar, stageperiodes
+    var $academiejaar = $("#Academiejaar");
+    var jaar = new Date().getFullYear();
+
+    var academiejaren = [];
+    for (var i = -1; i < 3; i++) {
+        academiejaren.push((jaar + i) + "-" + (jaar + i + 1));
+    }
+
+    $academiejaar.autocomplete({
+        source: academiejaren
+    });
+
+    $academiejaar.blur(function () {
+        $.ajax({ url: "/Instellingen/GetStageperiodes?academiejaar=" + $academiejaar.val() })
+        .success(function (stageperiodes) {
+            $("#stageperiode1").text("(" + stageperiodes.stageperiodeSemester1 + ")");
+            $("#stageperiode2").text("(" + stageperiodes.stageperiodeSemester2 + ")");
+        })
+        .error(function () {
+            $("#stageperiode1").text("");
+            $("#stageperiode2").text("");
+        });
     });
 
 });

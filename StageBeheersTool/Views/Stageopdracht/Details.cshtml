@@ -22,47 +22,31 @@
         <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Stageplaats)</dt>
         <dd><a href="https://maps.google.com/?q=@Model.Stageopdracht.Stageplaats" target="_blank">@Model.Stageopdracht.Stageplaats</a></dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Stageopdracht.Semester)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Semester)</dt>
         <dd class="omschrijving">@Html.DisplayFor(model => model.Semester)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Stageopdracht.Academiejaar)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Academiejaar)
-        </dd>
-        <dt>
-            Aantal studenten
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Academiejaar)</dt>
+        <dd>@Html.DisplayFor(model => model.Stageopdracht.Academiejaar)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.AantalStudenten)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Stageopdracht.Specialisatie)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Specialisatie)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Stageopdracht.Contractondertekenaar)
-        </dt>
+        <dt>Aantal studenten</dt>
+        <dd>@Html.DisplayFor(model => model.Stageopdracht.AantalStudenten)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Specialisatie)</dt>
+        <dd>@Html.DisplayFor(model => model.Stageopdracht.Specialisatie)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Contractondertekenaar)</dt>
         <dd>
             @Html.DisplayFor(model => model.Stageopdracht.ContractondertekenaarNaam)
             @Html.DisplayEmail(Model.Stageopdracht.ContractondertekenaarEmail)
         </dd>
-        <dt>
-            @Html.NameFor(model => model.Stagementor)
-        </dt>
+
+        <dt>@Html.NameFor(model => model.Stagementor)</dt>
         <dd>
             @Html.DisplayFor(model => model.Stageopdracht.StagementorNaam)
             @Html.DisplayEmail(Model.Stageopdracht.StagementorEmail)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)
-        </dt>
+
+        <dt>@Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)</dt>
         <dd>
             @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
             @if (Model.Stageopdracht.Stagebegeleider != null)
@@ -70,11 +54,10 @@
                 @Html.DisplayEmail(Model.Stageopdracht.Stagebegeleider.HogentEmail)
             }
         </dd>
+
         @if (Model.ToonStudenten)
         {
-            <dt>
-                Studenten
-            </dt>
+            <dt>Studenten</dt>
             foreach (var stage in Model.Stageopdracht.Stages)
             {
                 <dd>
@@ -82,12 +65,11 @@
                     @Html.DisplayEmail(stage.Student.HogentEmail)
                 </dd>
             }
+            <dd></dd>
         }
         @if (Model.ToonStatus)
         {
-            <dt>
-                Status
-            </dt>
+            <dt>Status</dt>
             <dd>
                 @Html.DisplayFor(model => model.Stageopdracht.Status)
             </dd>

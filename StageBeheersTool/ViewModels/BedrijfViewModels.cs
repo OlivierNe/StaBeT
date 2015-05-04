@@ -19,6 +19,7 @@ namespace StageBeheersTool.ViewModels
         public bool ToonChangePassword { get; set; }
         public bool ToonExtra { get; set; }
         public bool ToonTerug { get; set; }
+        public bool ToonDelete { get; set; }
     }
 
     public class RegisterBedrijfViewModel

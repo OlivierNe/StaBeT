@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Ionic.Zip;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.DAL.Extensions;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.Identity;
@@ -51,9 +52,8 @@ namespace StageBeheersTool.Controllers
             var studenten = _studentRepository.FindStudentenMetToegewezenStage()
                 .WithFilter(model.Naam, model.Voornaam);
             model.Studenten = studenten;
-
+            model.Titel = "Studenten met stage " + AcademiejaarHelper.HuidigAcademiejaar();
             model.ToonStage = true;
-
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_studentList", model);

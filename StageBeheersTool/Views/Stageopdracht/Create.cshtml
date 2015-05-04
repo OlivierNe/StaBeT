@@ -53,14 +53,20 @@
                     <div class="checkbox">
                         <label>
                             @Html.EditorFor(model => model.Semester1, new { htmlAttributes = new { @class = "" } })
-                            Semester 1 @Html.DisplayFor(model => model.StageperiodeSem1)
+                            Semester 1
+                            <span id="stageperiode1">
+                                @Html.DisplayFor(model => model.StageperiodeSem1)
+                            </span>
                         </label>
                     </div>
                     <br />
                     <div class="checkbox">
                         <label>
                             @Html.EditorFor(model => model.Semester2, new { htmlAttributes = new { @class = "" } })
-                            Semester 2 @Html.DisplayFor(model => model.StageperiodeSem2)
+                            Semester 2
+                            <span id="stageperiode2">
+                                @Html.DisplayFor(model => model.StageperiodeSem2)
+                            </span>
                         </label>
                     </div>
                 </div>
@@ -167,11 +173,14 @@
 
 @section styles
 {
-    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/core.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/autocomplete.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/theme.css" rel="stylesheet" />
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/lib/jquery-ui-1.11.4.min.js"></script>
     <script src="~/Scripts/stagetool-form.js"></script>
     <script src="~/Scripts/createStageForm.js"></script>
     <script src="~/Scripts/specialisatie.js"></script>

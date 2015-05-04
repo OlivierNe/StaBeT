@@ -1,14 +1,13 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
+using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Identity;
 using StageBeheersTool.ViewModels;
-
 
 namespace StageBeheersTool.Controllers
 {
@@ -41,7 +40,7 @@ namespace StageBeheersTool.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(IList<AdminVm> model)
         {
-
+            var validator = new HoGentPersoneelEmailAttribute();
             foreach (var adminVm in model.Where(m => m.HasChanged))
             {
                 if (string.IsNullOrEmpty(adminVm.Email) && string.IsNullOrEmpty(adminVm.Id))
@@ -60,8 +59,16 @@ namespace StageBeheersTool.Controllers
                     var user = UserManager.FindByEmail(newUser.Email);
                     if (user == null)
                     {
-                        UserManager.Create(newUser);
-                        adminVm.Id = newUser.Id;
+                        if (validator.IsValid(newUser.Email))
+                        {
+                            UserManager.Create(newUser);
+                            adminVm.Id = newUser.Id;
+                        }
+                        else
+                        {
+                            SetViewError(newUser.Email + " is geen geldig HoGent e-mailadres.");
+                            continue;
+                        }
                     }
                     else
                     {
@@ -80,7 +87,7 @@ namespace StageBeheersTool.Controllers
                 }
                 UserManager.UpdateSecurityStamp(adminVm.Id);
             }
-            TempData["message"] = Resources.SuccesAdminsGewijzigd;
+            SetViewMessage(Resources.SuccesAdminsGewijzigd);
             return RedirectToAction("Index");
         }
 
@@ -105,15 +112,16 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            var claims = user.Claims.ToArray();
-            foreach (var claim in claims)
-            {
-                UserManager.RemoveClaim(claim.UserId, new Claim(claim.ClaimType, claim.ClaimValue));
-            }
             UserManager.Delete(user);
             SetViewMessage(string.Format(Resources.SuccesAdminVerwijderd, user.Email));
             return RedirectToAction("Index");
         }
 
+        public ActionResult DeleteFromList(string email)
+        {
+            var user = UserManager.FindByEmail(email);
+            UserManager.RemoveFromRole(user.Id, Role.AdminDisabled);
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -69,13 +69,17 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
+            var isAdmin = CurrentUser.IsAdmin();
+            var isBegeleider = CurrentUser.IsBegeleider();
+            var isBedrijf = CurrentUser.IsBedrijf();
             var model = new BedrijfDetailsVM
             {
                 Bedrijf = bedrijf,
-                ToonEdit = CurrentUser.IsAdmin() || CurrentUser.IsBedrijf(),
-                ToonChangePassword = CurrentUser.IsBedrijf(),
-                ToonExtra = CurrentUser.IsAdmin() || CurrentUser.IsBegeleider(),
-                ToonTerug = CurrentUser.IsAdmin() || CurrentUser.IsBegeleider(),
+                ToonEdit = isAdmin || isBedrijf,
+                ToonChangePassword = isBedrijf,
+                ToonExtra = isAdmin || isBegeleider,
+                ToonTerug = isAdmin || isBegeleider,
+                ToonDelete = isAdmin
             };
             return View(model);
         }
@@ -182,7 +186,13 @@ namespace StageBeheersTool.Controllers
             {
                 return null;
             }
-            return _bedrijfRepository.FindById((int)id);
+            var bedrijf = _bedrijfRepository.FindById((int)id);
+            if (bedrijf != null && CurrentUser.IsStudent() 
+                && bedrijf.HeeftBeschikbareStageopdrachtenVoorHuidigAcademiejaar() == false)
+            {
+                return null;
+            }
+            return bedrijf;
         }
 
         #endregion

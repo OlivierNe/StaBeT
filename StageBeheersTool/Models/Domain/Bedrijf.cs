@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Microsoft.Ajax.Utilities;
 using StageBeheersTool.Helpers;
 
 namespace StageBeheersTool.Models.Domain
@@ -271,7 +270,13 @@ namespace StageBeheersTool.Models.Domain
             return Stageopdrachten.Where(so => so.Academiejaar == academiejaar)
                 .SelectMany(so => so.Stages)
                 .OrderBy(stage => stage.Stageopdracht.Titel);
-        } 
+        }
+
+        public bool HeeftBeschikbareStageopdrachtenVoorHuidigAcademiejaar()
+        {
+            var academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
+            return Stageopdrachten.Any(so => so.Academiejaar == academiejaar && so.Status == StageopdrachtStatus.Goedgekeurd);
+        }
 
         public Stage FindStage(int id)
         {
