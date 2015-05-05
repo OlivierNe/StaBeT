@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StageBeheersTool.Helpers;
 
 namespace StageBeheersTool.Models.Domain
 {
@@ -13,7 +14,7 @@ namespace StageBeheersTool.Models.Domain
         public virtual Keuzepakket Keuzepakket { get; set; }
         public virtual ICollection<VoorkeurStage> VoorkeurStages { get; set; }
 
-        //collection in geval de student niet geslaagd is voor de stage en volgend jaar nog eens moet doen
+        //collection in geval de student niet geslaagd is voor de stage en het volgend academiejaar nog eens moet doen
         public virtual ICollection<Stage> Stages { get; set; }
 
         public Stageopdracht ToegewezenStageopdracht
@@ -25,11 +26,8 @@ namespace StageBeheersTool.Models.Domain
         {
             get
             {
-                if (Stages.Count > 1)
-                {
-                    return Stages.FirstOrDefault(s => s.Stageopdracht.IsInHuidigAcademiejaar());
-                }
-                return Stages.FirstOrDefault();
+                return Stages.FirstOrDefault(s => s.Stageopdracht.IsInHuidigAcademiejaar())
+                    ?? Stages.FirstOrDefault();
             }
         }
 
@@ -147,9 +145,10 @@ namespace StageBeheersTool.Models.Domain
             voorkeur.StagedossierIngediend = true;
         }
 
-        public bool HeeftToegewezenStage()
+        public bool HeeftToegewezenStageInHuidigAcademiejaar()
         {
-            return ToegewezenStageopdracht != null;
+            return ToegewezenStageopdracht != null
+                && ToegewezenStageopdracht.Academiejaar == AcademiejaarHelper.HuidigAcademiejaar();
         }
 
         public Stage GetStageStudentRelatie()

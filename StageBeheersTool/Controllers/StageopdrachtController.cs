@@ -55,7 +55,7 @@ namespace StageBeheersTool.Controllers
             }
             if (CurrentUser.IsStudent())
             {
-                if (IdentityHelpers.StudentHeeftStage())
+                if (IdentityHelpers.StudentAcademiejaar() == AcademiejaarHelper.HuidigAcademiejaar())
                 {
                     return RedirectToAction("MijnStage", "Stage");
                 }
@@ -603,6 +603,7 @@ namespace StageBeheersTool.Controllers
             model.StagementorId = stageopdracht.Stagementor == null ? null : (int?)stageopdracht.Stagementor.Id;
             model.SetSelectLists(_specialisatieRepository.FindAll(), stageopdracht.Bedrijf.FindAllContractOndertekenaars(),
                 stageopdracht.Bedrijf.FindAllStagementors());
+            model.IsToegewezen = stageopdracht.IsToegewezen();
             return View(model);
         }
 
@@ -636,6 +637,7 @@ namespace StageBeheersTool.Controllers
                 stageopdracht.Bedrijf = bedrijf;
                 _stageopdrachtRepository.Update(stageopdracht);
                 await _emailService.SendAsync(EmailMessages.StageopdrachtGewijzigd(stageopdracht));
+                SetViewMessage(Resources.SuccesEditSaved);
                 return RedirectToAction("Details", new { model.Id, Overzicht });
             }
             model.SetSelectLists(_specialisatieRepository.FindAll(),
@@ -702,9 +704,16 @@ namespace StageBeheersTool.Controllers
             try
             {
                 var student = _userService.GetStudent();
-                student.AddVoorkeurStage(stageopdracht);
-                _userService.SaveChanges();
-                SetViewMessage(string.Format(Resources.succesVoorkeurToevoegen, stageopdracht.Titel));
+                if (student.HeeftToegewezenStageInHuidigAcademiejaar())
+                {
+                    SetViewError("Toevoegen aan voorkeuren mislukt.");
+                }
+                else
+                {
+                    student.AddVoorkeurStage(stageopdracht);
+                    _userService.SaveChanges();
+                    SetViewMessage(string.Format(Resources.succesVoorkeurToevoegen, stageopdracht.Titel));
+                }
             }
             catch (ApplicationException ex)
             {
@@ -916,6 +925,14 @@ namespace StageBeheersTool.Controllers
             var result = Admin.KeurStageBegeleidAanvraagAf(aanvraag);
             SetViewMessage(result);
             _stageopdrachtRepository.SaveChanges();
+            return RedirectToLocal(Overzicht);
+        }
+
+        [Authorize(Role.Admin)]
+        public ActionResult AanvraagVerwijderen(int id)
+        {
+            var aanvraag = _stageopdrachtRepository.FindAanvraagById(id);
+            _stageopdrachtRepository.DeleteAanvraag(aanvraag);
             return RedirectToLocal(Overzicht);
         }
         #endregion

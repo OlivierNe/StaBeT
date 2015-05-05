@@ -156,6 +156,15 @@ namespace StageBeheersTool.Models.Services
             }
         }
 
+        public void UpdateSecurityStamp(string email)
+        {
+            var user = _userManager.FindByEmail(email);
+            if (user != null)
+            {
+                _userManager.UpdateSecurityStamp(user.Id);
+            }
+        }
+
         #region helpers
         private bool UserExists(Student student)
         {
@@ -172,6 +181,8 @@ namespace StageBeheersTool.Models.Services
             return _dbContext.Bedrijven.Any(s => s.Email == bedrijf.Email);
         }
         #endregion
+
+
     }
 
 }

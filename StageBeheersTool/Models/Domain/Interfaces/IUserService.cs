@@ -17,7 +17,7 @@ namespace StageBeheersTool.Models.Domain
         void CreateLogins(List<string> emailList, params string[] roles);
         void DeleteLogin(string email);
         void DeleteAlleStudentAccounts();
+        void UpdateSecurityStamp(string email);
         void SaveChanges();
-        
     }
 }

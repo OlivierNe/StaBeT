@@ -504,7 +504,7 @@
     <value>Lijst stages naar excel exporteren</value>
   </data>
   <data name="SuccesDeleteStage" xml:space="preserve">
-    <value>Stage verwijderd.</value>
+    <value>Student van stageopdracht losgekoppeld.</value>
   </data>
   <data name="TitelStagesToewijzen" xml:space="preserve">
     <value>Stages toewijzen</value>

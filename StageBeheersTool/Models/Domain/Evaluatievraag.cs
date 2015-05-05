@@ -28,7 +28,14 @@ namespace StageBeheersTool.Models.Domain
                     return antwoord.ToLower() == "ja" || antwoord.ToLower() == "nee";
                 case SoortVraag.Meerkeuzevraag:
                     string[] antwoorden = MeerkeuzeAntwoorden.Split(';');
-                    return antwoorden.Contains(antwoord);
+                    foreach (var antw in antwoord.Split(','))
+                    {
+                        if (antwoorden.Contains(antw) == false)
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
             }
             return true;
         }

@@ -551,11 +551,11 @@
     <Content Include="Views\Activiteitsverslag\GeefFeedback.cshtml" />
     <Content Include="Views\Activiteitsverslag\Indienen.cshtml" />
     <Content Include="Views\Stage\MijnStage.cshtml" />
-    <Content Include="Views\Evaluatieformulier\Index.cshtml" />
     <Content Include="Views\Evaluatieformulier\Stagebezoek.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Evaluatieantwoord.cshtml" />
     <Content Include="Views\Student\ImportStudentenExcel.cshtml" />
     <Content Include="Views\Account\DeleteAlleStudentAccounts.cshtml" />
+    <Content Include="Views\Evaluatieformulier\Bekijken.cshtml" />
     <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />

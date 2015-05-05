@@ -5,6 +5,6 @@ namespace StageBeheersTool.Models.Identity
     {
         public const string LoginMode = "LoginMode";
         public const string Display = "Display";
-        public const string StudentHeeftStage = "StudentHeeftStage";
+        public const string StudentAcademiejaar = "StudentAcademiejaar";
     }
 }

@@ -49,10 +49,13 @@
             @Html.DisplayNameFor(model => model.Stageopdracht.Stagebegeleider)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam) 
-            @Html.DisplayEmail(Model.Begeleider.HogentEmail)
+            @if (Model.Begeleider != null)
+            {
+                @Html.DisplayFor(model => model.Stageopdracht.Stagebegeleider.Naam)
+                @Html.DisplayEmail(Model.Begeleider.HogentEmail)
+            }
         </dd>
-        
+
         <dt>
             @Html.DisplayNameFor(model => model.Stageopdracht.Academiejaar)
         </dt>
@@ -74,7 +77,7 @@
         <dd>
             @Html.DisplayFor(model => model.Stageperiode)
         </dd>
-        
+
         <dt>
             Stagecontract opgesteld
         </dt>

@@ -31,17 +31,17 @@ namespace StageBeheersTool.Helpers
             return mode;
         }
 
-        public static bool StudentHeeftStage()
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// null = geen toegewezen stage
+        /// not null = laatste(indien meer) academiejaar toegewezen stage
+        /// </returns>
+        public static string StudentAcademiejaar()
         {
             var identity = (ClaimsIdentity)HttpContext.Current.User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
-            var heeftStageClaim = claims.Where(c => c.Type == MyClaimTypes.StudentHeeftStage).Select(c => c.Value).FirstOrDefault();
-            if (heeftStageClaim == null)
-            {
-                return false;
-            }
-            bool heeftStage;
-            return Boolean.TryParse(heeftStageClaim, out heeftStage) && heeftStage;
+            return claims.Where(c => c.Type == MyClaimTypes.StudentAcademiejaar).Select(c => c.Value).FirstOrDefault();
         }
 
         public static bool HasRole(this ClaimsIdentity identity, string role)

@@ -299,6 +299,7 @@ namespace StageBeheersTool.ViewModels
         [HiddenInput]
         [Required]
         public int Id { get; set; }
+        public bool IsToegewezen { get; set; }
 
         public StageopdrachtEditVM()
         {
@@ -308,7 +309,6 @@ namespace StageBeheersTool.ViewModels
             : base(specialisaties, contractondertekenaars, stagementors)
         {
         }
-
     }
 
     public class StageopdrachtAfkeurenVM

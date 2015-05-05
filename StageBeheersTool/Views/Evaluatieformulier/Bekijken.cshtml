@@ -1,0 +1,138 @@
+﻿@model EvaluatieCreateVM
+@{
+    ViewBag.Title = "Evaluatieformulier stagebezoek " + Model.Stagebezoek;
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="form-horizontal">
+    <hr />
+    @for (int i = 0; i < Model.Evaluatieantwoorden.Count; i++)
+    {
+        var antwoord = Model.Evaluatieantwoorden[i];
+
+        switch (antwoord.Evaluatievraag.SoortVraag)
+        {
+            case SoortVraag.JaNeevraag:
+
+                <div class="form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => antwoord.Id, antwoord.Evaluatievraag.Vraag, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-8">
+                        <label class="radio-inline">
+                            @Html.RadioButton(antwoord.Evaluatievraag.Id.ToString(), "Ja", antwoord.Antwoord == "Ja", new { disabled = "disabled" }) Ja
+                        </label>
+                        <label class="radio-inline">
+                            @Html.RadioButton(antwoord.Evaluatievraag.Id.ToString(), "Nee", antwoord.Antwoord == "Nee", new { disabled = "disabled" }) Nee
+                        </label>
+                    </div>
+                </div>
+                break;
+
+            case SoortVraag.Meningvraag:
+
+                var nogMeerMeningVragen = true;
+                <table class="table-header-rotated">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-4"></th>
+                            <th class="rotate"><div><span>Volledig oneens</span></div></th>
+                            <th class="rotate"><div><span>Eerder oneens</span></div></th>
+                            <th class="rotate"><div><span>Noch oneens, noch eens</span></div></th>
+                            <th class="rotate"><div><span>Eerder eens</span></div></th>
+                            <th class="rotate"><div><span>Volledig eens</span></div></th>
+                            <th class="rotate"><div><span>Geen mening</span></div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @while (nogMeerMeningVragen)
+                        {
+                            <tr class="">
+                                <td class="row-header">
+                                    @Html.LabelFor(model => antwoord.Id, antwoord.Evaluatievraag.Vraag, new { @class = "" })
+                                </td>
+                                <td class="row-content">
+                                    @Html.RadioButton(antwoord.Evaluatievraag.Id.ToString(), "Volledig oneens", antwoord.Antwoord == "Volledig oneens",
+                                                    new { title = "Volledig oneens", disabled = "disabled" })
+                                </td>
+                                <td class="row-content">
+                                    @Html.RadioButton(antwoord.Evaluatievraag.Id.ToString(), "Eerder oneens", antwoord.Antwoord == "Eerder oneens",
+                                                 new { title = "Eerder oneens", disabled = "disabled" })
+                                </td>
+                                <td class="row-content">
+                                    @Html.RadioButton(antwoord.Evaluatievraag.Id.ToString(), "Noch oneens, noch eens", antwoord.Antwoord == "Noch oneens, noch eens",
+                                                 new { title = "Noch oneens, noch eens", disabled = "disabled" })
+                                </td>
+                                <td class="row-content">
+                                    @Html.RadioButton(antwoord.Evaluatievraag.Id.ToString(), "Eerder eens", antwoord.Antwoord == "Eerder eens",
+                                                 new { title = "Eerder eens", disabled = "disabled" })
+                                </td>
+                                <td class="row-content">
+                                    @Html.RadioButton(antwoord.Evaluatievraag.Id.ToString(), "Volledig eens", antwoord.Antwoord == "Volledig eens",
+                                                 new { title = "Volledig eens", disabled = "disabled" })
+                                </td>
+                                <td class="row-content">
+                                    @Html.RadioButton(antwoord.Evaluatievraag.Id.ToString(), "Geen mening", antwoord.Antwoord == "Geen mening",
+                                                 new { title = "Geen mening", disabled = "disabled" })
+                                </td>
+                            </tr>
+                            if (Model.Evaluatieantwoorden[(i + 1)].Evaluatievraag.SoortVraag == SoortVraag.Meningvraag)
+                            {
+                                i++;
+                                antwoord = Model.Evaluatieantwoorden[i];
+                            }
+                            else
+                            {
+                                nogMeerMeningVragen = false;
+                            }
+                        }
+                    </tbody>
+                </table>
+                <br /><br />
+
+                        break;
+
+            case SoortVraag.Meerkeuzevraag:
+
+            <div class="form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => antwoord.Id, antwoord.Evaluatievraag.Vraag, new { @class = "control-label" })
+                </div>
+                <div class="col-md-8">
+                    @{
+                            var keuzes = antwoord.Evaluatievraag.MeerkeuzeAntwoorden.Split(';');
+                            var antwoorden = antwoord.Antwoord.Split(',');
+                    }
+                    @foreach (var keuze in keuzes)
+                    {
+                        <label class="checkbox">
+                            @if (antwoorden.Contains(keuze))
+                            {
+                                <input type="checkbox" name="@antwoord.Evaluatievraag.Id" value="@keuze" checked="checked" disabled="disabled">@keuze
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="@antwoord.Evaluatievraag.Id" value="@keuze" disabled="disabled">@keuze
+                            }
+                        </label>
+                    }
+                </div>
+            </div>
+                    break;
+
+            case SoortVraag.Openvraag:
+            <div class="form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => antwoord.Id, antwoord.Evaluatievraag.Vraag, new { @class = "control-label" })
+                </div>
+                <div class="col-md-8">
+                    <div class="omschrijving">@antwoord.Antwoord</div>
+                </div>
+            </div>
+                    break;
+        }
+    }
+</div>
+<p>
+    @Html.OverzichtActionLink("/Stage/MijnStages")
+</p>

@@ -33,6 +33,16 @@
             columns.Add().Sanitized(false).Encoded(false)
                 .RenderValueAs(so => Html.ActionLink("afkeuren", "AanvraagAfkeuren",
                     new { so.Id, overzicht }, new { @class = "btn btn-default" })).SetWidth(130);
+            columns.Add().Sanitized(false).Encoded(false)
+                .RenderValueAs(so =>
+                {
+                    if (so.Status != StagebegeleidAanvraagStatus.NietBeoordeeld)
+                    {
+                        return Html.ActionLink("Uit deze lijst verwijderen", "AanvraagVerwijderen",
+                            new { so.Id, overzicht }, new { @class = "btn btn-default" });
+                    }
+                    return MvcHtmlString.Empty;
+                }).SetWidth(130);
         }
     }).Sortable(true).WithPaging(10).EmptyText("Geen aanvragen gevonden")
 </div>

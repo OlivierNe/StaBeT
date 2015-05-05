@@ -124,6 +124,12 @@ namespace StageBeheersTool.Models.DAL
                 .SingleOrDefault(s => s.Student.Id == studentId && s.Stageopdracht.Id == stageId);
         }
 
+        public void DeleteVoorkeurstagesVanStudent(Student student)
+        {
+            _studentVoorkeurStages.RemoveRange(student.VoorkeurStages);
+            SaveChanges();
+        }
+
         public IQueryable<Stageopdracht> FindAllFromAcademiejaar(string academiejaar)
         {
             return _stageopdrachten.Where(so => so.Academiejaar == academiejaar).IncludeAndOrder();
@@ -139,8 +145,18 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenStageopdracht.Semester1 = stageopdracht.Semester1;
             teUpdatenStageopdracht.Semester2 = stageopdracht.Semester2;
             teUpdatenStageopdracht.Specialisatie = stageopdracht.Specialisatie;
-            teUpdatenStageopdracht.Academiejaar = stageopdracht.Academiejaar;
             teUpdatenStageopdracht.AantalStudenten = stageopdracht.AantalStudenten;
+            teUpdatenStageopdracht.Gemeente = stageopdracht.Gemeente;
+            teUpdatenStageopdracht.Postcode = stageopdracht.Postcode;
+            teUpdatenStageopdracht.Straat = stageopdracht.Straat;
+            teUpdatenStageopdracht.Straatnummer = stageopdracht.Straatnummer;
+
+            if (teUpdatenStageopdracht.IsToegewezen() == false)
+            {
+                teUpdatenStageopdracht.Academiejaar = stageopdracht.Academiejaar;
+            }
+            
+            //stagementor
             teUpdatenStageopdracht.Stagementor = stageopdracht.Stagementor;
             if (stageopdracht.Stagementor != null)
             {
@@ -152,6 +168,7 @@ namespace StageBeheersTool.Models.DAL
                 teUpdatenStageopdracht.StagementorEmail = null;
                 teUpdatenStageopdracht.StagementorNaam = null;
             }
+            //contractondertekenaar
             teUpdatenStageopdracht.Contractondertekenaar = stageopdracht.Contractondertekenaar;
             if (stageopdracht.Contractondertekenaar != null)
             {
@@ -163,11 +180,6 @@ namespace StageBeheersTool.Models.DAL
                 teUpdatenStageopdracht.ContractondertekenaarEmail = null;
                 teUpdatenStageopdracht.ContractondertekenaarNaam = null;
             }
-            teUpdatenStageopdracht.Gemeente = stageopdracht.Gemeente;
-            teUpdatenStageopdracht.Postcode = stageopdracht.Postcode;
-            teUpdatenStageopdracht.Straat = stageopdracht.Straat;
-            teUpdatenStageopdracht.Straatnummer = stageopdracht.Straatnummer;
-
             SaveChanges();
         }
 

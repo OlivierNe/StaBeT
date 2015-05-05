@@ -4,63 +4,80 @@
 }
 <div id="grid-tableDiv">
     @Html.Grid(Model.Stages).Columns(columns =>
-{
-
-    columns.Add(stage => stage.Student.Familienaam).Titled("Student").Sanitized(false).Encoded(false)
-       .RenderValueAs(stage => Html.ActionLink(stage.Student.Naam, "Details", "Student",
-           new { stage.Student.Id, overzicht }, new { })).SetWidth(150);
-
-    columns.Add(stage => stage.Stageopdracht.Titel).Titled("Stageopdracht").Sanitized(false).Encoded(false)
-       .RenderValueAs(stage => Html.ActionLink(stage.Stageopdracht.Titel, "Details", "Stageopdracht",
-           new { stage.Stageopdracht.Id, overzicht }, new { }));
-
-    columns.Add(stage => stage.Stageopdracht.Bedrijf.Naam).Titled("Bedrijf").Sanitized(false).Encoded(false)
-       .RenderValueAs(stage => Html.ActionLink(stage.Bedrijf.Naam, "Details", "Bedrijf",
-           new { stage.Bedrijf.Id, overzicht }, new { }));
-    if (Model.ToonBegeleider)
     {
-        columns.Add(stage => stage.Stageopdracht.Stagebegeleider.Familienaam).Titled("Begeleider")
-            .Sanitized(false).Encoded(false).RenderValueAs(stage =>
-            {
-                if (stage.Begeleider == null)
-                {
-                    return new MvcHtmlString("");
-                }
-                return Html.ActionLink(stage.Stageopdracht.Stagebegeleider.Naam, "Details", "Begeleider",
-                    new { stage.Stageopdracht.Stagebegeleider.Id, overzicht }, new { });
-            }).Sortable(true).SetWidth(150);
-    }
-    columns.Add().Sanitized(false).Encoded(false).SetWidth(170)
-        .RenderValueAs(stage =>
+
+        columns.Add(stage => stage.Student.Familienaam).Titled("Student").Sanitized(false).Encoded(false)
+            .RenderValueAs(stage => Html.ActionLink(stage.Student.Naam, "Details", "Student",
+                new { stage.Student.Id, overzicht }, new { })).SetWidth(150);
+
+        columns.Add(stage => stage.Stageopdracht.Titel).Titled("Stageopdracht").Sanitized(false).Encoded(false)
+            .RenderValueAs(stage => Html.ActionLink(stage.Stageopdracht.Titel, "Details", "Stageopdracht",
+                new { stage.Stageopdracht.Id, overzicht }, new { }));
+
+        columns.Add(stage => stage.Stageopdracht.Bedrijf.Naam).Titled("Bedrijf").Sanitized(false).Encoded(false)
+            .RenderValueAs(stage => Html.ActionLink(stage.Bedrijf.Naam, "Details", "Bedrijf",
+                new { stage.Bedrijf.Id, overzicht }, new { }));
+        if (Model.ToonBegeleider)
         {
-            string retVal = "";
-            if (Model.ToonDetails)
+            columns.Add(stage => stage.Stageopdracht.Stagebegeleider.Familienaam).Titled("Begeleider")
+                .Sanitized(false).Encoded(false).RenderValueAs(stage =>
+                {
+                    if (stage.Begeleider == null)
+                    {
+                        return new MvcHtmlString("");
+                    }
+                    return Html.ActionLink(stage.Stageopdracht.Stagebegeleider.Naam, "Details", "Begeleider",
+                        new { stage.Stageopdracht.Stagebegeleider.Id, overzicht }, new { });
+                }).Sortable(true).SetWidth(150);
+        }
+        columns.Add().Sanitized(false).Encoded(false).SetWidth(170)
+            .RenderValueAs(stage =>
             {
-                retVal += Html.ActionLink("Details", "Details", "Stage",
-               new { stage.Id, overzicht }, new { @class = "btn btn-default" });
-            }
-            if (Model.ToonEditStageopdracht)
-            {
-                retVal += " " + Html.ActionLink("Bewerken", "Edit", "Stageopdracht",
-                    new { stage.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" });
-            }
-            if (Model.ToonEdit)
-            {
-                retVal += " " + Html.ActionLink("Bewerken", "Edit", "Stage",
-                    new { stage.Id, overzicht }, new { @class = "btn btn-default" });
-            }
-            if (Model.ToonEvaluatieformulier)
-            {
-                retVal += " " + Html.ActionLink("Evaluatieformulieren", "Index", "Evaluatieformulier",
-                    new { stageid = stage.Id,overzicht }, new { @class = "btn btn-default" });
-            }
-            return retVal;
-        });
-    if (Model.ToonActiviteitverslagen)
-    {
-        columns.Add().Sanitized(false).Encoded(false)
-            .RenderValueAs(stage => Html.ActionLink("Activiteitsverslagen", "VanStudent", "Activiteitsverslag",
-                new { stage.Id, overzicht }, new { @class = "btn btn-default", title = "Activiteitsverslagen bekijken" }));
-    }
-}).Sortable(true).WithPaging(10).EmptyText("Geen stages gevonden")
+                string retVal = "";
+                if (Model.ToonDetails)
+                {
+                    retVal += Html.ActionLink("Details", "Details", "Stage",
+                        new { stage.Id, overzicht }, new { @class = "btn btn-default" });
+                }
+                if (Model.ToonEditStageopdracht)
+                {
+                    retVal += " " + Html.ActionLink("Bewerken", "Edit", "Stageopdracht",
+                        new { stage.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" });
+                }
+                if (Model.ToonEdit)
+                {
+                    retVal += " " + Html.ActionLink("Bewerken", "Edit", "Stage",
+                        new { stage.Id, overzicht }, new { @class = "btn btn-default" });
+                }
+                return retVal;
+            });
+        if (Model.ToonEvaluatieformulier)
+        {
+            columns.Add().Sanitized(false).Encoded(false).Titled("Evaluatieformulieren")
+              .RenderValueAs(stage => "<select onchange='if (this.value) window.location.href=this.value' class='form-control'>" +
+                                      "<option value=''>--stagebezoek--</option>" +
+                                      "<option value='/Evaluatieformulier/Stagebezoek?stageId=" + stage.Id + "&stagebezoek=1&overzicht=" + @overzicht + "'>Eerste stagebezoek</option>" +
+                                      "<option value='/Evaluatieformulier/Stagebezoek?stageId=" + stage.Id + "&stagebezoek=2&overzicht=" + @overzicht + "'>Tweede stagebezoek</option>" +
+                                      "<option value='/Evaluatieformulier/Stagebezoek?stageId=" + stage.Id + "&stagebezoek=3&overzicht=" + @overzicht + "'>Derde stagebezoek</option>" +
+                                      "<option value='/Evaluatieformulier/Stagebezoek?stageId=" + stage.Id + "&stagebezoek=-1&overzicht=" + @overzicht + "'>Extra stagebezoek</option>" +
+                                      "</select>");
+        }
+        if (Model.ToonActiviteitverslagen)
+        {
+            columns.Add().Sanitized(false).Encoded(false)
+                .RenderValueAs(stage => Html.ActionLink("Activiteitsverslagen", "VanStudent", "Activiteitsverslag",
+                    new { stage.Id, overzicht }, new { @class = "btn btn-default", title = "Activiteitsverslagen bekijken" }));
+        }
+        if (Model.ToonEvaluatieformulierBekijken)
+        {
+            columns.Add().Sanitized(false).Encoded(false).Titled("Evaluatieformulieren")
+                .RenderValueAs(stage => "<select onchange='if (this.value) window.location.href=this.value' class='form-control'>" +
+                                        "<option value=''>--stagebezoek--</option>" +
+                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=1&overzicht=" + @overzicht + "'>Eerste stagebezoek</option>" +
+                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=2&overzicht=" + @overzicht + "'>Tweede stagebezoek</option>" +
+                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=3&overzicht=" + @overzicht + "'>Derde stagebezoek</option>" +
+                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=-1&overzicht=" + @overzicht + "'>Extra stagebezoek</option>" +
+                                        "</select>");
+        }
+    }).Sortable(true).WithPaging(10).EmptyText("Geen stages gevonden")
 </div>

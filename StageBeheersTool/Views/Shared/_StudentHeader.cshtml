@@ -1,10 +1,18 @@
-﻿@if (IdentityHelpers.StudentHeeftStage())
+﻿@{ var academiejaar = IdentityHelpers.StudentAcademiejaar(); }
+@if (academiejaar == null)
+{
+    <li>@Html.ActionLink("Stageopdrachten", "BeschikbareStageopdrachten", "Stageopdracht")</li>
+    <li>@Html.ActionLink(Resources.TitelMijnVoorkeurStages, "MijnVoorkeurStages", "Stageopdracht")</li>
+}
+else if (academiejaar == AcademiejaarHelper.HuidigAcademiejaar())
 {
     <li>@Html.ActionLink("Mijn stage", "MijnStage", "Stage") </li>
-    <li>@Html.ActionLink("Activiteitsverslagen","MijnActiviteitsverslagen","Activiteitsverslag")</li>
+    <li>@Html.ActionLink("Activiteitsverslagen", "MijnActiviteitsverslagen", "Activiteitsverslag")</li>
 }
 else
 {
     <li>@Html.ActionLink("Stageopdrachten", "BeschikbareStageopdrachten", "Stageopdracht")</li>
     <li>@Html.ActionLink(Resources.TitelMijnVoorkeurStages, "MijnVoorkeurStages", "Stageopdracht")</li>
+    <li>@Html.ActionLink("Mijn stage", "MijnStage", "Stage") </li>
+    <li>@Html.ActionLink("Activiteitsverslagen", "MijnActiviteitsverslagen", "Activiteitsverslag")</li>
 }

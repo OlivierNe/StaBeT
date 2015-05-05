@@ -187,11 +187,6 @@ namespace StageBeheersTool.Controllers
                 return null;
             }
             var bedrijf = _bedrijfRepository.FindById((int)id);
-            if (bedrijf != null && CurrentUser.IsStudent() 
-                && bedrijf.HeeftBeschikbareStageopdrachtenVoorHuidigAcademiejaar() == false)
-            {
-                return null;
-            }
             return bedrijf;
         }
 

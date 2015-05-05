@@ -24,16 +24,14 @@ namespace StageBeheersTool.Models.Domain
 
         IQueryable<VoorkeurStage> FindAllStudentVoorkeurenMetIngediendStagedossier();
         VoorkeurStage FindStudentVoorkeurStageByIds(int studentId, int stageId);
+        void DeleteVoorkeurstagesVanStudent(Student student);
 
         void AddAanvraag(StagebegeleidingAanvraag aanvraag);
         void DeleteAanvraag(StagebegeleidingAanvraag aanvraag);
 
         string[] FindAllAcademiejaren();
-        //string[] FindAllAcademiejarenVanBegeleider();
         IQueryable<Stageopdracht> FindAllVanAcademiejaar(string academiejaar);
-        //IQueryable<Stageopdracht> FindMijnStagesVanAcademiejaar(string academiejaar);
 
         void SaveChanges();
-
     }
 }

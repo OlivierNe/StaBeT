@@ -60,7 +60,7 @@ namespace StageBeheersTool.Models.Domain
             {
                 throw new ApplicationException(Resources.ErrorStageAanStudentKoppelenZonderGoedgekeurdStagedossier);
             }
-            if (studentVoorkeurstage.Student.HeeftToegewezenStage())
+            if (studentVoorkeurstage.Student.HeeftToegewezenStageInHuidigAcademiejaar())
             {
                 throw new ApplicationException(Resources.ErrorStudentHeeftAlToegewezenStage);
             }

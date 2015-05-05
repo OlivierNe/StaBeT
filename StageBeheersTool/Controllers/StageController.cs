@@ -63,7 +63,7 @@ namespace StageBeheersTool.Controllers
                 SetViewError(Resources.ErrorStageAanStudentKoppelenZonderGoedgekeurdStagedossier);
                 return RedirectToLocal(Overzicht);
             }
-            if (studentVoorkeurstage.Student.HeeftToegewezenStage())
+            if (studentVoorkeurstage.Student.HeeftToegewezenStageInHuidigAcademiejaar())
             {
                 SetViewError(Resources.ErrorStudentHeeftAlToegewezenStage);
                 return RedirectToLocal(Overzicht);
@@ -107,6 +107,8 @@ namespace StageBeheersTool.Controllers
                 stage.AcademiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(stage.Stageopdracht.Academiejaar);
                 stage.Semester = model.Semester;
                 _stageRepository.SaveChanges();
+                _stageopdrachtRepository.DeleteVoorkeurstagesVanStudent(model.Student);
+                _userService.UpdateSecurityStamp(model.Student.HogentEmail);
             }
             catch (ApplicationException ex)
             {
@@ -114,7 +116,7 @@ namespace StageBeheersTool.Controllers
                 return View(model);
             }
             SetViewMessage(string.Format(Resources.SuccesStageAanStudentToegewezen,
-                studentVoorkeurstage.Stageopdracht.Titel, studentVoorkeurstage.Student.Naam));
+                model.Stageopdracht.Titel, model.Student.Naam));
             return RedirectToLocal(Overzicht);
         }
 
@@ -130,7 +132,7 @@ namespace StageBeheersTool.Controllers
             }
             if (CurrentUser.IsStudent())
             {
-                if (IdentityHelpers.StudentHeeftStage())
+                if (IdentityHelpers.StudentAcademiejaar() == AcademiejaarHelper.HuidigAcademiejaar())
                 {
                     return RedirectToAction("MijnStage", "Stage");
                 }
@@ -173,6 +175,7 @@ namespace StageBeheersTool.Controllers
             model.ToonActiviteitverslagen = true;
             model.Title = Resources.TitelMijnStages;
             model.ToonEditStageopdracht = true;
+            model.ToonEvaluatieformulierBekijken = true;
 
             if (Request.IsAjaxRequest())
             {

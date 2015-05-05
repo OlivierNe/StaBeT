@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.Identity;
@@ -14,17 +11,14 @@ namespace StageBeheersTool.Controllers
     {
         private readonly IUserService _userService;
         private readonly IEvaluatievraagRepository _evaluatievraagRepository;
+        private readonly IStageRepository _stageRepository;
 
-        public EvaluatieformulierController(IUserService userService, IEvaluatievraagRepository evaluatievraagRepository)
+        public EvaluatieformulierController(IUserService userService,
+            IEvaluatievraagRepository evaluatievraagRepository, IStageRepository stageRepository)
         {
             _userService = userService;
             _evaluatievraagRepository = evaluatievraagRepository;
-        }
-
-        [Authorize(Role.Bedrijf)]
-        public ActionResult Index(int stageId)
-        {
-            return View(stageId);
+            _stageRepository = stageRepository;
         }
 
         [Authorize(Role.Bedrijf)]
@@ -74,6 +68,17 @@ namespace StageBeheersTool.Controllers
             }
             SetViewMessage(Resources.SuccesSaveEvaluatieformulier);
             return RedirectToAction("MijnToegewezenStages", "Stage");
+        }
+
+        [Authorize(Role.Begeleider)]
+        public ActionResult Bekijken(int stageId, int stagebezoek)
+        {
+            var stage = _stageRepository.FindById(stageId);
+            var evaluatievragen = _evaluatievraagRepository.FindByStagebezoek(stagebezoek)
+                .Where(vraag => vraag.Voor == "Stagementor").ToList();
+            var evaluatieantwoorden = stage.EvaluatieAntwoorden.ToList();
+            var model = new EvaluatieCreateVM(evaluatievragen, evaluatieantwoorden, stagebezoek, stageId);
+            return View(model);
         }
 
     }

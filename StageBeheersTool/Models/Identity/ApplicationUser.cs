@@ -36,7 +36,8 @@ namespace StageBeheersTool.Models.Identity
                     {
                         display = student.Naam;
                     }
-                    userIdentity.AddClaim(new Claim(MyClaimTypes.StudentHeeftStage, student.HeeftToegewezenStage().ToString()));
+                    userIdentity.AddClaim(new Claim(MyClaimTypes.StudentAcademiejaar,
+                        student.ToegewezenStageopdracht == null ? null : student.ToegewezenStageopdracht.Academiejaar));
                 }
             }
             else if (userIdentity.HasRole(Role.Begeleider))

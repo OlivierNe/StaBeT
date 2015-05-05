@@ -7,7 +7,7 @@ using StageBeheersTool.Helpers;
 namespace StageBeheersTool.Models.Domain
 {
 
-    public class Bedrijf 
+    public class Bedrijf
     {
         #region Properties
         public int Id { get; set; }
@@ -80,7 +80,7 @@ namespace StageBeheersTool.Models.Domain
 
         public IEnumerable<Stageopdracht> FindStageopdrachtenVanAcademiejaar(string academiejaar)
         {
-            return Stageopdrachten.Where(so => string.IsNullOrEmpty(academiejaar) 
+            return Stageopdrachten.Where(so => string.IsNullOrEmpty(academiejaar)
                 || so.Academiejaar == academiejaar).OrderBy(so => so.Titel);
         }
 
@@ -203,10 +203,7 @@ namespace StageBeheersTool.Models.Domain
                 {
                     return true;
                 }
-                if (DateTime.Now.Date <= ((DateTime)deadline).Date)
-                {
-                    return true;
-                }
+                return DateTime.Today <= ((DateTime)deadline).Date;
             }
             return false;
         }
