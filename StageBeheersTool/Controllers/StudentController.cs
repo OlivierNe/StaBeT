@@ -211,6 +211,7 @@ namespace StageBeheersTool.Controllers
                 SetViewError("Geen bestand geselecteerd.");
                 return View();
             }
+            var message = "";
             if (file != null)
             {
                 try
@@ -219,11 +220,11 @@ namespace StageBeheersTool.Controllers
                     _studentRepository.AddAll(studenten);
                     var hogentEmails = studenten.Select(s => s.HogentEmail).ToList();
                     _userService.CreateLogins(hogentEmails, Role.Student);
-                    SetViewMessage("Studenten succesvol geïmporteerd.");
+                    message += "Studenten succesvol geïmporteerd. ";
                 }
                 catch (FileFormatException)
                 {
-                    SetViewError("Ongeldig bestand formaat.");
+                    SetViewError("Ongeldig excel bestand formaat.");
                     return View();
                 }
             }
@@ -238,7 +239,7 @@ namespace StageBeheersTool.Controllers
                             var studentNaam = fotoFile.FileName.Substring(0, fotoFile.FileName.LastIndexOf('_'));
                             var idx = studentNaam.LastIndexOf('_');
                             var voornaam = studentNaam.Substring(idx).Trim('_', ' ');
-                            var familienaam = studentNaam.Substring(0, idx).Trim('_', ' ');
+                            var familienaam = studentNaam.Substring(0, idx).Trim('_', ' ').Replace('_', ' ');
                             var student = _studentRepository.FindByNaam(voornaam, familienaam);
                             if (student == null)
                                 continue;
@@ -262,7 +263,9 @@ namespace StageBeheersTool.Controllers
                         }
                     }
                 }
+                message += "Student Foto's toegevoegd";
             }
+            SetViewMessage(message);
             return View();
         }
 

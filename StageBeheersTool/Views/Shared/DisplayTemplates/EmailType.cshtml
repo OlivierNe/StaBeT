@@ -1,0 +1,32 @@
+﻿@model EmailType
+@{
+    var emailType = "";
+    switch (Model)
+    {
+        case EmailType.StageopdrachtGoedkeuren:
+            emailType = "Stageopdracht goedkeuren";
+            break;
+        case EmailType.StageopdrachtAfkeuren:
+            emailType = "Stageopdracht afkeuren";
+            break;
+        case EmailType.StageopdrachtGewijzigd:
+            emailType = "Stageopdracht gewijzigd";
+            break;
+        case EmailType.StageopdrachtAangemaakt:
+            emailType = "Stageopdracht aangemaakt";
+            break;
+        case EmailType.StageopdrachtVerwijderd:
+            emailType = "Stageopdracht verwijderd";
+            break;
+        case EmailType.StagedossierIngediend:
+            emailType = "Stagedossier ingediend";
+            break;
+        case EmailType.StagedossierAfgekeurd:
+            emailType = "Stagedossier afgekeurd";
+            break;
+        case EmailType.StagedossierGoedgekeurd:
+            emailType = "Stagedossier goedgekeurd";
+            break;
+    }
+}
+@emailType

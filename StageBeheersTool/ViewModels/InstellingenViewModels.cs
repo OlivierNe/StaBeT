@@ -193,4 +193,12 @@ namespace StageBeheersTool.ViewModels
             }
         }
     }
+
+    public class StandaardEmailVM
+    {
+        public int Id { get; set; }
+        public string Inhoud { get; set; }
+        public string Onderwerp { get; set; }
+        public EmailType EmailType { get; set; }
+    }
 }

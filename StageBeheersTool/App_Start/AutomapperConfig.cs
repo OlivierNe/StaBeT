@@ -45,6 +45,8 @@ namespace StageBeheersTool.App_Start
 
             Mapper.CreateMap<AcademiejaarInstellingen, AcademiejaarInstellingenVM>();
             Mapper.CreateMap<AcademiejaarInstellingenVM, AcademiejaarInstellingen>();
+            Mapper.CreateMap<StandaardEmail, StandaardEmailVM>();
+            Mapper.CreateMap<StandaardEmailVM, StandaardEmail>();
 
             Mapper.CreateMap<AdminVm, ApplicationUser>();
             Mapper.CreateMap<ApplicationUser, AdminVm>();

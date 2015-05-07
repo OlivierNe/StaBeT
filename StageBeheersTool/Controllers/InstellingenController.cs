@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using AutoMapper;
+using DocumentFormat.OpenXml.EMMA;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.Identity;
@@ -141,10 +142,34 @@ namespace StageBeheersTool.Controllers
 
         public ActionResult StandaardEmails()
         {
+
             return View();
         }
 
+        public ActionResult StandaardEmailEdit(int emailType)
+        {
+            var standaardEmail = _instellingenRepository.FindStandaardEmailByType((EmailType)emailType);
+            if (standaardEmail == null)
+            {
+                standaardEmail = new StandaardEmail { EmailType = (EmailType)emailType };
+                _instellingenRepository.AddStandaardEmail(standaardEmail);
+            }
+            return View(Mapper.Map<StandaardEmailVM>(standaardEmail));
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult StandaardEmailEdit(StandaardEmailVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var standaardEmail = Mapper.Map<StandaardEmail>(model);
+                //...
+
+                return View(model);
+            }
+            return View(model);
+        }
         #endregion
 
     }

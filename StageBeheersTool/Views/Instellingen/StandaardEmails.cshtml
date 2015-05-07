@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Standaard E-mails";
+    var emailTypes = Enum.GetValues(typeof(EmailType)).Cast<EmailType>();
+}
+
+<h2>Tekst voor standaard E-mails instellen</h2>
+
+<ul>
+    @foreach (var emailType in emailTypes)
+    {
+        <li>
+            @Html.ActionLink(Html.DisplayFor(model => emailType).ToString(), "StandaardEmailEdit",
+                "Instellingen", new { emailType = (int)emailType }, new { })
+        </li>
+    }
+</ul>
