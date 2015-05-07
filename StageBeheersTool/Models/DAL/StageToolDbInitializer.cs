@@ -747,7 +747,7 @@ namespace StageBeheersTool.Models.DAL
                 }
                 throw new ApplicationException("Fout bij aanmaken database " + message);
             }
-           // AddOudeGegevens(context);
+            AddOudeGegevens(context);
         }
 
         public async void AddOudeGegevens(StageToolDbContext context)

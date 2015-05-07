@@ -392,7 +392,7 @@ namespace StageBeheersTool.Controllers
                     var bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
                     _userService.CreateUserObject(bedrijf);
                     await _emailService.SendAsync("Registratie", string.Format("<strong>Account aangemaakt: <br/><strong><ul><li>" +
-                            "Login: {0}</li><li>Wachtwoord: {1}</li></ul>", user.Email, generatedPassword), destinations: user.Email);
+                            "Login: {0}</li><li>Wachtwoord: {1}</li></ul>", user.Email, generatedPassword), geadresseerden: user.Email);
                     SetViewMessage(Resources.SuccesEmailRegistratieBedrijfVerzonden);
                     return RedirectToAction("Login", "Account");
                 }
@@ -557,7 +557,7 @@ namespace StageBeheersTool.Controllers
                 var callbackUrl = Url.Action("ResetPassword", "Account",
                     new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                 await _emailService.SendAsync("Reset Password", "klik <a href=\"" + callbackUrl + "\">hier</a> om uw wachtwoord te resetten.",
-                     destinations: user.Email);
+                     geadresseerden: user.Email);
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
             return View(model);

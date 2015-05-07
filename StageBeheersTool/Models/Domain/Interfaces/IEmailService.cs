@@ -5,7 +5,7 @@ namespace StageBeheersTool.Models.Domain
 {
     public interface IEmailService
     {
-        Task SendAsync(string onderwerp, string inhoud, params string[] destinations);
+        Task SendAsync(string onderwerp, string inhoud, params string[] geadresseerden);
         Task<bool> SendStandaardEmail(EmailType emailType, string reden = null, params string[] geadresseerden);
 
         void AddStandaardEmail(StandaardEmail standaardEmail);
