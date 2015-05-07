@@ -16,7 +16,7 @@ namespace StageBeheersTool.Models.DAL
 {
     public class StageToolDbInitializer :
         //DropCreateDatabaseAlways<StageToolDbContext>
-    DropCreateDatabaseIfModelChanges<StageToolDbContext>
+        DropCreateDatabaseIfModelChanges<StageToolDbContext>
     {
 
         public void RunSeed(StageToolDbContext ctx)
@@ -60,18 +60,18 @@ namespace StageBeheersTool.Models.DAL
                 {
                     Academiejaar = "2014-2015",
                     Semester1Begin = new DateTime(2014, 9, 22),
-                    Semester2Einde = new DateTime(2015, 2, 6),
+                    Semester1Einde = new DateTime(2015, 2, 6),
                     Semester2Begin = new DateTime(2015, 2, 9),
-                    Semester1Einde = new DateTime(2015, 6, 26)
+                    Semester2Einde = new DateTime(2015, 6, 26)
                 });
 
                 context.AcademiejarenInstellingen.Add(new AcademiejaarInstellingen()
                 {
                     Academiejaar = "2015-2016",
                     Semester1Begin = new DateTime(2015, 9, 21),
-                    Semester2Einde = new DateTime(2016, 2, 5),
+                    Semester1Einde = new DateTime(2016, 2, 5),
                     Semester2Begin = new DateTime(2016, 2, 8),
-                    Semester1Einde = new DateTime(2016, 7, 1)
+                    Semester2Einde = new DateTime(2016, 7, 1)
                 });
                 #endregion
 
@@ -843,7 +843,14 @@ namespace StageBeheersTool.Models.DAL
                             var stages = new List<Stage>();
                             foreach (var student in stageopdrachtstudenten)
                             {
-                                stages.Add(new Stage { Stageopdracht = stageopdracht, Student = student, Semester = 2 });
+                                stages.Add(new Stage
+                                {
+                                    Stageopdracht = stageopdracht,
+                                    Student = student,
+                                    Semester = 2,
+                                    AcademiejaarInstellingen = context.AcademiejarenInstellingen
+                                        .FirstOrDefault(ac => ac.Academiejaar == stageopdracht.Academiejaar)
+                                });
                             }
                             stageopdracht.Stages = stages;
                             stageopdracht.Bedrijf = bedrijf;

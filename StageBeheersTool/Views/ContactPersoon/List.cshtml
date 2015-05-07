@@ -1,5 +1,7 @@
 ﻿@model ContactpersoonListVM
-
+@{
+    ViewBag.Title = Model.Title;
+}
 <h2>@ViewBag.Title</h2>
 <p>
     @Html.ActionLink("Nieuw contactpersoon", "Create", "Contactpersoon")

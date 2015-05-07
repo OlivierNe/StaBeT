@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Security.Claims;
+using DocumentFormat.OpenXml.Math;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using StageBeheersTool.Models.DAL;
@@ -99,7 +100,13 @@ namespace StageBeheersTool.Models.Services
 
         public ApplicationUser CreateLogin(string email, string wachtwoord = null, params string[] roles)
         {
-            var user = new ApplicationUser { UserName = email, Email = email, EmailConfirmed = true };
+            var user = _users.FirstOrDefault(u => u.Email == email);
+            if (user != null)
+            {
+                AddRolesToUser(user, roles);
+                return user;
+            }
+            user = new ApplicationUser { UserName = email, Email = email, EmailConfirmed = true };
             IdentityResult result;
             if (string.IsNullOrWhiteSpace(wachtwoord))
             {

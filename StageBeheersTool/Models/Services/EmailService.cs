@@ -8,6 +8,13 @@ namespace StageBeheersTool.Models.Services
 {
     public class EmailService : IEmailService
     {
+        private readonly IInstellingenRepository _instellingenRepository;
+
+        public EmailService(IInstellingenRepository instellingenRepository)
+        {
+            _instellingenRepository = instellingenRepository;
+        }
+
         public Task SendAsync(IdentityMessage message)
         {
             using (var mailMessage = new MailMessage())
@@ -17,7 +24,11 @@ namespace StageBeheersTool.Models.Services
                 mailMessage.Body = message.Body;
                 mailMessage.IsBodyHtml = true;
                 mailMessage.To.Add(new MailAddress(message.Destination));
-
+                var mailboxStages = _instellingenRepository.Find(Instelling.MailboxStages);
+                if (mailboxStages != null)
+                {
+                    mailMessage.CC.Add(mailboxStages.Value);
+                }
                 var smtp = new SmtpClient
                 {
                     Host = ConfigurationManager.AppSettings["smtpServer"],

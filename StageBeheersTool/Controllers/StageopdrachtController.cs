@@ -20,7 +20,6 @@ namespace StageBeheersTool.Controllers
         private readonly IStageopdrachtRepository _stageopdrachtRepository;
         private readonly IBedrijfRepository _bedrijfRepository;
         private readonly ISpecialisatieRepository _specialisatieRepository;
-        private readonly IAcademiejaarRepository _academiejaarRepository;
         private readonly IInstellingenRepository _instellingenRepository;
         private readonly IUserService _userService;
         private readonly IBegeleiderRepository _begeleiderRepository;
@@ -29,14 +28,13 @@ namespace StageBeheersTool.Controllers
 
         public StageopdrachtController(IStageopdrachtRepository stageopdrachtRepository,
             IBedrijfRepository bedrijfRepository, ISpecialisatieRepository specialisatieRepository,
-            IUserService userService, IAcademiejaarRepository academiejaarRepository,
-            IBegeleiderRepository begeleiderRepository, ISpreadsheetService spreadsheetService,
-            IEmailService emailService, IInstellingenRepository instellingenRepository)
+            IUserService userService, IBegeleiderRepository begeleiderRepository,
+            ISpreadsheetService spreadsheetService, IEmailService emailService,
+            IInstellingenRepository instellingenRepository)
         {
             _stageopdrachtRepository = stageopdrachtRepository;
             _bedrijfRepository = bedrijfRepository;
             _specialisatieRepository = specialisatieRepository;
-            _academiejaarRepository = academiejaarRepository;
             _userService = userService;
             _begeleiderRepository = begeleiderRepository;
             _spreadsheetService = spreadsheetService;
@@ -105,6 +103,7 @@ namespace StageBeheersTool.Controllers
             model.ToonSemester = true;
             model.ToonBedrijf = true;
             model.ToonZoekenOpAcademiejaar = true;
+            model.ToonZoekenOpBedrijf = true;
             model.Academiejaren = _stageopdrachtRepository.FindAllAcademiejaren();
             model.Title = Resources.TitelGoedgekeurdeStageopdrachten;
             return StageopdrachtView(model);
@@ -126,6 +125,7 @@ namespace StageBeheersTool.Controllers
             model.ToonAantalStudenten = true;
             model.ToonSemester = true;
             model.ToonBedrijf = true;
+            model.ToonZoekenOpBedrijf = true;
             model.ToonZoekenOpAcademiejaar = true;
             model.Academiejaren = _stageopdrachtRepository.FindAllAcademiejaren();
             model.Title = Resources.TitelAfgekeurdeStageopdrachten;
@@ -168,6 +168,7 @@ namespace StageBeheersTool.Controllers
             model.ToonStudenten = true;
             model.ToonBedrijf = true;
             model.ToonSemester = true;
+            model.ToonZoekenOpBedrijf = true;
             model.Title = Resources.TitelToegewezenStageopdrachtenZonderBegeleider;
             return StageopdrachtView(model);
         }
@@ -189,7 +190,8 @@ namespace StageBeheersTool.Controllers
             model.ToonBedrijf = true;
             model.ToonSemester = true;
             model.ToonBegeleider = true;
-            model.Title = Resources.TitelToegewezenStages;
+            model.ToonZoekenOpBedrijf = true;
+            model.Title = Resources.TitelToegewezenStageopdrachten;
             return StageopdrachtView(model);
         }
 
@@ -443,7 +445,7 @@ namespace StageBeheersTool.Controllers
                 model = new StageopdrachtCreateVM(_bedrijfRepository.FindAll(), _specialisatieRepository.FindAll());
             }
             model.AantalStudenten = 2;
-            model.SetStageperiodes(_academiejaarRepository.FindVanHuidigAcademiejaar());
+            model.SetStageperiodes(_instellingenRepository.FindAcademiejaarInstellingVanHuidig());
             return View(model);
         }
 
@@ -514,7 +516,7 @@ namespace StageBeheersTool.Controllers
                 model.SetBedrijfSelectList(_bedrijfRepository.FindAll(), _specialisatieRepository.FindAll());
             }
 
-            var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
+            var academiejaarInstellingen = _instellingenRepository.FindAcademiejaarInstellingVanHuidig();
             if (academiejaarInstellingen != null)
             {
                 model.StageperiodeSem1 = academiejaarInstellingen.StageperiodeSemester1();
@@ -536,7 +538,7 @@ namespace StageBeheersTool.Controllers
                 return HttpNotFound();
             }
 
-            var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
+            var academiejaarInstellingen = _instellingenRepository.FindAcademiejaarInstellingVanHuidig();
             model.SetStageperiodes(academiejaarInstellingen);
             if (CurrentUser.IsBedrijf())
             {
@@ -589,7 +591,7 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            var academiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(stageopdracht.Academiejaar);
+            var academiejaarInstellingen = _instellingenRepository.FindAcademiejaarInstellingByAcademiejaar(stageopdracht.Academiejaar);
             if (CurrentUser.IsBedrijf() && stageopdracht.Bedrijf.MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen) == false)
             {
                 return new HttpStatusCodeResult(403);
@@ -599,7 +601,8 @@ namespace StageBeheersTool.Controllers
                 return new HttpStatusCodeResult(403);
             }
             var model = Mapper.Map<Stageopdracht, StageopdrachtEditVM>(stageopdracht);
-            model.ContractondertekenaarId = stageopdracht.Contractondertekenaar == null ? null : (int?)stageopdracht.Contractondertekenaar.Id;
+            model.ContractondertekenaarId = stageopdracht.Contractondertekenaar == null ?
+                null : (int?)stageopdracht.Contractondertekenaar.Id;
             model.StagementorId = stageopdracht.Stagementor == null ? null : (int?)stageopdracht.Stagementor.Id;
             model.SetSelectLists(_specialisatieRepository.FindAll(), stageopdracht.Bedrijf.FindAllContractOndertekenaars(),
                 stageopdracht.Bedrijf.FindAllStagementors());
@@ -619,7 +622,7 @@ namespace StageBeheersTool.Controllers
             }
             if (ModelState.IsValid)
             {
-                var academiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(stageopdracht.Academiejaar);
+                var academiejaarInstellingen = _instellingenRepository.FindAcademiejaarInstellingByAcademiejaar(stageopdracht.Academiejaar);
                 if (CurrentUser.IsBedrijf() && stageopdracht.Bedrijf.MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen) == false)
                 {
                     return new HttpStatusCodeResult(403);

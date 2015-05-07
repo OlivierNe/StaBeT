@@ -1,5 +1,5 @@
 ﻿@{ var academiejaar = IdentityHelpers.StudentAcademiejaar(); }
-@if (academiejaar == null)
+@if (academiejaar == "")
 {
     <li>@Html.ActionLink("Stageopdrachten", "BeschikbareStageopdrachten", "Stageopdracht")</li>
     <li>@Html.ActionLink(Resources.TitelMijnVoorkeurStages, "MijnVoorkeurStages", "Stageopdracht")</li>

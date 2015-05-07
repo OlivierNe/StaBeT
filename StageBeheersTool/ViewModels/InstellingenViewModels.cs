@@ -33,6 +33,87 @@ namespace StageBeheersTool.ViewModels
         [UIHint("NullableDateTime")]
         public DateTime? DeadlineBedrijfStageEdit { get; set; }
 
+        [Display(Name = "Datum afstudeerbeurs")]
+        [UIHint("NullableDateTime")]
+        public DateTime? DatumAfstudeerbeurs { get; set; }
+
+        private string _vrijeDagen;
+        [Display(Name = "Vrije dagen")]
+        [DataType(DataType.MultilineText)]
+        public string VrijeDagen
+        {
+            get
+            {
+                if (_vrijeDagen == null)
+                {
+                    _vrijeDagen = "";
+                    var culture = new CultureInfo("nl-BE");
+                    const string dateFormat = "dddd d MMMM yyyy";
+                    var jaar = DateTime.Now.Year;
+                    _vrijeDagen += "- " + new DateTime(jaar, 11, 2).ToString(dateFormat, culture) + " (Allerzielen)\n";
+                    _vrijeDagen += "- " + new DateTime(jaar, 11, 11).ToString(dateFormat, culture) + " (Wapenstilstand)\n";
+                    jaar++;
+                    int firstDig = jaar / 100;
+                    int remain19 = jaar % 19;
+                    int temp = (firstDig - 15) / 2 + 202 - 11 * remain19;
+                    switch (firstDig)
+                    {
+                        case 21:
+                        case 24:
+                        case 25:
+                        case 27:
+                        case 28:
+                        case 29:
+                        case 30:
+                        case 31:
+                        case 32:
+                        case 34:
+                        case 35:
+                        case 38:
+                            temp = temp - 1;
+                            break;
+                        case 33:
+                        case 36:
+                        case 37:
+                        case 39:
+                        case 40:
+                            temp = temp - 2;
+                            break;
+                    }
+                    temp = temp % 30;
+                    int tA = temp + 21;
+                    if ((temp == 29) || (temp == 28 & remain19 > 10))
+                        tA -= 1;
+                    int tB = (tA - 19) % 7;
+                    int tC = (40 - firstDig) % 4;
+                    if (tC == 3 || tC > 1)
+                        tC++;
+                    temp = jaar % 100;
+                    int tD = (temp + temp / 4) % 7;
+                    int tE = ((20 - tB - tC - tD) % 7) + 1;
+                    int d = tA + tE;
+                    int m = 3;
+                    if (d > 31)
+                    {
+                        d -= 31;
+                        m++;
+                    }
+                    var paasmaandag = new DateTime(jaar, m, d + 1);
+                    _vrijeDagen += "- " + paasmaandag.ToString(dateFormat, culture) + " (paasmaandag)\n";
+                    _vrijeDagen += "- " + paasmaandag.AddDays(38).ToString(dateFormat, culture) + " (Hemelvaart)\n";
+                    var pinkstermaandag = paasmaandag.AddDays(48);
+                    while (pinkstermaandag.DayOfWeek != DayOfWeek.Monday)
+                    {
+                        pinkstermaandag = pinkstermaandag.AddDays(1);
+                    }
+                    _vrijeDagen += "- " + pinkstermaandag.ToString(dateFormat, culture) + " (Pinkstermaandag)\n";
+                }
+                return
+                    _vrijeDagen;
+            }
+            set { _vrijeDagen = value; }
+        }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var errors = new List<ValidationResult>();

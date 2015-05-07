@@ -20,7 +20,6 @@ namespace StageBeheersTool.Controllers
     public class StageController : BaseController
     {
         private readonly IStageopdrachtRepository _stageopdrachtRepository;
-        private readonly IAcademiejaarRepository _academiejaarRepository;
         private readonly IStageRepository _stageRepository;
         private readonly IBegeleiderRepository _begeleiderRepository;
         private readonly ISpreadsheetService _spreadsheetService;
@@ -30,13 +29,11 @@ namespace StageBeheersTool.Controllers
         private readonly IInstellingenRepository _instellingenRepository;
 
         public StageController(IStageopdrachtRepository stageopdrachtRepository,
-            IStageRepository stageRepository, IAcademiejaarRepository academiejaarRepository,
-            IBegeleiderRepository begeleiderRepository, ISpreadsheetService spreadsheetService,
-            IUserService userService, IEmailService emailService, IInstellingenRepository instellingenRepository,
-            IDocumentService documentService)
+            IStageRepository stageRepository, IBegeleiderRepository begeleiderRepository,
+            ISpreadsheetService spreadsheetService, IUserService userService,
+            IEmailService emailService, IInstellingenRepository instellingenRepository, IDocumentService documentService)
         {
             _stageopdrachtRepository = stageopdrachtRepository;
-            _academiejaarRepository = academiejaarRepository;
             _stageRepository = stageRepository;
             _begeleiderRepository = begeleiderRepository;
             _spreadsheetService = spreadsheetService;
@@ -47,7 +44,6 @@ namespace StageBeheersTool.Controllers
         }
 
         #region Stage toewijzen
-
 
         [Authorize(Role.Admin)]
         public ActionResult StageToewijzen(int studentId, int stageId)
@@ -76,7 +72,7 @@ namespace StageBeheersTool.Controllers
                 StudentId = studentVoorkeurstage.Student.Id,
                 StageopdrachtId = studentVoorkeurstage.Stageopdracht.Id
             };
-            model.SetStageperiodes(_academiejaarRepository.FindVanHuidigAcademiejaar());
+            model.SetStageperiodes(_instellingenRepository.FindAcademiejaarInstellingVanHuidig());
             return View(model);
         }
 
@@ -104,7 +100,8 @@ namespace StageBeheersTool.Controllers
                 {
                     stage.SetAangepasteStageperiode(model.Begindatum, model.Einddatum, model.Semester);
                 }
-                stage.AcademiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(stage.Stageopdracht.Academiejaar);
+                stage.AcademiejaarInstellingen = _instellingenRepository
+                    .FindAcademiejaarInstellingByAcademiejaar(stage.Stageopdracht.Academiejaar);
                 stage.Semester = model.Semester;
                 _stageRepository.SaveChanges();
                 _stageopdrachtRepository.DeleteVoorkeurstagesVanStudent(model.Student);
@@ -199,15 +196,16 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Admin)]
-        public ActionResult StagesToewijzen(StageListVM model)
+        public ActionResult StagesToewijzen(StagesToewijzenListVM model)
         {
-            var stageopdrachten = _stageopdrachtRepository.FindAllStudentVoorkeurenMetIngediendStagedossier();
-
+            var voorkeurStages = _stageopdrachtRepository.FindAllStudentVoorkeurenMetIngediendStagedossier()
+                .WithFilter(voornaam: model.Voornaam, naam: model.Naam);
+            model.VoorkeurStages = voorkeurStages;
             if (Request.IsAjaxRequest())
             {
-                return PartialView("_StagesToewijzenList", stageopdrachten);
+                return PartialView("_StagesToewijzenList", model);
             }
-            return View(stageopdrachten);
+            return View(model);
         }
 
         [Authorize(Role.Admin, Role.Begeleider)]
@@ -300,7 +298,7 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
-            var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
+            var academiejaarInstellingen = _instellingenRepository.FindAcademiejaarInstellingVanHuidig();
             var model = Mapper.Map<StageEditVM>(stage);
             model.SetStageperiodes(academiejaarInstellingen);
             return View(model);
@@ -318,7 +316,7 @@ namespace StageBeheersTool.Controllers
                 SetViewMessage(Resources.SuccesEditStage);
                 return RedirectToAction("Details", new { stage.Id, Overzicht });
             }
-            var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
+            var academiejaarInstellingen = _instellingenRepository.FindAcademiejaarInstellingVanHuidig();
             model.SetStageperiodes(academiejaarInstellingen);
             return View(model);
         }
@@ -453,7 +451,6 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
-        //TODO:mergefields in word document bijvullen
         [Authorize(Role.Admin)]
         [HttpPost]
         public ActionResult GenereerStagecontracten(int[] id)

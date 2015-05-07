@@ -19,9 +19,12 @@ namespace StageBeheersTool.Models.Domain
         public int Semester { get; set; }
         public bool AangepasteStageperiode { get; set; }
         public virtual AcademiejaarInstellingen AcademiejaarInstellingen { get; set; }
-
+        
         public bool StagecontractOpgesteld { get; set; }
         public bool GetekendStagecontract { get; set; }
+
+        public DateTime? DatumStagecontractOpgesteld { get; set; }
+        public DateTime? DatumGetekendStagecontract { get; set; }
 
         public virtual ICollection<Activiteitsverslag> Activiteitsverslagen { get; set; }
         public virtual ICollection<Evaluatieantwoord> EvaluatieAntwoorden { get; set; }

@@ -66,6 +66,7 @@ namespace StageBeheersTool.Models.DAL
 
         public DbSet<AcademiejaarInstellingen> AcademiejarenInstellingen { get; set; }
         public DbSet<Instelling> Instellingen { get; set; }
+        public DbSet<StandaardEmail> StandaardEmails { get; set; }
 
         public DbSet<Evaluatievraag> Evaluatievragen { get; set; }
 

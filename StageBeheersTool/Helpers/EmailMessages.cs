@@ -15,7 +15,8 @@ namespace StageBeheersTool.Helpers
             };
         }
 
-        public static IdentityMessage StageopdrachtAfkeurenMail(Stageopdracht stageopdracht, string reden, string onderwerp = "Stageopdracht afgekeurd.")
+        public static IdentityMessage StageopdrachtAfkeurenMail(Stageopdracht stageopdracht,
+            string reden, string onderwerp = "Stageopdracht afgekeurd.")
         {
             return new IdentityMessage
             {

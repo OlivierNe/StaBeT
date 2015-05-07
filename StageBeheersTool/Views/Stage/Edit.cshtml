@@ -74,6 +74,9 @@
                         @Html.EditorFor(model => model.StagecontractOpgesteld)
                         @Html.ValidationMessageFor(model => model.StagecontractOpgesteld, "", new { @class = "text-danger" })
                     </div>
+                    <div>
+                        @Html.EditorFor(model => model.DatumStagecontractOpgesteld, new { htmlAttributes = new { @class = "" } })
+                    </div>
                 </div>
             </div>
 
@@ -83,6 +86,9 @@
                     <div class="checkbox">
                         @Html.EditorFor(model => model.GetekendStagecontract)
                         @Html.ValidationMessageFor(model => model.GetekendStagecontract, "", new { @class = "text-danger" })
+                    </div>
+                    <div>
+                        @Html.EditorFor(model => model.DatumGetekendStagecontract, new { htmlAttributes = new { @class = "" } })
                     </div>
                 </div>
             </div>

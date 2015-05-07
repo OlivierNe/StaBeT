@@ -1,39 +1,39 @@
-﻿@model IEnumerable<VoorkeurStage>
+﻿@model StagesToewijzenListVM
 @{
     var overzicht = ViewHelpers.CurrentOverzicht();
 }
 
 <div id="grid-tableDiv">
-    @Html.Grid(Model).Columns(columns =>
+    @Html.Grid(Model.VoorkeurStages).Columns(columns =>
 {
-    columns.Add(so => so.Stageopdracht.Titel).Titled("Stageopdracht").Encoded(false).Sanitized(false)
-           .RenderValueAs(s => Html.ActionLink(s.Stageopdracht.Titel,
-               "Details", "Stageopdracht", new { s.Stageopdracht.Id, overzicht }, new { })).SetWidth(300);
+    columns.Add(vs => vs.Stageopdracht.Titel).Titled("Stageopdracht").Encoded(false).Sanitized(false)
+           .RenderValueAs(vs=> Html.ActionLink(vs.Stageopdracht.Titel,
+               "Details", "Stageopdracht", new { vs.Stageopdracht.Id, overzicht }, new { })).SetWidth(300);
 
-    columns.Add(s => s.Student.Familienaam).Titled("Student").Sanitized(false).Encoded(false)
-            .RenderValueAs(s => Html.ActionLink(s.Student.Naam, "details", "Student",
-                new { s.Student.Id, overzicht }, new { })).SetWidth(150);
+    columns.Add(vs=> vs.Student.Familienaam).Titled("Student").Sanitized(false).Encoded(false)
+            .RenderValueAs(vs=> Html.ActionLink(vs.Student.Naam, "details", "Student",
+                new { vs.Student.Id, overzicht }, new { })).SetWidth(150);
 
-    columns.Add(s => s.Status).Titled("Stagedossier status");
+    columns.Add(vs=> vs.Status).Titled("Stagedossier status");
 
-    columns.Add().Sanitized(false).Encoded(false).Titled("Stagedossier").RenderValueAs(s => Html.ActionLink("Goedkeuren", "StagedossierGoedkeuren",
-        new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" })
+    columns.Add().Sanitized(false).Encoded(false).Titled("Stagedossier").RenderValueAs(vs=> Html.ActionLink("Goedkeuren", "StagedossierGoedkeuren",
+        new { studentId = vs.Student.Id, stageId = vs.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" })
         + " " + Html.ActionLink("Afkeuren", "StagedossierAfkeuren",
-        new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" })).SetWidth(250);
+        new { studentId = vs.Student.Id, stageId = vs.Stageopdracht.Id, overzicht }, new { @class = "btn btn-default" })).SetWidth(250);
 
     columns.Add().Sanitized(false).Encoded(false)
-        .RenderValueAs(s =>
+        .RenderValueAs(vs=>
         {
-            if (s.Stageopdracht.Stages.Any(stage => stage.Student.Id == s.Student.Id))
+            if (vs.Stageopdracht.Stages.Any(stage => stage.Student.Id == vs.Student.Id))
             {
                 return Html.ActionLink("Toewijzen", "StageToewijzen", "Stage",
-                  new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id, overzicht },
+                  new { studentId = vs.Student.Id, stageId = vs.Stageopdracht.Id, overzicht },
                   new { @class = "btn btn-default", disabled = "disabled" });
             }
-            if (s.Status == StagedossierStatus.Goedgekeurd)
+            if (vs.Status == StagedossierStatus.Goedgekeurd)
             {
                 return Html.ActionLink("Toewijzen", "StageToewijzen", "Stage",
-                    new { studentId = s.Student.Id, stageId = s.Stageopdracht.Id, overzicht },
+                    new { studentId = vs.Student.Id, stageId = vs.Stageopdracht.Id, overzicht },
                     new { @class = "btn btn-default", title = "Stageopdracht aan student toewijzen" });
             }
             return MvcHtmlString.Empty;

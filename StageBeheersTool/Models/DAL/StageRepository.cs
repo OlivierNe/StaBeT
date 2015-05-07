@@ -62,6 +62,8 @@ namespace StageBeheersTool.Models.DAL
             }
             teUpdatenStage.StagecontractOpgesteld = stage.StagecontractOpgesteld;
             teUpdatenStage.GetekendStagecontract = stage.GetekendStagecontract;
+            teUpdatenStage.DatumGetekendStagecontract = stage.DatumGetekendStagecontract;
+            teUpdatenStage.DatumStagecontractOpgesteld = stage.DatumStagecontractOpgesteld;
             SaveChanges();
         }
 

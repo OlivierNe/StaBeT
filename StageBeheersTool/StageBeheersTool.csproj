@@ -226,6 +226,7 @@
     <Compile Include="Helpers\ZipFileResult.cs" />
     <Compile Include="Models\DAL\EvaluatievraagRepository.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableStageExtensions.cs" />
+    <Compile Include="Models\DAL\Extensions\QueryablevoorkeurStageExtensions.cs" />
     <Compile Include="Models\DAL\Mapping\ActiviteitsverslagMapper.cs" />
     <Compile Include="Models\DAL\Mapping\EvaluatieantwoordMapper.cs" />
     <Compile Include="Models\DAL\Mapping\EvaluatievraagMapper.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="Models\Domain\Foto.cs" />
     <Compile Include="Models\Domain\Interfaces\IEvaluatievraagRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\IDocumentService.cs" />
+    <Compile Include="Models\Domain\StandaardEmail.cs" />
     <Compile Include="Models\Identity\MyClaimTypes.cs" />
     <Compile Include="Models\Identity\UserWithRoles.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBedrijfExtensions.cs" />

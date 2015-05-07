@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using StageBeheersTool.Models.Domain;
@@ -26,6 +27,15 @@ namespace StageBeheersTool.ViewModels
         public string Title { get; set; }
     }
 
+    public class StagesToewijzenListVM
+    {
+        public IEnumerable<VoorkeurStage> VoorkeurStages { get; set; }
+
+        //student
+        public string Voornaam { get; set; }
+        public string Naam { get; set; }
+    }
+
     public class StageDetailsVM
     {
         public Stage Stage { get; set; }
@@ -33,15 +43,17 @@ namespace StageBeheersTool.ViewModels
         public DateTime? Begindatum { get; set; }
         [UIHint("NullableDateTime")]
         public DateTime? Einddatum { get; set; }
+        [UIHint("NullableDateTime")]
+        [DisplayName("Stagecontract opgesteld")]
+        public DateTime? DatumStagecontractOpgesteld { get { return Stage.DatumStagecontractOpgesteld; } }
+        [UIHint("NullableDateTime")]
+        [DisplayName("Getekend stagecontract")]
+        public DateTime? DatumGetekendStagecontract { get { return Stage.DatumGetekendStagecontract; } }
+        [DisplayName("Aangepaste stageperiode")]
+        public bool AangepasteStageperiode { get { return Stage.AangepasteStageperiode; } }
 
         public bool ToonEdit { get; set; }
         public bool ToonVerwijderen { get; set; }
-
-        [Display(Name = "Aangepaste stageperiode")]
-        public bool AangepasteStageperiode
-        {
-            get { return Stage.AangepasteStageperiode; }
-        }
     }
 
     public class StageEditVM : StageAanStudentToewijzenVM
@@ -51,6 +63,10 @@ namespace StageBeheersTool.ViewModels
         public bool StagecontractOpgesteld { get; set; }
         [Display(Name = "Getekend stagecontract")]
         public bool GetekendStagecontract { get; set; }
+        [UIHint("NullableDateTime")]
+        public DateTime? DatumStagecontractOpgesteld { get; set; }
+        [UIHint("NullableDateTime")]
+        public DateTime? DatumGetekendStagecontract { get; set; }
     }
 
     public class StageAanStudentToewijzenVM : IValidatableObject

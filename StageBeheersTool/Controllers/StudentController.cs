@@ -85,7 +85,7 @@ namespace StageBeheersTool.Controllers
                     SetViewMessage(string.Format(Resources.SuccesStudentCreate, student.Naam));
                     if (model.LoginAccountAanmaken)
                     {
-                        _userService.CreateLogin(student.HogentEmail, "wachtwoord", Role.Student);//TODO: tijdelijk "wachtwoord"
+                        _userService.CreateLogin(student.HogentEmail, Role.Student);
                     }
                     return RedirectToAction("Details", new { student.Id });
                 }

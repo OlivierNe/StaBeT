@@ -50,9 +50,9 @@
             @Html.DisplayFor(model => model.Stage.Semester)
         </dd>
 
-        <dt>Aangepaste stageperiode</dt>
+        <dt>@Html.NameFor(model => model.AangepasteStageperiode) </dt>
         <dd>
-            @Html.DisplayFor(model => model.Stage.AangepasteStageperiode)
+            @Html.DisplayFor(model => model.AangepasteStageperiode)
         </dd>
 
         <dt>
@@ -70,16 +70,16 @@
         </dd>
 
         <dt>
-            Stagecontract opgesteld
+            @Html.DisplayNameFor(model => model.DatumStagecontractOpgesteld)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Stage.StagecontractOpgesteld)
+            @Html.DisplayFor(model => model.Stage.StagecontractOpgesteld) @Html.DisplayFor(model => model.DatumStagecontractOpgesteld)
         </dd>
         <dt>
-            Getekend stagecontract
+            @Html.DisplayNameFor(model => model.DatumGetekendStagecontract)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Stage.GetekendStagecontract)
+            @Html.DisplayFor(model => model.Stage.GetekendStagecontract) @Html.DisplayFor(model => model.DatumGetekendStagecontract)
         </dd>
     </dl>
 </div>

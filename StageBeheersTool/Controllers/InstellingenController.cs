@@ -13,27 +13,24 @@ namespace StageBeheersTool.Controllers
     [Authorize(Roles = Role.Admin)]
     public class InstellingenController : BaseController
     {
-        private readonly IAcademiejaarRepository _academiejaarRepository;
         private readonly IInstellingenRepository _instellingenRepository;
 
-        public InstellingenController(IAcademiejaarRepository academiejaarRepository,
-            IInstellingenRepository instellingenRepository)
+        public InstellingenController(IInstellingenRepository instellingenRepository)
         {
-            _academiejaarRepository = academiejaarRepository;
             _instellingenRepository = instellingenRepository;
         }
 
         #region academiejaar instellingen
         public ActionResult HuidigAcademiejaar()
         {
-            var academiejaarInstellingen = _academiejaarRepository.FindVanHuidigAcademiejaar();
+            var academiejaarInstellingen = _instellingenRepository.FindAcademiejaarInstellingVanHuidig();
             if (academiejaarInstellingen == null)
             {
                 academiejaarInstellingen = new AcademiejaarInstellingen
                 {
                     Academiejaar = AcademiejaarHelper.HuidigAcademiejaar()
                 };
-                _academiejaarRepository.Add(academiejaarInstellingen);
+                _instellingenRepository.AddAcademiejaarInstelling(academiejaarInstellingen);
             }
             return View(Mapper.Map<AcademiejaarInstellingenVM>(academiejaarInstellingen));
         }
@@ -45,7 +42,7 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 var academiejaarInstellingen = Mapper.Map<AcademiejaarInstellingen>(model);
-                _academiejaarRepository.Update(academiejaarInstellingen);
+                _instellingenRepository.UpdateAcademiejaarInstelling(academiejaarInstellingen);
                 SetViewMessage(string.Format(Resources.SuccesParametersAcademiejaar, model.Academiejaar));
             }
             return View(model);
@@ -53,7 +50,8 @@ namespace StageBeheersTool.Controllers
 
         public ActionResult AlleAcademiejaren()
         {
-            return View(Mapper.Map<IEnumerable<AcademiejaarInstellingen>, IEnumerable<AcademiejaarInstellingenVM>>(_academiejaarRepository.FindAll()));
+            return View(Mapper.Map<IEnumerable<AcademiejaarInstellingen>,
+                IEnumerable<AcademiejaarInstellingenVM>>(_instellingenRepository.FindAllAcademiejaarInstellingen()));
         }
 
         public ActionResult CreateAcadInstellingen(string academiejaar = null)
@@ -61,7 +59,7 @@ namespace StageBeheersTool.Controllers
             AcademiejaarInstellingen academiejaarInstellingen;
             if (academiejaar != null)
             {
-                academiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(academiejaar);
+                academiejaarInstellingen = _instellingenRepository.FindAcademiejaarInstellingByAcademiejaar(academiejaar);
             }
             else
             {
@@ -74,9 +72,14 @@ namespace StageBeheersTool.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateAcadInstellingen(AcademiejaarInstellingenVM model)
         {
+            if (_instellingenRepository.FindAcademiejaarInstellingByAcademiejaar(model.Academiejaar) != null)
+            {
+                ModelState.AddModelError("Academiejaar",
+                    "Academiejaarinstellingen voor academiejaar " + model.Academiejaar + " bestaan al.");
+            }
             if (ModelState.IsValid)
             {
-                _academiejaarRepository.Add(Mapper.Map<AcademiejaarInstellingen>(model));
+                _instellingenRepository.AddAcademiejaarInstelling(Mapper.Map<AcademiejaarInstellingen>(model));
                 SetViewMessage(string.Format(Resources.SuccesParametersAcademiejaar, model.Academiejaar));
                 return View(model);
             }
@@ -90,7 +93,7 @@ namespace StageBeheersTool.Controllers
             {
                 academiejaar = AcademiejaarHelper.HuidigAcademiejaar();
             }
-            var academiejaarInstellingen = _academiejaarRepository.FindByAcademiejaar(academiejaar);
+            var academiejaarInstellingen = _instellingenRepository.FindAcademiejaarInstellingByAcademiejaar(academiejaar);
             if (academiejaarInstellingen == null)
             {
                 return HttpNotFound();
@@ -131,6 +134,16 @@ namespace StageBeheersTool.Controllers
             }
             return View(model);
         }
+
+        #endregion
+
+        #region standaardEmail
+
+        public ActionResult StandaardEmails()
+        {
+            return View();
+        }
+
 
         #endregion
 

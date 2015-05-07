@@ -13,7 +13,7 @@ namespace StageBeheersTool.ViewModels
 
         public string Naam { get; set; }
         public string Bedrijf { get; set; }
-
+        public string Title { get; set; }
     }
 
     public class ContactpersoonCreateVM

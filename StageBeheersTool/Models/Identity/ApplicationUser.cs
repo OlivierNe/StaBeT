@@ -37,7 +37,7 @@ namespace StageBeheersTool.Models.Identity
                         display = student.Naam;
                     }
                     userIdentity.AddClaim(new Claim(MyClaimTypes.StudentAcademiejaar,
-                        student.ToegewezenStageopdracht == null ? null : student.ToegewezenStageopdracht.Academiejaar));
+                        student.ToegewezenStageopdracht == null ? "" : student.ToegewezenStageopdracht.Academiejaar));
                 }
             }
             else if (userIdentity.HasRole(Role.Begeleider))

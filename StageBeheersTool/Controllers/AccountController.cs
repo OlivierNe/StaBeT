@@ -52,7 +52,8 @@ namespace StageBeheersTool.Controllers
                 .Where(user => (string.IsNullOrWhiteSpace(model.LoginZoeken) ||
                     user.Login.ToLower().Contains(model.LoginZoeken.ToLower())) && ((model.IsAdmin && user.IsAdmin())
                     || (model.IsBegeleider && user.IsBegeleider()) || (model.IsStudent && user.IsStudent())
-                    || (model.IsBedrijf && user.IsBedrijf())));
+                    || (model.IsBedrijf && user.IsBedrijf()) || (user.HeeftGeenRol() && !model.IsBedrijf
+                    && !model.IsAdmin && !model.IsBegeleider && !model.IsStudent)));
             model.SetUsers(users);
             model.ToonActies = CurrentUser.IsAdmin();
             if (Request.IsAjaxRequest())
@@ -62,7 +63,6 @@ namespace StageBeheersTool.Controllers
             return View(model);
         }
 
-        //TODO:Import studenten stage uit bamaflex.
         [Authorize(Role.Admin)]
         public ActionResult Create()
         {
@@ -320,8 +320,8 @@ namespace StageBeheersTool.Controllers
                 var webservice = new ldap_wrapService(); //https://webservice.hogent.be/ldap/ldap.wsdl
                 var response = webservice.authenticate(model.Email, model.Password);
                 var serializer = new JavaScriptSerializer();
-                dynamic dataStudent = serializer.Deserialize<object>(response);
-                if (dataStudent["ACTIVE"] != 0) //inloggen gelukt
+                dynamic dataAccount = serializer.Deserialize<object>(response);
+                if (dataAccount["ACTIVE"] != 0) //inloggen gelukt
                 {
                     await SignInManager.SignInAsync(user, model.RememberMe, false);
                     return RedirectToAction("List", "Stageopdracht");

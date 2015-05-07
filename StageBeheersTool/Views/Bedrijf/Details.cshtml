@@ -74,7 +74,7 @@
 }
 @if (Model.ToonDelete)
 {
-    @Html.ActionLink("Gegevens wijzigen", "Delete", new { Model.Bedrijf.Id, overzicht = ViewHelpers.GetOverzicht() },
+    @Html.ActionLink("Verwijderen", "Delete", new { Model.Bedrijf.Id, overzicht = ViewHelpers.GetOverzicht() },
         new { @class = "btn btn-default" })
 }
 @if (Model.ToonTerug)

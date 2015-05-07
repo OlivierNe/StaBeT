@@ -28,5 +28,10 @@ namespace StageBeheersTool.Models.Identity
             return Roles.Contains(Role.Student);
         }
 
+        public bool HeeftGeenRol()
+        {
+            return Roles.Count == 0;
+        }
+
     }
 }

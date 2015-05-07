@@ -50,7 +50,7 @@ namespace StageBeheersTool.Controllers
                 {
                     _bedrijfRepository.Add(bedrijf);
                     SetViewMessage(string.Format(Resources.SuccesCreateBedrijf, bedrijf.Naam));
-                    _userService.CreateLogin(bedrijf.Email, "wachtwoord", Role.Bedrijf);//TODO: tijdelijk "wachtwoord"
+                    _userService.CreateLogin(bedrijf.Email, Role.Bedrijf);
                     return RedirectToAction("Details", new { id = bedrijf.Id });
                 }
                 catch (ApplicationException ex)

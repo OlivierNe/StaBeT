@@ -36,11 +36,11 @@ namespace StageBeheersTool.Controllers
                 model.Contactpersonen = _contactpersoonRepository.FindAll()
                     .WithFilter(model.Bedrijf, model.Naam);
             }
+            model.Title = "Overzicht contactpersonen";
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_ContactpersoonList", model);
             }
-            ViewBag.Title = "Overzicht contactpersonen";
             return View(model);
         }
 
@@ -54,9 +54,9 @@ namespace StageBeheersTool.Controllers
             };
             if (Request.IsAjaxRequest())
             {
-                return PartialView("_ContactpersoonList");
+                return PartialView("_ContactpersoonList", model);
             }
-            ViewBag.Title = "Overzicht contactpersonen van " + bedrijf.Naam;
+            model.Title = "Overzicht contactpersonen van " + bedrijf.Naam;
             return View("List", model);
         }
 

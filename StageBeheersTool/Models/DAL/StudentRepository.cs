@@ -65,8 +65,9 @@ namespace StageBeheersTool.Models.DAL
 
         public Student FindByNaam(string voornaam, string familienaam)
         {
-            return _studenten.FirstOrDefault(student => student.Voornaam.ToLower() == voornaam.ToLower()
-                && student.Familienaam.ToLower() == familienaam.ToLower());
+            return _studenten.FirstOrDefault(student => student.Voornaam.ToLower().Trim() 
+                == voornaam.ToLower()
+                && student.Familienaam.ToLower().Trim() == familienaam.Trim());
         }
 
         public Student FindById(int id)

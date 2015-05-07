@@ -96,12 +96,13 @@ namespace StageBeheersTool.Models.DAL
 
         /// <summary>
         /// </summary>
-        /// <returns>Alle toegewezen stages van het huidige academiejaar</returns>
+        /// <returns>Alle toegewezen stageopdrachten van het huidige academiejaar</returns>
         public IQueryable<Stageopdracht> FindToegewezenStageopdrachten()
         {
             return _stageopdrachten
                 .Where(IsinHuidigAcademiejaar())
                 .Where(so => so.Status == StageopdrachtStatus.Toegewezen && so.Stages.Count > 0)
+                .Where(so => so.Stagebegeleider != null)
                 .IncludeAndOrder();
         }
 

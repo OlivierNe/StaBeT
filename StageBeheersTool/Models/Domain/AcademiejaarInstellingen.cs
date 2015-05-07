@@ -13,6 +13,13 @@ namespace StageBeheersTool.Models.Domain
         public DateTime? Semester2Begin { get; set; }
         public DateTime? Semester2Einde { get; set; }
         public DateTime? DeadlineBedrijfStageEdit { get; set; }
+        public string VrijeDagen { get; set; }
+        public DateTime? DatumAfstudeerbeurs { get; set; }
+   
+        public string DatumAfstudeerbeursToString
+        {
+            get { return DatumAfstudeerbeurs == null ? "" : ((DateTime)DatumAfstudeerbeurs).ToString("dddd d MMMM yyyy"); }
+        }
 
         public string StageperiodeSemester1()
         {
