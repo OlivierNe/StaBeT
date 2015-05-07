@@ -316,8 +316,6 @@ namespace StageBeheersTool.ViewModels
         public int Id { get; set; }
         public string Titel { get; set; }
         public string Aan { get; set; }
-        [Required]
-        public string Onderwerp { get; set; }
         [DataType(DataType.MultilineText)]
         [Required]
         public string Reden { get; set; }

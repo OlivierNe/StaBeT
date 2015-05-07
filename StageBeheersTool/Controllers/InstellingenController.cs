@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using AutoMapper;
-using DocumentFormat.OpenXml.EMMA;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
 using StageBeheersTool.Models.Identity;
@@ -15,10 +15,13 @@ namespace StageBeheersTool.Controllers
     public class InstellingenController : BaseController
     {
         private readonly IInstellingenRepository _instellingenRepository;
+        private readonly IEmailService _emailService;
 
-        public InstellingenController(IInstellingenRepository instellingenRepository)
+        public InstellingenController(IInstellingenRepository instellingenRepository,
+            IEmailService emailService)
         {
             _instellingenRepository = instellingenRepository;
+            _emailService = emailService;
         }
 
         #region academiejaar instellingen
@@ -142,17 +145,28 @@ namespace StageBeheersTool.Controllers
 
         public ActionResult StandaardEmails()
         {
-
-            return View();
+            var standaardEmails = _emailService.FindStandaardEmails();
+            foreach (var emailType in Enum.GetValues(typeof(EmailType)).Cast<EmailType>())
+            {
+                if (standaardEmails.FirstOrDefault(s => s.EmailType == emailType) == null)
+                {
+                    _emailService.AddStandaardEmail(new StandaardEmail
+                    {
+                        Gedeactiveerd = true,
+                        EmailType = emailType
+                    });
+                }
+            }
+            return View(standaardEmails);
         }
 
         public ActionResult StandaardEmailEdit(int emailType)
         {
-            var standaardEmail = _instellingenRepository.FindStandaardEmailByType((EmailType)emailType);
+            var standaardEmail = _emailService.FindStandaardEmailByType((EmailType)emailType);
             if (standaardEmail == null)
             {
                 standaardEmail = new StandaardEmail { EmailType = (EmailType)emailType };
-                _instellingenRepository.AddStandaardEmail(standaardEmail);
+                _emailService.AddStandaardEmail(standaardEmail);
             }
             return View(Mapper.Map<StandaardEmailVM>(standaardEmail));
         }
@@ -164,9 +178,9 @@ namespace StageBeheersTool.Controllers
             if (ModelState.IsValid)
             {
                 var standaardEmail = Mapper.Map<StandaardEmail>(model);
-                //...
-
-                return View(model);
+                _emailService.UpdateStandaardEmail(standaardEmail);
+                SetViewMessage(Resources.SuccesEditSaved);
+                return RedirectToAction("StandaardEmails");
             }
             return View(model);
         }

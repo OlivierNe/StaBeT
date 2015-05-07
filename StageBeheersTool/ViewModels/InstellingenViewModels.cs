@@ -197,8 +197,22 @@ namespace StageBeheersTool.ViewModels
     public class StandaardEmailVM
     {
         public int Id { get; set; }
+        [DataType(DataType.MultilineText)]
+        [Required]
+        [AllowHtml]
         public string Inhoud { get; set; }
+        [Required]
         public string Onderwerp { get; set; }
+        public bool Gedeactiveerd { get; set; }
         public EmailType EmailType { get; set; }
+
+        public bool HeeftReden
+        {
+            get
+            {
+                return EmailType == EmailType.StagedossierAfkeuren
+                    || EmailType == EmailType.StageopdrachtAfkeuren;
+            }
+        }
     }
 }

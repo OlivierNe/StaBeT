@@ -357,7 +357,7 @@ namespace StageBeheersTool.Controllers
         #region stagedossier
 
         [Authorize(Role.Admin)]
-        public ActionResult StagedossierGoedkeuren(int studentId, int stageId)
+        public async Task<ActionResult> StagedossierGoedkeuren(int studentId, int stageId)
         {
             var studentVoorkeurstage = _stageopdrachtRepository
                 .FindStudentVoorkeurStageByIds(stageId: stageId, studentId: studentId);
@@ -366,13 +366,14 @@ namespace StageBeheersTool.Controllers
                 return HttpNotFound();
             }
             Admin.KeurStagedossierGoed(studentVoorkeurstage);
+            var result = await _emailService
+                .SendStandaardEmail(EmailType.StagedossierGoedkeuren, geadresseerden: studentVoorkeurstage.Student.HogentEmail);
             SetViewMessage(string.Format(Resources.SuccesStagedossierGoedgekeurd,
-                studentVoorkeurstage.Student.Naam));
+                studentVoorkeurstage.Student.Naam) + (result ? " E-mail verzonden" : ""));
             _stageopdrachtRepository.SaveChanges();
             return RedirectToLocal(Overzicht);
         }
 
-        [Authorize(Role.Admin)]
         public ActionResult StagedossierAfkeuren(int studentId, int stageId)
         {
             var studentVoorkeurstage = _stageopdrachtRepository
@@ -381,8 +382,30 @@ namespace StageBeheersTool.Controllers
             {
                 return HttpNotFound();
             }
+            var model = new StagedossierAfkeurenVM
+            {
+                Aan = studentVoorkeurstage.Student.HogentEmail,
+                StageId = stageId,
+                StudentId = studentId
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Role.Admin)]
+        public async Task<ActionResult> StagedossierAfkeuren(StagedossierAfkeurenVM model)
+        {
+            var studentVoorkeurstage = _stageopdrachtRepository
+                .FindStudentVoorkeurStageByIds(stageId: model.StageId, studentId: model.StudentId);
+            if (studentVoorkeurstage == null)
+            {
+                return HttpNotFound();
+            }
             Admin.KeurStagedossierAf(studentVoorkeurstage);
-            SetViewMessage(string.Format(Resources.SuccesStagedossierAfgekeurd, studentVoorkeurstage.Student.Naam));
+            var result = await _emailService.SendStandaardEmail(EmailType.StagedossierAfkeuren,
+                geadresseerden: model.Aan, reden: model.Reden);
+            SetViewMessage(string.Format(Resources.SuccesStagedossierAfgekeurd, studentVoorkeurstage.Student.Naam)
+                + (result ? " E-mail verzonden." : ""));
             _stageopdrachtRepository.SaveChanges();
             return RedirectToLocal(Overzicht);
         }
@@ -425,10 +448,10 @@ namespace StageBeheersTool.Controllers
             {
                 student.SetStagedossierIngediend(stageopdracht);
                 _userService.SaveChanges();
-                SetViewMessage(string.Format(Resources.SuccesStagedossierAangeduidAlsIngediend,
-                     stageopdracht.Titel));
                 var stagesMailbox = _instellingenRepository.Find(Instelling.MailboxStages);
-                await _emailService.SendAsync(EmailMessages.StagedossierIngediend(stageopdracht, student, stagesMailbox));
+                await _emailService.SendStandaardEmail(EmailType.StagedossierIngediend, geadresseerden: stagesMailbox.Value);
+                SetViewMessage(string.Format(Resources.SuccesStagedossierAangeduidAlsIngediend,
+                    stageopdracht.Titel));
             }
             catch (ApplicationException ex)
             {

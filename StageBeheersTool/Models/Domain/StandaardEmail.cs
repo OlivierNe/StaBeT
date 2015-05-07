@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Inhoud { get; set; }
         public string Onderwerp { get; set; }
+        public bool Gedeactiveerd { get; set; }
         public EmailType EmailType { get; set; }
     }
 
@@ -16,7 +17,7 @@
         StageopdrachtAangemaakt,
         StageopdrachtVerwijderd,
         StagedossierIngediend,
-        StagedossierAfgekeurd,
-        StagedossierGoedgekeurd
+        StagedossierAfkeuren,
+        StagedossierGoedkeuren
     }
 }

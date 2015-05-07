@@ -8,7 +8,6 @@ using System.Web.Script.Serialization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Identity;
 using StageBeheersTool.ViewModels;
 using StageBeheersTool.Models.Domain;
@@ -383,17 +382,17 @@ namespace StageBeheersTool.Controllers
             {
                 Random r = new Random();
                 string generatedPassword = Membership.GeneratePassword(r.Next(10, 12), 0);
-#if DEBUG
-                generatedPassword = "wachtwoord";
-#endif
+                //#if DEBUG
+                //generatedPassword = "wachtwoord";
+                //#endif
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, generatedPassword);
                 if (result.Succeeded)
                 {
                     var bedrijf = Mapper.Map<RegisterBedrijfViewModel, Bedrijf>(model);
                     _userService.CreateUserObject(bedrijf);
-
-                    await _emailService.SendAsync(EmailMessages.BedrijfGeregistreerd(user.Email, generatedPassword));
+                    await _emailService.SendAsync("Registratie", string.Format("<strong>Account aangemaakt: <br/><strong><ul><li>" +
+                            "Login: {0}</li><li>Wachtwoord: {1}</li></ul>", user.Email, generatedPassword), destinations: user.Email);
                     SetViewMessage(Resources.SuccesEmailRegistratieBedrijfVerzonden);
                     return RedirectToAction("Login", "Account");
                 }
@@ -557,8 +556,8 @@ namespace StageBeheersTool.Controllers
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account",
                     new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Reset Password",
-                    "klik <a href=\"" + callbackUrl + "\">hier</a> om uw wachtwoord te resetten.");
+                await _emailService.SendAsync("Reset Password", "klik <a href=\"" + callbackUrl + "\">hier</a> om uw wachtwoord te resetten.",
+                     destinations: user.Email);
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
             return View(model);

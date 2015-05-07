@@ -254,7 +254,6 @@
     <Compile Include="Models\Identity\ApplicationUserManager.cs" />
     <Compile Include="Models\Identity\CurrentUser.cs" />
     <Compile Include="Models\Identity\Role.cs" />
-    <Compile Include="Models\DAL\AcademiejaarRepository.cs" />
     <Compile Include="Models\DAL\ContactpersoonRepository.cs" />
     <Compile Include="Models\DAL\Mapping\AcademiejaarInstellingenMapper.cs" />
     <Compile Include="Models\DAL\InstellingenRepository.cs" />
@@ -267,10 +266,8 @@
     <Compile Include="Models\Domain\AcademiejaarInstellingen.cs" />
     <Compile Include="Models\Domain\Admin.cs" />
     <Compile Include="Models\Domain\BegeleidAanvraagStatus.cs" />
-    <Compile Include="Helpers\EmailMessages.cs" />
     <Compile Include="Models\Domain\HoGentPersoon.cs" />
     <Compile Include="Models\Domain\Instelling.cs" />
-    <Compile Include="Models\Domain\Interfaces\IAcademiejaarRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\IContactpersoonRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\IEmailService.cs" />
     <Compile Include="Models\Domain\Interfaces\IImageService.cs" />
@@ -391,6 +388,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -405,6 +403,7 @@
     <Content Include="Scripts\account-list.js" />
     <Content Include="Scripts\AddAdmin.js" />
     <Content Include="Scripts\createUserObject.js" />
+    <Content Include="Scripts\lib\bootstrap-wysiwyg.js" />
     <Content Include="Scripts\lib\bootstrap.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Scripts\createStageForm.js" />
@@ -415,6 +414,11 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="App_Data\Stagecontract Template.docx" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -430,6 +434,7 @@
     <Content Include="Scripts\lib\gridmvc.min.js" />
     <Content Include="Scripts\lib\jquery.bootstrap-duallistbox.js" />
     <Content Include="Scripts\lib\jquery.bootstrap-duallistbox.min.js" />
+    <Content Include="Scripts\lib\jquery.hotkeys.js" />
     <Content Include="Scripts\lib\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\lib\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Models\Domain\Domain.cd" />
@@ -563,6 +568,7 @@
     <Content Include="Views\Shared\DisplayTemplates\EmailType.cshtml" />
     <Content Include="Views\Instellingen\StandaardEmails.cshtml" />
     <Content Include="Views\Instellingen\StandaardEmailEdit.cshtml" />
+    <Content Include="Views\Stage\StagedossierAfkeuren.cshtml" />
     <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />

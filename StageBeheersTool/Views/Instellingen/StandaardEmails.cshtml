@@ -1,16 +1,17 @@
-﻿@{
+﻿@model IEnumerable<StandaardEmail>
+@{
     ViewBag.Title = "Standaard E-mails";
-    var emailTypes = Enum.GetValues(typeof(EmailType)).Cast<EmailType>();
 }
 
-<h2>Tekst voor standaard E-mails instellen</h2>
+<h2>@ViewBag.Title</h2>
 
-<ul>
-    @foreach (var emailType in emailTypes)
+
+    @Html.Grid(Model).Columns(column =>
     {
-        <li>
-            @Html.ActionLink(Html.DisplayFor(model => emailType).ToString(), "StandaardEmailEdit",
-                "Instellingen", new { emailType = (int)emailType }, new { })
-        </li>
-    }
-</ul>
+        column.Add().Titled("E-mail type").Sanitized(false).Encoded(false)
+            .RenderValueAs(standaardEmail =>
+                Html.ActionLink(Html.DisplayFor(model => standaardEmail.EmailType).ToString(), "StandaardEmailEdit",
+                    "Instellingen", new { emailType = (int)standaardEmail.EmailType }, new { }));
+        column.Add(s => s.Gedeactiveerd).Sanitized(false).Encoded(false)
+            .RenderValueAs(s => Html.CheckBoxFor(model => s.Gedeactiveerd, new { disabled = "disabled" }));
+    })

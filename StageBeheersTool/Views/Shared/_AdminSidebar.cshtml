@@ -92,14 +92,17 @@
                 Instellingen <b class="glyphicon glyphicon-triangle-bottom"></b>
             </a>
             <ul class="collapse" id="InstellingenOpties">
-                <li class="">
+                <li>
                     @Html.ActionLink("Algemene instellingen", "AlgemeneInstellingen", "Instellingen")
                 </li>
-                <li class="">
+                <li>
                     @Html.ActionLink(Resources.TitelParametersAcademiejaar, "HuidigAcademiejaar", "Instellingen")
                 </li>
-                <li class="">
+                <li>
                     @Html.ActionLink(Resources.TitelAdminIndex, "Index", "Admin")
+                </li>
+                <li>
+                    @Html.ActionLink("Standaard E-mails instellen", "StandaardEmails", "Instellingen")
                 </li>
             </ul>
         </li>

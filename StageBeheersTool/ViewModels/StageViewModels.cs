@@ -69,6 +69,18 @@ namespace StageBeheersTool.ViewModels
         public DateTime? DatumGetekendStagecontract { get; set; }
     }
 
+    public class StagedossierAfkeurenVM
+    {
+        public int StageId { get; set; }
+        public int StudentId { get; set; }
+        public string Titel { get; set; }
+        public string Aan { get; set; }
+        [DataType(DataType.MultilineText)]
+        [Required]
+        public string Reden { get; set; }
+        public string Overzicht { get; set; }
+    }
+
     public class StageAanStudentToewijzenVM : IValidatableObject
     {
         public int StageopdrachtId { get; set; }

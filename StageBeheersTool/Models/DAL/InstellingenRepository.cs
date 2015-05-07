@@ -10,14 +10,12 @@ namespace StageBeheersTool.Models.DAL
     {
         private readonly StageToolDbContext _dbContext;
         private readonly DbSet<Instelling> _instellingen;
-        private readonly DbSet<StandaardEmail> _standaardEmails;
         private readonly DbSet<AcademiejaarInstellingen> _academiejaarInstellingen;
 
         public InstellingenRepository(StageToolDbContext ctx)
         {
             _dbContext = ctx;
             _instellingen = ctx.Instellingen;
-            _standaardEmails = ctx.StandaardEmails;
             _academiejaarInstellingen = ctx.AcademiejarenInstellingen;
         }
 
@@ -35,36 +33,6 @@ namespace StageBeheersTool.Models.DAL
         public void AddOrUpdate(Instelling instelling)
         {
             _instellingen.AddOrUpdate(instelling);
-            SaveChanges();
-        }
-        #endregion
-
-        #region standaardEmail
-
-        public void AddStandaardEmail(StandaardEmail standaardEmail)
-        {
-            _standaardEmails.Add(standaardEmail);
-            SaveChanges();
-        }
-
-        public StandaardEmail FindStandaardEmailById(int id)
-        {
-            return _standaardEmails.FirstOrDefault(s => s.Id == id);
-        }
-
-        public StandaardEmail FindStandaardEmailByType(EmailType emailType)
-        {
-            return _standaardEmails.FirstOrDefault(s => s.EmailType == emailType);
-        }
-
-        public IQueryable<StandaardEmail> FindStandaardEmails()
-        {
-            return _standaardEmails;
-        }
-
-        public void UpdateStandaardEmail(StandaardEmail standaardEmail)
-        {
-            _standaardEmails.AddOrUpdate(standaardEmail);
             SaveChanges();
         }
         #endregion

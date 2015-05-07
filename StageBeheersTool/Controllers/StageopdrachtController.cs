@@ -502,8 +502,8 @@ namespace StageBeheersTool.Controllers
                 bedrijf.AddStageopdracht(stageopdracht);
                 _userService.SaveChanges();
                 var stageMailbox = _instellingenRepository.Find(Instelling.MailboxStages);
-                await _emailService.SendAsync(EmailMessages.StageopdrachtAangemaakt(stageopdracht, stageMailbox));
-                SetViewMessage(Resources.SuccesCreateStageopdracht);
+                var result = await _emailService.SendStandaardEmail(EmailType.StageopdrachtAangemaakt, geadresseerden: stageMailbox.Value);
+                SetViewMessage(Resources.SuccesCreateStageopdracht + (result ? " E-mail verzonden." : ""));
                 return RedirectToAction("Details", new { stageopdracht.Id, Overzicht });
             }
             if (CurrentUser.IsBedrijf())
@@ -639,8 +639,18 @@ namespace StageBeheersTool.Controllers
                     bedrijf.FindContactpersoonById((int)model.ContractondertekenaarId) : null;
                 stageopdracht.Bedrijf = bedrijf;
                 _stageopdrachtRepository.Update(stageopdracht);
-                await _emailService.SendAsync(EmailMessages.StageopdrachtGewijzigd(stageopdracht));
-                SetViewMessage(Resources.SuccesEditSaved);
+                var mailboxStages = _instellingenRepository.Find(Instelling.MailboxStages);
+                bool result;
+                if (CurrentUser.IsBedrijf())
+                {
+                    result = await _emailService.SendStandaardEmail(EmailType.StageopdrachtGewijzigd, geadresseerden: mailboxStages.Value);
+                }
+                else
+                {
+                    result = await _emailService.SendStandaardEmail(EmailType.StageopdrachtGewijzigd,
+                        geadresseerden: new[] { stageopdracht.Bedrijf.Email, mailboxStages.Value });
+                }
+                SetViewMessage(Resources.SuccesEditSaved + (result ? " E-mail verzonden." : ""));
                 return RedirectToAction("Details", new { model.Id, Overzicht });
             }
             model.SetSelectLists(_specialisatieRepository.FindAll(),
@@ -667,7 +677,7 @@ namespace StageBeheersTool.Controllers
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Role.Bedrijf, Role.Admin)]
-        public ActionResult DeleteConfirmed(int id, string overzicht = "/Stageopdracht/List")
+        public async Task<ActionResult> DeleteConfirmed(int id, string overzicht = "/Stageopdracht/List")
         {
             var stageopdracht = FindStageopdracht(id);
             if (stageopdracht == null)
@@ -679,18 +689,19 @@ namespace StageBeheersTool.Controllers
                 SetViewError(Resources.ErrorVerwijderGoedgekeurdeStage);
                 return View(stageopdracht);
             }
+            bool result;
             try
             {
                 _stageopdrachtRepository.Delete(stageopdracht);
                 var stagesMailBox = _instellingenRepository.Find(Instelling.MailboxStages);
-                _emailService.SendAsync(EmailMessages.StageopdrachtVerwijderd(stageopdracht, stagesMailBox));
+                result = await _emailService.SendStandaardEmail(EmailType.StageopdrachtVerwijderd, geadresseerden: stagesMailBox.Value);
             }
             catch (ApplicationException ex)
             {
                 SetViewError(ex.Message);
                 return View(stageopdracht);
             }
-            SetViewMessage(string.Format(Resources.SuccesVerwijderStageopdracht, stageopdracht.Titel));
+            SetViewMessage(string.Format(Resources.SuccesVerwijderStageopdracht, stageopdracht.Titel) + (result ? " E-mail verzonden." : ""));
             return RedirectToLocal(overzicht);
         }
         #endregion
@@ -771,23 +782,24 @@ namespace StageBeheersTool.Controllers
         #endregion
 
         #region stageopdracht beoordelen
+
         [Authorize(Role.Admin)]
         public async Task<ActionResult> StageopdrachtGoedkeuren(int id)
         {
             var stageopdracht = _stageopdrachtRepository.FindById(id);
             Admin.KeurStageopdrachtGoed(stageopdracht);
-            string message = "";
+            bool result = false;
             if (stageopdracht.Bedrijf.HeeftGeldigEmail())
             {
-                message = "E-mail verzonden.";
-                await _emailService.SendAsync(EmailMessages.StageopdrachtGoedkeurenMail(stageopdracht));
+                result = await _emailService.SendStandaardEmail(EmailType.StageopdrachtGoedkeuren,
+                    geadresseerden: stageopdracht.Bedrijf.Email);
             }
             else
             {
                 SetViewError(String.Format(Resources.ErrorMailBedrijf, stageopdracht.Bedrijf.Naam, stageopdracht.Bedrijf.Email));
             }
             _stageopdrachtRepository.SaveChanges();
-            SetViewMessage(string.Format(Resources.SuccesStageGoedgekeurd, stageopdracht.Titel) + " " + message);
+            SetViewMessage(string.Format(Resources.SuccesStageGoedgekeurd, stageopdracht.Titel) + (result ? " E-mail verzonden." : ""));
             return RedirectToLocal(Overzicht);
         }
 
@@ -798,22 +810,19 @@ namespace StageBeheersTool.Controllers
             var model = Mapper.Map<StageopdrachtAfkeurenVM>(stageopdracht);
             model.Aan = stageopdracht.Bedrijf.Email;
             model.Titel = stageopdracht.Titel;
-            model.Onderwerp = "Stageopdracht afgekeurd";
             return View(model);
         }
 
         [HttpPost]
-        [ActionName("StageopdrachtAfkeuren")]
         [Authorize(Role.Admin)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> StageopdrachtAfkeurenConfirmed(StageopdrachtAfkeurenVM model)
+        public async Task<ActionResult> StageopdrachtAfkeuren(StageopdrachtAfkeurenVM model)
         {
             if (ModelState.IsValid == false)
             {
                 return View(model);
             }
             var stageopdracht = _stageopdrachtRepository.FindById(model.Id);
-            var message = "";
             try
             {
                 Admin.KeurStageopdrachtAf(stageopdracht);
@@ -823,18 +832,18 @@ namespace StageBeheersTool.Controllers
                 SetViewError(ex.Message);
                 return View(model);
             }
+            bool result = false;
             if (stageopdracht.Bedrijf.HeeftGeldigEmail())
             {
-                message += "E-mail verzonden.";
-                await _emailService.SendAsync(EmailMessages.StageopdrachtAfkeurenMail(stageopdracht, model.Reden,
-                      model.Onderwerp));
+                result = await _emailService.SendStandaardEmail(EmailType.StageopdrachtAfkeuren,
+                   geadresseerden: model.Aan, reden: model.Reden);
             }
             else
             {
                 SetViewError(String.Format(Resources.ErrorMailBedrijf, stageopdracht.Bedrijf.Naam, stageopdracht.Bedrijf.Email));
             }
             _stageopdrachtRepository.SaveChanges();
-            SetViewMessage(string.Format(Resources.SuccesStageAfgekeurd, stageopdracht.Titel) + " " + message);
+            SetViewMessage(string.Format(Resources.SuccesStageAfgekeurd, stageopdracht.Titel) + (result ? " E-mail verzonden." : ""));
             return RedirectToLocal(Overzicht);
         }
         #endregion
