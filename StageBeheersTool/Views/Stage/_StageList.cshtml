@@ -56,10 +56,10 @@
             columns.Add().Sanitized(false).Encoded(false).Titled("Evaluatieformulieren")
               .RenderValueAs(stage => "<select onchange='if (this.value) window.location.href=this.value' class='form-control'>" +
                                       "<option value=''>--stagebezoek--</option>" +
-                                      "<option value='/Evaluatieformulier/Stagebezoek?stageId=" + stage.Id + "&stagebezoek=1&overzicht=" + @overzicht + "'>Eerste stagebezoek</option>" +
-                                      "<option value='/Evaluatieformulier/Stagebezoek?stageId=" + stage.Id + "&stagebezoek=2&overzicht=" + @overzicht + "'>Tweede stagebezoek</option>" +
-                                      "<option value='/Evaluatieformulier/Stagebezoek?stageId=" + stage.Id + "&stagebezoek=3&overzicht=" + @overzicht + "'>Derde stagebezoek</option>" +
-                                      "<option value='/Evaluatieformulier/Stagebezoek?stageId=" + stage.Id + "&stagebezoek=-1&overzicht=" + @overzicht + "'>Extra stagebezoek</option>" +
+                                      "<option value='/Evaluatieformulier/Invullen?stageId=" + stage.Id + "&stagebezoek=1&overzicht=" + overzicht + "'>Eerste stagebezoek</option>" +
+                                      "<option value='/Evaluatieformulier/Invullen?stageId=" + stage.Id + "&stagebezoek=2&overzicht=" + overzicht + "'>Tweede stagebezoek</option>" +
+                                      "<option value='/Evaluatieformulier/Invullen?stageId=" + stage.Id + "&stagebezoek=3&overzicht=" + overzicht + "'>Derde stagebezoek</option>" +
+                                      "<option value='/Evaluatieformulier/Invullen?stageId=" + stage.Id + "&stagebezoek=-1&overzicht=" + overzicht + "'>Extra stagebezoek</option>" +
                                       "</select>");
         }
         if (Model.ToonActiviteitverslagen)
@@ -73,10 +73,10 @@
             columns.Add().Sanitized(false).Encoded(false).Titled("Evaluatieformulieren")
                 .RenderValueAs(stage => "<select onchange='if (this.value) window.location.href=this.value' class='form-control'>" +
                                         "<option value=''>--stagebezoek--</option>" +
-                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=1&overzicht=" + @overzicht + "'>Eerste stagebezoek</option>" +
-                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=2&overzicht=" + @overzicht + "'>Tweede stagebezoek</option>" +
-                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=3&overzicht=" + @overzicht + "'>Derde stagebezoek</option>" +
-                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=-1&overzicht=" + @overzicht + "'>Extra stagebezoek</option>" +
+                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=1&overzicht=" + overzicht + "'>Eerste stagebezoek</option>" +
+                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=2&overzicht=" + overzicht + "'>Tweede stagebezoek</option>" +
+                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=3&overzicht=" + overzicht + "'>Derde stagebezoek</option>" +
+                                        "<option value='/Evaluatieformulier/Bekijken?stageId=" + stage.Id + "&stagebezoek=-1&overzicht=" + overzicht + "'>Extra stagebezoek</option>" +
                                         "</select>");
         }
     }).Sortable(true).WithPaging(10).EmptyText("Geen stages gevonden")

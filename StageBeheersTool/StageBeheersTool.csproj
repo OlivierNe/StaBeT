@@ -238,9 +238,7 @@
     <Compile Include="Models\Domain\Foto.cs" />
     <Compile Include="Models\Domain\Interfaces\IEvaluatievraagRepository.cs" />
     <Compile Include="Models\Domain\Interfaces\IDocumentService.cs" />
-    <Compile Include="Models\Domain\StandaardEmail.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Models\Domain\StandaardEmail.cs" />
     <Compile Include="Models\Identity\MyClaimTypes.cs" />
     <Compile Include="Models\Identity\UserWithRoles.cs" />
     <Compile Include="Models\DAL\Extensions\QueryableBedrijfExtensions.cs" />
@@ -560,15 +558,15 @@
     <Content Include="Views\Activiteitsverslag\GeefFeedback.cshtml" />
     <Content Include="Views\Activiteitsverslag\Indienen.cshtml" />
     <Content Include="Views\Stage\MijnStage.cshtml" />
-    <Content Include="Views\Evaluatieformulier\Stagebezoek.cshtml" />
+    <Content Include="Views\Evaluatieformulier\Invullen.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Evaluatieantwoord.cshtml" />
     <Content Include="Views\Student\ImportStudentenExcel.cshtml" />
     <Content Include="Views\Account\DeleteAlleStudentAccounts.cshtml" />
     <Content Include="Views\Evaluatieformulier\Bekijken.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\EmailType.cshtml" />
-    <Content Include="Views\Instellingen\StandaardEmails.cshtml" />
-    <Content Include="Views\Instellingen\StandaardEmailEdit.cshtml" />
     <Content Include="Views\Stage\StagedossierAfkeuren.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\EmailType.cshtml" />
+    <Content Include="Views\Instellingen\StandaardEmailEdit.cshtml" />
+    <Content Include="Views\Instellingen\StandaardEmails.cshtml" />
     <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />

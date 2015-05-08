@@ -65,15 +65,16 @@ namespace StageBeheersTool.Models.DAL
             teUpdatenBegeleider.Postcode = begeleider.Postcode;
             teUpdatenBegeleider.Gemeente = begeleider.Gemeente;
             teUpdatenBegeleider.Straat = begeleider.Straat;
-            if (teUpdatenBegeleider.Foto != null)
+
+            if (teUpdatenBegeleider.Foto == null)
+            {
+                teUpdatenBegeleider.Foto = begeleider.Foto;
+            }
+            else if (begeleider.Foto != null)
             {
                 teUpdatenBegeleider.Foto.FotoData = begeleider.Foto.FotoData;
                 teUpdatenBegeleider.Foto.ContentType = begeleider.Foto.ContentType;
                 teUpdatenBegeleider.Foto.Naam = begeleider.Foto.Naam;
-            }
-            else
-            {
-                teUpdatenBegeleider.Foto = begeleider.Foto;
             }
             SaveChanges();
         }
@@ -110,7 +111,7 @@ namespace StageBeheersTool.Models.DAL
                     message +=
                         String.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
                             eve.Entry.Entity.GetType().Name, eve.Entry.GetValidationResult());
-                    message = eve.ValidationErrors.Aggregate(message, (current, ve) => current + 
+                    message = eve.ValidationErrors.Aggregate(message, (current, ve) => current +
                         String.Format("- Property: \"{0}\", Error: \"{1}\"", ve.PropertyName, ve.ErrorMessage));
                 }
                 throw new ApplicationException("" + message);

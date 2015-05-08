@@ -22,7 +22,7 @@ namespace StageBeheersTool.Controllers
         }
 
         [Authorize(Role.Bedrijf)]
-        public ActionResult Stagebezoek(int stageId, int stagebezoek)
+        public ActionResult Invullen(int stageId, int stagebezoek)
         {
             var bedrijf = _userService.GetBedrijf();
             var stage = bedrijf.FindStage(stageId);
@@ -40,7 +40,7 @@ namespace StageBeheersTool.Controllers
         [Authorize(Role.Bedrijf)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Stagebezoek(EvaluatieCreateVM model)
+        public ActionResult Invullen(EvaluatieCreateVM model)
         {
             var keys = Request.Form.AllKeys;
             var evaluatievragen = _evaluatievraagRepository.FindByStagebezoek(model.Stagebezoek)

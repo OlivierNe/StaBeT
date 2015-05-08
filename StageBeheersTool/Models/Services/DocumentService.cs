@@ -50,6 +50,7 @@ namespace StageBeheersTool.Models.Services
                         if (newElement != null)
                         {
                             var value = GetPropValue(stage, fieldName);
+                            value = value ?? "";
 
                             string[] pieces = value.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.None);
                             if (pieces.Length > 1)
@@ -67,6 +68,7 @@ namespace StageBeheersTool.Models.Services
                             }
                             field.ReplaceWith(newElement);
                             field.Attribute(Xmlns + "instr").Remove();
+
                         }
                     }
                     document.MainDocumentPart.Document.Body = new Body(body.ToString());
