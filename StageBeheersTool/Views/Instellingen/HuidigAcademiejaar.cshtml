@@ -48,13 +48,21 @@
                 @Html.EditorFor(model => model.DatumAfstudeerbeurs)
             </div>
         </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Stageterugkomdag, new { @class = "control-label col-md-3" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Stageterugkomdag)
+            </div>
+        </div>
+
         <div>
             @Html.LabelFor(model => model.VrijeDagen, new { @class = "control-label col-md-3" })
             <div class="col-md-6">
                 @Html.EditorFor(model => model.VrijeDagen, new { htmlAttributes = new { @class = "form-control", rows = 6 } })
             </div>
         </div>
-
+        
         <div class="form-group">
             <div class="col-md-offset-3 col-md-10">
                 <input type="submit" value="Opslaan" class="btn btn-success" />

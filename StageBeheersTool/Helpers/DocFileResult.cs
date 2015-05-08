@@ -14,6 +14,11 @@ namespace StageBeheersTool.Helpers
             _fileName = fileName + ".docx";
         }
 
+        public DocFileResult(string path, string fileName)
+            : this(File.ReadAllBytes(path), fileName)
+        {
+        }
+
         public override void ExecuteResult(ControllerContext context)
         {
             context.HttpContext.Response.Clear();

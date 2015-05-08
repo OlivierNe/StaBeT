@@ -37,6 +37,10 @@ namespace StageBeheersTool.ViewModels
         [UIHint("NullableDateTime")]
         public DateTime? DatumAfstudeerbeurs { get; set; }
 
+        [Display(Name = "Datum Stageterugkomdag")]
+        [UIHint("NullableDateTime")]
+        public DateTime? Stageterugkomdag { get; set; }
+
         private string _vrijeDagen;
         [Display(Name = "Vrije dagen")]
         [DataType(DataType.MultilineText)]

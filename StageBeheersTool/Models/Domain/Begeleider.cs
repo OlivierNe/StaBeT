@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using StageBeheersTool.Helpers;
 
@@ -90,9 +91,22 @@ namespace StageBeheersTool.Models.Domain
                     && stageopdracht.HeeftStageBegeleider() == false;
         }
 
-        public bool MagStageopdrachtWijzigen(Stageopdracht stageopdracht)
+        public bool MagStageopdrachtWijzigen(Stageopdracht stageopdracht, AcademiejaarInstellingen academiejaarInstellingen)
         {
-            return stageopdracht.Stagebegeleider != null && this.Equals(stageopdracht.Stagebegeleider);
+            if (stageopdracht.Stagebegeleider == null || this.Equals(stageopdracht.Stagebegeleider) == false)
+            {
+                return false;
+            }
+            if (academiejaarInstellingen == null)
+            {
+                return true;
+            }
+            var deadline = academiejaarInstellingen.DeadlineBedrijfStageEdit;
+            if (deadline == null)
+            {
+                return true;
+            }
+            return DateTime.Today <= ((DateTime)deadline).Date;
         }
 
         public IEnumerable<Stage> GetMijnStages()

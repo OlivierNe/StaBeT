@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Web;
 using AutoMapper;
 using StageBeheersTool.Helpers;
 using StageBeheersTool.Models.Domain;
@@ -16,12 +18,17 @@ namespace StageBeheersTool.Controllers
     {
         private readonly IInstellingenRepository _instellingenRepository;
         private readonly IEmailService _emailService;
+        private readonly IDocumentService _documentService;
+        private readonly IStageRepository _stageRepository;
 
         public InstellingenController(IInstellingenRepository instellingenRepository,
-            IEmailService emailService)
+            IEmailService emailService, IDocumentService documentService,
+            IStageRepository stageRepository)
         {
             _instellingenRepository = instellingenRepository;
             _emailService = emailService;
+            _documentService = documentService;
+            _stageRepository = stageRepository;
         }
 
         #region academiejaar instellingen
@@ -184,6 +191,58 @@ namespace StageBeheersTool.Controllers
             }
             return View(model);
         }
+        #endregion
+
+        #region stagecontract template
+
+        public ActionResult StagecontractTemplate()
+        {
+            return View();
+        }
+
+        public ActionResult DownloadStagecontractTemplate()
+        {
+            return new DocFileResult(Path.Combine(Server.MapPath("~/App_Data"),
+                Path.GetFileName("Stagecontract Template.docx")), "Stagecontract Template");
+        }
+
+        public ActionResult UploadStagecontractTemplate(HttpPostedFileBase file)
+        {
+            if (file == null)
+            {
+                SetViewError("Geen bestand geselecteerd.");
+                return RedirectToAction("StagecontractTemplate");
+            }
+            string fullPath = Request.MapPath("~/App_Data/Stagecontract Template.docx");
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+            file.SaveAs(Request.MapPath("~/App_Data/Stagecontract Template.docx"));
+
+            SetViewMessage("Stagecontract template vervangen.");
+            return RedirectToAction("StagecontractTemplate");
+        }
+
+        public ActionResult StagecontractTemplateTesten()
+        {
+            var testStage = _stageRepository.FindAll().FirstOrDefault();
+            byte[] stagecontract = _documentService.GenerateStagecontract(testStage);
+            return new DocFileResult(stagecontract, "Stagecontract - TEST");
+        }
+
+        public ActionResult StagecontractTemplateTerugzetten()
+        {
+            string fullPath = Server.MapPath("~/App_Data/Stagecontract Template.docx");
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+            System.IO.File.Copy(Server.MapPath("~/App_Data/Stagecontract Template - kopie.docx"), fullPath);
+            SetViewMessage("Oorspronkelijke stagecontract template teruggezet.");
+            return RedirectToAction("StagecontractTemplate");
+        }
+
         #endregion
 
     }

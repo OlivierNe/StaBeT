@@ -417,6 +417,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="App_Data\Stagecontract Template - kopie.docx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -567,6 +568,7 @@
     <Content Include="Views\Shared\DisplayTemplates\EmailType.cshtml" />
     <Content Include="Views\Instellingen\StandaardEmailEdit.cshtml" />
     <Content Include="Views\Instellingen\StandaardEmails.cshtml" />
+    <Content Include="Views\Instellingen\StagecontractTemplate.cshtml" />
     <None Include="Web References\be.hogent.webservice\ldap.wsdl" />
     <Content Include="Web References\be.hogent.webservice\Map.datasource" />
     <Content Include="Web References\be.hogent.webservice\Reference.map" />

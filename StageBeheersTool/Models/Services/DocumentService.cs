@@ -19,8 +19,18 @@ namespace StageBeheersTool.Models.Services
 
         private byte[] _stagecontractTemplate;
 
+        public byte[] StagecontractTemplate
+        {
+            get
+            {
+                return _stagecontractTemplate;
+            }
+            set { _stagecontractTemplate = value; }
+        }
+
         public byte[] GenerateStagecontract(Stage stage)
         {
+
             if (_stagecontractTemplate == null)
             {
                 var templatePath = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data"),
@@ -35,43 +45,38 @@ namespace StageBeheersTool.Models.Services
                 stream.Write(_stagecontractTemplate, 0, _stagecontractTemplate.Length);
                 using (WordprocessingDocument document = WordprocessingDocument.Open(stream, true))
                 {
-                    XElement body = XElement.Parse(document.MainDocumentPart.Document.Body.OuterXml);
-                    IList<XElement> mailMergeFields =
-                        (from el in body.Descendants()
-                         where el.Attribute(Xmlns + "instr") != null
-                         select el).ToList();
+                    IList<SdtElement> controls = document.MainDocumentPart.RootElement.
+                        Descendants<SdtElement>().Where(e => e is SdtBlock || e is SdtRun).ToList();
 
-                    foreach (XElement field in mailMergeFields)
+                    foreach (var control in controls)
                     {
-                        string fieldName = field.Attribute(Xmlns + "instr")
-                            .Value.Replace("MERGEFIELD", string.Empty).Trim().Split(' ')[0];
+                        var tag = control.SdtProperties.GetFirstChild<Tag>().Val.Value;
+                        var value = GetPropValue(stage, tag);
+                        var newRun = ParseTextFoNewLines(value);
+                        var run = control.Descendants<Run>().First();
+                        run.Append(newRun);
 
-                        XElement newElement = field.Descendants(Xmlns + "r").FirstOrDefault();
-                        if (newElement != null)
+                        control.Descendants<Text>().First().Text = "";
+
+                        if (control is SdtRun)
                         {
-                            var value = GetPropValue(stage, fieldName);
-                            value = value ?? "";
-
-                            string[] pieces = value.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-                            if (pieces.Length > 1)
+                            SdtRun sdtRun = (SdtRun)control;
+                            foreach (var elem in sdtRun.SdtContentRun.Elements())
                             {
-                                var run = ParseTextFoNewLines(pieces);
-                                var paragraph = new Paragraph(run);
-                                newElement.Value = "";
-                                var openElement = ConvertXElementToOpenXmlElement(newElement);
-                                openElement.Append(paragraph);
-                                newElement = ConvertOpenxmlElementToXElement(openElement);
+                                control.Parent.InsertBefore(elem.CloneNode(true), sdtRun);
                             }
-                            else
+                            sdtRun.Remove();
+                        }
+                        else if (control is SdtBlock)
+                        {
+                            SdtBlock sdtBlock = (SdtBlock)control;
+                            foreach (var elem in sdtBlock.SdtContentBlock.Elements())
                             {
-                                newElement.Descendants(Xmlns + "t").First().Value = value.ToString();
+                                control.Parent.InsertBefore(elem.CloneNode(true), sdtBlock);
                             }
-                            field.ReplaceWith(newElement);
-                            field.Attribute(Xmlns + "instr").Remove();
-
+                            sdtBlock.Remove();
                         }
                     }
-                    document.MainDocumentPart.Document.Body = new Body(body.ToString());
                     document.MainDocumentPart.Document.Save();
                 }
                 documentData = stream.ToArray();
@@ -79,29 +84,17 @@ namespace StageBeheersTool.Models.Services
             return documentData;
         }
 
-        private OpenXmlElement ConvertXElementToOpenXmlElement(XElement xElement)
+        private Run ParseTextFoNewLines(object value)
         {
-            OpenXmlElement openXmlElement = null;
-            using (StreamWriter sw = new StreamWriter(new MemoryStream()))
+            string text = (value == null) ? "" : value.ToString();
+
+            Run run = new Run();
+            string[] pieces = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            if (pieces.Length <= 0)
             {
-                sw.Write(xElement.ToString());
-                sw.Flush();
-                sw.BaseStream.Seek(0, SeekOrigin.Begin);
-                OpenXmlReader re = OpenXmlReader.Create(sw.BaseStream);
-                re.Read();
-                openXmlElement = re.LoadCurrentElement();
-                re.Close();
+                run.Append(new Text(text));
+                return run;
             }
-            return openXmlElement;
-        }
-
-        private XElement ConvertOpenxmlElementToXElement(OpenXmlElement openXmlElement)
-        {
-            return XElement.Parse(openXmlElement.OuterXml);
-        }
-
-        private Run ParseTextFoNewLines(IEnumerable<string> pieces)
-        {
             RunProperties runProp = new RunProperties();
             RunFonts runFont = new RunFonts();
             runFont.Ascii = "Arial";
@@ -109,7 +102,6 @@ namespace StageBeheersTool.Models.Services
             size.Val = new StringValue("20");
             runProp.Append(runFont);
             runProp.Append(size);
-            Run run = new Run();
             run.PrependChild<RunProperties>(runProp);
             bool first = true;
             foreach (string line in pieces)

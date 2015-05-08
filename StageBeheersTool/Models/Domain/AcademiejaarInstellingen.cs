@@ -15,7 +15,13 @@ namespace StageBeheersTool.Models.Domain
         public DateTime? DeadlineBedrijfStageEdit { get; set; }
         public string VrijeDagen { get; set; }
         public DateTime? DatumAfstudeerbeurs { get; set; }
-   
+        public DateTime? Stageterugkomdag { get; set; }
+
+        public string StageterugkomdagToString
+        {
+            get { return Stageterugkomdag == null ? "" : ((DateTime)Stageterugkomdag).ToString("dd/MM/yyyy"); }
+        }
+
         public string DatumAfstudeerbeursToString
         {
             get { return DatumAfstudeerbeurs == null ? "" : ((DateTime)DatumAfstudeerbeurs).ToString("dddd d MMMM yyyy"); }

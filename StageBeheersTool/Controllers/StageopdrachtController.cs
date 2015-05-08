@@ -562,7 +562,8 @@ namespace StageBeheersTool.Controllers
                 var begeleider = _userService.GetBegeleider();
                 model.ToonAanvraagIndienen = begeleider.MagAanvraagIndienen(stageopdracht);
                 model.ToonAanvraagAnnuleren = begeleider.MagAanvraagAnnuleren(stageopdracht);
-                model.ToonEdit = begeleider.MagStageopdrachtWijzigen(stageopdracht);
+                model.ToonEdit = begeleider.MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen);
+                model.ToonBedrijfeditDeadline = model.ToonEdit;
                 model.ToonStudenten = true;
             }
             else if (CurrentUser.IsAdmin())
@@ -596,7 +597,7 @@ namespace StageBeheersTool.Controllers
             {
                 return new HttpStatusCodeResult(403);
             }
-            if (CurrentUser.IsBegeleider() && _userService.GetBegeleider().MagStageopdrachtWijzigen(stageopdracht) == false)
+            if (CurrentUser.IsBegeleider() && _userService.GetBegeleider().MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen) == false)
             {
                 return new HttpStatusCodeResult(403);
             }
@@ -627,7 +628,7 @@ namespace StageBeheersTool.Controllers
                 {
                     return new HttpStatusCodeResult(403);
                 }
-                if (CurrentUser.IsBegeleider() && _userService.GetBegeleider().MagStageopdrachtWijzigen(stageopdracht) == false)
+                if (CurrentUser.IsBegeleider() && _userService.GetBegeleider().MagStageopdrachtWijzigen(stageopdracht, academiejaarInstellingen) == false)
                 {
                     return new HttpStatusCodeResult(403);
                 }
