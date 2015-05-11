@@ -17,7 +17,7 @@ namespace StageBeheersTool.Models.DAL
             //: base("OnlineConnection", throwIfV1Schema: false)
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-            Database.Log = message => Trace.WriteLine(message);
+           // Database.Log = message => Trace.WriteLine(message);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
